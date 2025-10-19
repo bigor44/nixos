@@ -15,8 +15,8 @@
       ll = "exa -l";
       la = "exa -lah";
       edit = "sudo -e";
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles";
-      nrb = "sudo nixos-rebuild boot --flake ~/nixos-dotfiles";
+      nrs = "sudo nixos-rebuild switch --flake ~/nixos";
+      nrb = "sudo nixos-rebuild boot --flake ~/nixos";
       nfu = "nix flake update";
       nfc = "nix flake check";
     };
