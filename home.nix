@@ -15,7 +15,6 @@
     ./home/git.nix
     ./home/zsh.nix
     ./home/nvim.nix
-    ./home/vscode.nix
   ];
 }
 
