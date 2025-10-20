@@ -2,6 +2,7 @@
 
 {
   imports = [
+    # Base Modules
     ./modules/options.nix
     ./modules/boot.nix
     ./modules/gc.nix
@@ -10,6 +11,7 @@
     ./modules/base-apps.nix
     ./modules/users.nix
     ./modules/fonts.nix
+     # Optionnal Modules
     ./modules/audio.nix
     ./modules/adguard.nix
     ./modules/desktop-env.nix

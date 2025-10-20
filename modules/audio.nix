@@ -1,7 +1,6 @@
-{ ... }:
+{ lib, config, ... }:
 
-{
-  # Enable sound with pipewire.
+lib.mkIf config.audio.enable {
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {

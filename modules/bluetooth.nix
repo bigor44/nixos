@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-lib.mkIf config.desktop.enable {
+lib.mkIf config.bluetooth.enable {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
