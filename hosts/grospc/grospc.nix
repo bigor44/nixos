@@ -7,5 +7,6 @@
   adblocker.enable = true; 
   desktop.enable = true;
   sshserver.enable = false;
+  podman.enable = false;
 }
 
