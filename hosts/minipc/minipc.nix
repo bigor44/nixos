@@ -2,10 +2,10 @@
 
 {
   networking.hostName = "minipc";
-  audio.enable = true;
-  bluetooth.enable = true;
+  audio.enable = false;
+  bluetooth.enable = false; 
   adblocker.enable = true;
-  desktop.enable = true;
+  desktop.enable = false;
   sshserver.enable = true;
   podman.enable = false;
 }
