@@ -8,6 +8,10 @@
     vimAlias = true;
     vimdiffAlias = true;
     plugins = with pkgs.vimPlugins; [
+      nvim-lspconfig
+      mini-nvim
+      plenary-nvim
+      nix-develop-nvim
       nvim-treesitter.withAllGrammars
       catppuccin-nvim
     ];
