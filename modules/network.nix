@@ -1,6 +1,7 @@
 { ... }:
 
 {
+  networking.nftables.enable = true;
   networking = {
     networkmanager = {
       enable = true;
