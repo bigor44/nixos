@@ -8,8 +8,8 @@
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "z" "fzf" ];
-      theme = "dst";
+      plugins = [ "git" "z" "fzf" "sudo" ];
+      theme = "agnoster";
     };
     shellAliases = {
       ll = "exa -l";

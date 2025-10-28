@@ -6,5 +6,6 @@
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     terminus_font
+    powerline-fonts
   ];
 }
