@@ -22,8 +22,9 @@ lib.mkIf config.adblocker.enable {
           "https://ns1.fdn.fr/dns-query"
         ];
         bootstrap_dns = [ "192.168.1.254" ];
-        upstream_mode = "parallel";
+        upstream_mode = "load_balance";
         cache_enabled = true;
+        anonymize_client_ip = true;
       };
       filtering = {
         protection_enabled = true;
