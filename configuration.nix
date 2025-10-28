@@ -11,7 +11,6 @@
     ./modules/base-apps.nix
     ./modules/users.nix
     ./modules/fonts.nix
-    ./modules/monitoring.nix
      # Optionnal Modules
     ./modules/audio.nix
     ./modules/adguard.nix
@@ -20,6 +19,8 @@
     ./modules/desktop-apps.nix
     ./modules/flatpak.nix
     ./modules/ssh.nix
+    ./modules/monitoring.nix
+    ./modules/dashboard.nix
   ];
 
   config = {

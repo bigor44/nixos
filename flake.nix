@@ -33,7 +33,6 @@
           ./hosts/minipc/hardware-configuration.nix
           ./hosts/minipc/minipc.nix
           ./configuration.nix
-	  ./modules/grafprom.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

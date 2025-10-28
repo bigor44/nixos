@@ -8,5 +8,7 @@
   desktop.enable = true;
   sshserver.enable = false;
   podman.enable = false;
+  dashboard.enable = false;
+  monitoring.enable = true;
 }
 

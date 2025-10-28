@@ -1,6 +1,6 @@
-{ ... }:
+{ config, lib, ... }:
 
-{
+lib.mkIf config.dashboard.enable {
   networking.firewall.allowedTCPPorts = [9090 3000];
   services.grafana = {
     enable = true;
@@ -14,6 +14,7 @@
   services.prometheus = {
     enable = true;
     port = 9090;
+    globalConfig.scrape_interval = "10s";
     scrapeConfigs = [
       {
         job_name = "grospc";
@@ -22,7 +23,7 @@
         ];
       }
       {
-        job_name = "interbus";
+        job_name = "minipc";
         static_configs = [
           {targets = ["127.0.0.1:9100"];}
         ];

@@ -8,5 +8,7 @@
     podman.enable = lib.mkEnableOption "Enable Podman";
     desktop.enable = lib.mkEnableOption "Enable desktop environment";
     sshserver.enable = lib.mkEnableOption "Enable SSH Server";
+    dashboard.enable = lib.mkEnableOption "Enable Grafana & Prometheus";
+    monitoring.enable = lib.mkEnableOption "Enable Prometheus node exporter";
   };
 }
