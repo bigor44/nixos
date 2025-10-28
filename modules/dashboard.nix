@@ -1,20 +1,19 @@
 { config, lib, ... }:
 
 lib.mkIf config.dashboard.enable {
-  networking.firewall.allowedTCPPorts = [9090 3000];
+  networking.firewall.allowedTCPPorts = [9090];
   services.grafana = {
     enable = true;
+    openFirewall = true;
     settings.server = {
       domain = "minipc.lan";
-      http_port = 3000;
       http_addr = "0.0.0.0";
     };
   };
 
   services.prometheus = {
     enable = true;
-    port = 9090;
-    globalConfig.scrape_interval = "10s";
+    listenAddress = "127.0.0.1"; 
     scrapeConfigs = [
       {
         job_name = "exporters";
