@@ -17,15 +17,12 @@ lib.mkIf config.dashboard.enable {
     globalConfig.scrape_interval = "10s";
     scrapeConfigs = [
       {
-        job_name = "grospc";
+        job_name = "exporters";
         static_configs = [
-          {targets = ["192.168.1.1:9100"];}
-        ];
-      }
-      {
-        job_name = "minipc";
-        static_configs = [
-          {targets = ["127.0.0.1:9100"];}
+	  {targets = [
+	    "192.168.1.1:9100"
+	    "127.0.0.1:9100"
+	  ];}
         ];
       }
     ];
