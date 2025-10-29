@@ -37,6 +37,7 @@
       nixosConfigurations.minipc = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
+          nvf.nixosModules.default
           ./hosts/minipc/hardware-configuration.nix
           ./hosts/minipc/minipc.nix
           ./configuration.nix
