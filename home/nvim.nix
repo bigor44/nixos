@@ -9,6 +9,7 @@
     vimdiffAlias = true;
     plugins = with pkgs.vimPlugins; [
       nvim-lspconfig
+      vim-nix
       mini-nvim
       plenary-nvim
       nix-develop-nvim
