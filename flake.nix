@@ -3,11 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, nvf, ... }:
     let
       system = "x86_64-linux";
     in
@@ -15,6 +21,7 @@
       nixosConfigurations.grospc = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
+          nvf.nixosModules.default
           ./hosts/grospc/hardware-configuration.nix
           ./hosts/grospc/grospc.nix
           ./configuration.nix
