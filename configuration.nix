@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -12,7 +12,7 @@
     ./modules/nvf.nix
     ./modules/users.nix
     ./modules/fonts.nix
-     # Optionnal Modules
+    # Optionnal Modules
     ./modules/audio.nix
     ./modules/adguard.nix
     ./modules/desktop-env.nix
@@ -26,7 +26,7 @@
 
   config = {
     nixpkgs.config.allowUnfree = true;
-    nix.settings.experimental-features = ["nix-command" "flakes"];
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
     system.stateVersion = "25.05";
   };
 }
