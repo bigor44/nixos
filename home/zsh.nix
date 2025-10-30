@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -8,7 +10,7 @@
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "z" "fzf" "sudo" ];
+      plugins = ["git" "z" "fzf" "sudo"];
       theme = "agnoster";
     };
     shellAliases = {
@@ -23,7 +25,7 @@
     history.size = 10000;
     history.ignoreAllDups = true;
     history.path = "$HOME/.zsh_history";
-    history.ignorePatterns = [ "rm *" "pkill *" "cp *" ];
+    history.ignorePatterns = ["rm *" "pkill *" "cp *"];
   };
   programs.fzf = {
     enable = true;

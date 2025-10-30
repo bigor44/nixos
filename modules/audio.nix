@@ -1,5 +1,8 @@
-{ lib, config, ... }:
-
+{
+  lib,
+  config,
+  ...
+}:
 lib.mkIf config.audio.enable {
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;

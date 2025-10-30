@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   home.username = "bigor";
   home.homeDirectory = "/home/bigor";
   home.stateVersion = "25.11";
@@ -11,5 +9,3 @@
     ./home/zsh.nix
   ];
 }
-
-

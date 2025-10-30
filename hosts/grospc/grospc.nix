@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   networking.hostName = "grospc";
   audio.enable = true;
   bluetooth.enable = true;
@@ -11,4 +9,3 @@
   dashboard.enable = false;
   monitoring.enable = true;
 }
-

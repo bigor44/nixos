@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   networking.hostName = "minipc";
   audio.enable = false;
   bluetooth.enable = false;

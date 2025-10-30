@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.zsh.enable = true;
   environment.systemPackages = with pkgs; [
     eza
@@ -16,6 +14,7 @@
     htop
     ripgrep
     nixd
+    alejandra
     pciutils
     sl
     sysstat
