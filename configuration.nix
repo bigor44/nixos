@@ -7,7 +7,6 @@
     ./modules/locale.nix
     ./modules/network.nix
     ./modules/base-apps.nix
-    ./modules/nvf.nix
     ./modules/users.nix
     ./modules/fonts.nix
     # Optionnal Modules
