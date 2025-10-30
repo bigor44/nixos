@@ -1,7 +1,10 @@
-{ config, lib, ... }:
-
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.dashboard.enable {
-  networking.firewall.allowedTCPPorts = [ 9090 ];
+  networking.firewall.allowedTCPPorts = [9090];
   services.grafana = {
     enable = true;
     openFirewall = true;
