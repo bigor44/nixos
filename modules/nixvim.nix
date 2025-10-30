@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   programs.nixvim = {
     enable = true;
     viAlias = true;
@@ -31,7 +31,7 @@
         enable = true;
         settings = {
           formatters_by_ft = {
-            nix = ["nixpkgs-fmt"];
+            nix = [ "nixpkgs-fmt" ];
           };
         };
       };

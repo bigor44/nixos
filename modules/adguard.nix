@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 lib.mkIf config.adblocker.enable {
   services.adguardhome = {
@@ -24,7 +23,7 @@ lib.mkIf config.adblocker.enable {
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
         ];
-        bootstrap_dns = ["192.168.1.254"];
+        bootstrap_dns = [ "192.168.1.254" ];
         upstream_mode = "load_balance";
         cache_enabled = true;
         anonymize_client_ip = true;
@@ -42,10 +41,11 @@ lib.mkIf config.adblocker.enable {
       # to not have to manually create {enabled = true; url = "";} for every filter
       # This is, however, fully optional
       filters =
-        map (url: {
-          enabled = true;
-          url = url;
-        }) [
+        map
+          (url: {
+            enabled = true;
+            url = url;
+          }) [
           "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
           "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
           "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # HaGeZi's Normal DNS Blocklist
@@ -53,6 +53,6 @@ lib.mkIf config.adblocker.enable {
         ];
     };
   };
-  networking.firewall.allowedTCPPorts = [53];
-  networking.firewall.allowedUDPPorts = [53];
+  networking.firewall.allowedTCPPorts = [ 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

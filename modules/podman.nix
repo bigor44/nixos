@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 lib.mkIf config.podman.enable {
   virtualisation.containers.enable = true;
