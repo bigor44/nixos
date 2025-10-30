@@ -1,4 +1,6 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+
+{
   users.users.bigor = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];

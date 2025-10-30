@@ -1,4 +1,6 @@
-{ ... }: {
+{ config, ... }:
+
+{
   imports = [
     # Base Modules
     ./modules/options.nix

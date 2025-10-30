@@ -1,8 +1,5 @@
-{ config
-, lib
-, pkgs
-, ...
-}:
+{ config, lib, pkgs, ... }:
+
 lib.mkIf config.desktop.enable {
   services.flatpak.enable = true;
   systemd.services.flatpak-repo = {

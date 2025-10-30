@@ -27,14 +27,6 @@
         enable = true;
         servers.nil_ls.enable = true;
       };
-      conform-nvim = {
-        enable = true;
-        settings = {
-          formatters_by_ft = {
-            nix = [ "nixpkgs-fmt" ];
-          };
-        };
-      };
     };
   };
 }

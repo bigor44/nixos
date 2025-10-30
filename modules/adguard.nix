@@ -1,7 +1,5 @@
-{ config
-, lib
-, ...
-}:
+{ config, lib, ... }:
+
 lib.mkIf config.adblocker.enable {
   services.adguardhome = {
     enable = true;
