@@ -7,11 +7,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     nixpkgs,
     home-manager,
+    nixvim,
     ...
   }: let
     system = "x86_64-linux";
@@ -19,6 +24,7 @@
     nixosConfigurations.grospc = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        nixvim.nixosModules.nixvim
         ./hosts/grospc/hardware-configuration.nix
         ./hosts/grospc/grospc.nix
         ./configuration.nix
@@ -34,6 +40,7 @@
     nixosConfigurations.minipc = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        nixvim.nixosModules.nixvim
         ./hosts/minipc/hardware-configuration.nix
         ./hosts/minipc/minipc.nix
         ./configuration.nix
