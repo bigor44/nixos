@@ -16,7 +16,7 @@
     htop
     ripgrep
     nil
-    nixpkgs-fmt
+    alejandra
     pciutils
     sl
     sysstat

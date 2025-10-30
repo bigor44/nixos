@@ -6,7 +6,6 @@
     ./modules/options.nix
     ./modules/boot.nix
     ./modules/gc.nix
-    ./modules/nixvim.nix
     ./modules/locale.nix
     ./modules/network.nix
     ./modules/base-apps.nix
