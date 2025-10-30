@@ -14,6 +14,8 @@
     zip
     unzip
     htop
+    ripgrep
+    nixd
     pciutils
     sl
     sysstat
