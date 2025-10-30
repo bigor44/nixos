@@ -3,6 +3,7 @@
     enable = true;
     viAlias = true;
     vimAlias = true;
+    defaultEditor = true;
     opts = {
       number = true;
       mouse = "a";
