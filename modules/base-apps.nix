@@ -13,8 +13,8 @@
     unzip
     htop
     ripgrep
-    nil
     alejandra
+    nixd
     pciutils
     sl
     sysstat

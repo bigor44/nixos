@@ -7,11 +7,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     nixpkgs,
     home-manager,
+    nvf,
     ...
   }: let
     system = "x86_64-linux";
@@ -19,6 +24,7 @@
     nixosConfigurations.grospc = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        nvf.nixosModules.default
         ./hosts/grospc/hardware-configuration.nix
         ./hosts/grospc/grospc.nix
         ./configuration.nix
@@ -34,6 +40,7 @@
     nixosConfigurations.minipc = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        nvf.nixosModules.default
         ./hosts/minipc/hardware-configuration.nix
         ./hosts/minipc/minipc.nix
         ./configuration.nix

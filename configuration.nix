@@ -9,6 +9,7 @@
     ./modules/base-apps.nix
     ./modules/users.nix
     ./modules/fonts.nix
+    ./modules/neovim.nix
     # Optionnal Modules
     ./modules/audio.nix
     ./modules/adguard.nix
