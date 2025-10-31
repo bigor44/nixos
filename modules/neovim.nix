@@ -13,14 +13,13 @@
       statusline = {
         lualine = {
           enable = true;
-          theme = "catppuccin";
         };
       };
 
       theme = {
         enable = true;
-        name = "catppuccin";
-        style = "mocha";
+        name = "tokyonight";
+        style = "night";
         transparent = false;
       };
 
@@ -41,7 +40,10 @@
         indent-blankline.enable = true;
         highlight-undo.enable = true;
       };
-
+      lsp = {
+        enable = true;
+        formatOnSave = true;
+      };
       languages = {
         enableTreesitter = true;
         enableFormat = true;
