@@ -23,7 +23,7 @@ This repository contains my personal NixOS configuration, managed declaratively 
 | `flake.nix`              | Flake definition for reproducible builds.                                  |
 | `flake.lock`             | Lockfile for flake inputs.                                                  |
 | `home.nix`               | Home Manager configuration.                                                 |
-| `home/`                  | User-specific configurations (Neovim, VSCode, Zsh, Git).                  |
+| `home/`                  | User-specific configurations (Zsh, Git).                  |
 | `hosts/`                 | Host-specific configurations and hardware profiles.                        |
 | `modules/`               | Reusable NixOS modules (audio, bluetooth, desktop apps, etc.).             |
 | `modules-disabled/`      | Disabled modules (e.g., Home Assistant, Podman).                            |
