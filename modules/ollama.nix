@@ -2,9 +2,16 @@
   services.ollama = {
     enable = true;
     acceleration = "rocm";
-    environmentVariables = {
-      HCC_AMDGPU_TARGET = "gfx1031"; # used to be necessary, but doesn't seem to anymore
+  };
+  services.open-webui = {
+    enable = true;
+    host = "0.0.0.0";
+    openFirewall = true;
+    environment = {
+      ANONYMIZED_TELEMETRY = "False";
+      DO_NOT_TRACK = "True";
+      SCARF_NO_ANALYTICS = "True";
+      WEBUI_AUTH = "False";
     };
   };
-  services.open-webui.enable = true;
 }
