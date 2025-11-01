@@ -1,4 +1,9 @@
-{...}: {
+{
+  lib,
+  config,
+  ...
+}:
+lib.mkIf config.llm.enable {
   services.ollama = {
     enable = true;
     acceleration = "rocm";
