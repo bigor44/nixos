@@ -22,6 +22,7 @@
     ./modules/podman.nix
     ./modules/podman-home-assistant.nix
     ./modules/dashboard.nix
+    ./modules/ollama.nix
   ];
 
   config = {
