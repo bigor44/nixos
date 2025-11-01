@@ -1,4 +1,9 @@
-{...}: {
+{
+  lib,
+  config,
+  ...
+}:
+lib.mkIf config.podman.enable {
   networking.firewall.allowedTCPPorts = [8123];
   virtualisation.oci-containers = {
     backend = "podman";

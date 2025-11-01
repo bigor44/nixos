@@ -19,6 +19,8 @@
     ./modules/flatpak.nix
     ./modules/ssh.nix
     ./modules/monitoring.nix
+    ./modules/podman.nix
+    ./modules/podman-home-assistant.nix
     ./modules/dashboard.nix
   ];
 
