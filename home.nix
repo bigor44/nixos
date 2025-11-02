@@ -45,7 +45,7 @@ in {
     oh-my-zsh = {
       enable = true;
       plugins = ["git" "z" "fzf"];
-      theme = "awesomepanda";
+      theme = "candy";
     };
   };
   programs.fzf = {
