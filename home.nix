@@ -44,7 +44,7 @@ in {
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
-      plugins = ["git" "z" "fzf"];
+      plugins = ["git" "zoxide" "fzf"];
       theme = "candy";
     };
   };
