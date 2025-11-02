@@ -23,6 +23,7 @@ in {
   };
   home.packages = with pkgs; [
     eza
+    gemini-cli
   ];
   programs.git = {
     enable = true;
@@ -38,5 +39,22 @@ in {
   programs.zsh = {
     enable = true;
     shellAliases = sharedAliases;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    oh-my-zsh = {
+      enable = true;
+      plugins = ["git" "z" "fzf"];
+      theme = "awesomepanda";
+    };
+  };
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
   };
 }
