@@ -10,6 +10,6 @@
   ];
   imports = [
     ./home/git.nix
-    ./home/zsh.nix
+    ./home/shell.nix
   ];
 }
