@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   programs.fish.enable = true;
   environment.systemPackages = with pkgs; [
-    eza
     bat
     dig
     btop

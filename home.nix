@@ -1,4 +1,22 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  sharedAliases = {
+    ll = "exa -l";
+    la = "exa -lah";
+  };
+  fishAbbrs = {
+    nrs = "sudo nixos-rebuild switch --flake ~/nixos";
+    nrb = "sudo nixos-rebuild boot --flake ~/nixos";
+    nfu = "nix flake update";
+    nfc = "nix flake check";
+    gaa = "git add -A";
+    gc = "git commit";
+    gcm = "git commit -m";
+    gd = "git diff";
+    gl = "git pull";
+    gp = "git push";
+    gst = "git status";
+  };
+in {
   home.username = "bigor";
   home.homeDirectory = "/home/bigor";
   home.stateVersion = "25.11";
@@ -6,6 +24,7 @@
     EDITOR = "nvim";
   };
   home.packages = with pkgs; [
+    eza
   ];
   programs.git = {
     enable = true;
@@ -16,35 +35,11 @@
   };
   programs.bash = {
     enable = true;
-    shellAliases = {
-      ll = "exa -l";
-      la = "exa -lah";
-      edit = "sudo -e";
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos";
-      nrb = "sudo nixos-rebuild boot --flake ~/nixos";
-      nfu = "nix flake update";
-      nfc = "nix flake check";
-    };
+    shellAliases = sharedAliases;
   };
   programs.fish = {
     enable = true;
-    shellAliases = {
-      ll = "exa -l";
-      la = "exa -lah";
-      edit = "sudo -e";
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos";
-      nrb = "sudo nixos-rebuild boot --flake ~/nixos";
-      nfu = "nix flake update";
-      nfc = "nix flake check";
-    };
-    shellAbbrs = {
-      gaa = "git add -A";
-      gc = "git commit";
-      gcm = "git commit -m";
-      gd = "git diff";
-      gl = "git pull";
-      gp = "git push";
-      gst = "git status";
-    };
+    shellAliases = sharedAliases;
+    shellAbbrs = fishAbbrs;
   };
 }
