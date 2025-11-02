@@ -2,8 +2,6 @@
   sharedAliases = {
     ll = "exa -l";
     la = "exa -lah";
-  };
-  fishAbbrs = {
     nrs = "sudo nixos-rebuild switch --flake ~/nixos";
     nrb = "sudo nixos-rebuild boot --flake ~/nixos";
     nfu = "nix flake update";
@@ -37,9 +35,8 @@ in {
     enable = true;
     shellAliases = sharedAliases;
   };
-  programs.fish = {
+  programs.zsh = {
     enable = true;
     shellAliases = sharedAliases;
-    shellAbbrs = fishAbbrs;
   };
 }
