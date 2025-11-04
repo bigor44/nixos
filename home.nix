@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   sharedAliases = {
     ll = "exa -l";
     la = "exa -lah";
@@ -14,7 +15,8 @@
     gp = "git push";
     gst = "git status";
   };
-in {
+in
+{
   home.username = "bigor";
   home.homeDirectory = "/home/bigor";
   home.stateVersion = "25.05";
@@ -43,7 +45,11 @@ in {
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
-      plugins = ["git" "zoxide" "fzf"];
+      plugins = [
+        "git"
+        "zoxide"
+        "fzf"
+      ];
       theme = "candy";
     };
   };

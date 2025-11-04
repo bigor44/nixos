@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.zsh.enable = true;
   environment.systemPackages = with pkgs; [
     bat
@@ -12,9 +13,6 @@
     unzip
     htop
     ripgrep
-    alejandra
-    nixpkgs-fmt
-    nil
     pciutils
     sl
     sysstat

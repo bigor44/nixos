@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   options = {
     audio.enable = lib.mkEnableOption "Enable Audio";
     bluetooth.enable = lib.mkEnableOption "Enable bluetooth";

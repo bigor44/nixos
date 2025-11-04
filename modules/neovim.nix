@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nvf = {
     enable = true;
     settings.vim = {
@@ -68,4 +69,9 @@
       autopairs.nvim-autopairs.enable = true;
     };
   };
+  environment.systemPackages = with pkgs; [
+    nil
+    nixfmt
+    nixfmt-tree
+  ];
 }

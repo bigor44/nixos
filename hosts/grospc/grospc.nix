@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   networking.hostName = "grospc";
   audio.enable = true;
   bluetooth.enable = true;
