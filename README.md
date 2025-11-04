@@ -1,151 +1,45 @@
-# NixOS Configuration Repository
+# NixOS Configuration Project
 
-This repository contains my personal NixOS configuration, including modules for
-desktop environments, servers, development tools, and more. It's designed to be
-modular, maintainable, and easy to deploy using Nix flakes.
+This repository contains a complete, declarative NixOS configuration managed using Nix Flakes. It's designed to be reproducible and modular, supporting multiple host machines (`grospc` and `minipc`). The configuration includes system-level settings, user-specific environments via `home-manager`, and detailed customizations for the Cosmic desktop environment.
 
-## 📁 Project Structure
+The core of the project is the modular approach, with different functionalities split into separate files under the `modules/` directory. This makes it easy to manage and toggle features like audio, Bluetooth, various applications, and services.
 
-```
-.
-├── flake.nix                 # Main flake definition
-├── flake.lock                # Lock file for reproducible builds
-├── hardware-configuration.nix # Hardware-specific configuration (generated)
-├── hosts/                    # Host-specific configurations
-│   └── minipc/               # Configuration for 'minipc' host
-│       ├── configuration.nix # Main host config
-│       └── hardware-configuration.nix # Hardware config for this host
-├── modules/                  # Reusable configuration modules
-│   ├── options.nix           # Module options
-│   ├── audio.nix             # Audio configuration
-│   ├── bluetooth.nix         # Bluetooth support
-│   ├── desktop-apps.nix      # Desktop applications
-│   ├── desktop-env.nix       # Desktop environment (Cosmic)
-│   ├── fonts.nix             # Font configuration
-│   ├── gc.nix                # Garbage collection settings
-│   ├── locale.nix            # Locale and timezone settings
-│   ├── monitoring.nix        # Prometheus node exporter
-│   ├── network.nix           # Network configuration (NetworkManager, nftables)
-│   ├── neovim.nix            # Neovim configuration via nvf
-│   ├── ollama.nix            # Ollama and Open WebUI for LLMs
-│   ├── podman.nix            # Podman container setup
-│   ├── podman-home-assistant.nix # Home Assistant container
-│   ├── ssh.nix               # SSH server settings
-│   ├── users.nix             # User management
-│   └── ...                   # Other modules
-└── README.md                 # This file
+## Building and Running
+
+To apply the configuration to a NixOS system, you need to have Nix Flakes enabled. The primary command to build and switch to a new configuration is:
+
+```bash
+sudo nixos-rebuild switch --flake .#<hostname>
 ```
 
-## 🧰 Features
+Replace `<hostname>` with the target host you want to build for (e.g., `grospc` or `minipc`).
 
-### 🔧 Host Configuration
+**Common Commands:**
 
-- **Host**: `minipc`
-- **Architecture**: x86_64-linux
-- **System Type**: Desktop (Cosmic DE)
-- **Hardware**: Custom PC with GPU acceleration
+*   **Apply the configuration:** `sudo nixos-rebuild switch --flake .#<hostname>`
+*   **Update flake inputs:** `nix flake update`
+*   **Check the flake:** `nix flake check`
 
-### 🖥️ Desktop Environment
+## Project Structure
 
-- **DE**: [Cosmic](https://github.com/pop-os/cosmic)
-- **Display Manager**: Cosmic Greeter
-- **Applications**:
-  - Firefox
-  - Steam
-  - Discord
-  - Brave
-  - OneDrive
-  - WhatsApp Electron
+*   `flake.nix`: The entry point for the Nix Flake. It defines the project's inputs (like `nixpkgs` and `home-manager`) and outputs the final `nixosConfigurations` for each host.
+*   `configuration.nix`: The main system-wide configuration file. It imports all the necessary modules from the `modules/` directory.
+*   `home.nix`: The main `home-manager` configuration file. It defines user-specific packages, shell settings (aliases, Zsh), Git configuration, and other user-level programs.
+*   `hosts/`: This directory contains host-specific configurations. Each subdirectory corresponds to a machine and includes hardware-specific settings.
+*   `modules/`: This directory contains a collection of modularized NixOS configurations for different aspects of the system, such as applications, services, and hardware.
+*   `config/cosmic/`: This directory holds settings for the Cosmic desktop environment, which are managed outside of the NixOS configuration but are part of the overall setup.
 
-### 🧑‍💻 Development Tools
+## Development Conventions
 
-- **Editor**: Neovim (via [nvf](https://github.com/Neovim-from-scratch/nvf))
-- **Languages**:
-  - Nix (with `nil`, `nixfmt`)
-  - Markdown
-  - Bash
-- **LSP Support**: Treesitter, LSP integration
-- **Git Integration**: Gitsigns
-
-### 🌐 Networking
-
-- **Network Manager**: Enabled with custom DNS
-- **Firewall**: nftables
-- **Hosts File**: Local DNS entries for devices on LAN
-
-### 🔐 Security
-
-- **SSH Server**: Enabled with passwordless login (key-based)
-- **Sudo**: Wheel group doesn't require password
-- **Root Login**: Disabled
-
-### 📊 Monitoring & Dashboard
-
-- **Prometheus Node Exporter**: Enabled
-- **Grafana & Prometheus**: Dashboard for system metrics
-- **Garbage Collection**: Automated weekly cleanup
-
-### 🤖 AI / LLM Support
-
-- **Ollama**: Local LLM inference with ROCm acceleration
-- **Open WebUI**: Web interface for interacting with models
-
-### 🐳 Containerization
-
-- **Podman**: Container engine with Docker compatibility
-- **Home Assistant**: Containerized instance
-
-## 🛠️ Deployment
-
-### Prerequisites
-
-- NixOS 24.05 or later
-- Nix with flakes enabled
-
-### Setup Steps
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/bigor/nixos-config.git
-   cd nixos-config
-   ```
-
-2. **Update Hardware Configuration** On your target machine:
-   ```bash
-   nixos-generate-config --force --root /mnt
-   cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/<hostname>/
-   ```
-
-3. **Deploy**
-   ```bash
-   sudo nixos-rebuild switch --flake .#minipc
-   ```
-
-## 📦 Included Modules
-
-| Module                      | Description                  |
-| --------------------------- | ---------------------------- |
-| `audio.nix`                 | Audio configuration          |
-| `bluetooth.nix`             | Bluetooth support            |
-| `desktop-apps.nix`          | Desktop applications         |
-| `desktop-env.nix`           | Cosmic desktop environment   |
-| `fonts.nix`                 | Console and GUI fonts        |
-| `gc.nix`                    | Garbage collection settings  |
-| `locale.nix`                | Locale and timezone          |
-| `monitoring.nix`            | Prometheus node exporter     |
-| `network.nix`               | Network configuration        |
-| `neovim.nix`                | Neovim with full LSP support |
-| `ollama.nix`                | Ollama and Open WebUI        |
-| `podman.nix`                | Podman containers            |
-| `podman-home-assistant.nix` | Home Assistant container     |
-| `ssh.nix`                   | SSH server settings          |
-| `users.nix`                 | User and sudo configuration  |
+*   **Declarative Changes:** All system and user configurations are managed declaratively within `.nix` files. To make changes, you modify these files and then rebuild the system.
+*   **Modularity:** New features or configurations should be added as new modules in the `modules/` directory and then imported into `configuration.nix`.
+*   **Host-Specific Settings:** Any configuration that is unique to a single machine should be placed in the corresponding file within the `hosts/` directory.
+*   **User-Specific Settings:** User-level packages and configurations are managed in `home.nix` using `home-manager`.
 
 ## 📝 Notes
 
 - This configuration uses `nvf` for Neovim configuration (Neovim from Scratch).
 - The system is set to French locale and timezone.
-- SSH keys are configured for `bigor` user.
 - All modules are optional and can be enabled/disabled via the options in
   `options.nix`.
 
