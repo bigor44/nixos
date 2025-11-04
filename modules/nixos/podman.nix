@@ -1,3 +1,7 @@
+/*
+  Title: Podman Configuration
+  Description: Enables and configures Podman for container management.
+*/
 {
   config,
   lib,

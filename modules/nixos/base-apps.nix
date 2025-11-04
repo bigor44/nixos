@@ -1,3 +1,7 @@
+/*
+  Title: Base Applications
+  Description: Installs a set of essential command-line tools and utilities.
+*/
 { pkgs, ... }:
 {
   programs.zsh.enable = true;

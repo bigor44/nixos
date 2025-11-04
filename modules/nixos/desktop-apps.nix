@@ -1,3 +1,7 @@
+/*
+  Title: Desktop Applications
+  Description: Installs a set of desktop applications.
+*/
 {
   config,
   lib,

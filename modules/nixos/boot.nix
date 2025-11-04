@@ -1,3 +1,7 @@
+/*
+  Title: Bootloader Configuration
+  Description: Configures the systemd-boot loader and sets the Zen kernel.
+*/
 { pkgs, ... }:
 {
   boot.loader.systemd-boot.enable = true;

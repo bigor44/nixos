@@ -1,3 +1,7 @@
+/*
+  Title: Shell Configuration
+  Description: Configures Bash and Zsh with aliases, plugins, and other settings.
+*/
 {
   programs.bash = {
     enable = true;

@@ -1,3 +1,7 @@
+/*
+  Title: User Configuration
+  Description: Configures system users, including SSH keys and sudo access.
+*/
 { pkgs, ... }:
 {
   users.users.bigor = {

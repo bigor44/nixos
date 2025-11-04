@@ -1,3 +1,7 @@
+/*
+  Title: Dashboard Configuration
+  Description: Configures Grafana and Prometheus for system monitoring and dashboards.
+*/
 {
   config,
   lib,

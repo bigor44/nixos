@@ -1,3 +1,7 @@
+/*
+  Title: Locale Configuration
+  Description: Sets the system's locale, time zone, and keyboard layout.
+*/
 { ... }:
 {
   time.timeZone = "Europe/Paris";

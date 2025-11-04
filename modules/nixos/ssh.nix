@@ -1,3 +1,7 @@
+/*
+  Title: SSH Server Configuration
+  Description: Configures the OpenSSH server with secure settings.
+*/
 {
   config,
   lib,

@@ -1,3 +1,7 @@
+/*
+  Title: Monitoring Configuration
+  Description: Configures the Prometheus node exporter for system monitoring.
+*/
 {
   lib,
   config,

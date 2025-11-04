@@ -1,3 +1,7 @@
+/*
+  Title: Audio Configuration
+  Description: Configures the audio system, disabling PulseAudio and enabling PipeWire.
+*/
 {
   lib,
   config,

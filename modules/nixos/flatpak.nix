@@ -1,3 +1,7 @@
+/*
+  Title: Flatpak Configuration
+  Description: Enables Flatpak and adds the Flathub remote.
+*/
 {
   config,
   lib,

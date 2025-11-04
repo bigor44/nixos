@@ -1,3 +1,7 @@
+/*
+  Title: Desktop Environment Configuration
+  Description: Enables the Cosmic desktop environment and greeter.
+*/
 {
   config,
   lib,

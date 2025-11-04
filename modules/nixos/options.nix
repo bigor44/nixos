@@ -1,3 +1,7 @@
+/*
+  Title: Module Options
+  Description: Defines custom options for enabling and disabling different modules in the NixOS configuration.
+*/
 { lib, ... }:
 {
   options = {

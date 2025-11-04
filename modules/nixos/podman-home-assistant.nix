@@ -1,3 +1,7 @@
+/*
+  Title: Home Assistant Container
+  Description: Configures and runs Home Assistant in a Podman container.
+*/
 {
   lib,
   config,

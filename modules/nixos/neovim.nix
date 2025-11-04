@@ -1,3 +1,7 @@
+/*
+  Title: Neovim Configuration
+  Description: Configures Neovim with various plugins and settings for a complete development environment.
+*/
 { pkgs, ... }:
 {
   programs.nvf = {

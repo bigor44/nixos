@@ -1,3 +1,7 @@
+/*
+  Title: AdGuard Home Configuration
+  Description: Configures AdGuard Home for network-wide ad blocking and DNS filtering.
+*/
 {
   config,
   lib,

@@ -1,3 +1,7 @@
+/*
+  Title: Bluetooth Configuration
+  Description: Enables and configures Bluetooth services.
+*/
 {
   config,
   lib,

@@ -1,3 +1,7 @@
+/*
+  Title: Ollama Configuration
+  Description: Enables and configures Ollama for large language models and the Open WebUI.
+*/
 {
   lib,
   config,
