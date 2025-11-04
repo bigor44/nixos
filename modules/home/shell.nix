@@ -1,13 +1,13 @@
 /*
-  Title: Shell Configuration
-  Description: Configures Bash and Zsh with aliases, plugins, and other settings.
+Title: Shell Configuration
+Description: Configures Bash and Zsh with aliases, plugins, and other settings.
 */
 {
   programs.bash = {
     enable = true;
     shellAliases = {
-      ll = "exa -l";
-      la = "exa -lah";
+      ll = "eza -l";
+      la = "eza -lah";
       nrs = "sudo nixos-rebuild switch --flake ~/nixos";
       nrb = "sudo nixos-rebuild boot --flake ~/nixos";
       nfu = "nix flake update";
@@ -24,8 +24,8 @@
   programs.zsh = {
     enable = true;
     shellAliases = {
-      ll = "exa -l";
-      la = "exa -lah";
+      ll = "eza -l";
+      la = "eza -lah";
       nrs = "sudo nixos-rebuild switch --flake ~/nixos";
       nrb = "sudo nixos-rebuild boot --flake ~/nixos";
       nfu = "nix flake update";
@@ -48,8 +48,10 @@
         "git"
         "zoxide"
         "fzf"
+        "sudo"
+        "ssh-agent"
       ];
-      theme = "dst";
+      theme = "agnoster";
     };
     history.size = 10000;
     history.ignoreAllDups = true;
