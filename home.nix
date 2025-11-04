@@ -50,7 +50,7 @@ in {
         "zoxide"
         "fzf"
       ];
-      theme = "candy";
+      theme = "dst";
     };
     history.size = 10000;
     history.ignoreAllDups = true;
