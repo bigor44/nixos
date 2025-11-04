@@ -40,6 +40,7 @@ in {
     enable = true;
     shellAliases = sharedAliases;
     enableCompletion = true;
+    autocd = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
@@ -50,6 +51,10 @@ in {
         "fzf"
       ];
       theme = "candy";
+      history.size = 10000;
+      history.ignoreAllDups = true;
+      history.path = "$HOME/.zsh_history";
+      history.ignorePatterns = ["rm *" "pkill *" "cp *"];
     };
   };
   programs.fzf = {
