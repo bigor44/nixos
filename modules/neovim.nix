@@ -19,7 +19,7 @@
       theme = {
         enable = true;
         name = "tokyonight";
-        style = "night";
+        style = "moon";
         transparent = false;
       };
 
@@ -40,19 +40,17 @@
         indent-blankline.enable = true;
         highlight-undo.enable = true;
       };
+
       lsp = {
         enable = true;
         formatOnSave = true;
       };
+
       languages = {
         enableTreesitter = true;
         enableFormat = true;
         enableExtraDiagnostics = true;
-        nix = {
-          enable = true;
-          lsp.server = "nixd";
-          lsp.package = pkgs.nixd;
-        };
+        nix.enable = true;
         markdown.enable = true;
         bash.enable = true;
       };
@@ -66,7 +64,7 @@
       filetree.neo-tree.enable = true;
       telescope.enable = true;
       treesitter.context.enable = true;
-      autocomplete.nvim-cmp.enable = true;
+      autocomplete.blink-cmp.enable = true;
       autopairs.nvim-autopairs.enable = true;
     };
   };

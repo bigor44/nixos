@@ -13,7 +13,8 @@
     htop
     ripgrep
     alejandra
-    nixd
+    nixpkgs-fmt
+    nil
     pciutils
     sl
     sysstat
