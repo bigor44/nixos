@@ -1,13 +1,13 @@
 /*
-  Title: Audio Configuration
-  Description: Configures the audio system, disabling PulseAudio and enabling PipeWire.
+Title: Audio Configuration
+Description: Configures the audio system, disabling PulseAudio and enabling PipeWire.
 */
 {
   lib,
   config,
   ...
 }:
-lib.mkIf config.audio.enable {
+lib.mkIf config.desktop.enable {
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {

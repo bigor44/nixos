@@ -1,13 +1,13 @@
 /*
-  Title: Bluetooth Configuration
-  Description: Enables and configures Bluetooth services.
+Title: Bluetooth Configuration
+Description: Enables and configures Bluetooth services.
 */
 {
   config,
   lib,
   ...
 }:
-lib.mkIf config.bluetooth.enable {
+lib.mkIf config.desktop.enable {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
