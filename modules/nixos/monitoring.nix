@@ -1,6 +1,6 @@
 /*
-Title: Dashboard Configuration
-Description: Configures Grafana and Prometheus for system monitoring and dashboards.
+  Title: Dashboard Configuration
+  Description: Configures Grafana and Prometheus for system monitoring and dashboards.
 */
 {
   config,
@@ -8,7 +8,7 @@ Description: Configures Grafana and Prometheus for system monitoring and dashboa
   ...
 }:
 lib.mkIf config.server.enable {
-  networking.firewall.allowedTCPPorts = [9090];
+  networking.firewall.allowedTCPPorts = [ 9090 ];
   services.grafana = {
     enable = true;
     openFirewall = true;
@@ -37,6 +37,6 @@ lib.mkIf config.server.enable {
   services.prometheus.exporters.node = {
     enable = true;
     openFirewall = true;
-    enabledCollectors = ["systemd"];
+    enabledCollectors = [ "systemd" ];
   };
 }
