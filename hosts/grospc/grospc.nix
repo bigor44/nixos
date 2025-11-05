@@ -1,9 +1,7 @@
-{...}: {
+{
   networking.hostName = "grospc";
-  adblocker.enable = true;
   desktop.enable = true;
+  server.enable = false;
+  adblocker.enable = true;
   llm.enable = true;
-  sshserver.enable = false;
-  dashboard.enable = false;
-  monitoring.enable = true;
 }

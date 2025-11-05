@@ -1,9 +1,7 @@
-{...}: {
+{
   networking.hostName = "minipc";
-  adblocker.enable = true;
   desktop.enable = false;
+  server.enable = true;
+  adblocker.enable = true;
   llm.enable = true;
-  sshserver.enable = true;
-  monitoring.enable = true;
-  dashboard.enable = true;
 }

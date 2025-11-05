@@ -23,7 +23,6 @@
     ./modules/nixos/flatpak.nix
     ./modules/nixos/ssh.nix
     ./modules/nixos/monitoring.nix
-    ./modules/nixos/dashboard.nix
     ./modules/nixos/ollama.nix
   ];
 
