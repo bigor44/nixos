@@ -9,5 +9,7 @@
     desktop.enable = lib.mkEnableOption "Enable desktop environment";
     llm.enable = lib.mkEnableOption "Enable Ollama";
     server.enable = lib.mkEnableOption "Enable SSH Server";
+    virtualization.enable = lib.mkEnableOption "Enable libvirtd virtualization";
+    ubuntu-vm.enable = lib.mkEnableOption "Enable Ubuntu VM autostart";
   };
 }
