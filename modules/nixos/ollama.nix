@@ -2,11 +2,7 @@
   Title: Ollama Configuration
   Description: Enables and configures Ollama for large language models and the Open WebUI.
 */
-{
-  lib,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 lib.mkIf config.llm.enable {
   services.ollama = {
     enable = true;

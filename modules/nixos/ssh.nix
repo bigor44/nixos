@@ -2,11 +2,7 @@
   Title: SSH Server Configuration
   Description: Configures the OpenSSH server with secure settings.
 */
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.server.enable {
   services.openssh = {
     enable = true;

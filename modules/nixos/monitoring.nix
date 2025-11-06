@@ -2,11 +2,7 @@
   Title: Dashboard Configuration
   Description: Configures Grafana and Prometheus for system monitoring and dashboards.
 */
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.server.enable {
   networking.firewall.allowedTCPPorts = [ 9090 ];
   services.grafana = {
@@ -24,13 +20,7 @@ lib.mkIf config.server.enable {
     scrapeConfigs = [
       {
         job_name = "exporters";
-        static_configs = [
-          {
-            targets = [
-              "127.0.0.1:9100"
-            ];
-          }
-        ];
+        static_configs = [ { targets = [ "127.0.0.1:9100" ]; } ];
       }
     ];
   };
