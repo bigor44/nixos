@@ -1,6 +1,7 @@
 # This is the main configuration file for the NixOS system.
 # It imports other modules and sets system-wide options.
-{config, ...}: {
+{ config, ... }:
+{
   imports = [
     # Base Modules
     ./modules/nixos/options.nix
@@ -24,7 +25,6 @@
     ./modules/nixos/ssh.nix
     ./modules/nixos/monitoring.nix
     ./modules/nixos/ollama.nix
-    ./modules/nixos/kubernetes.nix
   ];
 
   config = {
