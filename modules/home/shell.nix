@@ -1,8 +1,8 @@
 /*
-  Title: Shell Configuration
-  Description: Configures Bash and Zsh with aliases, plugins, and other settings.
+Title: Shell Configuration
+Description: Configures Bash and Zsh with aliases, plugins, and other settings.
 */
-{
+{pkgs, ...}: {
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -21,8 +21,26 @@
       gst = "git status";
     };
   };
-  programs.zsh = {
+  programs.fish = {
     enable = true;
+    plugins = [
+      {
+        name = "tide";
+        src = pkgs.fishPlugins.tide.src;
+      }
+      {
+        name = "z";
+        src = pkgs.fishPlugins.z.src;
+      }
+      {
+        name = "fzf";
+        src = pkgs.fishPlugins.fzf.src;
+      }
+      {
+        name = "gruvbox";
+        src = pkgs.fishPlugins.gruvbox.src;
+      }
+    ];
     shellAliases = {
       ll = "eza -l";
       la = "eza -lah";
@@ -38,37 +56,14 @@
       gp = "git push";
       gst = "git status";
     };
-    enableCompletion = true;
-    autocd = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "zoxide"
-        "fzf"
-        "sudo"
-        "ssh-agent"
-      ];
-      theme = "agnoster";
-    };
-    history.size = 10000;
-    history.ignoreAllDups = true;
-    history.path = "$HOME/.zsh_history";
-    history.ignorePatterns = [
-      "rm *"
-      "pkill *"
-      "cp *"
-    ];
   };
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
   };
   programs.zoxide = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
     enableBashIntegration = true;
   };
 }
