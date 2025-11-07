@@ -36,10 +36,6 @@ Description: Configures Bash and Zsh with aliases, plugins, and other settings.
         name = "fzf";
         src = pkgs.fishPlugins.fzf.src;
       }
-      {
-        name = "gruvbox";
-        src = pkgs.fishPlugins.gruvbox.src;
-      }
     ];
     shellAliases = {
       ll = "eza -l";
