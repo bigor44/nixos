@@ -25,8 +25,6 @@
     ./modules/nixos/ssh.nix
     ./modules/nixos/monitoring.nix
     ./modules/nixos/ollama.nix
-    ./modules/nixos/virtualization.nix
-    ./modules/nixos/ubuntu-vm.nix
   ];
 
   config = {
