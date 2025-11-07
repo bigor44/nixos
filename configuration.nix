@@ -1,7 +1,6 @@
 # This is the main configuration file for the NixOS system.
 # It imports other modules and sets system-wide options.
-{ config, ... }:
-{
+{config, ...}: {
   imports = [
     # Base Modules
     ./modules/nixos/options.nix
@@ -13,6 +12,7 @@
     ./modules/nixos/users.nix
     ./modules/nixos/fonts.nix
     ./modules/nixos/neovim.nix
+    ./modules/nixos/ssh.nix
 
     # Optionnal Modules
 
@@ -22,7 +22,6 @@
     ./modules/nixos/bluetooth.nix
     ./modules/nixos/desktop-apps.nix
     ./modules/nixos/flatpak.nix
-    ./modules/nixos/ssh.nix
     ./modules/nixos/monitoring.nix
     ./modules/nixos/ollama.nix
   ];
