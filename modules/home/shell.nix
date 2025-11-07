@@ -25,8 +25,8 @@ Description: Configures Bash and Zsh with aliases, plugins, and other settings.
     enable = true;
     plugins = [
       {
-        name = "tide";
-        src = pkgs.fishPlugins.tide.src;
+        name = "bobthefisher";
+        src = pkgs.fishPlugins.bobthefisher.src;
       }
       {
         name = "z";
