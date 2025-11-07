@@ -1,10 +1,8 @@
 /*
-  Title: Network Configuration
-  Description: Configures networking, including NetworkManager, nftables, and host file entries.
+Title: Network Configuration
+Description: Configures networking, including NetworkManager, nftables, and host file entries.
 */
-{ ... }:
 {
-  networking.nftables.enable = true;
   networking = {
     networkmanager = {
       enable = true;
