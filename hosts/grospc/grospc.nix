@@ -4,4 +4,5 @@
   server.enable = false;
   adblocker.enable = true;
   llm.enable = false;
+  k3s.enable = true;
 }

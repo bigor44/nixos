@@ -17,6 +17,7 @@
     # Optionnal Modules
 
     ./modules/nixos/audio.nix
+    ./modules/nixos/k3s.nix
     ./modules/nixos/adguard.nix
     ./modules/nixos/desktop-env.nix
     ./modules/nixos/bluetooth.nix
