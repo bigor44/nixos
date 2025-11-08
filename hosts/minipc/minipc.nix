@@ -4,4 +4,5 @@
   server.enable = true;
   adblocker.enable = true;
   llm.enable = true;
+  dashboard.enable = true;
 }

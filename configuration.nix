@@ -24,6 +24,7 @@
     ./modules/nixos/flatpak.nix
     ./modules/nixos/monitoring.nix
     ./modules/nixos/ollama.nix
+    ./modules/nixos/homepage.nix
   ];
 
   config = {
