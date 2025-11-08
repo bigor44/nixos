@@ -25,15 +25,17 @@ Replace `<hostname>` with the target host you want to build for (e.g., `grospc` 
 ## Project Structure
 
 *   `flake.nix`: The entry point for the Nix Flake. It defines the project's inputs (like `nixpkgs` and `home-manager`) and outputs the final `nixosConfigurations` for each host.
-*   `configuration.nix`: The main system-wide configuration file. It imports all the necessary modules from the `modules/` directory.
-*   `home.nix`: The main `home-manager` configuration file. It defines user-specific packages, shell settings (aliases, Zsh), Git configuration, and other user-level programs.
+*   `configuration.nix`: The main system-wide configuration file. It imports NixOS modules from the `modules/nixos/` directory.
+*   `home.nix`: The main `home-manager` configuration file. It imports user-specific modules from the `modules/home/` directory.
 *   `hosts/`: This directory contains host-specific configurations. Each subdirectory corresponds to a machine and includes hardware-specific settings.
-*   `modules/`: This directory contains a collection of modularized NixOS configurations for different aspects of the system, such as applications, services, and hardware.
+*   `modules/`: This directory contains modularized configurations:
+    *   `modules/nixos/`: Contains NixOS modules for system-wide configurations.
+    *   `modules/home/`: Contains home-manager modules for user-specific configurations.
 *   `config/cosmic/`: This directory holds settings for the Cosmic desktop environment, which are managed outside of the NixOS configuration but are part of the overall setup.
 
 ## Development Conventions
 
 *   **Declarative Changes:** All system and user configurations are managed declaratively within `.nix` files. To make changes, you modify these files and then rebuild the system.
-*   **Modularity:** New features or configurations should be added as new modules in the `modules/` directory and then imported into `configuration.nix`.
+*   **Modularity:** New features or configurations should be added as new modules in the `modules/nixos` or `modules/home` directories and then imported into `configuration.nix` or `home.nix` respectively.
 *   **Host-Specific Settings:** Any configuration that is unique to a single machine should be placed in the corresponding file within the `hosts/` directory.
 *   **User-Specific Settings:** User-level packages and configurations are managed in `home.nix` using `home-manager`.

@@ -34,16 +34,15 @@ Replace `<hostname>` with the target host you want to build for (e.g., `grospc` 
 ## Development Conventions
 
 *   **Declarative Changes:** All system and user configurations are managed declaratively within `.nix` files. To make changes, you modify these files and then rebuild the system.
-*   **Modularity:** New features or configurations should be added as new modules in the `modules/` directory and then imported into `configuration.nix`.
+*   **Modularity:** New features or configurations should be added as new modules in the `modules/nixos` or `modules/home` directories and then imported into `configuration.nix` or `home.nix` respectively.
 *   **Host-Specific Settings:** Any configuration that is unique to a single machine should be placed in the corresponding file within the `hosts/` directory.
 *   **User-Specific Settings:** User-level packages and configurations are managed in `home.nix` using `home-manager`.
 
 ## 📝 Notes
 
-- This configuration uses `nvf` for Neovim configuration (Neovim from Scratch).
+- This configuration uses `nvf` for Neovim configuration.
 - The system is set to French locale and timezone.
-- All modules are optional and can be enabled/disabled via the options in
-  `options.nix`.
+- All modules are optional and can be enabled/disabled via the options in `modules/nixos/options.nix`.
 
 ## 📄 License
 
