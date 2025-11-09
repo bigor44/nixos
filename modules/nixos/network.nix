@@ -14,11 +14,11 @@
     hosts = {
       "192.168.1.1" = [
         "grospc"
-        "grospc.lan"
+        "grospc.bigor.lan"
       ];
       "192.168.1.10" = [
         "minipc"
-        "minipc.lan"
+        "minipc.bigor.lan"
       ];
     };
   };
