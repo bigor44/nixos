@@ -1,6 +1,6 @@
 /*
-Title: SSH Server Configuration
-Description: Configures the OpenSSH server with secure settings.
+  Title: SSH Server Configuration
+  Description: Configures the OpenSSH server with secure settings.
 */
 {
   services.openssh = {

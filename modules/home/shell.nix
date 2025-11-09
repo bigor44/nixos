@@ -1,8 +1,9 @@
 /*
-Title: Shell Configuration
-Description: Configures Bash and Zsh with aliases, plugins, and other settings.
+  Title: Shell Configuration
+  Description: Configures Bash and Zsh with aliases, plugins, and other settings.
 */
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.bash = {
     enable = true;
     shellAliases = {

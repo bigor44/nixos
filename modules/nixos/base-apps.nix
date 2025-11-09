@@ -1,8 +1,9 @@
 /*
-Title: Base Applications
-Description: Installs a set of essential command-line tools and utilities.
+  Title: Base Applications
+  Description: Installs a set of essential command-line tools and utilities.
 */
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.fish.enable = true;
   programs.tmux.enable = true;
   environment.systemPackages = with pkgs; [
