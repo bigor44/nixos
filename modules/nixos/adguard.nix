@@ -8,6 +8,7 @@ lib.mkIf config.adblocker.enable {
     enable = true;
     openFirewall = true;
     port = 3003;
+    mutableSettings = false; # CRITICAL: Must be false for rewrites to work
     settings = {
       language = "fr";
       dns = {
@@ -69,6 +70,32 @@ lib.mkIf config.adblocker.enable {
           enabled = false; # Enforcing "Safe search" option for search engines, when possible.
         };
       };
+      custom_dns_entries = [
+        {
+          domain = "bigor.lan";
+          answer = "192.168.1.10";
+        }
+        {
+          domain = "grospc.bigor.lan";
+          answer = "192.168.1.1";
+        }
+        {
+          domain = "minipc.bigor.lan";
+          answer = "192.168.1.10";
+        }
+        {
+          domain = "*.bigor.lan";
+          answer = "192.168.1.10";
+        }
+        {
+          domain = "*.grospc.bigor.lan";
+          answer = "192.168.1.1";
+        }
+        {
+          domain = "*.minipc.bigor.lan";
+          answer = "192.168.1.10";
+        }
+      ];
       # The following notation uses map
       # to not have to manually create {enabled = true; url = "";} for every filter
       # This is, however, fully optional
