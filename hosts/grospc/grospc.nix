@@ -4,5 +4,4 @@
   server.enable = false;
   adblocker.enable = true;
   llm.enable = false;
-  portal.enable = false;
 }
