@@ -12,7 +12,6 @@ Description: Installs a set of essential command-line tools and utilities.
     curl
     fastfetch
     tree
-    tmux
     zip
     unzip
     htop
