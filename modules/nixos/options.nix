@@ -6,7 +6,6 @@
 {
   options = {
     adblocker.enable = lib.mkEnableOption "Enable Adguard Home";
-    dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
     desktop.enable = lib.mkEnableOption "Enable desktop environment";
     llm.enable = lib.mkEnableOption "Enable Ollama";
     server.enable = lib.mkEnableOption "Enable SSH Server";
