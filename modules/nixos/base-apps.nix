@@ -7,7 +7,6 @@
   programs.fish.enable = true;
   programs.tmux.enable = true;
   environment.systemPackages = with pkgs; [
-    bat
     nixfmt
     dig
     btop
