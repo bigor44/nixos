@@ -19,6 +19,7 @@
     shellAbbrs = {
       nrs = "sudo nixos-rebuild switch --flake ~/nixos";
       nrb = "sudo nixos-rebuild boot --flake ~/nixos";
+      ncg = "sudo nix-collect-garbage -d";
       nfu = "nix flake update";
       nfc = "nix flake check";
       gaa = "git add -A";

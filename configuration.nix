@@ -13,12 +13,12 @@
     ./modules/nixos/users.nix
     ./modules/nixos/fonts.nix
     ./modules/nixos/nixvim.nix
-    ./modules/nixos/ssh.nix
 
     # Optionnal Modules
 
     ./modules/nixos/audio.nix
     ./modules/nixos/adguard.nix
+    ./modules/nixos/ssh.nix
     ./modules/nixos/desktop-env.nix
     ./modules/nixos/bluetooth.nix
     ./modules/nixos/desktop-apps.nix
