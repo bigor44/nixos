@@ -4,24 +4,6 @@
 */
 { pkgs, ... }:
 {
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      ll = "eza -l";
-      la = "eza -lah";
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos";
-      nrb = "sudo nixos-rebuild boot --flake ~/nixos";
-      nfu = "nix flake update";
-      nfc = "nix flake check";
-      gaa = "git add -A";
-      gc = "git commit";
-      gcm = "git commit -m";
-      gd = "git diff";
-      gl = "git pull";
-      gp = "git push";
-      gst = "git status";
-    };
-  };
   programs.fish = {
     enable = true;
     plugins = [
@@ -41,6 +23,8 @@
     shellAliases = {
       ll = "eza -l";
       la = "eza -lah";
+    };
+    shellAbbrs = {
       nrs = "sudo nixos-rebuild switch --flake ~/nixos";
       nrb = "sudo nixos-rebuild boot --flake ~/nixos";
       nfu = "nix flake update";
