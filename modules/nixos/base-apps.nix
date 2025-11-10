@@ -8,6 +8,7 @@
   programs.tmux.enable = true;
   environment.systemPackages = with pkgs; [
     bat
+    nixfmt
     dig
     btop
     wget

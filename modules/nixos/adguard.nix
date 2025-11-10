@@ -1,12 +1,8 @@
 /*
-Title: AdGuard Home Configuration
-Description: Configures AdGuard Home for network-wide ad blocking and DNS filtering with custom local domain records.
+  Title: AdGuard Home Configuration
+  Description: Configures AdGuard Home for network-wide ad blocking and DNS filtering with custom local domain records.
 */
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.adblocker.enable {
   services.adguardhome = {
     enable = true;
@@ -29,7 +25,7 @@ lib.mkIf config.adblocker.enable {
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
         ];
-        bootstrap_dns = ["192.168.1.254"];
+        bootstrap_dns = [ "192.168.1.254" ];
         upstream_mode = "load_balance";
         cache_enabled = true;
         anonymize_client_ip = true;
@@ -75,18 +71,18 @@ lib.mkIf config.adblocker.enable {
       # This is, however, fully optional
       filters =
         map
-        (url: {
-          enabled = true;
-          url = url;
-        })
-        [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # HaGeZi's Normal DNS Blocklist
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # HaGeZi's Threat Intelligence Feeds DNS Blocklist
-        ];
+          (url: {
+            enabled = true;
+            url = url;
+          })
+          [
+            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
+            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
+            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # HaGeZi's Normal DNS Blocklist
+            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # HaGeZi's Threat Intelligence Feeds DNS Blocklist
+          ];
     };
   };
-  networking.firewall.allowedTCPPorts = [53];
-  networking.firewall.allowedUDPPorts = [53];
+  networking.firewall.allowedTCPPorts = [ 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

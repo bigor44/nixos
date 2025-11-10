@@ -1,6 +1,7 @@
 # This is the main configuration file for the NixOS system.
 # It imports other modules and sets system-wide options.
-{config, ...}: {
+{ config, ... }:
+{
   imports = [
     # Base Modules
     ./modules/nixos/options.nix
