@@ -14,22 +14,16 @@
   };
 
   outputs =
-    {
-      nixpkgs,
-      home-manager,
-      nixvim,
-      ...
-    }:
+    { self, nixpkgs, home-manager, nixvim, ... }@inputs:
     let
       system = "x86_64-linux";
-    in
-    {
-      nixosConfigurations.grospc = nixpkgs.lib.nixosSystem {
+      mkNixosSystem = hostName: nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           nixvim.nixosModules.nixvim
-          ./hosts/grospc/hardware-configuration.nix
-          ./hosts/grospc/grospc.nix
+          ./hosts/${hostName}/hardware-configuration.nix
+          ./hosts/${hostName}/${hostName}.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -40,21 +34,11 @@
           }
         ];
       };
-      nixosConfigurations.minipc = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          nixvim.nixosModules.nixvim
-          ./hosts/minipc/hardware-configuration.nix
-          ./hosts/minipc/minipc.nix
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.bigor = import ./home.nix;
-            home-manager.backupFileExtension = "backup";
-          }
-        ];
+    in
+    {
+      nixosConfigurations = {
+        grospc = mkNixosSystem "grospc";
+        minipc = mkNixosSystem "minipc";
       };
     };
 }
