@@ -11,7 +11,7 @@
     ./modules/nixos/base-apps.nix
     ./modules/nixos/users.nix
     ./modules/nixos/fonts.nix
-    ./modules/nixos/neovim.nix
+    ./modules/nixos/nixvim.nix
     ./modules/nixos/ssh.nix
 
     # Optionnal Modules
