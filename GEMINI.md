@@ -29,7 +29,8 @@ Replace `<hostname>` with the target host you want to build for (e.g., `grospc` 
 *   `home.nix`: The main `home-manager` configuration file. It imports user-specific modules from the `modules/home/` directory.
 *   `hosts/`: This directory contains host-specific configurations. Each subdirectory corresponds to a machine and includes hardware-specific settings.
 *   `modules/`: This directory contains modularized configurations:
-    *   `modules/nixos/`: Contains NixOS modules for system-wide configurations. These include `adguard.nix`, `audio.nix`, `base-apps.nix`, `bluetooth.nix`, `boot.nix`, `desktop-apps.nix`, `desktop-env.nix`, `flatpak.nix`, `fonts.nix`, `gc.nix`, `locale.nix`, `neovim.nix`, `network.nix`, `options.nix`, `ssh.nix`, and `users.nix`.
+    *   `modules/nixos/`: Contains NixOS modules for system-wide configurations. These include `adguard.nix`, `audio.nix`, `base-apps.nix`, `bluetooth.nix`, `boot.nix`, `desktop-apps.nix`, `desktop-env.nix`, `flatpak.nix`, `fonts.nix`, `gc.nix`, `locale.nix`, `network.nix`, `nixvim.nix`, `options.nix`, `ssh.nix`, and `users.nix`.
+    *   `modules/nixos/nixvim/`: Contains modules for configuring nixvim. These include `keymaps.nix`, `options.nix`, and `plugins.nix`.
     *   `modules/home/`: Contains home-manager modules for user-specific configurations. These include `git.nix`, `packages.nix`, and `shell.nix`.
 *   `config/cosmic/`: This directory holds settings for the Cosmic desktop environment, which are managed outside of the NixOS configuration but are part of the overall setup.
 
