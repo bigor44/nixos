@@ -11,14 +11,6 @@
         name = "bobthefisher";
         src = pkgs.fishPlugins.bobthefisher.src;
       }
-      {
-        name = "z";
-        src = pkgs.fishPlugins.z.src;
-      }
-      {
-        name = "fzf";
-        src = pkgs.fishPlugins.fzf.src;
-      }
     ];
     shellAliases = {
       ll = "eza -l";
@@ -45,6 +37,5 @@
   programs.zoxide = {
     enable = true;
     enableFishIntegration = true;
-    enableBashIntegration = true;
   };
 }
