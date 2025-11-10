@@ -22,7 +22,6 @@
     ./modules/nixos/bluetooth.nix
     ./modules/nixos/desktop-apps.nix
     ./modules/nixos/flatpak.nix
-    ./modules/nixos/ollama.nix
   ];
 
   config = {

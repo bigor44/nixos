@@ -1,13 +1,11 @@
 /*
-  Title: Module Options
-  Description: Defines custom options for enabling and disabling different modules in the NixOS configuration.
+Title: Module Options
+Description: Defines custom options for enabling and disabling different modules in the NixOS configuration.
 */
-{ lib, ... }:
-{
+{lib, ...}: {
   options = {
     adblocker.enable = lib.mkEnableOption "Enable Adguard Home";
     desktop.enable = lib.mkEnableOption "Enable desktop environment";
-    llm.enable = lib.mkEnableOption "Enable Ollama";
     server.enable = lib.mkEnableOption "Enable SSH Server";
   };
 }
