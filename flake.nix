@@ -26,12 +26,13 @@
           ./hosts/${hostName}/${hostName}.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
-          {
+          ({ config, ... }: {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.bigor = import ./home.nix;
             home-manager.backupFileExtension = "backup";
-          }
+            home-manager.extraSpecialArgs = { desktop = config.desktop; };
+          })
         ];
       };
     in
