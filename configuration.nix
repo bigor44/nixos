@@ -1,28 +1,19 @@
-# This is the main configuration file for the NixOS system.
-# It imports other modules and sets system-wide options.
 { config, ... }:
 {
   imports = [
-    # Base Modules
+    # Core system modules
     ./modules/nixos/options.nix
-    ./modules/nixos/boot.nix
-    ./modules/nixos/gc.nix
-    ./modules/nixos/locale.nix
+    ./modules/nixos/system.nix
     ./modules/nixos/network.nix
-    ./modules/nixos/base-apps.nix
     ./modules/nixos/users.nix
+    ./modules/nixos/packages.nix
     ./modules/nixos/fonts.nix
     ./modules/nixos/nixvim.nix
 
-    # Optionnal Modules
-
-    ./modules/nixos/audio.nix
+    # Optional service modules
+    ./modules/nixos/desktop.nix
     ./modules/nixos/adguard.nix
-    ./modules/nixos/ssh.nix
-    ./modules/nixos/desktop-env.nix
-    ./modules/nixos/bluetooth.nix
-    ./modules/nixos/desktop-apps.nix
-    ./modules/nixos/flatpak.nix
+    ./modules/nixos/sshd.nix
   ];
 
   config = {
