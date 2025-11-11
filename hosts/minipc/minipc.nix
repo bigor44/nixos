@@ -3,4 +3,5 @@
   desktop.enable = false;
   server.enable = true;
   adblocker.enable = true;
+  nfs.server.enable = true;
 }

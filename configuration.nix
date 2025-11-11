@@ -8,6 +8,8 @@
     ./modules/nixos/users.nix
     ./modules/nixos/packages.nix
     ./modules/nixos/nixvim.nix
+    ./modules/nixos/nfs-server.nix
+    ./modules/nixos/nfs-client.nix
 
     # Optional service modules
     ./modules/nixos/desktop.nix
