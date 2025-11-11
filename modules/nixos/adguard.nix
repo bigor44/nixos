@@ -29,6 +29,11 @@ lib.mkIf config.adblocker.enable {
         upstream_mode = "load_balance";
         cache_enabled = true;
         anonymize_client_ip = true;
+        use_http3_upstreams = true;
+        enable_dnssec = true;
+        edns_client_subnet = {
+          enabled = false; # Privacy enhancement
+        };
 
         # Custom DNS rewrites for local domain
         rewrites = [
