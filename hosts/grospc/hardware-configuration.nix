@@ -27,6 +27,10 @@
     device = "/dev/disk/by-uuid/8bddd23c-0995-42dd-bac3-652523fb299d";
     fsType = "ext4";
   };
+  fileSystems."/steamlibrary" = {
+    device = "dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";
+    fsType = "ext4";
+  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/D6EF-2060";
