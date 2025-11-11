@@ -1,7 +1,4 @@
-/*
-  Consolidated system configuration
-  Replaces boot.nix, gc.nix, and locale.nix
-*/
+# Consolidated system configuration
 { pkgs, ... }:
 {
   # Boot configuration
@@ -55,4 +52,9 @@
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
   };
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    terminus_font
+    powerline-fonts
+  ];
 }

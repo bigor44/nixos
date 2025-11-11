@@ -7,7 +7,6 @@
     ./modules/nixos/network.nix
     ./modules/nixos/users.nix
     ./modules/nixos/packages.nix
-    ./modules/nixos/fonts.nix
     ./modules/nixos/nixvim.nix
 
     # Optional service modules

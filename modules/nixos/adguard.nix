@@ -8,24 +8,21 @@ lib.mkIf config.adblocker.enable {
     enable = true;
     openFirewall = true;
     port = 3003;
-    mutableSettings = false; # CRITICAL: Must be false for rewrites to work
+    mutableSettings = false;
     settings = {
       language = "fr";
       dns = {
         upstream_dns = [
-          "https://unfiltered.adguard-dns.com/dns-query"
           "https://one.one.one.one/dns-query"
-          "https://doh.opendns.com/dns-query"
-          "https://dns.adguard.com/dns-query"
           "https://dns.cloudflare.com/dns-query"
-          "https://dns64.dns.google/dns-query"
-          "https://doh.libredns.gr/dns-query"
           "https://dns.quad9.net/dns-query"
-          "https://noads.joindns4.eu/dns-query"
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
         ];
-        bootstrap_dns = [ "192.168.1.254" ];
+        bootstrap_dns = [
+          "192.168.1.254"
+          "1.1.1.1"
+        ];
         upstream_mode = "load_balance";
         cache_enabled = true;
         anonymize_client_ip = true;
@@ -34,30 +31,29 @@ lib.mkIf config.adblocker.enable {
         edns_client_subnet = {
           enabled = false; # Privacy enhancement
         };
-
-        # Custom DNS rewrites for local domain
         rewrites = [
-          # Main domain
-          {
-            domain = "bigor.lan";
-            answer = "192.168.1.10";
-          }
-          # Specific subdomains
           {
             domain = "grospc.bigor.lan";
+            answer = "192.168.1.1";
+          }
+          {
+            domain = "*.grospc.bigor.lan";
             answer = "192.168.1.1";
           }
           {
             domain = "minipc.bigor.lan";
             answer = "192.168.1.10";
           }
-          # Wildcard domains (note: AdGuard uses *.domain syntax)
-          {
-            domain = "*.grospc.bigor.lan";
-            answer = "192.168.1.1";
-          }
           {
             domain = "*.minipc.bigor.lan";
+            answer = "192.168.1.10";
+          }
+          {
+            domain = "bigor.lan";
+            answer = "192.168.1.10";
+          }
+          {
+            domain = "*.bigor.lan";
             answer = "192.168.1.10";
           }
         ];
