@@ -176,7 +176,7 @@ in
       };
 
       # Keybindings
-      keybindings = [
+      profiles.default.keybindings = [
         {
           key = "ctrl+h";
           command = "workbench.action.navigateLeft";
