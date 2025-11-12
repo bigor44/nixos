@@ -1,7 +1,3 @@
-/*
-  Title: NFS Server Configuration
-  Description: Configures NFS server to share /mnt/storage
-*/
 { config, lib, ... }:
 lib.mkIf config.nfs.server.enable {
   services.nfs.server = {

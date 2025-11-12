@@ -1,7 +1,3 @@
-/*
-  Title: Network Configuration
-  Description: Configures networking, including NetworkManager, nftables, and host file entries.
-*/
 {
   networking = {
     networkmanager = {

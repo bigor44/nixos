@@ -1,8 +1,3 @@
-/*
-  Title: Neovim Configuration
-  Description: Configures Neovim by importing modularized settings.
-*/
-{ pkgs, ... }:
 {
   programs.nixvim = {
     enable = true;

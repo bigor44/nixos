@@ -1,5 +1,4 @@
 [
-  # Format code
   {
     mode = [
       "n"

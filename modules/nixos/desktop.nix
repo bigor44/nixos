@@ -1,7 +1,3 @@
-/*
-  Consolidated desktop configuration
-  Replaces desktop-env.nix, audio.nix, bluetooth.nix, and flatpak.nix
-*/
 {
   config,
   lib,

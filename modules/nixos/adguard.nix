@@ -1,7 +1,3 @@
-/*
-  Title: AdGuard Home Configuration
-  Description: Configures AdGuard Home for network-wide ad blocking and DNS filtering with custom local domain records.
-*/
 { config, lib, ... }:
 lib.mkIf config.adblocker.enable {
   services.adguardhome = {

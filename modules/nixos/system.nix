@@ -1,4 +1,3 @@
-# Consolidated system configuration
 { pkgs, ... }:
 {
   # Boot configuration

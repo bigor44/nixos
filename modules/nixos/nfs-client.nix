@@ -1,7 +1,3 @@
-/*
-  Title: NFS Client Configuration
-  Description: Mounts NFS share from minipc to /mnt/share
-*/
 { config, lib, ... }:
 lib.mkIf config.nfs.client.enable {
   # Ensure the mount point exists

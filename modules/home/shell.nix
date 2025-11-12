@@ -1,7 +1,3 @@
-/*
-  Title: Shell Configuration
-  Description: Configures Fish shell with plugins, aliases, abbreviations, and integrations.
-*/
 { pkgs, ... }:
 {
   programs.fish = {
