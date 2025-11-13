@@ -13,7 +13,5 @@ lib.mkIf config.nfs.server.enable {
   };
 
   # Ensure correct permissions on /mnt/storage
-  systemd.tmpfiles.rules = [
-    "d /mnt/storage 0755 bigor users -"
-  ];
+  systemd.tmpfiles.rules = [ "d /mnt/storage 0755 bigor users -" ];
 }
