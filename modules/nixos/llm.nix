@@ -5,8 +5,8 @@ lib.mkIf config.server.enable {
     acceleration = "rocm";
     loadModels = [
       "qwen3-coder"
-      "mistral-small3.2"
-      "gemma3"
+      "deepseek-r1:32b"
+      "codellama:34b-instruct"
     ];
   };
 }
