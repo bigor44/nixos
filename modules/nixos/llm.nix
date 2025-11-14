@@ -6,7 +6,6 @@ lib.mkIf config.server.enable {
     loadModels = [
       "qwen3-coder"
       "deepseek-r1:32b"
-      "codellama:34b-instruct"
     ];
   };
 }
