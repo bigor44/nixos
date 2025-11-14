@@ -6,7 +6,7 @@ lib.mkIf config.server.enable {
     loadModels = [
       "qwen3-coder"
       "mistral-small3.2"
-      "gpt-oss"
+      "gemma3"
     ];
   };
 }
