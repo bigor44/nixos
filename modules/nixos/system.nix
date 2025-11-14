@@ -1,21 +1,56 @@
 { pkgs, ... }:
 {
-  # Boot configuration
   boot = {
     loader = {
       systemd-boot = {
         enable = true;
         configurationLimit = 10;
+        editor = false; # Security: disable boot entry editing
       };
       efi.canTouchEfiVariables = true;
     };
     kernelPackages = pkgs.linuxPackages_zen;
+
+    # Kernel parameters for better performance
+    kernel.sysctl = {
+      "vm.swappiness" = 10;
+      "vm.vfs_cache_pressure" = 50;
+      "net.ipv4.tcp_congestion_control" = "bbr";
+      "net.core.default_qdisc" = "fq";
+    };
+
+    # Silent boot (optional)
+    consoleLogLevel = 3;
+    kernelParams = [
+      "quiet"
+      "splash"
+    ];
   };
 
-  # Nix garbage collection and optimization
+  # Nix configuration enhancements
   nix = {
-    settings.auto-optimise-store = true;
+    settings = {
+      auto-optimise-store = true;
+      # Enable flakes and new commands
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      # Parallel builds
+      max-jobs = "auto";
+      # Substitute from cache
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
+
     optimise.automatic = true;
+
     gc = {
       automatic = true;
       dates = "weekly";
@@ -24,7 +59,7 @@
     };
   };
 
-  # Locale and timezone
+  # Locale configuration (existing is good)
   time.timeZone = "Europe/Paris";
 
   i18n = {
@@ -42,15 +77,16 @@
     };
   };
 
-  # Keyboard layout
   services.xserver.xkb = {
     layout = "fr";
     variant = "";
   };
+
   console = {
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
   };
+
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     terminus_font

@@ -13,8 +13,11 @@
   programs.fish.enable = true;
   programs.tmux.enable = true;
   programs.firefox.enable = lib.mkIf config.desktop.enable true;
-  programs.steam.enable = lib.mkIf config.desktop.enable true;
-
+  programs.steam = lib.mkIf config.desktop.enable {
+    enable = true;
+    remotePlay.openFirewall = true;
+    gamescopeSession.enable = true; # Better for AMD GPUs
+  };
   # Base CLI packages (always installed)
   environment.systemPackages =
     with pkgs;
