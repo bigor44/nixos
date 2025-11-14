@@ -52,6 +52,7 @@
       discord
       brave
       onedrive
+      youtube-music
       whatsapp-electron
     ];
 }
