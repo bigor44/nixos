@@ -5,19 +5,10 @@
       systemd-boot = {
         enable = true;
         configurationLimit = 10;
-        editor = false; # Security: disable boot entry editing
       };
       efi.canTouchEfiVariables = true;
     };
     kernelPackages = pkgs.linuxPackages_zen;
-
-    # Kernel parameters for better performance
-    kernel.sysctl = {
-      "vm.swappiness" = 10;
-      "vm.vfs_cache_pressure" = 50;
-      "net.ipv4.tcp_congestion_control" = "bbr";
-      "net.core.default_qdisc" = "fq";
-    };
 
     # Silent boot (optional)
     consoleLogLevel = 3;
