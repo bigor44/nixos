@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # Color scheme
   colorschemes.tokyonight = {
     enable = true;
@@ -51,10 +50,10 @@
           timeoutMs = 500;
         };
         formattersByFt = {
-          nix = [ "nixfmt-rfc-style" ];
-          sh = [ "shfmt" ];
-          bash = [ "shfmt" ];
-          markdown = [ "marksman" ];
+          nix = ["alejandra"];
+          sh = ["shfmt"];
+          bash = ["shfmt"];
+          markdown = ["marksman"];
         };
       };
     };
@@ -74,12 +73,12 @@
           "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
         };
         sources = [
-          { name = "nvim_lsp"; }
-          { name = "luasnip"; }
-          { name = "nvim_lsp_signature_help"; }
-          { name = "git"; }
-          { name = "path"; }
-          { name = "buffer"; }
+          {name = "nvim_lsp";}
+          {name = "luasnip";}
+          {name = "nvim_lsp_signature_help";}
+          {name = "git";}
+          {name = "path";}
+          {name = "buffer";}
         ];
       };
     };
@@ -321,7 +320,7 @@
     marksman
 
     # Formatters
-    nixfmt-rfc-style
+    alejandra
     shfmt
 
     # Ripgrep for telescope

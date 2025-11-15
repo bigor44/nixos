@@ -1,14 +1,13 @@
 /*
-  Consolidated packages configuration
-  Replaces base-apps.nix and desktop-apps.nix
+Consolidated packages configuration
+Replaces base-apps.nix and desktop-apps.nix
 */
 {
   config,
   lib,
   pkgs,
   ...
-}:
-{
+}: {
   # Base programs (always enabled)
   programs.fish.enable = true;
   programs.tmux.enable = true;
@@ -19,11 +18,10 @@
     gamescopeSession.enable = true; # Better for AMD GPUs
   };
   # Base CLI packages (always installed)
-  environment.systemPackages =
-    with pkgs;
+  environment.systemPackages = with pkgs;
     [
       # Nix tooling
-      nixfmt
+      alejandra
 
       # Network tools
       dig

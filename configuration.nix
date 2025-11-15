@@ -1,5 +1,4 @@
-{ config, ... }:
-{
+{config, ...}: {
   imports = [
     # Core system modules
     ./modules/nixos/options.nix

@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.server.enable {
   services.openssh = {
     enable = true;

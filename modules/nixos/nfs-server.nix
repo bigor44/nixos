@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.nfs.server.enable {
   services.nfs.server = {
     enable = true;
@@ -8,10 +12,10 @@ lib.mkIf config.nfs.server.enable {
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 2049 ]; # NFS
-    allowedUDPPorts = [ 2049 ];
+    allowedTCPPorts = [2049]; # NFS
+    allowedUDPPorts = [2049];
   };
 
   # Ensure correct permissions on /mnt/storage
-  systemd.tmpfiles.rules = [ "d /mnt/storage 0755 bigor users -" ];
+  systemd.tmpfiles.rules = ["d /mnt/storage 0755 bigor users -"];
 }

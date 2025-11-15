@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   networking.hostName = "grospc";
   desktop.enable = true;
   server.enable = false;
