@@ -29,7 +29,7 @@ Remplacez `<hostname>` par l'hôte cible pour lequel vous souhaitez construire (
 *   `home.nix` : Le fichier de configuration principal de `home-manager`. Il importe les modules spécifiques à l'utilisateur du répertoire `modules/home/`.
 *   `hosts/` : Ce répertoire contient les configurations spécifiques à l'hôte. Chaque sous-répertoire correspond à une machine et inclut des paramètres spécifiques au matériel.
 *   `modules/` : Ce répertoire contient les configurations modularisées :
-    *   `modules/nixos/` : Contient les modules NixOS pour les configurations à l'échelle du système. Ceux-ci incluent `adguard.nix`, `desktop.nix`, `network.nix`, `nixvim.nix`, `options.nix`, `packages.nix`, `sshd.nix`, `system.nix`, et `users.nix`.
+    *   `modules/nixos/` : Contient les modules NixOS pour les configurations à l'échelle du système. Ceux-ci incluent `adguard.nix`, `desktop.nix`, `llm.nix`, `network.nix`, `nfs-client.nix`, `nfs-server.nix`, `nixvim.nix`, `options.nix`, `packages.nix`, `sshd.nix`, `system.nix`, et `users.nix`.
     *   `modules/nixos/nixvim/` : Contient les modules pour configurer nixvim. Ceux-ci incluent `keymaps.nix`, `options.nix`, et `plugins.nix`.
     *   `modules/home/` : Contient les modules home-manager pour les configurations spécifiques à l'utilisateur. Ceux-ci incluent `git.nix`, `packages.nix`, et `shell.nix`.
 *   `config/cosmic/` : Ce répertoire contient les paramètres pour l'environnement de bureau Cosmic, qui sont gérés en dehors de la configuration NixOS mais font partie de la configuration globale.
