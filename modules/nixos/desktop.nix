@@ -9,6 +9,10 @@ lib.mkIf config.desktop.enable {
   services.displayManager.cosmic-greeter.enable = true;
   services.desktopManager.cosmic.enable = true;
 
+  # Enable automatic login for the user.
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "bigor";
+
   # Audio
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;

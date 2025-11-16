@@ -7,10 +7,10 @@
 
     # Import modularized configuration
     imports = [
-      ./nixvim/options.nix
-      ./nixvim/plugins.nix
+      ./options.nix
+      ./plugins.nix
     ];
 
-    keymaps = import ./nixvim/keymaps.nix;
+    keymaps = import ./keymaps.nix;
   };
 }

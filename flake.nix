@@ -26,16 +26,16 @@
         inherit system;
         specialArgs = {inherit inputs;};
         modules = [
+          ./modules/nixos
           nixvim.nixosModules.nixvim
           ./hosts/${hostName}/hardware-configuration.nix
           ./hosts/${hostName}/${hostName}.nix
-          ./configuration.nix
           home-manager.nixosModules.home-manager
           (
             {config, ...}: {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.bigor = import ./home.nix;
+              home-manager.users.bigor = import ./modules/home;
               home-manager.backupFileExtension = "backup";
               home-manager.extraSpecialArgs = {
                 desktop = config.desktop;
