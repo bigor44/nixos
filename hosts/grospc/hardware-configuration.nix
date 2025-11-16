@@ -8,36 +8,24 @@
   modulesPath,
   ...
 }: {
-  imports = [(modulesPath + "/installer/scan/not-detected.nix")];
-
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "xhci_pci"
-    "ahci"
-    "usbhid"
-    "usb_storage"
-    "sd_mod"
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
   ];
+
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/8bddd23c-0995-42dd-bac3-652523fb299d";
-    fsType = "ext4";
-  };
-  fileSystems."/steamlibrary" = {
-    device = "/dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";
+    device = "/dev/disk/by-uuid/54a73182-b62c-4f57-bdc6-e38be6658999";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/D6EF-2060";
+    device = "/dev/disk/by-uuid/BE3B-7EC8";
     fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
-    ];
+    options = ["fmask=0077" "dmask=0077"];
   };
 
   swapDevices = [];

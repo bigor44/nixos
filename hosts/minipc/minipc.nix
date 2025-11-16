@@ -5,7 +5,7 @@
   adblocker.enable = true;
   nfs.server.enable = true;
 
-  boot = { 
+  boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "amd_pstate=active"
