@@ -7,7 +7,6 @@
       };
       efi.canTouchEfiVariables = true;
     };
-    kernelPackages = pkgs.linuxPackages_zen;
 
     # Silent boot (optional)
     consoleLogLevel = 3;

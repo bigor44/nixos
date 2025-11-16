@@ -6,6 +6,7 @@
   nfs.client.enable = true;
 
   powerManagement.cpuFreqGovernor = "performance";
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   fileSystems."/steamlibrary".options = [
     "noatime"
