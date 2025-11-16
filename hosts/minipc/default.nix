@@ -15,5 +15,4 @@
   };
   powerManagement.cpuFreqGovernor = "schedutil";
   hardware.cpu.amd.updateMicrocode = true;
-  services.homer.enable = true;
 }
