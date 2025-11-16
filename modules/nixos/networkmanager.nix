@@ -1,4 +1,9 @@
 {
+  lib,
+  config,
+  ...
+}:
+lib.mkIf config.desktop.enable {
   networking = {
     networkmanager = {
       enable = true;
