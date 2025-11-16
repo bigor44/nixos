@@ -7,15 +7,5 @@
         "::1"
       ];
     };
-    hosts = {
-      "192.168.1.1" = [
-        "grospc"
-        "grospc.bigor.lan"
-      ];
-      "192.168.1.10" = [
-        "minipc"
-        "minipc.bigor.lan"
-      ];
-    };
   };
 }
