@@ -32,6 +32,7 @@ lib.mkIf config.adblocker.enable {
         cache_enabled = true;
         anonymize_client_ip = true;
         use_http3_upstreams = true;
+        use_private_ptr_resolvers = false;
         enable_dnssec = true;
         edns_client_subnet.enabled = false;
         local_domain_name = "bigor.lan";
