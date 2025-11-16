@@ -144,7 +144,13 @@ in {
       }
     ];
   };
-
+  trouble = {
+    enable = true;
+    settings = {
+      auto_open = false;
+      auto_close = true;
+    };
+  };
   gitsigns = {
     enable = true;
     settings = {
