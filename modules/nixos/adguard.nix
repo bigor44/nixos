@@ -9,6 +9,7 @@ lib.mkIf config.adblocker.enable {
     openFirewall = true;
     port = 3003;
     mutableSettings = false;
+
     settings = {
       language = "fr";
       log = {
@@ -32,9 +33,11 @@ lib.mkIf config.adblocker.enable {
         anonymize_client_ip = true;
         use_http3_upstreams = true;
         enable_dnssec = true;
-        edns_client_subnet = {
-          enabled = false; # Privacy enhancement
-        };
+        edns_client_subnet.enabled = false;
+        local_domain_name = "bigor.lan";
+        resolve_clients = true;
+      };
+      filtering = {
         rewrites = [
           {
             domain = "grospc.bigor.lan";
@@ -61,33 +64,26 @@ lib.mkIf config.adblocker.enable {
             answer = "192.168.1.10";
           }
         ];
-      };
-      filtering = {
         protection_enabled = true;
         filtering_enabled = true;
-
-        parental_enabled = false; # Parental control-based DNS requests filtering.
-        safe_search = {
-          enabled = false; # Enforcing "Safe search" option for search engines, when possible.
-        };
+        parental_enabled = false;
+        safe_search.enabled = false;
       };
-      # The following notation uses map
-      # to not have to manually create {enabled = true; url = "";} for every filter
-      # This is, however, fully optional
       filters =
-        map
-        (url: {
+        map (url: {
           enabled = true;
-          url = url;
-        })
-        [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # HaGeZi's Normal DNS Blocklist
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # HaGeZi's Threat Intelligence Feeds DNS Blocklist
+          inherit url;
+        }) [
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"
+          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt"
+          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt"
         ];
     };
   };
-  networking.firewall.allowedTCPPorts = [53];
-  networking.firewall.allowedUDPPorts = [53];
+
+  networking.firewall = {
+    allowedTCPPorts = [53];
+    allowedUDPPorts = [53];
+  };
 }
