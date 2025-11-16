@@ -15,7 +15,6 @@ Replaces base-apps.nix and desktop-apps.nix
   programs.steam = lib.mkIf config.desktop.enable {
     enable = true;
     remotePlay.openFirewall = true;
-    gamescopeSession.enable = true; # Better for AMD GPUs
   };
   # Base CLI packages (always installed)
   environment.systemPackages = with pkgs;

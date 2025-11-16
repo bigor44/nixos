@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   boot = {
     loader = {
       systemd-boot = {
@@ -26,7 +30,7 @@
         "flakes"
       ];
       # Parallel builds
-      max-jobs = "auto";
+      max-jobs = lib.mkDefault 8;
       # Substitute from cache
       substituters = [
         "https://cache.nixos.org"
@@ -73,7 +77,7 @@
 
   console = {
     keyMap = "fr";
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-132b.psf.gz";
   };
 
   fonts.packages = with pkgs; [

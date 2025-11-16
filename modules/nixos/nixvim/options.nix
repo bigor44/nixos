@@ -2,6 +2,7 @@
   # Global options
   opts = {
     number = true;
+    spelllang = ["en" "fr"];
     relativenumber = true;
     autoindent = true;
     expandtab = true;
@@ -26,10 +27,4 @@
     mapleader = " ";
     maplocalleader = " ";
   };
-
-  # Additional vim options for spell checking
-  extraConfigVim = ''
-    set spell
-    set spelllang=en,fr
-  '';
 }

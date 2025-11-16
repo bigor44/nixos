@@ -1,4 +1,5 @@
 {pkgs, ...}: {
+  imports = [./hardware-configuration.nix];
   networking.hostName = "minipc";
   desktop.enable = false;
   server.enable = true;

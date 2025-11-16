@@ -1,4 +1,5 @@
 {pkgs, ...}: {
+  imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
   desktop.enable = true;
   server.enable = false;
@@ -7,6 +8,7 @@
 
   powerManagement.cpuFreqGovernor = "performance";
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  services.thermald.enable = true;
 
   fileSystems."/steamlibrary" = {
     device = "/dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";

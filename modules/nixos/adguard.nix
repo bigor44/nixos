@@ -11,6 +11,10 @@ lib.mkIf config.adblocker.enable {
     mutableSettings = false;
     settings = {
       language = "fr";
+      log = {
+        enabled = false;
+        compress = false;
+      };
       dns = {
         upstream_dns = [
           "https://one.one.one.one/dns-query"

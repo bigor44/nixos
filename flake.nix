@@ -27,9 +27,8 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./modules/nixos
+          ./hosts/${hostName}
           nixvim.nixosModules.nixvim
-          ./hosts/${hostName}/hardware-configuration.nix
-          ./hosts/${hostName}/${hostName}.nix
           home-manager.nixosModules.home-manager
           (
             {config, ...}: {
