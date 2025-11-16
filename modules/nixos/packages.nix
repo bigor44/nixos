@@ -44,7 +44,6 @@ Replaces base-apps.nix and desktop-apps.nix
       # Misc
       fastfetch
       sl
-      gemini-cli
     ]
     ++ lib.optionals config.desktop.enable [
       # Desktop applications (only when desktop is enabled)
