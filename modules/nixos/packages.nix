@@ -12,6 +12,7 @@ Replaces base-apps.nix and desktop-apps.nix
   programs.fish.enable = true;
   programs.tmux.enable = true;
   programs.firefox.enable = lib.mkIf config.desktop.enable true;
+  programs.gamemode.enable = true;
   programs.steam = lib.mkIf config.desktop.enable {
     enable = true;
     remotePlay.openFirewall = true;
