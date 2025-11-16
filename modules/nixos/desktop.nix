@@ -8,6 +8,7 @@ lib.mkIf config.desktop.enable {
   # Desktop environment
   services.displayManager.cosmic-greeter.enable = true;
   services.desktopManager.cosmic.enable = true;
+  networking.networkmanager.enable = true;
 
   # Audio
   services.pulseaudio.enable = false;
