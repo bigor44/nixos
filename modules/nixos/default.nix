@@ -7,7 +7,6 @@
     ./system.nix
     ./users.nix
     ./packages.nix
-    ./llm.nix
     ./nixvim
     ./nfs
   ];
