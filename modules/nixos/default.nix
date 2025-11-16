@@ -5,7 +5,7 @@
     ./desktop.nix
     ./sshd.nix
     ./system.nix
-    ./network.nix
+    ./networkmanager.nix
     ./users.nix
     ./packages.nix
     ./llm.nix
