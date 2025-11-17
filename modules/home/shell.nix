@@ -83,7 +83,7 @@
       set -gx EZA_COLORS "da=38;5;240:gm=38;5;240"
 
       # Better history search
-      bind \cr 'history | fzf | read -l result; and commandline -r $result'
+      bind \cr 'fzf-history-widget'
     '';
   };
 

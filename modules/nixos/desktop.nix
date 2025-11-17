@@ -12,7 +12,6 @@ lib.mkIf config.desktop.enable {
     desktopManager.cosmic.enable = true;
 
     # Audio
-    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;

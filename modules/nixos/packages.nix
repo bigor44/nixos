@@ -17,11 +17,6 @@
   # Base CLI packages (always installed)
   environment.systemPackages = with pkgs;
     [
-      # Nix tooling
-      alejandra
-      deadnix
-      statix
-
       # Network tools
       dig
       wget
@@ -34,11 +29,8 @@
       lm_sensors
 
       # File utilities
-      tree
       zip
       unzip
-      ripgrep
-      pciutils
 
       # Misc
       fastfetch
