@@ -12,6 +12,10 @@
         src = pkgs.fishPlugins.autopair.src;
       }
       {
+        name = "colored-man-pages";
+        src = pkgs.fishPlugins.colored-man-pages.src;
+      }
+      {
         name = "done";
         src = pkgs.fishPlugins.done.src;
       }
