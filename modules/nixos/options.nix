@@ -1,9 +1,12 @@
 {lib, ...}: {
   options = {
+    role = lib.mkOption {
+      type = lib.types.enum ["desktop" "server" "minimal"];
+      default = "minimal";
+      description = "System role: desktop, server, or minimal";
+    };
     adblocker.enable = lib.mkEnableOption "Enable Adguard Home";
-    desktop.enable = lib.mkEnableOption "Enable desktop environment";
-    server.enable = lib.mkEnableOption "Enable SSH Server";
-    nfs.client.enable = lib.mkEnableOption "Enable nfs client";
-    nfs.server.enable = lib.mkEnableOption "Enable nfs server";
+    nfs.client.enable = lib.mkEnableOption "Enable client nfs";
+    nfs.server.enable = lib.mkEnableOption "Enable NFS Server";
   };
 }

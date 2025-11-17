@@ -1,10 +1,8 @@
 {pkgs, ...}: {
   imports = [./hardware-configuration.nix];
+  role = "server";
   networking.hostName = "minipc";
-  desktop.enable = false;
-  server.enable = true;
   adblocker.enable = true;
-  nfs.server.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

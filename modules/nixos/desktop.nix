@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.mkIf config.desktop.enable {
+lib.mkIf (config.role == "desktop") {
   networking.networkmanager.enable = true;
   # Desktop environment
   services = {
