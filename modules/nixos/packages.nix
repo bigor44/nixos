@@ -1,14 +1,9 @@
-/*
-Consolidated packages configuration
-Replaces base-apps.nix and desktop-apps.nix
-*/
 {
-  config,
   lib,
+  config,
   pkgs,
   ...
 }: {
-  # Base programs (always enabled)
   programs.fish.enable = true;
   programs.tmux.enable = true;
   programs.firefox.enable = lib.mkIf config.desktop.enable true;
@@ -22,6 +17,8 @@ Replaces base-apps.nix and desktop-apps.nix
     [
       # Nix tooling
       alejandra
+      deadnix
+      statix
 
       # Network tools
       dig
