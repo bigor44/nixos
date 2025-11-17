@@ -5,21 +5,23 @@
   ...
 }:
 lib.mkIf config.desktop.enable {
-  # Desktop environment
-  services.displayManager.cosmic-greeter.enable = true;
-  services.desktopManager.cosmic.enable = true;
   networking.networkmanager.enable = true;
+  # Desktop environment
+  services = {
+    displayManager.cosmic-greeter.enable = true;
+    desktopManager.cosmic.enable = true;
 
-  # Audio
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
+    # Audio
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
   };
+  security.rtkit.enable = true;
 
   # Bluetooth
   hardware.bluetooth = {

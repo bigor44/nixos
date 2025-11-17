@@ -4,13 +4,15 @@
   pkgs,
   ...
 }: {
-  programs.fish.enable = true;
-  programs.tmux.enable = true;
-  programs.firefox.enable = lib.mkIf config.desktop.enable true;
-  programs.gamemode.enable = true;
-  programs.steam = lib.mkIf config.desktop.enable {
-    enable = true;
-    remotePlay.openFirewall = true;
+  programs = {
+    fish.enable = true;
+    tmux.enable = true;
+    firefox.enable = lib.mkIf config.desktop.enable true;
+    gamemode.enable = true;
+    steam = lib.mkIf config.desktop.enable {
+      enable = true;
+      remotePlay.openFirewall = true;
+    };
   };
   # Base CLI packages (always installed)
   environment.systemPackages = with pkgs;

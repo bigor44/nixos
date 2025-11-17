@@ -5,19 +5,19 @@
     plugins = [
       {
         name = "bobthefisher";
-        src = pkgs.fishPlugins.bobthefisher.src;
+        inherit (pkgs.fishPlugins.bobthefisher) src;
       }
       {
         name = "autopair";
-        src = pkgs.fishPlugins.autopair.src;
+        inherit (pkgs.fishPlugins.autopair) src;
       }
       {
         name = "colored-man-pages";
-        src = pkgs.fishPlugins.colored-man-pages.src;
+        inherit (pkgs.fishPlugins.colored-man-pages) src;
       }
       {
         name = "done";
-        src = pkgs.fishPlugins.done.src;
+        inherit (pkgs.fishPlugins.done) src;
       }
     ];
 

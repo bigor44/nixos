@@ -1,5 +1,5 @@
 # modules/nixos/nixvim/plugins.nix
-{pkgs, ...}: let
+_: let
   lspServers = ["nil_ls" "bashls" "marksman"];
 in {
   /*

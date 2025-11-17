@@ -14,7 +14,6 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     home-manager,
     nixvim,
@@ -30,17 +29,14 @@
           ./hosts/${hostName}
           nixvim.nixosModules.nixvim
           home-manager.nixosModules.home-manager
-          (
-            {config, ...}: {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.bigor = import ./modules/home;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = {
-                desktop = config.desktop;
-              };
-            }
-          )
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.bigor = import ./modules/home;
+              backupFileExtension = "backup";
+            };
+          }
         ];
       };
   in {
