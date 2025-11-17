@@ -3,6 +3,7 @@
     eza
     fd
     ripgrep
+    jq
     alejandra
     statix
     deadnix
