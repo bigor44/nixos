@@ -32,7 +32,13 @@ in {
       "<leader>D" = "type_definition";
     };
   };
-
+  none-ls = {
+    enable = true;
+    sources.diagnostics = {
+      statix.enable = true; # Nix linter
+      deadnix.enable = true; # Find unused Nix code
+    };
+  };
   cmp = {
     enable = true;
     autoEnableSources = true;

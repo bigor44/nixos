@@ -39,6 +39,8 @@
       shfmt
       ripgrep
       fd
+      statix
+      deadnix
     ];
   };
 }
