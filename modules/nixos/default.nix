@@ -8,7 +8,6 @@
     ./users.nix
     ./packages.nix
     ./nixvim
-    ./nfs
   ];
 
   nixpkgs.config.allowUnfree = true;
