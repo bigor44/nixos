@@ -9,35 +9,39 @@
 }: {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "xhci_pci"
-    "thunderbolt"
-    "usb_storage"
-    "usbhid"
-    "sd_mod"
-  ];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-amd"];
-  boot.extraModulePackages = [];
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/472e7005-6c44-4af4-a270-d96350e91836";
-    fsType = "ext4";
-  };
-
-  fileSystems."/mnt/storage" = {
-    device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/E12E-89E1";
-    fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
+  boot = {
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+      "thunderbolt"
+      "usb_storage"
+      "usbhid"
+      "sd_mod"
     ];
+    initrd.kernelModules = [];
+    kernelModules = ["kvm-amd"];
+    extraModulePackages = [];
+  };
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/472e7005-6c44-4af4-a270-d96350e91836";
+      fsType = "ext4";
+    };
+
+    "/mnt/storage" = {
+      device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
+      fsType = "ext4";
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/E12E-89E1";
+      fsType = "vfat";
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
+    };
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
