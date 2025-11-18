@@ -79,10 +79,4 @@
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132b.psf.gz";
   };
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    terminus_font
-    powerline-fonts
-  ];
 }
