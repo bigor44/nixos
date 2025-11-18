@@ -63,6 +63,12 @@
             alejandra.enable = true;
             statix.enable = true;
             deadnix.enable = true;
+            nix-flake-check = {
+              enable = true;
+              name = "nix-flake-check";
+              entry = "nix flake check --accept-flake-config";
+              pass_filenames = false;
+            };
           };
         })
         checkInputs
