@@ -5,7 +5,11 @@
   ...
 }:
 lib.mkIf (config.role == "desktop") {
-  networking.networkmanager.enable = true;
+  #Network Manager
+  networking.networkmanager = {
+    enable = true;
+    insertNameservers = ["::1" "127.0.01"];
+  };
   # Desktop environment
   services = {
     displayManager.cosmic-greeter.enable = true;
