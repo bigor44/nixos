@@ -17,58 +17,70 @@ lib.mkIf config.adblocker.enable {
         compress = false;
       };
       dns = {
+        bind_hosts = ["0.0.0.0"];
+        port = 53;
         upstream_dns = [
-          "https://one.one.one.one/dns-query"
           "https://dns.cloudflare.com/dns-query"
           "https://dns.quad9.net/dns-query"
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
         ];
         bootstrap_dns = [
-          "192.168.1.254"
           "1.1.1.1"
+          "8.8.8.8"
         ];
         upstream_mode = "load_balance";
         cache_enabled = true;
-        anonymize_client_ip = true;
+        cache_size = 4194304;
+        cache_ttl_min = 60;
+        cache_ttl_max = 86400;
+        anonymize_client_ip = false; # Changed: may interfere with local resolution
         use_http3_upstreams = true;
-        use_private_ptr_resolvers = false;
-        enable_dnssec = true;
+        use_private_ptr_resolvers = true; # Changed: better for local domains
+        enable_dnssec = false; # Changed: can cause issues with local domains
         edns_client_subnet.enabled = false;
-        local_domain_name = "bigor.lan";
+        local_domain_name = "lan"; # Simplified
         resolve_clients = true;
       };
       filtering = {
-        rewrites = [
-          {
-            domain = "grospc.bigor.lan";
-            answer = "192.168.1.1";
-          }
-          {
-            domain = "*.grospc.bigor.lan";
-            answer = "192.168.1.1";
-          }
-          {
-            domain = "minipc.bigor.lan";
-            answer = "192.168.1.10";
-          }
-          {
-            domain = "*.minipc.bigor.lan";
-            answer = "192.168.1.10";
-          }
-          {
-            domain = "bigor.lan";
-            answer = "192.168.1.10";
-          }
-          {
-            domain = "*.bigor.lan";
-            answer = "192.168.1.10";
-          }
-        ];
         protection_enabled = true;
         filtering_enabled = true;
         parental_enabled = false;
         safe_search.enabled = false;
+        rewrites = [
+          # Exact domain matches
+          {
+            domain = "grospc.bigor.lan";
+            answer = "192.168.1.1";
+            enabled = true;
+          }
+          {
+            domain = "minipc.bigor.lan";
+            answer = "192.168.1.10";
+            enabled = true;
+          }
+          {
+            domain = "bigor.lan";
+            answer = "192.168.1.10";
+            enabled = true;
+          }
+          # Wildcard matches
+          {
+            domain = "*.grospc.bigor.lan";
+            answer = "192.168.1.1";
+            enabled = true;
+          }
+          {
+            domain = "*.minipc.bigor.lan";
+            answer = "192.168.1.10";
+            enabled = true;
+          }
+          {
+            domain = "*.bigor.lan";
+            answer = "192.168.1.10";
+            enabled = true;
+          }
+        ];
       };
       filters =
         map (url: {
