@@ -11,12 +11,17 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     nixpkgs,
     home-manager,
     nixvim,
+    pre-commit-hooks,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -43,6 +48,26 @@
     nixosConfigurations = {
       grospc = mkNixosSystem "grospc";
       minipc = mkNixosSystem "minipc";
+    };
+
+    devShells.${system}.default = nixpkgs.legacyPackages.${system}.mkShell {
+      packages = with nixpkgs.legacyPackages.${system}; [
+        alejandra
+        statix
+        deadnix
+      ];
+      inherit
+        (pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            alejandra.enable = true;
+            statix.enable = true;
+            deadnix.enable = true;
+          };
+        })
+        checkInputs
+        shellHook
+        ;
     };
   };
 }

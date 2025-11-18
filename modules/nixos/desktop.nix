@@ -8,7 +8,7 @@ lib.mkIf (config.role == "desktop") {
   #Network Manager
   networking.networkmanager = {
     enable = true;
-    insertNameservers = ["::1" "127.0.01"];
+    insertNameservers = ["::1" "127.0.0.1"];
   };
   # Desktop environment
   services = {

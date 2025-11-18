@@ -7,5 +7,6 @@
     alejandra
     statix
     deadnix
+    gemini-cli
   ];
 }
