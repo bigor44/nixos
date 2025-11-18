@@ -34,12 +34,12 @@ lib.mkIf config.adblocker.enable {
         cache_size = 4194304;
         cache_ttl_min = 60;
         cache_ttl_max = 86400;
-        anonymize_client_ip = false; # Changed: may interfere with local resolution
+        anonymize_client_ip = true;
         use_http3_upstreams = true;
-        use_private_ptr_resolvers = true; # Changed: better for local domains
-        enable_dnssec = false; # Changed: can cause issues with local domains
+        use_private_ptr_resolvers = true;
+        enable_dnssec = true;
         edns_client_subnet.enabled = false;
-        local_domain_name = "lan"; # Simplified
+        local_domain_name = "lan";
         resolve_clients = true;
       };
       filtering = {
@@ -64,7 +64,6 @@ lib.mkIf config.adblocker.enable {
             answer = "192.168.1.10";
             enabled = true;
           }
-          # Wildcard matches
           {
             domain = "*.grospc.bigor.lan";
             answer = "192.168.1.1";
@@ -94,7 +93,6 @@ lib.mkIf config.adblocker.enable {
         ];
     };
   };
-
   networking.firewall = {
     allowedTCPPorts = [53];
     allowedUDPPorts = [53];
