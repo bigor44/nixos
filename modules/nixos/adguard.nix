@@ -16,6 +16,9 @@ lib.mkIf config.adblocker.enable {
         enabled = false;
         compress = false;
       };
+      querylog = {
+        enabled = false;
+      };
       dns = {
         bind_hosts = ["0.0.0.0"];
         port = 53;
