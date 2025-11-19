@@ -18,8 +18,15 @@ Both share the same flake, user (`bigor`), fish shell, and home-manager setup.
 │   ├── grospc/               # Desktop machine
 │   └── minipc/               # Server machine
 ├── modules/
-│   ├── nixos/                # System-wide modules
-│   └── home/                 # Home-manager (user) modules
+│   ├── home/                 # Home-manager (user) modules
+│   │   ├── git.nix
+│   │   ├── packages.nix
+│   │   └── shell.nix
+│   └── nixos/                # System-wide modules
+│       ├── core/
+│       ├── desktop/
+│       ├── nixvim/
+│       └── services/
 └── README.md                 # This file
 ```
 
