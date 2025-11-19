@@ -18,6 +18,7 @@
       "quiet"
       "splash"
     ];
+    plymouth.enable = true;
   };
 
   # Nix configuration enhancements
