@@ -4,6 +4,11 @@
     tmux.enable = true;
   };
   environment.systemPackages = with pkgs; [
+    # Nix
+    alejandra
+    statix
+    deadnix
+
     # Network tools
     dig
     wget
