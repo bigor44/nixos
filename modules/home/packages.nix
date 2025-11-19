@@ -4,9 +4,6 @@
     fd
     ripgrep
     jq
-    alejandra
-    statix
-    deadnix
     gemini-cli
   ];
 }
