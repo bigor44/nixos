@@ -32,6 +32,9 @@ Both share the same flake, user (`bigor`), fish shell, and home-manager setup.
 git clone https://github.com/bigor44/nixos ~/nixos
 cd ~/nixos
 
+# Enter the development environment
+nix develop
+
 # Update lockfile (optional)
 nix flake update
 
@@ -49,7 +52,23 @@ Fish abbreviations are already configured:
 
 ---
 
-## 3. Host Profiles
+## 3. Development
+
+This flake provides a development shell with tools for formatting and linting. To use them, enter the shell:
+
+```bash
+nix develop
+```
+
+The following tools are available in the shell:
+* `alejandra`: Nix code formatter
+* `statix`: Linter for Nix code
+* `deadnix`: Find dead Nix code
+* `pre-commit-hooks`: For pre-commit checks
+
+---
+
+## 4. Host Profiles
 
 | Feature | grospc (desktop) | minipc (server) |
 |---------|------------------|-----------------|
@@ -65,7 +84,7 @@ Fish abbreviations are already configured:
 
 ---
 
-## 4. Networking
+## 5. Networking
 
 * LAN domain: `bigor.lan`
 * DNS: AdGuard on each host (port 53) → upstream DoH
@@ -78,22 +97,22 @@ Fish abbreviations are already configured:
 
 ---
 
-## 5. Shared Software
+## 6. Shared Software
 
 * Shell: fish + fzf + zoxide + bobthefisher
 * Editor: nixvim (Neovim) – LSP, telescope, dap, gitsigns …
-* CLI: eza, bat, ripgrep, fd, btop, htop, alejandra, …
+* CLI: eza, bat, ripgrep, fd, btop, htop, alejandra, statix, deadnix, …
 * Fonts: JetBrains-Nerd, Terminus, Powerline
 
 ---
 
-## 6. Secrets / TODO
+## 7. Secrets / TODO
 
 * No secret management yet – place secrets in `/etc/nixos/secrets.nix` and import manually
 * Consider sops-nix or agenix for next iteration
 
 ---
 
-## 7. License
+## 8. License
 
 MIT – do whatever you want.
