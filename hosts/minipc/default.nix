@@ -4,6 +4,7 @@
   adblocker.enable = true;
   sshd.enable = true;
   desktop.enable = false;
+  dashboard.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
