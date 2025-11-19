@@ -1,8 +1,9 @@
 {pkgs, ...}: {
   imports = [./hardware-configuration.nix];
-  role = "desktop";
   networking.hostName = "grospc";
   adblocker.enable = true;
+  sshd.enable = false;
+  desktop.enable = true;
 
   powerManagement.cpuFreqGovernor = "performance";
   boot.kernelPackages = pkgs.linuxPackages_zen;

@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf (config.role == "server") {
+lib.mkIf config.sshd.enable {
   services.openssh = {
     enable = true;
     openFirewall = true;

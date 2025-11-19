@@ -1,13 +1,8 @@
 {...}: {
   imports = [
-    ./options.nix
-    ./adguard.nix
-    ./desktop.nix
-    ./fonts.nix
-    ./sshd.nix
-    ./system.nix
-    ./users.nix
-    ./packages.nix
+    ./core
+    ./desktop
+    ./services
     ./nixvim
   ];
 
