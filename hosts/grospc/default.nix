@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
-  adblocker.enable = true;
+
   sshd.enable = false;
   desktop.enable = true;
   dashboard.enable = false;

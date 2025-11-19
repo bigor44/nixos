@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [./hardware-configuration.nix];
   networking.hostName = "minipc";
-  adblocker.enable = true;
+
   sshd.enable = true;
   desktop.enable = false;
   dashboard.enable = true;
