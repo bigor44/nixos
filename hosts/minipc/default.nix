@@ -5,6 +5,7 @@
   sshd.enable = true;
   desktop.enable = false;
   dashboard.enable = true;
+  llm.enable = false;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

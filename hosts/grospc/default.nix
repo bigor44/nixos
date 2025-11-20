@@ -5,9 +5,13 @@
   sshd.enable = false;
   desktop.enable = true;
   dashboard.enable = false;
+  llm.enable = true;
 
   powerManagement.cpuFreqGovernor = "performance";
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    initrd.kernelModules = ["amdgpu"];
+  };
 
   fileSystems."/steamlibrary" = {
     device = "/dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";
