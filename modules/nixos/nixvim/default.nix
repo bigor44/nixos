@@ -12,6 +12,14 @@
     opts = import ./opts.nix;
     keymaps = import ./keymaps.nix;
 
+    colorschemes.tokyonight = {
+      enable = true;
+      settings = {
+        style = "moon";
+        transparent = false;
+      };
+    };
+
     extraConfigLua = ''
       vim.api.nvim_create_autocmd("TextYankPost", {
         callback = function() vim.highlight.on_yank{timeout=250} end,

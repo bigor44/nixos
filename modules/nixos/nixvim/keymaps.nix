@@ -152,4 +152,11 @@
     action = ">gv";
     options.desc = "Indent right";
   }
+  # ---------- todo comments ----------
+  {
+    mode = "n";
+    key = "<leader>ft";
+    action = "<cmd>TodoTelescope<cr>";
+    options.desc = "Find TODOs";
+  }
 ]
