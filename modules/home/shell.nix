@@ -44,15 +44,6 @@
       };
 
       shellAbbrs = {
-        # NixOS operations
-        nrs = "sudo nixos-rebuild switch --flake ~/nixos";
-        nrb = "sudo nixos-rebuild boot --flake ~/nixos";
-        nrt = "sudo nixos-rebuild test --flake ~/nixos";
-        ncg = "sudo nix-collect-garbage -d";
-        nfu = "nix flake update";
-        nfc = "nix flake check";
-        nfo = "nix flake show";
-
         # Git operations
         gaa = "git add -A";
         gc = "git commit";

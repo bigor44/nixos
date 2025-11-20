@@ -44,12 +44,6 @@
     };
 
     optimise.automatic = true;
-
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 8d";
-    };
   };
 
   # Locale configuration (existing is good)
