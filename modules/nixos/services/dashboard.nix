@@ -57,13 +57,10 @@ lib.mkIf config.dashboard.enable {
               icon = "adguard-home.png";
               href = "http://minipc.bigor.lan:3003";
               description = "DNS & AdBlocker";
-              # Optional: Integration to show stats on the tile
-              # widget = {
-              #   type = "adguard";
-              #   url = "http://127.0.0.1:3003";
-              #   username = "admin"; # Requires secrets management
-              #   password = "password";
-              # };
+              widget = {
+                type = "adguard";
+                url = "http://127.0.0.1:3003";
+              };
             };
           }
           {
@@ -71,13 +68,10 @@ lib.mkIf config.dashboard.enable {
               icon = "adguard-home.png";
               href = "http://grospc.bigor.lan:3003";
               description = "DNS & AdBlocker";
-              # Optional: Integration to show stats on the tile
-              # widget = {
-              #   type = "adguard";
-              #   url = "http://127.0.0.1:3003";
-              #   username = "admin"; # Requires secrets management
-              #   password = "password";
-              # };
+              widget = {
+                type = "adguard";
+                url = "http://grospc.bigor.lan:3003";
+              };
             };
           }
         ];
