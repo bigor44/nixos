@@ -3,6 +3,5 @@
     ./sshd.nix
     ./adguard.nix
     ./dashboard.nix
-    ./netdata.nix
   ];
 }

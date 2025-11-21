@@ -74,17 +74,6 @@ lib.mkIf config.dashboard.enable {
               };
             };
           }
-          {
-            "Netdata (minipc)" = {
-              icon = "netdata.png";
-              href = "http://minipc.bigor.lan:19999";
-              description = "System Monitoring";
-              widget = {
-                type = "netdata";
-                url = "http://minipc.bigor.lan:19999";
-              };
-            };
-          }
         ];
       }
     ];
