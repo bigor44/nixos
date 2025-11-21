@@ -5,6 +5,7 @@
   sshd.enable = false;
   desktop.enable = true;
   dashboard.enable = false;
+  monitoring.enable = false;
 
   powerManagement.cpuFreqGovernor = "performance";
   boot.kernelPackages = pkgs.linuxPackages_zen;
