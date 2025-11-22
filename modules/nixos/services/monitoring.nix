@@ -27,7 +27,7 @@ in {
       # --- Prometheus ---
       services.prometheus = {
         enable = true;
-        port = 9091;
+        port = 9090;
         checkConfig = "syntax-only";
 
         scrapeConfigs = [
@@ -65,7 +65,7 @@ in {
             name = "Prometheus";
             type = "prometheus";
             access = "proxy";
-            url = "http://127.0.0.1:9091";
+            url = "http://127.0.0.1:9090";
           }
         ];
       };
