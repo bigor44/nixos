@@ -1,8 +1,4 @@
-{
-  lib,
-  config,
-  ...
-}: let
+{lib, ...}: let
   roleEnum = ["desktop" "server" "hybrid"];
 in {
   options = {
@@ -20,28 +16,4 @@ in {
       isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
     };
   };
-
-  config = lib.mkMerge [
-    # --- Configuration pour le rôle SERVEUR ---
-    (lib.mkIf (config.system.role == "server") {
-      desktop.enable = lib.mkDefault false;
-      sshd.enable = lib.mkDefault true;
-      dashboard.enable = lib.mkDefault true;
-      monitoring.isServer = lib.mkDefault true;
-    })
-
-    # --- Configuration pour le rôle DESKTOP ---
-    (lib.mkIf (config.system.role == "desktop") {
-      desktop.enable = lib.mkDefault true; # Cosmic activé
-      sshd.enable = lib.mkDefault false; # Pas de SSH par défaut (sécurité)
-      dashboard.enable = lib.mkDefault false;
-      monitoring.isServer = lib.mkDefault false;
-    })
-
-    # --- Configuration pour le rôle HYBRID (Optionnel) ---
-    (lib.mkIf (config.system.role == "hybrid") {
-      desktop.enable = lib.mkDefault true;
-      sshd.enable = lib.mkDefault true;
-    })
-  ];
 }

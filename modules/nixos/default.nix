@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./core
+    ./roles
     ./desktop
     ./services
     ./nixvim
