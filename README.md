@@ -18,14 +18,13 @@ Le projet est structuré pour maximiser le partage de code entre les machines to
 
 | Hostname | Rôle | OS / Environnement | Services Clés |
 | :--- | :--- | :--- | :--- |
-| **`grospc`** | Desktop | NixOS / **Cosmic Alpha** | Steam, **Google Antigravity**, Gaming, Dev |
+| **`grospc`** | Desktop | NixOS / **Cosmic Alpha** | Steam, Gaming, Dev |
 | **`minipc`** | Serveur | NixOS / Headless | NFS, AdGuard, Prometheus, Grafana, Homepage |
 
 ## ✨ Fonctionnalités Clés
 
 ### 🚀 Environnement de Bureau & Dev
 - **Cosmic Desktop** : Utilisation de l'environnement de bureau Cosmic (System76) écrit en Rust.
-- **Google Antigravity** : IDE "Agentic" nouvelle génération propulsé par Gemini 3, installé via Flake pour une isolation propre.
 - **NixVim** : Configuration Neovim déclarative complète (LSP, Treesitter, Telescope, etc.).
 
 ### 📊 Services & Monitoring
@@ -63,14 +62,3 @@ nix flake update
   - **Options Centralisées** : Les fonctionnalités globales (ex: `monitoring.enable`, `system.role`) sont gérées via des options personnalisées dans `modules/nixos/core/options.nix`.
 
 -----
-
-*Configuration maintenue par [bigor44](https://www.google.com/search?q=https://github.com/bigor44)*
-
-```
-
-### Ce qui a changé dans cette version :
-1.  **Tableau des machines :** Plus lisible pour comprendre d'un coup d'œil qui fait quoi.
-2.  **Section Antigravity :** Mention explicite de votre nouvel IDE.
-3.  **Détails techniques :** Ajout des détails sur la stack de monitoring et Cosmic.
-4.  **Commandes utiles :** Ajout de la commande de mise à jour (`nix flake update`).
-```
