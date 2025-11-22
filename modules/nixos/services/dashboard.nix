@@ -74,6 +74,24 @@ lib.mkIf config.dashboard.enable {
               };
             };
           }
+          {
+            "Grafana" = {
+              icon = "grafana.png";
+              href = "http://minipc.bigor.lan:3000";
+              description = "Monitoring & Logs";
+            };
+          }
+          {
+            "Prometheus" = {
+              icon = "prometheus.png";
+              href = "http://minipc.bigor.lan:9090";
+              description = "Metrics DB";
+              widget = {
+                type = "prometheus";
+                url = "http://127.0.0.1:9090";
+              };
+            };
+          }
         ];
       }
     ];

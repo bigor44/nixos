@@ -3,5 +3,6 @@
     ./sshd.nix
     ./adguard.nix
     ./dashboard.nix
+    ./monitoring.nix
   ];
 }
