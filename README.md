@@ -6,7 +6,7 @@ Ce dépôt contient ma configuration système **NixOS** gérée avec **Flakes**.
 
 Le projet est structuré pour maximiser le partage de code entre les machines tout en gardant une configuration claire.
 
-- **`flake.nix`** : Point d'entrée, définit les inputs (Nixpkgs, Home-Manager, NixVim, Antigravity...) et les outputs système.
+- **`flake.nix`** : Point d'entrée, définit les inputs (Nixpkgs, Home-Manager, NixVim, Flake-Parts...) et les outputs système.
 - **`hosts/`** : Configurations spécifiques à chaque machine.
   - **`grospc`** : Station de travail principale (Gaming, Dev, Cosmic DE).
   - **`minipc`** : Serveur domestique (NAS, Monitoring, Dashboard).
@@ -49,7 +49,7 @@ nixos-rebuild switch --flake .#minipc
 
 ### Mise à jour des dépendances
 
-Pour mettre à jour le `flake.lock` (incluant Nixpkgs, Antigravity, etc.) :
+Pour mettre à jour le `flake.lock` (incluant Nixpkgs, Home-Manager, etc.) :
 
 ```bash
 nix flake update
