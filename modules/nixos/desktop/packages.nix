@@ -8,10 +8,7 @@ lib.mkIf config.desktop.enable {
   programs = {
     firefox.enable = true;
     gamemode.enable = true;
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-    };
+    steam.enable = true;
   };
   environment.systemPackages = with pkgs; [
     discord
@@ -19,5 +16,6 @@ lib.mkIf config.desktop.enable {
     onedrive
     youtube-music
     whatsapp-electron
+    antigravity-fhs
   ];
 }
