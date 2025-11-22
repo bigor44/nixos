@@ -103,13 +103,17 @@ Neovim entièrement configuré via Nix (`nixvim`) avec le thème **TokyoNight** 
 
 ### Maintenance
 
-Le dépôt inclut un `devShell` avec des outils de qualité de code (`alejandra`, `statix`, `deadnix`) et des hooks de pre-commit.
+Le dépôt inclut un `devShell` avec des outils de qualité de code. Les hooks de pre-commit sont configurés pour formater et vérifier automatiquement le code avant chaque commit.
 
 ```bash
 # Entrer dans le shell de développement
 nix develop
 
-# Vérifier et formater le code
+# Les hooks s'exécuteront automatiquement lors de `git commit`.
+# Pour les lancer manuellement sur tous les fichiers :
+pre-commit run --all-files
+
+# Pour formater manuellement tout le code :
 nix fmt
 ```
 

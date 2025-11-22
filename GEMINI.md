@@ -9,6 +9,7 @@ This repository contains a fully-declarative NixOS configuration for two machine
 *   **Home Manager:** A tool for managing user-specific configuration (dotfiles).
 *   **COSMIC:** A new desktop environment on the `grospc` machine.
 *   **pre-commit-hooks-nix:** For managing pre-commit hooks.
+*   **Nixvim:** For managing Neovim configuration.
 
 **Architecture:**
 
@@ -42,9 +43,14 @@ The primary way to manage the system is through `nixos-rebuild`.
     sudo nix-collect-garbage -d
     ```
 
+*   **Format the code:**
+    ```bash
+    nix fmt
+    ```
+
 # Development Conventions
 
 *   **Modularity:** The configuration is highly modular, with clear separation between system-level and user-level settings, and between shared and host-specific configurations.
 *   **Development Environment:** Development-specific tools (e.g., `alejandra`, `statix`, `deadnix`) are defined in the `devShell` within `flake.nix`. They are not included in the base system or home-manager configuration to keep the user environment clean. To use them, enter the development shell with `nix develop`.
 *   **Secrets:** Secrets are not managed in this repository and should be placed in `/etc/nixos/secrets.nix`.
-*   **Formatting:** The `README.md` suggests the use of `alejandra` for formatting Nix code, although it is not explicitly enforced in the configuration. Pre-commit hooks are set up to enforce formatting and linting.
+*   **Formatting:** The `README.md` suggests the use of `alejandra` for formatting Nix code. Pre-commit hooks are set up to enforce formatting and linting with `alejandra`, `statix`, and `deadnix`.
