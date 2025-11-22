@@ -75,7 +75,7 @@ in {
         ];
       };
 
-      networking.firewall.allowedTCPPorts = [3000 9090];
+      networking.firewall.allowedTCPPorts = [3000];
     })
   ];
 }

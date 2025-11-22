@@ -82,17 +82,6 @@ lib.mkIf config.dashboard.enable {
               description = "Monitoring & Logs";
             };
           }
-          {
-            "Prometheus" = {
-              icon = "prometheus.png";
-              href = "http://minipc.bigor.lan:9090";
-              description = "Metrics DB";
-              widget = {
-                type = "prometheus";
-                url = "http://127.0.0.1:9090";
-              };
-            };
-          }
         ];
       }
     ];
