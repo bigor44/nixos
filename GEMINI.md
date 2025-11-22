@@ -1,56 +1,43 @@
-# Project Overview
+# NixOS Configuration
 
-This repository contains a fully-declarative NixOS configuration for two machines, `grospc` (a desktop) and `minipc` (a headless server). It uses Nix Flakes to manage dependencies and ensure reproducible builds. The configuration is split into shared modules and host-specific settings.
+This repository contains a NixOS configuration managed with flakes. It defines the configurations for multiple hosts and uses home-manager to manage user-specific settings.
 
-**Key Technologies:**
+## Project Overview
 
-*   **NixOS:** A Linux distribution with a declarative configuration model.
-*   **Nix Flakes:** A new feature in Nix for managing dependencies and improving reproducibility.
-*   **Home Manager:** A tool for managing user-specific configuration (dotfiles).
-*   **COSMIC:** A new desktop environment on the `grospc` machine.
-*   **pre-commit-hooks-nix:** For managing pre-commit hooks.
-*   **Nixvim:** For managing Neovim configuration.
+The project is structured to manage NixOS configurations for different machines from a single repository. It leverages flakes for reproducibility and modularity.
 
-**Architecture:**
+- **Hosts:**
+  - `grospc`: A desktop machine.
+  - `minipc`: A server.
+- **Key Technologies:**
+  - **NixOS:** The operating system.
+  - **Flakes:** Used for managing dependencies and providing reproducible builds.
+  - **Home Manager:** Manages user-specific configurations (dotfiles, packages, etc.).
+  - **NixVim:** Manages the Neovim configuration.
 
-*   The entry point is `flake.nix`, which defines the inputs (Nixpkgs, Home Manager, etc.) and builds the two NixOS systems.
-*   `hosts/`: Contains the host-specific configuration for `grospc` and `minipc`.
-*   `modules/`: Contains shared configuration modules for both NixOS and Home Manager.
-    *   `nixos/`: System-wide settings, packages, and services.
-    *   `home/`: User-specific settings, packages, and dotfiles, managed by Home Manager.
+## Building and Running
 
-# Building and Running
+To apply the configuration to a specific host, use the following command from the root of the repository:
 
-The primary way to manage the system is through `nixos-rebuild`.
+```bash
+nixos-rebuild switch --flake .#<hostname>
+```
 
-*   **Build and switch to a new generation:**
-    ```bash
-    # For the desktop
-    sudo nixos-rebuild switch --flake .#grospc
+Replace `<hostname>` with the name of the host you want to configure (e.g., `grospc` or `minipc`).
 
-    # For the server
-    sudo nixos-rebuild switch --flake .#minipc
-    ```
+For example, to apply the configuration to `grospc`:
 
-*   **Update flake inputs:**
-    ```bash
-    nix flake update
-    ```
+```bash
+nixos-rebuild switch --flake .#grospc
+```
 
-*   **Garbage Collection:**
-    ```bash
-    # Remove old generations
-    sudo nix-collect-garbage -d
-    ```
+## Development Conventions
 
-*   **Format the code:**
-    ```bash
-    nix fmt
-    ```
+The configuration is organized into modules to promote reusability and maintainability.
 
-# Development Conventions
+- **`flake.nix`:** The entry point of the configuration. It defines the inputs (dependencies) and outputs (NixOS configurations, dev shells, etc.).
+- **`hosts/`:** Contains host-specific configurations. Each subdirectory corresponds to a different machine.
+- **`modules/nixos/`:** Contains system-wide configurations that are shared across hosts. This is further divided into subdirectories for different aspects of the system (e.g., `core`, `desktop`, `services`).
+- **`modules/home/`:** Contains the home-manager configuration for the user, which is also shared across hosts.
 
-*   **Modularity:** The configuration is highly modular, with clear separation between system-level and user-level settings, and between shared and host-specific configurations.
-*   **Development Environment:** Development-specific tools (e.g., `alejandra`, `statix`, `deadnix`) are defined in the `devShell` within `flake.nix`. They are not included in the base system or home-manager configuration to keep the user environment clean. To use them, enter the development shell with `nix develop`.
-*   **Secrets:** Secrets are not managed in this repository and should be placed in `/etc/nixos/secrets.nix`.
-*   **Formatting:** The `README.md` suggests the use of `alejandra` for formatting Nix code. Pre-commit hooks are set up to enforce formatting and linting with `alejandra`, `statix`, and `deadnix`.
+This modular approach allows for a clean separation of concerns and makes it easy to manage configurations for multiple machines.
