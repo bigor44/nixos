@@ -5,11 +5,6 @@
 }: let
   cfg = config.monitoring;
 in {
-  options.monitoring = {
-    enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
-    isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
-  };
-
   config = lib.mkMerge [
     # ---------------------------------------------------------
     # Partie AGENT (Installé partout où monitoring.enable = true)

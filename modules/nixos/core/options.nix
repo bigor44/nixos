@@ -15,6 +15,10 @@ in {
     desktop.enable = lib.mkEnableOption "Enable Cosmic Desktop";
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
     dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
+    monitoring = {
+      enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
+      isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
+    };
   };
 
   config = lib.mkMerge [
