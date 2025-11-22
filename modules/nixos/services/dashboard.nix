@@ -43,6 +43,7 @@ lib.mkIf config.dashboard.enable {
         datetime = {
           format = {
             timeStyle = "short";
+            hour12 = false;
           };
         };
       }
