@@ -44,6 +44,10 @@
       };
 
       shellAbbrs = {
+        #Nix flake operations
+        nfc = "nix flake check";
+        nfu = "nix flake update";
+
         # Git operations
         gaa = "git add -A";
         gc = "git commit";
