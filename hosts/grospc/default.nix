@@ -2,10 +2,7 @@
   imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
 
-  sshd.enable = false;
-  desktop.enable = true;
-  dashboard.enable = false;
-  monitoring.enable = true;
+  system.role = "desktop";
 
   powerManagement.cpuFreqGovernor = "performance";
   boot.kernelPackages = pkgs.linuxPackages_zen;

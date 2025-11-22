@@ -26,14 +26,13 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux"];
 
-      # Logic that runs "per system" (e.g. for your devShell)
       perSystem = {
         config,
         pkgs,
         system,
         ...
       }: {
-        # 1. Define the Pre-commit checks
+        # Pre-commit checks
         checks = {
           pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
@@ -45,43 +44,53 @@
           };
         };
 
+        # DevShell
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             alejandra
             statix
             deadnix
           ];
-
           inherit (config.checks.pre-commit-check) shellHook;
         };
       };
 
       flake = {
         nixosConfigurations = let
-          # Helper function (adapted from your original file)
-          mkNixosSystem = hostName:
-            inputs.nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = {inherit inputs;};
-              modules = [
-                ./modules/nixos
-                ./hosts/${hostName}
-                inputs.nixvim.nixosModules.nixvim
-                inputs.home-manager.nixosModules.home-manager
-                # inputs.stylix.nixosModules.stylix # If using Stylix
-                {
-                  home-manager = {
-                    useGlobalPkgs = true;
-                    useUserPackages = true;
-                    users.bigor = import ./modules/home;
-                    backupFileExtension = "backup";
-                  };
-                }
-              ];
-            };
+          # Définition des modules partagés pour éviter la répétition
+          sharedModules = [
+            ./modules/nixos
+            inputs.nixvim.nixosModules.nixvim
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.bigor = import ./modules/home;
+                backupFileExtension = "backup";
+              };
+            }
+          ];
         in {
-          grospc = mkNixosSystem "grospc";
-          minipc = mkNixosSystem "minipc";
+          grospc = inputs.nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {inherit inputs;};
+            modules =
+              sharedModules
+              ++ [
+                ./hosts/grospc
+              ];
+          };
+
+          minipc = inputs.nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {inherit inputs;};
+            modules =
+              sharedModules
+              ++ [
+                ./hosts/minipc
+              ];
+          };
         };
       };
     };

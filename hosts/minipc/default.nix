@@ -2,13 +2,7 @@
   imports = [./hardware-configuration.nix];
   networking.hostName = "minipc";
 
-  sshd.enable = true;
-  desktop.enable = false;
-  dashboard.enable = true;
-  monitoring = {
-    enable = true;
-    isServer = true;
-  };
+  system.role = "server";
 
   # NFS
   services.nfs.server = {
