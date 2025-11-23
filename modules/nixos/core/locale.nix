@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Fuseau horaire
   time.timeZone = "Europe/Paris";
 

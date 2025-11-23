@@ -26,69 +26,78 @@
     };
   };
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
+  outputs =
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
 
-      perSystem = {
-        config,
-        pkgs,
-        system,
-        ...
-      }: {
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
+      perSystem =
+        {
+          config,
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
 
-        formatter = pkgs.alejandra;
+          formatter = pkgs.nixfmt-rfc-style;
 
-        checks = {
-          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              alejandra.enable = true;
-              statix.enable = true;
-              deadnix.enable = true;
+          checks = {
+            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                nixfmt-rfc-style.enable = true;
+                statix.enable = true;
+                deadnix.enable = true;
+              };
             };
           };
-        };
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [alejandra statix deadnix];
-          inherit (config.checks.pre-commit-check) shellHook;
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixfmt-rfc-style
+              statix
+              deadnix
+            ];
+            inherit (config.checks.pre-commit-check) shellHook;
+          };
         };
-      };
 
       flake = {
-        nixosConfigurations = let
-          sharedModules = [
-            ./modules/nixos
-            inputs.nixvim.nixosModules.nixvim
-            inputs.home-manager.nixosModules.home-manager
-            inputs.sops-nix.nixosModules.sops
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.bigor = import ./modules/home;
-                backupFileExtension = "backup";
-              };
-            }
-          ];
-        in {
-          grospc = inputs.nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = {inherit inputs;};
-            modules = sharedModules ++ [./hosts/grospc];
-          };
+        nixosConfigurations =
+          let
+            sharedModules = [
+              ./modules/nixos
+              inputs.nixvim.nixosModules.nixvim
+              inputs.home-manager.nixosModules.home-manager
+              inputs.sops-nix.nixosModules.sops
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  users.bigor = import ./modules/home;
+                  backupFileExtension = "backup";
+                };
+              }
+            ];
+          in
+          {
+            grospc = inputs.nixpkgs.lib.nixosSystem {
+              system = "x86_64-linux";
+              specialArgs = { inherit inputs; };
+              modules = sharedModules ++ [ ./hosts/grospc ];
+            };
 
-          minipc = inputs.nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = {inherit inputs;};
-            modules = sharedModules ++ [./hosts/minipc];
+            minipc = inputs.nixpkgs.lib.nixosSystem {
+              system = "x86_64-linux";
+              specialArgs = { inherit inputs; };
+              modules = sharedModules ++ [ ./hosts/minipc ];
+            };
           };
-        };
       };
     };
 }

@@ -1,6 +1,12 @@
-{lib, ...}: let
-  roleEnum = ["desktop" "server" "hybrid"];
-in {
+{ lib, ... }:
+let
+  roleEnum = [
+    "desktop"
+    "server"
+    "hybrid"
+  ];
+in
+{
   options = {
     system.role = lib.mkOption {
       type = lib.types.enum roleEnum;
@@ -26,12 +32,12 @@ in {
     myNetwork.ips = {
       grospc = lib.mkOption {
         type = lib.types.str;
-        default = "192.168.1.1"; #
+        default = "192.168.1.1";
         description = "Adresse IP statique du Desktop (grospc)";
       };
       minipc = lib.mkOption {
         type = lib.types.str;
-        default = "192.168.1.10"; #
+        default = "192.168.1.10";
         description = "Adresse IP statique du Serveur (minipc)";
       };
     };

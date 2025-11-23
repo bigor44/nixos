@@ -49,5 +49,8 @@ lib.mkIf config.reverse_proxy.enable {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }

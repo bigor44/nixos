@@ -83,7 +83,10 @@
 
   # ---------- format ----------
   {
-    mode = ["n" "v"];
+    mode = [
+      "n"
+      "v"
+    ];
     key = "<leader>cf";
     action = "<cmd>Format<cr>";
     options.desc = "Format";

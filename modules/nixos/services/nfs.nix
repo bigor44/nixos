@@ -2,10 +2,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.nfs;
   inherit (config.myNetwork) ips;
-in {
+in
+{
   config = lib.mkMerge [
     # --- Configuration SERVEUR (minipc) ---
     (lib.mkIf cfg.server {
@@ -17,7 +19,7 @@ in {
           /mnt/storage ${ips.grospc}(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
         '';
       };
-      networking.firewall.allowedTCPPorts = [2049];
+      networking.firewall.allowedTCPPorts = [ 2049 ];
     })
 
     # --- Configuration CLIENT (grospc) ---
@@ -26,7 +28,10 @@ in {
         device = "${ips.minipc}:/mnt/storage";
         fsType = "nfs";
         # x-systemd.automount évite de bloquer le boot si le serveur est éteint
-        options = ["x-systemd.automount" "noauto"];
+        options = [
+          "x-systemd.automount"
+          "noauto"
+        ];
       };
     })
   ];

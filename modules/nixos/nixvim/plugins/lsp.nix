@@ -35,7 +35,11 @@
       autoEnableSources = true;
       settings = {
         formatting = {
-          fields = ["kind" "abbr" "menu"];
+          fields = [
+            "kind"
+            "abbr"
+            "menu"
+          ];
           expandable_indicator = true;
         };
         mapping = {
@@ -48,10 +52,10 @@
           "<S-Tab>" = "cmp.mapping.select_prev_item()";
         };
         sources = [
-          {name = "nvim_lsp";}
-          {name = "luasnip";}
-          {name = "path";}
-          {name = "buffer";}
+          { name = "nvim_lsp"; }
+          { name = "luasnip"; }
+          { name = "path"; }
+          { name = "buffer"; }
         ];
       };
     };
@@ -69,10 +73,10 @@
           timeout_ms = 500;
         };
         formatters_by_ft = {
-          nix = ["alejandra"];
-          sh = ["shfmt"];
-          bash = ["shfmt"];
-          markdown = ["marksman"];
+          nix = [ "nixfmt" ];
+          sh = [ "shfmt" ];
+          bash = [ "shfmt" ];
+          markdown = [ "marksman" ];
         };
       };
     };

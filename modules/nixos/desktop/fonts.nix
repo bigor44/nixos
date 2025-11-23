@@ -23,10 +23,19 @@ lib.mkIf config.desktop.enable {
 
     fontconfig = {
       defaultFonts = {
-        serif = ["Noto Serif CJK JP" "Noto Serif"];
-        sansSerif = ["Noto Sans CJK JP" "Noto Sans"];
-        monospace = ["JetBrainsMono Nerd Font" "Noto Sans Mono CJK JP"];
-        emoji = ["Noto Color Emoji"];
+        serif = [
+          "Noto Serif CJK JP"
+          "Noto Serif"
+        ];
+        sansSerif = [
+          "Noto Sans CJK JP"
+          "Noto Sans"
+        ];
+        monospace = [
+          "JetBrainsMono Nerd Font"
+          "Noto Sans Mono CJK JP"
+        ];
+        emoji = [ "Noto Color Emoji" ];
       };
     };
   };

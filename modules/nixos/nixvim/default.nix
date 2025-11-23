@@ -1,5 +1,6 @@
-{pkgs, ...}: {
-  imports = [./plugins];
+{ pkgs, ... }:
+{
+  imports = [ ./plugins ];
 
   programs.nixvim = {
     enable = true;
@@ -26,12 +27,10 @@
       })
     '';
 
-    /*
-    ↓  binaries for LSP, formatters, telescope
-    */
+    # ↓  binaries for LSP, formatters, telescope
     extraPackages = with pkgs; [
       nixd
-      alejandra
+      nixfmt-rfc-style
       bash-language-server
       marksman
       shfmt

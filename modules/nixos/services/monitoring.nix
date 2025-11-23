@@ -2,10 +2,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.monitoring;
   inherit (config.myNetwork) ips;
-in {
+in
+{
   config = lib.mkMerge [
     # ---------------------------------------------------------
     # Partie AGENT (Installé partout où monitoring.enable = true)
@@ -13,12 +15,12 @@ in {
     (lib.mkIf cfg.enable {
       services.prometheus.exporters.node = {
         enable = true;
-        enabledCollectors = ["systemd"];
+        enabledCollectors = [ "systemd" ];
         port = 9100;
       };
 
       # Ouvrir le port pour que Prometheus puisse venir lire les données
-      networking.firewall.allowedTCPPorts = [9100];
+      networking.firewall.allowedTCPPorts = [ 9100 ];
     })
 
     # ---------------------------------------------------------
@@ -36,7 +38,7 @@ in {
             {
               static_configs = [
                 {
-                  targets = ["127.0.0.1:9093"];
+                  targets = [ "127.0.0.1:9093" ];
                 }
               ];
             }
@@ -69,7 +71,7 @@ in {
                 # ... configuration SMTP ...
               };
               route = {
-                group_by = ["alertname"];
+                group_by = [ "alertname" ];
                 group_wait = "30s";
                 group_interval = "5m";
                 repeat_interval = "1h";
