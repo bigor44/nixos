@@ -4,6 +4,7 @@
   ...
 }: let
   cfg = config.monitoring;
+  inherit (config.myNetwork) ips;
 in {
   config = lib.mkMerge [
     # ---------------------------------------------------------
@@ -37,7 +38,7 @@ in {
               {
                 targets = [
                   "127.0.0.1:9100" # Le minipc lui-même
-                  "192.168.1.1:9100" # Le grospc (IP déduite de ton adguard.nix)
+                  "${ips.grospc}:9100" # Le grospc (IP déduite de ton adguard.nix)
                 ];
                 labels = {
                   type = "node";

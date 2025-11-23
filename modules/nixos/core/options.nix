@@ -19,5 +19,17 @@ in {
       server = lib.mkEnableOption "Enable NFS Server Share";
       client = lib.mkEnableOption "Enable NFS Client Mount";
     };
+    myNetwork.ips = {
+      grospc = lib.mkOption {
+        type = lib.types.str;
+        default = "192.168.1.1"; #
+        description = "Adresse IP statique du Desktop (grospc)";
+      };
+      minipc = lib.mkOption {
+        type = lib.types.str;
+        default = "192.168.1.10"; #
+        description = "Adresse IP statique du Serveur (minipc)";
+      };
+    };
   };
 }

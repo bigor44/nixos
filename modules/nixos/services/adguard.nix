@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   services.adguardhome = {
     enable = true;
     openFirewall = true;
@@ -49,32 +49,17 @@
           # Exact domain matches
           {
             domain = "grospc.bigor.lan";
-            answer = "192.168.1.1";
+            answer = config.myNetwork.ips.grospc;
             enabled = true;
           }
           {
             domain = "minipc.bigor.lan";
-            answer = "192.168.1.10";
+            answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
           {
             domain = "bigor.lan";
-            answer = "192.168.1.10";
-            enabled = true;
-          }
-          {
-            domain = "*.grospc.bigor.lan";
-            answer = "192.168.1.1";
-            enabled = true;
-          }
-          {
-            domain = "*.minipc.bigor.lan";
-            answer = "192.168.1.10";
-            enabled = true;
-          }
-          {
-            domain = "*.bigor.lan";
-            answer = "192.168.1.10";
+            answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
         ];
