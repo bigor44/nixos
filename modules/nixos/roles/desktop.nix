@@ -4,7 +4,7 @@
 }:
 lib.mkIf (config.system.role == "desktop") {
   desktop.enable = lib.mkDefault true;
-  sshd.enable = lib.mkDefault false;
+  nfs.client = lib.mkDefault true;
   monitoring = {
     enable = lib.mkDefault true;
     isServer = lib.mkDefault false;

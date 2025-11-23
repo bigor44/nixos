@@ -48,7 +48,7 @@
           };
 
           devShells.default = pkgs.mkShell {
-            packages = with pkgs; [ alejandra statix deadnix ];
+            packages = with pkgs; [ nixpkgs-fmt statix deadnix ];
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };

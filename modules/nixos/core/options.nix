@@ -17,5 +17,9 @@ in
       enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
       isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
     };
+    nfs = {
+      server = lib.mkEnableOption "Enable NFS Server Share";
+      client = lib.mkEnableOption "Enable NFS Client Mount";
+    };
   };
 }

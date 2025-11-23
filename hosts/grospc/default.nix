@@ -15,9 +15,4 @@
       "nodiratime"
     ];
   };
-  fileSystems."/mnt/storage" = {
-    device = "192.168.1.10:/mnt/storage"; # IP du minipc
-    fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" ]; # Montage à la demande pour ne pas bloquer le boot
-  };
 }
