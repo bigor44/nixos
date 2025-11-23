@@ -7,7 +7,6 @@ lib.mkIf config.dashboard.enable {
   services.homepage-dashboard = {
     enable = true;
     listenPort = 8082; # Standard Homepage port
-    openFirewall = true; # Opens port 8082
 
     # Global settings
     settings = {
@@ -54,9 +53,9 @@ lib.mkIf config.dashboard.enable {
       {
         "Infrastructure" = [
           {
-            "AdGuard Home (minipc)" = {
+            "AdGuard Home" = {
               icon = "adguard-home.png";
-              href = "http://minipc.bigor.lan:3003";
+              href = "https://adguard.bigor.lan";
               description = "DNS & AdBlocker";
               widget = {
                 type = "adguard";
@@ -65,20 +64,9 @@ lib.mkIf config.dashboard.enable {
             };
           }
           {
-            "AdGuard Home (grospc)" = {
-              icon = "adguard-home.png";
-              href = "http://grospc.bigor.lan:3003";
-              description = "DNS & AdBlocker";
-              widget = {
-                type = "adguard";
-                url = "http://grospc.bigor.lan:3003";
-              };
-            };
-          }
-          {
             "Grafana" = {
               icon = "grafana.png";
-              href = "http://minipc.bigor.lan:3000";
+              href = "https://grafana.bigor.lan";
               description = "Monitoring & Logs";
             };
           }
@@ -89,7 +77,7 @@ lib.mkIf config.dashboard.enable {
   systemd.services.homepage-dashboard.serviceConfig = {
     # List every IP and Domain you use to access the dashboard
     Environment = [
-      "HOMEPAGE_ALLOWED_HOSTS=${config.myNetwork.ips.minipc},${config.myNetwork.ips.minipc}:8082,minipc,localhost,127.0.0.1,home.bigor.lan"
+      "HOMEPAGE_ALLOWED_HOSTS=home.bigor.lan"
     ];
   };
 }

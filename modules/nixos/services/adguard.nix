@@ -1,7 +1,11 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}:
+lib.mkIf config.adblocker.enable {
   services.adguardhome = {
     enable = true;
-    openFirewall = true;
     port = 3003;
     mutableSettings = false;
 

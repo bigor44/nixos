@@ -4,7 +4,7 @@
   ...
 }:
 lib.mkIf (config.system.role == "server") {
-  desktop.enable = lib.mkDefault false;
+  adblocker.enable = lib.mkDefault true;
   sshd.enable = lib.mkDefault true;
   dashboard.enable = lib.mkDefault true;
   tailscale.enable = lib.mkDefault true;
