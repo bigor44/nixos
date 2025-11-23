@@ -21,6 +21,7 @@
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
   ];
+  nixpkgs.config.allowUnfree = true;
 
   # Nix configuration enhancements
   nix = {
@@ -32,8 +33,15 @@
         "flakes"
       ];
       max-jobs = lib.mkDefault 8;
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
     };
-
     optimise.automatic = true;
   };
 
@@ -42,6 +50,10 @@
 
   i18n = {
     defaultLocale = "fr_FR.UTF-8";
+    supportedLocales = [
+      "fr_FR.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+    ];
     extraLocaleSettings = {
       LC_ADDRESS = "fr_FR.UTF-8";
       LC_IDENTIFICATION = "fr_FR.UTF-8";

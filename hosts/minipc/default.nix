@@ -16,7 +16,8 @@
 
   systemd.services.network-udp-gro = {
     description = "Enable UDP GRO forwarding for Tailscale";
-    after = ["network.target"];
+    after = ["network-online.target"];
+    wants = ["network-online.target"];
     wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "oneshot";
