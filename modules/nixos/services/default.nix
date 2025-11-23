@@ -6,5 +6,6 @@
     ./monitoring.nix
     ./nfs.nix
     ./caddy.nix
+    ./tailscale.nix
   ];
 }
