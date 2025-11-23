@@ -1,79 +1,58 @@
-# GEMINI.md: Project Overview
-
-This file provides a comprehensive overview of the NixOS configuration project, intended to be used as a context for AI-assisted development.
+# Gemini Project Analysis: NixOS Configuration
 
 ## Project Overview
 
-This is a NixOS configuration managed using [Nix Flakes](https://nixos.wiki/wiki/Flakes). It defines the system configurations for multiple machines, ensuring reproducibility and modularity. The project is structured to separate machine-specific settings from shared, reusable modules.
+This repository contains a complete NixOS configuration for multiple machines, managed using Nix Flakes. It demonstrates a robust, modular, and reproducible approach to system management, treating infrastructure as code.
 
-The main technologies used are:
-- **NixOS**: A declarative Linux distribution.
-- **Nix Flakes**: A feature to manage dependencies and package Nix expressions.
-- **Home Manager**: To declaratively manage user-specific configurations (`dotfiles`).
-- **flake-parts**: To simplify the structure of the `flake.nix` file.
-- **sops-nix**: For managing secrets securely.
-- **nixvim**: For a declarative Neovim configuration.
+The configuration manages at least two distinct machines:
+*   **`grospc`**: A desktop machine.
+*   **`minipc`**: A server.
 
-## Project Structure
+The project is architected with a strong separation of concerns:
+*   **Flake Entrypoint (`flake.nix`):** Defines all inputs (like `nixpkgs`, `home-manager`, `sops-nix`) and orchestrates the assembly of system configurations.
+*   **Modular Configuration (`modules/`):**
+    *   **System-level (`nixos/`):** Contains NixOS modules for system-wide settings, services, and hardware. It uses a role-based system (`desktop`, `server`) to apply configurations conditionally.
+    *   **User-level (`home/`):** Contains user-specific configurations managed by `home-manager`, such as shell setup, dotfiles, and user packages.
+*   **Machine-specific (`hosts/`):** Each machine has a dedicated directory containing its hardware configuration and top-level settings, like its assigned role.
+*   **Secrets Management:** Secrets are managed declaratively and securely using `sops-nix`, with encrypted files stored in the `secrets/` directory.
 
-- **`flake.nix`**: The entry point of the configuration. It defines the project's dependencies (inputs) and orchestrates the build for each host.
+Key technologies used:
+*   **NixOS:** The declarative Linux distribution.
+*   **Nix Flakes:** For reproducible builds and dependency management.
+*   **Home Manager:** To manage user environments declaratively.
+*   **sops-nix:** For encrypting and decrypting secrets.
 
-- **`hosts/`**: Contains the configuration for each individual machine. Each host's `default.nix` sets the machine-specific settings, such as hostname, and assigns a `system.role` (e.g., "desktop" or "server").
-  - `grospc/`: Configuration for a desktop machine.
-  - `minipc/`: Configuration for a headless server.
+## Building and Running
 
-- **`modules/`**: Contains reusable modules that are shared across different hosts.
-  - **`nixos/`**: System-level modules, categorized into:
-    - `core/`: Base system settings, users, custom NixOS options, and sops configuration.
-    - `roles/`: Defines machine profiles (`desktop`, `server`, `hybrid`). The configuration for each role is enabled based on the `system.role` option set in a host's configuration.
-    - `desktop/`: GUI-related configurations (e.g., Cosmic DE, audio, bluetooth).
-    - `services/`: Server-side applications and services. This includes modules for AdGuard Home, Caddy, Tailscale, Vaultwarden, NFS, and monitoring services.
-    - `nixvim/`: Declarative configuration for Neovim, including plugins and keymaps.
-  - **`home/`**: User-level modules managed by Home Manager for the `bigor` user, defining packages, shell aliases, and git configuration.
+The primary way to manage a system with this configuration is through the `nixos-rebuild` command, targeting a specific host defined in the `flake.nix`.
 
-- **`secrets/`**: Contains encrypted secret files managed by `sops`.
+**Apply Configuration:**
+To build and activate the configuration for a specific machine, run the following command on the target machine:
 
-## Key Architectural Concepts
+```bash
+# Example for the 'grospc' desktop
+nixos-rebuild switch --flake .#grospc
 
-### Roles
+# Example for the 'minipc' server
+nixos-rebuild switch --flake .#minipc
+```
 
-The configuration uses a role-based architecture to tailor systems. The `system.role` option in a host's configuration determines its profile. The available roles are defined in `modules/nixos/roles/`:
-- **`desktop`**: Configures a full desktop environment with GUI applications.
-- **`server`**: Configures a headless system with various services.
-- **`hybrid`**: A combination of both desktop and server roles.
+**Update Dependencies:**
+To update all flake inputs (like `nixpkgs`) to their latest versions, run:
 
-### Custom Options
-
-The project defines many custom NixOS options in `modules/nixos/core/options.nix`. These act as toggles for enabling or disabling features across the configurations (e.g., `sshd.enable`, `adblocker.enable`). This makes it easy to manage which services and features are active on each host.
-
-## Building and Running the Configuration
-
-To apply the configuration to a specific host, you use the `nixos-rebuild` command with the appropriate flake output.
-
-**1. Apply the configuration:**
-
-- For the desktop machine (`grospc`):
-  ```bash
-  nixos-rebuild switch --flake .#grospc
-  ```
-
-- For the server (`minipc`):
-  ```bash
-  nixos-rebuild switch --flake .#minipc
-  ```
-
-**2. Update Dependencies:**
-
-To update all flake inputs to their latest versions, run:
 ```bash
 nix flake update
 ```
-This will update the `flake.lock` file. You can then rebuild the system to apply the updates.
+
+**Development Shell:**
+The project provides a development shell with tools for formatting and checking Nix code. To enter this environment, run:
+```bash
+nix develop
+```
 
 ## Development Conventions
 
-- **Modularity**: Configurations are broken down into small, single-purpose modules.
-- **Host-specific vs. Shared**: General settings belong in `modules/`, while machine-specific values (like hostname or `system.role`) belong in `hosts/`.
-- **Code Formatting**: The codebase is formatted using `alejandra`.
-- **Linting**: `statix` and `deadnix` are used to check for errors and unused code.
-- **Pre-commit Hooks**: The project uses `pre-commit-hooks.nix` to automatically format and lint files before committing. A development shell with these tools can be entered with `nix develop`.
+*   **Modularity:** The configuration is highly modular. New features or services are typically added as new modules in the `modules/` directory. These modules are then enabled for specific hosts via custom options.
+*   **Role-Based Configuration:** A custom option `system.role` is used to assign a role (e.g., "desktop", "server") to each machine. This role is then used to conditionally apply large sets of related configurations.
+*   **Declarative Secrets:** Secrets are not stored in plain text. They are encrypted using `sops` and decrypted on the target machine by `sops-nix`, allowing the entire configuration, including secrets, to be stored in a git repository.
+*   **Code Style:** The codebase is formatted using `nixfmt-rfc-style`. Pre-commit hooks are configured to ensure code is linted (`statix`, `deadnix`) and formatted before being committed.
