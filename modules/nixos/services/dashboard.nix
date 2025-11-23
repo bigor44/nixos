@@ -54,6 +54,13 @@ lib.mkIf config.dashboard.enable {
       {
         "Infrastructure" = [
           {
+            "Vaultwarden" = {
+              icon = "bitwarden.png";
+              href = "https://vault.bigor.lan";
+              description = "Password Manager";
+            };
+          }
+          {
             "AdGuard Home" = {
               icon = "adguard-home.png";
               href = "https://adguard.bigor.lan";

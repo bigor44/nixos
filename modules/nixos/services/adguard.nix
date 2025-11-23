@@ -82,6 +82,11 @@ lib.mkIf config.adblocker.enable {
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
+          {
+            domain = "vault.bigor.lan";
+            answer = config.myNetwork.ips.minipc;
+            enabled = true;
+          }
         ];
       };
       filters =

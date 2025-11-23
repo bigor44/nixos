@@ -16,6 +16,13 @@ lib.mkIf config.reverse_proxy.enable {
         '';
       };
 
+      "vault.bigor.lan" = {
+        extraConfig = ''
+          reverse_proxy 127.0.0.1:8222
+          tls internal
+        '';
+      };
+
       # AdGuard Home - Port 3003
       "adguard.bigor.lan" = {
         extraConfig = ''

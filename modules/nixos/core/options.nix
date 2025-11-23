@@ -14,6 +14,7 @@ in {
     dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
     reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
     tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
+    vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
     monitoring = {
       enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
       isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
