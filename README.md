@@ -1,64 +1,81 @@
 # ❄️ NixOS Configuration
 
-Ce dépôt contient ma configuration système **NixOS** gérée avec **Flakes**. Elle est conçue pour être modulaire, reproductible et gère plusieurs machines avec des rôles distincts (Desktop & Serveur).
+This repository contains my **NixOS** system configuration managed with **Nix Flakes**. It is designed to be modular, reproducible, and manages multiple machines with distinct roles (Desktop & Server).
 
-## 🏗️ Architecture du Projet
+## 🏗️ Project Architecture
 
-Le projet est structuré pour maximiser le partage de code entre les machines tout en gardant une configuration claire.
+The project is structured to maximize code sharing between machines while keeping the configuration clean and readable.
 
-- **`flake.nix`** : Point d'entrée, définit les inputs (Nixpkgs, Home-Manager, NixVim, Flake-Parts...) et les outputs système.
-- **`hosts/`** : Configurations spécifiques à chaque machine.
-  - **`grospc`** : Station de travail principale (Gaming, Dev, Cosmic DE).
-  - **`minipc`** : Serveur domestique (NAS, Monitoring, Dashboard).
-- **`modules/`** : Modules réutilisables.
-  - **`nixos/`** : Configuration système (Core, Desktop, Services).
-  - **`home/`** : Configuration utilisateur (Home Manager, Shell, Git).
+* **`flake.nix`**: Entry point defining inputs (Nixpkgs, Home-Manager, NixVim, Sops-Nix...) and system outputs.
+* **`hosts/`**: Machine-specific configurations.
+    * **`grospc`**: Main workstation (Gaming, Dev, Cosmic DE).
+    * **`minipc`**: Home server (NAS, Monitoring, Dashboard, AdBlock).
+* **`modules/`**: Reusable modules.
+    * **`nixos/`**: System-level configuration (Core, Desktop, Services).
+    * **`home/`**: User-level configuration via Home Manager (Shell, Git, Neovim).
+* **`secrets/`**: Encrypted secrets managed by **sops-nix**.
 
-## 🖥️ Machines
+## 🖥️ Hosts
 
-| Hostname | Rôle | OS / Environnement | Services Clés |
+| Hostname | Role | OS / Kernel | Key Features |
 | :--- | :--- | :--- | :--- |
-| **`grospc`** | Desktop | NixOS / **Cosmic Alpha** | Steam, Gaming, Dev |
-| **`minipc`** | Serveur | NixOS / Headless | NFS, AdGuard, Prometheus, Grafana, Homepage |
+| **`grospc`** | Desktop | NixOS / Zen Kernel | Cosmic DE, Steam (Gaming), Pipewire, Bluetooth, NFS Client |
+| **`minipc`** | Server | NixOS / Latest Kernel | Headless, AdGuard, Monitoring Stack, Vaultwarden, Tailscale Exit Node, NFS Server |
 
-## ✨ Fonctionnalités Clés
+## ✨ Key Features
 
-### 🚀 Environnement de Bureau & Dev
-- **Cosmic Desktop** : Utilisation de l'environnement de bureau Cosmic (System76) écrit en Rust.
-- **NixVim** : Configuration Neovim déclarative complète (LSP, Treesitter, Telescope, etc.).
+### 🚀 Desktop & Development Environment
+* **Cosmic Desktop**: Running the alpha version of System76's Cosmic Desktop environment.
+* **NixVim**: Fully declarative Neovim configuration featuring:
+    * **Theme**: **Gruvbox** (hard contrast).
+    * **LSP**: Native support for Nix, Bash, Markdown, JSON, YAML.
+    * **Tools**: Telescope, Neo-tree, Gitsigns, Toggleterm, Which-key.
+    * **Debug**: DAP enabled.
+* **Shell**: Fish shell with plugins (bobthefisher, autopair, etc.), `eza` aliases, and **Bat** (configured with `gruvbox-dark` theme).
 
-### 📊 Services & Monitoring
-- **Monitoring Stack** : 
-  - **Node Exporter** sur toutes les machines.
-  - **Prometheus & Grafana** centralisés sur le `minipc` pour l'agrégation et la visualisation.
-- **AdGuard Home** : Filtrage DNS et bloquage de publicités réseau.
-- **Homepage Dashboard** : Tableau de bord personnel regroupant tous les services du LAN.
-- **Partage de fichiers** : Serveur NFS sur `minipc` monté automatiquement sur `grospc`.
+### 📊 Services & Infrastructure
+* **Monitoring Stack**:
+    * **Node Exporter**: Running on all nodes.
+    * **Prometheus**: Centralized metric collection.
+    * **Alertmanager**: Alert handling and routing.
+    * **Grafana**: Data visualization with provisioned datasources (Prometheus & Alertmanager).
+* **Homepage Dashboard**: A unified dashboard (`home.bigor.lan`) displaying system stats and service status (using `customapi` for Alertmanager).
+* **AdGuard Home**: Network-wide ad blocking and local DNS rewriting (`*.bigor.lan`).
+* **Networking**:
+    * **Tailscale**: VPN with Exit Node capability enabled on `minipc`.
+    * **Caddy**: Reverse proxy serving internal sites over HTTPS with local certificates.
+* **Security**:
+    * **Sops-nix**: Secret management using Age encryption.
+    * **Hardened SSH**: Root login disabled, password authentication disabled.
 
-## 🛠️ Installation et Utilisation
+## 🛠️ Installation & Usage
 
-Pour appliquer la configuration sur une machine, clonez ce dépôt puis exécutez :
+To apply the configuration to a specific host:
 
 ```bash
-# Pour la station de travail (grospc)
+# For the workstation (grospc)
 nixos-rebuild switch --flake .#grospc
 
-# Pour le serveur (minipc)
+# For the server (minipc)
 nixos-rebuild switch --flake .#minipc
 ````
 
-### Mise à jour des dépendances
+### Update Dependencies
 
-Pour mettre à jour le `flake.lock` (incluant Nixpkgs, Home-Manager, etc.) :
+To update `flake.lock` (including Nixpkgs, Home-Manager, etc.):
 
 ```bash
 nix flake update
 ```
 
-## 📝 Conventions de Code
+## 📝 Configuration Details
 
-  - **Formatage** : Le code est formaté automatiquement via `alejandra`.
-  - **Pre-commit** : Des hooks sont configurés pour vérifier la syntaxe et le style avant chaque commit.
-  - **Options Centralisées** : Les fonctionnalités globales (ex: `monitoring.enable`, `system.role`) sont gérées via des options personnalisées dans `modules/nixos/core/options.nix`.
+  * **Custom Options**: Global settings (e.g., `system.role`, `myNetwork.ips`) are defined in `modules/nixos/core/options.nix` to keep modules DRY (Don't Repeat Yourself).
+  * **Formatting**: The codebase is automatically formatted using **Alejandra**.
+  * **Pre-commit**: Hooks are configured to lint (Statix, Deadnix) and format code before committing.
 
------
+## 📄 License
+
+MIT License - 
+
+```
