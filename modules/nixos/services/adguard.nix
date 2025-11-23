@@ -88,7 +88,7 @@ lib.mkIf config.adblocker.enable {
             enabled = true;
           }
           {
-            domain = "alert.bigor.lan";
+            domain = "alerts.bigor.lan";
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }

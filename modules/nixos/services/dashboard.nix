@@ -63,11 +63,30 @@ lib.mkIf config.dashboard.enable {
           {
             "Alertmanager" = {
               icon = "alertmanager.png";
-              href = "https://alerts.bigor.lan"; # Ou http://minipc.bigor.lan:9093 si pas de reverse proxy
+              href = "https://alerts.bigor.lan";
               description = "Gestion des alertes";
               widget = {
-                type = "alertmanager";
-                url = "http://127.0.0.1:9093";
+                type = "customapi";
+                url = "http://127.0.0.1:9093/api/v1/alerts";
+                refreshInterval = 10000; # Rafraîchir toutes les 10s
+                mappings = [
+                  {
+                    field = "data";
+                    label = "Alertes";
+                    format = "size"; # Compte le nombre d'éléments dans la liste 'data'
+                    state_map = [
+                      {
+                        value = 0;
+                        color = "green";
+                      }
+                      {
+                        operator = ">";
+                        value = 0;
+                        color = "red";
+                      }
+                    ];
+                  }
+                ];
               };
             };
           }
