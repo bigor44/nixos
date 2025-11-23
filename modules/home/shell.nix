@@ -77,9 +77,6 @@
 
         # Set colors for eza
         set -gx EZA_COLORS "da=38;5;240:gm=38;5;240"
-
-        # Better history search
-        bind \cr 'fzf-history-widget'
       '';
     };
 

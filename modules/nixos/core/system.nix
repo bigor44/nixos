@@ -16,9 +16,7 @@
     consoleLogLevel = 3;
     kernelParams = [
       "quiet"
-      "splash"
     ];
-    plymouth.enable = true;
   };
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
