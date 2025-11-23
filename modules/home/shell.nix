@@ -102,7 +102,7 @@
     bat = {
       enable = true;
       config = {
-        theme = "TwoDark";
+        theme = "gruvbox-dark";
         pager = "less -FR";
       };
     };

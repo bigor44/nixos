@@ -1,11 +1,12 @@
 {
   programs.nixvim = {
     # --- Thème (Déplacé ici) ---
-    colorschemes.tokyonight = {
+    colorschemes.gruvbox = {
       enable = true;
       settings = {
-        style = "moon";
-        transparent = false;
+        # Options courantes pour gruvbox
+        transparent_mode = false; # Mettre à true pour la transparence
+        contrast_dark = "hard"; # Options: "soft", "medium", "hard"
       };
     };
 
