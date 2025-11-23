@@ -7,6 +7,7 @@ lib.mkIf config.adblocker.enable {
   services.adguardhome = {
     enable = true;
     port = 3003;
+    host = "127.0.0.1";
     mutableSettings = false;
 
     settings = {

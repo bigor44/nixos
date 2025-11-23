@@ -55,7 +55,7 @@ in {
         settings = {
           server = {
             http_port = 3000;
-            http_addr = "0.0.0.0"; # Accessible depuis le réseau
+            http_addr = "127.0.0.1";
           };
         };
 

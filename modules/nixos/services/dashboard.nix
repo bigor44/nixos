@@ -6,7 +6,8 @@
 lib.mkIf config.dashboard.enable {
   services.homepage-dashboard = {
     enable = true;
-    listenPort = 8082; # Standard Homepage port
+    listenPort = 8082;
+    allowedHosts = "localhost:8082,home.bigor.lan";
 
     # Global settings
     settings = {
