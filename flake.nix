@@ -36,6 +36,8 @@
           config.allowUnfree = true;
         };
 
+        formatter = pkgs.alejandra;
+
         checks = {
           pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
