@@ -75,10 +75,4 @@ lib.mkIf config.dashboard.enable {
       }
     ];
   };
-  systemd.services.homepage-dashboard.serviceConfig = {
-    # List every IP and Domain you use to access the dashboard
-    Environment = [
-      "HOMEPAGE_ALLOWED_HOSTS=home.bigor.lan"
-    ];
-  };
 }
