@@ -3,3 +3,13 @@ result
 result-*
 .pre-commit-config.yaml
 
+keys.txt
+age.agekey
+
+# Fichiers temporaires ou déchiffrés par erreur (ex: sops -d > clear.yaml)
+*.decrypted.*
+*_decrypted.*
+
+# --- Éditeurs (Comme vous utilisez Neovim/NixVim) ---
+*.swp
+*.swo

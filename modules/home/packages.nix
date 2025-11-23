@@ -5,5 +5,8 @@
     ripgrep
     jq
     gemini-cli
+    age
+    sops
+    ssh-to-age
   ];
 }
