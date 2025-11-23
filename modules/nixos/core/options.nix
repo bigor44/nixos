@@ -1,8 +1,6 @@
-{ lib, ... }:
-let
-  roleEnum = [ "desktop" "server" "hybrid" ];
-in
-{
+{lib, ...}: let
+  roleEnum = ["desktop" "server" "hybrid"];
+in {
   options = {
     system.role = lib.mkOption {
       type = lib.types.enum roleEnum;

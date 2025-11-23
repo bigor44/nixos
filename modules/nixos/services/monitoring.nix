@@ -1,11 +1,10 @@
-{ config
-, lib
-, ...
-}:
-let
-  cfg = config.monitoring;
-in
 {
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.monitoring;
+in {
   config = lib.mkMerge [
     # ---------------------------------------------------------
     # Partie AGENT (Installé partout où monitoring.enable = true)
@@ -13,12 +12,12 @@ in
     (lib.mkIf cfg.enable {
       services.prometheus.exporters.node = {
         enable = true;
-        enabledCollectors = [ "systemd" ];
+        enabledCollectors = ["systemd"];
         port = 9100;
       };
 
       # Ouvrir le port pour que Prometheus puisse venir lire les données
-      networking.firewall.allowedTCPPorts = [ 9100 ];
+      networking.firewall.allowedTCPPorts = [9100];
     })
 
     # ---------------------------------------------------------
@@ -71,7 +70,7 @@ in
         ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 3000 ];
+      networking.firewall.allowedTCPPorts = [3000];
     })
   ];
 }

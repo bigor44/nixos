@@ -1,6 +1,7 @@
-{ config
-, lib
-, ...
+{
+  config,
+  lib,
+  ...
 }:
 lib.mkIf config.dashboard.enable {
   services.homepage-dashboard = {

@@ -1,6 +1,7 @@
-{ config
-, lib
-, ...
+{
+  config,
+  lib,
+  ...
 }:
 lib.mkIf config.desktop.enable {
   services.pipewire = {
