@@ -5,5 +5,6 @@
     ./dashboard.nix
     ./monitoring.nix
     ./nfs.nix
+    ./caddy.nix
   ];
 }
