@@ -89,7 +89,7 @@ lib.mkIf config.dashboard.enable {
   systemd.services.homepage-dashboard.serviceConfig = {
     # List every IP and Domain you use to access the dashboard
     Environment = [
-      "HOMEPAGE_ALLOWED_HOSTS=${config.myNetwork.ips.minipc},${config.myNetwork.ips.minipc}:8082,minipc,localhost,127.0.0.1"
+      "HOMEPAGE_ALLOWED_HOSTS=${config.myNetwork.ips.minipc},${config.myNetwork.ips.minipc}:8082,minipc,localhost,127.0.0.1,home.bigor.lan"
     ];
   };
 }

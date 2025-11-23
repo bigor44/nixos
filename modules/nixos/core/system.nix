@@ -20,6 +20,9 @@
     ];
     plymouth.enable = true;
   };
+  security.pki.certificateFiles = [
+    ../../../certs/minipc-ca.pem
+  ];
 
   # Nix configuration enhancements
   nix = {
