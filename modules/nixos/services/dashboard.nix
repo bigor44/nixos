@@ -67,11 +67,11 @@ lib.mkIf config.dashboard.enable {
               description = "Gestion des alertes";
               widget = {
                 type = "customapi";
-                url = "http://127.0.0.1:9093/api/v1/alerts";
+                url = "http://127.0.0.1:9093/api/v2/alerts";
                 refreshInterval = 10000; # Rafraîchir toutes les 10s
                 mappings = [
                   {
-                    field = "data";
+                    field = "";
                     label = "Alertes";
                     format = "size"; # Compte le nombre d'éléments dans la liste 'data'
                     state_map = [
