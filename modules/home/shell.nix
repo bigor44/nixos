@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs = {
     fish = {
       enable = true;
@@ -98,7 +98,7 @@
     zoxide = {
       enable = true;
       enableFishIntegration = true;
-      options = ["--cmd cd"];
+      options = [ "--cmd cd" ];
     };
 
     # Bat configuration

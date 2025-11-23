@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs = {
     fish.enable = true;
     tmux.enable = true;
@@ -11,7 +11,7 @@
   };
   environment.systemPackages = with pkgs; [
     # Nix
-    alejandra
+    nixpkgs-fmt
     statix
     deadnix
 

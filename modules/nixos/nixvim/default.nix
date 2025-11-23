@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
@@ -32,18 +32,18 @@
     '';
 
     /*
-    ↓  plugin definitions
+      ↓  plugin definitions
     */
-    plugins = import ./plugins.nix {inherit pkgs;};
+    plugins = import ./plugins.nix { inherit pkgs; };
 
     /*
-    ↓  binaries for LSP, formatters, telescope
+      ↓  binaries for LSP, formatters, telescope
     */
     extraPackages = with pkgs; [
-      nil
+      nixd
+      nixpkgs-fmt
       bash-language-server
       marksman
-      alejandra
       shfmt
       ripgrep
       fd

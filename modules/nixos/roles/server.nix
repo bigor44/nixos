@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 lib.mkIf (config.system.role == "server") {
   desktop.enable = lib.mkDefault false;

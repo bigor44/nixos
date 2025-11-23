@@ -1,7 +1,7 @@
 {
   number = true;
   relativenumber = true;
-  spelllang = ["en" "fr"];
+  spelllang = [ "en" "fr" ];
   tabstop = 2;
   shiftwidth = 2;
   expandtab = true;

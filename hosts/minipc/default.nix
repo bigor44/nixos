@@ -1,5 +1,5 @@
-{pkgs, ...}: {
-  imports = [./hardware-configuration.nix];
+{ pkgs, ... }: {
+  imports = [ ./hardware-configuration.nix ];
   networking.hostName = "minipc";
 
   system.role = "server";
@@ -11,7 +11,7 @@
       /mnt/storage 192.168.1.1(rw,sync,no_subtree_check,no_root_squash)
     '';
   };
-  networking.firewall.allowedTCPPorts = [2049];
+  networking.firewall.allowedTCPPorts = [ 2049 ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

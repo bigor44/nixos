@@ -1,13 +1,15 @@
-_: let
+_:
+let
   # CORRECTION 1 : Ajout de jsonls et yamlls pour faire fonctionner SchemaStore
-  lspServers = ["nil_ls" "bashls" "marksman" "jsonls" "yamlls"];
-in {
+  lspServers = [ "nixd" "bashls" "marksman" "jsonls" "yamlls" ];
+in
+{
   # Note: Le colorscheme a été déplacé dans default.nix comme vu précédemment
 
   /*
-  ---------------------------------------------------------------
-  THEME & UI
-  ---------------------------------------------------------------
+    ---------------------------------------------------------------
+    THEME & UI
+    ---------------------------------------------------------------
   */
 
   # CORRECTION 2 : Structure lspkind mise à jour (settings.cmp.menu)
@@ -33,9 +35,9 @@ in {
   };
 
   /*
-  ---------------------------------------------------------------
-  NAVIGATION & EDITING
-  ---------------------------------------------------------------
+    ---------------------------------------------------------------
+    NAVIGATION & EDITING
+    ---------------------------------------------------------------
   */
   nvim-surround.enable = true;
 
@@ -57,19 +59,20 @@ in {
   };
 
   /*
-  ---------------------------------------------------------------
-  LSP & COMPLETION
-  ---------------------------------------------------------------
+    ---------------------------------------------------------------
+    LSP & COMPLETION
+    ---------------------------------------------------------------
   */
   lsp = {
     enable = true;
     servers =
       builtins.listToAttrs
-      (map (n: {
-          name = n;
-          value = {enable = true;};
-        })
-        lspServers);
+        (map
+          (n: {
+            name = n;
+            value = { enable = true; };
+          })
+          lspServers);
     keymaps.diagnostic = {
       "<leader>e" = "open_float";
       "[d" = "goto_prev";
@@ -94,7 +97,7 @@ in {
     autoEnableSources = true;
     settings = {
       formatting = {
-        fields = ["kind" "abbr" "menu"];
+        fields = [ "kind" "abbr" "menu" ];
         expandable_indicator = true;
       };
       mapping = {
@@ -107,10 +110,10 @@ in {
         "<S-Tab>" = "cmp.mapping.select_prev_item()";
       };
       sources = [
-        {name = "nvim_lsp";}
-        {name = "luasnip";}
-        {name = "path";}
-        {name = "buffer";}
+        { name = "nvim_lsp"; }
+        { name = "luasnip"; }
+        { name = "path"; }
+        { name = "buffer"; }
       ];
     };
   };
@@ -125,18 +128,18 @@ in {
         timeout_ms = 500;
       };
       formatters_by_ft = {
-        nix = ["alejandra"];
-        sh = ["shfmt"];
-        bash = ["shfmt"];
-        markdown = ["marksman"];
+        nix = [ "nixpkgs-fmt" ];
+        sh = [ "shfmt" ];
+        bash = [ "shfmt" ];
+        markdown = [ "marksman" ];
       };
     };
   };
 
   /*
-  ---------------------------------------------------------------
-  TREESITTER & EXPLORER
-  ---------------------------------------------------------------
+    ---------------------------------------------------------------
+    TREESITTER & EXPLORER
+    ---------------------------------------------------------------
   */
   treesitter = {
     enable = true;
@@ -172,9 +175,9 @@ in {
   };
 
   /*
-  ---------------------------------------------------------------
-  OUTILS DIVERS & GIT
-  ---------------------------------------------------------------
+    ---------------------------------------------------------------
+    OUTILS DIVERS & GIT
+    ---------------------------------------------------------------
   */
   dap.enable = true;
   dap-ui = {
