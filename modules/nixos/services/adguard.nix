@@ -62,6 +62,21 @@
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
+          {
+            domain = "home.bigor.lan";
+            answer = config.myNetwork.ips.minipc;
+            enabled = true;
+          }
+          {
+            domain = "adguard.bigor.lan";
+            answer = config.myNetwork.ips.minipc;
+            enabled = true;
+          }
+          {
+            domain = "grafana.bigor.lan";
+            answer = config.myNetwork.ips.minipc;
+            enabled = true;
+          }
         ];
       };
       filters =

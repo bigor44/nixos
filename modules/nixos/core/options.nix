@@ -11,6 +11,7 @@ in {
     desktop.enable = lib.mkEnableOption "Enable Cosmic Desktop";
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
     dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
+    reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
     monitoring = {
       enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
       isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
