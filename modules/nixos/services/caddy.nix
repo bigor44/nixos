@@ -31,6 +31,14 @@ lib.mkIf config.reverse_proxy.enable {
         '';
       };
 
+      # Alertmanager - Port 9093
+      "alerts.bigor.lan" = {
+        extraConfig = ''
+          reverse_proxy 127.0.0.1:9093
+          tls internal
+        '';
+      };
+
       # Grafana - Port 3000
       "grafana.bigor.lan" = {
         extraConfig = ''

@@ -61,6 +61,17 @@ lib.mkIf config.dashboard.enable {
             };
           }
           {
+            "Alertmanager" = {
+              icon = "alertmanager.png";
+              href = "https://alerts.bigor.lan"; # Ou http://minipc.bigor.lan:9093 si pas de reverse proxy
+              description = "Gestion des alertes";
+              widget = {
+                type = "alertmanager";
+                url = "http://127.0.0.1:9093";
+              };
+            };
+          }
+          {
             "AdGuard Home" = {
               icon = "adguard-home.png";
               href = "https://adguard.bigor.lan";
