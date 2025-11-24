@@ -13,11 +13,11 @@ lib.mkIf config.adblocker.enable {
     settings = {
       language = "fr";
       log = {
-        enabled = false;
-        compress = false;
+        enabled = true;
+        compress = true;
       };
       querylog = {
-        enabled = false;
+        enabled = true;
       };
       dns = {
         bind_hosts = [ "0.0.0.0" ];
@@ -27,6 +27,8 @@ lib.mkIf config.adblocker.enable {
           "https://dns.quad9.net/dns-query"
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
+          "https://unfiltered.joindns4.eu/dns-query"
+          "https://dns.google/dns-query"
         ];
         bootstrap_dns = [
           "1.1.1.1"
