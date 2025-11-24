@@ -1,14 +1,21 @@
 { pkgs, ... }:
 {
   programs = {
+    starship = {
+      enable = true;
+      enableFishIntegration = true;
+      settings = {
+        add_newline = false;
+        character = {
+          success_symbol = "[➜](bold green)";
+          error_symbol = "[➜](bold red)";
+        };
+      };
+    };
     fish = {
       enable = true;
 
       plugins = [
-        {
-          name = "bobthefisher";
-          inherit (pkgs.fishPlugins.bobthefisher) src;
-        }
         {
           name = "autopair";
           inherit (pkgs.fishPlugins.autopair) src;
@@ -103,7 +110,6 @@
     bat = {
       enable = true;
       config = {
-        theme = "gruvbox-dark";
         pager = "less -FR";
       };
     };

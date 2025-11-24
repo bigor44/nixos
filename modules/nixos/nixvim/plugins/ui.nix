@@ -1,12 +1,19 @@
 {
   programs.nixvim = {
     # --- Thème (Déplacé ici) ---
-    colorschemes.gruvbox = {
+    colorschemes.catppuccin = {
       enable = true;
       settings = {
-        # Options courantes pour gruvbox
-        transparent_mode = false; # Mettre à true pour la transparence
-        contrast_dark = "hard"; # Options: "soft", "medium", "hard"
+        flavour = "mocha"; # Latte, Frappe, Macchiato, Mocha
+        transparent_background = false; # Mettre à true si vous voulez la transparence
+        integrations = {
+          cmp = true;
+          gitsigns = true;
+          neotree = true;
+          treesitter = true;
+          telescope.enabled = true;
+          which_key = true;
+        };
       };
     };
 
