@@ -11,6 +11,7 @@ lib.mkIf config.desktop.enable {
     steam.enable = true;
   };
   environment.systemPackages = with pkgs; [
+    alacritty
     discord
     brave
     onedrive

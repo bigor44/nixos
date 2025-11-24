@@ -8,7 +8,14 @@ lib.mkIf config.desktop.enable {
   networking.networkmanager.enable = true;
   # Desktop environment
   services = {
-    displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
+    displayManager = {
+      ly.enable = true;
+      cosmic-greeter.enable = false;
+      gdm.enable = false;
+    };
+    desktopManager = {
+      cosmic.enable = true;
+      gnome.enable = true;
+    };
   };
 }
