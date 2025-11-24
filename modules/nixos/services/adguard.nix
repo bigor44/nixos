@@ -27,7 +27,6 @@ lib.mkIf config.adblocker.enable {
           "https://dns.quad9.net/dns-query"
           "https://ns0.fdn.fr/dns-query"
           "https://ns1.fdn.fr/dns-query"
-          "https://unfiltered.joindns4.eu/dns-query"
           "https://dns.google/dns-query"
         ];
         bootstrap_dns = [
@@ -39,7 +38,7 @@ lib.mkIf config.adblocker.enable {
         cache_size = 4194304;
         cache_ttl_min = 60;
         cache_ttl_max = 86400;
-        anonymize_client_ip = true;
+        anonymize_client_ip = false;
         use_http3_upstreams = true;
         use_private_ptr_resolvers = true;
         enable_dnssec = true;
