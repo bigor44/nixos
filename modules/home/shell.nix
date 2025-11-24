@@ -6,9 +6,59 @@
       enableFishIntegration = true;
       settings = {
         add_newline = false;
+
+        # On définit la structure : Dossier > Git > Flèche finale
+        # On ajoute aussi le prompt à droite (durée de la commande) typique de bobthefisher
+        format = "[](mauve)$directory[](fg:mauve bg:surface0)$git_branch$git_status[](fg:surface0) ";
+        right_format = "$cmd_duration";
+
+        # Définition des couleurs Catppuccin Mocha pour l'harmonisation
+        palette = "catppuccin_mocha";
+        palettes.catppuccin_mocha = {
+          base = "#1e1e2e";
+          mantle = "#181825";
+          surface0 = "#313244";
+          text = "#cdd6f4";
+          blue = "#89b4fa";
+          mauve = "#cba6f7";
+          red = "#f38ba8";
+          green = "#a6e3a1";
+          yellow = "#f9e2af";
+        };
+
+        # 1. Le Dossier (Premier bloc)
+        directory = {
+          style = "fg:base bg:mauve"; # Texte sombre sur fond Mauve
+          format = "[ $path ]($style)";
+          truncation_length = 3;
+          truncation_symbol = "…/";
+          read_only = " 🔒";
+        };
+
+        # 2. Git Branch (Deuxième bloc)
+        git_branch = {
+          symbol = " ";
+          style = "fg:text bg:surface0"; # Texte clair sur fond gris foncé
+          format = "[ $symbol$branch ]($style)";
+        };
+
+        # 3. Git Status (Suite du deuxième bloc)
+        git_status = {
+          style = "fg:red bg:surface0";
+          format = "[$all_status$ahead_behind ]($style)";
+        };
+
+        # 4. Indicateur de succès/échec (similaire aux flèches de couleur de bobthefisher)
         character = {
           success_symbol = "[➜](bold green)";
           error_symbol = "[➜](bold red)";
+        };
+
+        # Infos de droite
+        cmd_duration = {
+          min_time = 500;
+          format = "[$duration]($style)";
+          style = "yellow";
         };
       };
     };
