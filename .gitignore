@@ -2,6 +2,7 @@
 result
 result-*
 .pre-commit-config.yaml
+GEMINI.md
 
 keys.txt
 age.agekey
