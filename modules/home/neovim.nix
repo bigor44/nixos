@@ -5,17 +5,30 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+
     extraPackages = with pkgs; [
-      # Langages et LSP
+      # Language Servers
       lua-language-server
-      nixd # Nix LSP
+      nixd
+      bash-language-server
+      marksman
+      nodePackages.vscode-langservers-extracted # JSON/YAML
+
+      # Formatters
       nixfmt-rfc-style
+      stylua
+      shfmt
+      jq
+      nodePackages.prettier
+
+      # Build tools & utilities
       ripgrep
-      gnumake
       fd
+      gnumake
       gcc
       gzip
       nodejs
+      tree-sitter
     ];
   };
 }
