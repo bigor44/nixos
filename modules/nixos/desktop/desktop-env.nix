@@ -16,7 +16,7 @@ lib.mkIf config.desktop.enable {
       };
     };
     desktopManager = {
-      # cosmic.enable = true;
+      cosmic.enable = true;
       plasma6.enable = true;
     };
   };

@@ -32,4 +32,3 @@ opt.mouse = "a"
 
 -- Langue
 opt.spelllang = { "en", "fr" }
-

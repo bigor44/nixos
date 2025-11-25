@@ -45,9 +45,14 @@
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
+                # Nix
                 nixfmt-rfc-style.enable = true;
                 statix.enable = true;
                 deadnix.enable = true;
+
+                #Lua
+                stylua.enable = true;
+                luacheck.enable = true;
               };
             };
           };
@@ -57,6 +62,7 @@
               nixfmt-rfc-style
               statix
               deadnix
+              stylua
             ];
             inherit (config.checks.pre-commit-check) shellHook;
           };
