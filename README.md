@@ -6,7 +6,7 @@ This repository contains my **NixOS** system configuration managed with **Nix Fl
 
 The project is structured to maximize code sharing between machines while keeping the configuration clean and readable.
 
-* **`flake.nix`**: Entry point defining inputs (Nixpkgs, Home-Manager, NixVim, Sops-Nix...) and system outputs.
+* **`flake.nix`**: Entry point defining inputs (Nixpkgs, Home-Manager, Sops-Nix...) and system outputs.
 * **`hosts/`**: Machine-specific configurations.
     * **`grospc`**: Main workstation (Gaming, Dev, Cosmic DE).
     * **`minipc`**: Home server (NAS, Monitoring, Dashboard, AdBlock).
@@ -26,11 +26,6 @@ The project is structured to maximize code sharing between machines while keepin
 
 ### 🚀 Desktop & Development Environment
 * **Cosmic Desktop**: Running the alpha version of System76's Cosmic Desktop environment.
-* **NixVim**: Fully declarative Neovim configuration featuring:
-    * **Theme**: **Gruvbox** (hard contrast).
-    * **LSP**: Native support for Nix, Bash, Markdown, JSON, YAML.
-    * **Tools**: Telescope, Neo-tree, Gitsigns, Toggleterm, Which-key.
-    * **Debug**: DAP enabled.
 * **Shell**: Fish shell with plugins (bobthefisher, autopair, etc.), `eza` aliases, and **Bat** (configured with `gruvbox-dark` theme).
 
 ### 📊 Services & Infrastructure
@@ -71,7 +66,7 @@ nix flake update
 ## 📝 Configuration Details
 
   * **Custom Options**: Global settings (e.g., `system.role`, `myNetwork.ips`) are defined in `modules/nixos/core/options.nix` to keep modules DRY (Don't Repeat Yourself).
-  * **Formatting**: The codebase is automatically formatted using **Alejandra**.
+  * **Formatting**: The codebase is automatically formatted using **nixfmt-rfc-style**.
   * **Pre-commit**: Hooks are configured to lint (Statix, Deadnix) and format code before committing.
 
 ## 📄 License
