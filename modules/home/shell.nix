@@ -86,10 +86,6 @@
         la = "eza -lah --icons --git";
         lt = "eza --tree --level=2 --icons";
 
-        # Common shortcuts
-        cat = "bat";
-        grep = "rg";
-
         # Safety nets
         rm = "rm -i";
         cp = "cp -i";

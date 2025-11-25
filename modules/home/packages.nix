@@ -3,7 +3,7 @@
   osConfig,
   lib,
   ...
-}: # Ajoutez osConfig et lib ici
+}:
 let
   isDesktop = osConfig.system.role == "desktop" || osConfig.system.role == "hybrid";
 in
@@ -16,7 +16,6 @@ in
         normal.family = "JetBrainsMono Nerd Font";
         size = 12;
       };
-      # You can reuse your Catppuccin colors here easily!
     };
   };
   home.packages =
