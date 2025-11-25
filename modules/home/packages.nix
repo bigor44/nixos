@@ -8,16 +8,6 @@ let
   isDesktop = osConfig.system.role == "desktop" || osConfig.system.role == "hybrid";
 in
 {
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      window.opacity = 0.95;
-      font = {
-        normal.family = "JetBrainsMono Nerd Font";
-        size = 12;
-      };
-    };
-  };
   home.packages =
     with pkgs;
     [
