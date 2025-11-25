@@ -4,8 +4,17 @@
   ...
 }:
 lib.mkIf config.desktop.enable {
-  #Network Manager
+  # Boot
+  boot = {
+    consoleLogLevel = 3;
+    kernelParams = [
+      "quiet"
+    ];
+  };
+
+  # Network Manager
   networking.networkmanager.enable = true;
+
   # Desktop environment
   services = {
     displayManager = {

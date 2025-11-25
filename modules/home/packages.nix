@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-let
-  isDesktop = osConfig.system.role == "desktop" || osConfig.system.role == "hybrid";
-in
 {
   home.packages =
     with pkgs;
@@ -20,7 +17,7 @@ in
       sops
       ssh-to-age
     ]
-    ++ lib.optionals isDesktop [
+    ++ lib.optionals osConfig.desktop.enable [
       discord
       brave
       onedrive

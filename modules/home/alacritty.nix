@@ -3,10 +3,7 @@
   lib,
   ...
 }:
-let
-  isDesktop = osConfig.system.role == "desktop" || osConfig.system.role == "hybrid";
-in
-lib.mkIf isDesktop {
+lib.mkIf osConfig.desktop.enable {
   programs.alacritty = {
     enable = true;
     settings = {

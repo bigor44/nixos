@@ -75,14 +75,23 @@
               ./modules/nixos
               inputs.home-manager.nixosModules.home-manager
               inputs.sops-nix.nixosModules.sops
-              {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  users.bigor = import ./modules/home;
-                  backupFileExtension = "backup";
-                };
-              }
+              (
+                { config, ... }:
+                {
+                  home-manager = {
+                    useGlobalPkgs = true;
+                    useUserPackages = true;
+                    users.bigor = import ./modules/home;
+                    backupFileExtension = "backup";
+
+                    # C'est ICI qu'on injecte osConfig et inputs dans Home Manager
+                    extraSpecialArgs = {
+                      inherit inputs;
+                      osConfig = config;
+                    };
+                  };
+                }
+              )
             ];
           in
           {

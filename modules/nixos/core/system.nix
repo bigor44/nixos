@@ -8,12 +8,6 @@
       };
       efi.canTouchEfiVariables = true;
     };
-
-    # Silent boot (optional)
-    consoleLogLevel = 3;
-    kernelParams = [
-      "quiet"
-    ];
   };
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
