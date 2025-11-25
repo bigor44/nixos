@@ -15,11 +15,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -72,7 +67,6 @@
           let
             sharedModules = [
               ./modules/nixos
-              inputs.nixvim.nixosModules.nixvim
               inputs.home-manager.nixosModules.home-manager
               inputs.sops-nix.nixosModules.sops
               {

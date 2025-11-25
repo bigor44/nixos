@@ -34,6 +34,5 @@
 
     # Misc
     fastfetch
-    sl
   ];
 }
