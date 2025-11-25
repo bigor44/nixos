@@ -6,6 +6,7 @@
   };
   imports = [
     ./packages.nix
+    ./dotfiles.nix
     ./shell.nix
     ./git.nix
     ./neovim.nix
