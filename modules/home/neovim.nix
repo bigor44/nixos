@@ -30,8 +30,6 @@
 
       # Python
       pyright
-      black
-      isort
       python3
     ];
   };

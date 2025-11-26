@@ -24,6 +24,8 @@
       nodePackages.prettier
       nixfmt
       shfmt
+      isort
+      black
     ]
     ++ lib.optionals osConfig.desktop.enable [
       discord

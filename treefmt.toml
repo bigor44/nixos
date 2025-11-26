@@ -30,6 +30,12 @@ command = "stylua"
 options = ["--config-path", "stylua.toml"]  # ✅ Explicit config
 includes = ["*.lua"]
 
+# --- SHELL (via shfmt) ---
+[formatter.shfmt]
+command = "shfmt"
+options = ["-i", "2", "-s", "-w"] # Indentation 2 espaces, simplify, write
+includes = ["*.sh", "*.bash"]
+
 # --- YAML (via yamlfmt) ---
 [formatter.yaml]
 command = "yamlfmt"
