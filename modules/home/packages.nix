@@ -19,6 +19,7 @@
     ]
     ++ lib.optionals osConfig.desktop.enable [
       discord
+      python3
       brave
       onedrive
       youtube-music
