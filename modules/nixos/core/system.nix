@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+_: {
   boot = {
     loader = {
       systemd-boot = {
@@ -31,7 +30,7 @@
         "nix-command"
         "flakes"
       ];
-      max-jobs = lib.mkDefault 8;
+      max-jobs = "auto";
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
