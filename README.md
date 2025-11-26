@@ -10,9 +10,7 @@ A **declarative, reproducible, and role-based** NixOS configuration managing a d
 
 ## 🏗️ Architecture
 
-This configuration uses a **Capability-based** design pattern. Hosts are assigned a `role` (desktop/server), which triggers specific capability flags (`desktop.enable`,  etc.).
-
-
+This configuration uses a **Capability-based** design pattern. Hosts are assigned a `role` (desktop/server), which triggers specific capability flags (`desktop.enable`, etc.).
 
 ```mermaid
 graph TD
@@ -44,60 +42,60 @@ graph TD
     M --> RS
     RD --> HM
     RS --> Mon & AGH & Rev & Dash
-````
+```
 
------
+---
 
 ## 🖥️ Hosts Overview
 
-| Host | IP | Role | Kernel | Key Features |
-| :--- | :--- | :--- | :--- | :--- |
-| **`grospc`** | `192.168.1.11` | `desktop` | `linuxPackages_zen` | Cosmic DE, Plasma 6, Steam, Gaming optimization, NFS Client |
-| **`minipc`** | `192.168.1.10` | `server` | `linuxPackages_latest` | 24/7 Services, NFS Server, Tailscale Exit Node, Monitoring Hub |
+| Host         | IP             | Role      | Kernel                 | Key Features                                                   |
+| :----------- | :------------- | :-------- | :--------------------- | :------------------------------------------------------------- |
+| **`grospc`** | `192.168.1.11` | `desktop` | `linuxPackages_zen`    | Cosmic DE, Plasma 6, Steam, Gaming optimization, NFS Client    |
+| **`minipc`** | `192.168.1.10` | `server`  | `linuxPackages_latest` | 24/7 Services, NFS Server, Tailscale Exit Node, Monitoring Hub |
 
------
+---
 
 ## ✨ Key Features
 
 ### 🎨 Desktop & Environment (Grospc)
 
-  * **Desktop Environment**: Dual setup with **Cosmic Desktop** (Alpha) and **KDE Plasma 6**.
-  * **Gaming**: Steam, Gamemode, and optimized scheduler parameters (`performance` governor).
-  * **Terminal**: **Alacritty** with Catppuccin Mocha theme.
-  * **Fonts**: Priority management for **Nerd Fonts** (JetBrainsMono) with full CJK and Emoji fallback support.
-  * **Audio**: Pipewire with low-latency configuration.
+- **Desktop Environment**: Dual setup with **Cosmic Desktop** (Alpha) and **KDE Plasma 6**.
+- **Gaming**: Steam, Gamemode, and optimized scheduler parameters (`performance` governor).
+- **Terminal**: **Alacritty** with Catppuccin Mocha theme.
+- **Fonts**: Priority management for **Nerd Fonts** (JetBrainsMono) with full CJK and Emoji fallback support.
+- **Audio**: Pipewire with low-latency configuration.
 
 ### 🏠 Homelab Services (Minipc)
 
 The server acts as a central hub reachable via local domains (`*.bigor.lan`) managed by AdGuard and Caddy.
 
-| Service | Local Domain | Description |
-| :--- | :--- | :--- |
-| **Homepage** | `home.bigor.lan` | Central dashboard with live widgets. |
+| Service          | Local Domain        | Description                               |
+| :--------------- | :------------------ | :---------------------------------------- |
+| **Homepage**     | `home.bigor.lan`    | Central dashboard with live widgets.      |
 | **AdGuard Home** | `adguard.bigor.lan` | Network-wide ad blocking & DNS rewriting. |
-| **Grafana** | `grafana.bigor.lan` | Visualization for Prometheus metrics. |
-| **Alertmanager** | `alerts.bigor.lan` | Alert routing (integrated into Homepage). |
-| **Vaultwarden** | `vault.bigor.lan` | Self-hosted password manager. |
+| **Grafana**      | `grafana.bigor.lan` | Visualization for Prometheus metrics.     |
+| **Alertmanager** | `alerts.bigor.lan`  | Alert routing (integrated into Homepage). |
+| **Vaultwarden**  | `vault.bigor.lan`   | Self-hosted password manager.             |
 
-  * **Reverse Proxy**: **Caddy** handles internal TLS certificates automatically.
-  * **NFS**: Server hosts `/mnt/storage`, automatically mounted by the Desktop client.
-  * **Tailscale**: Configured as an **Exit Node** with UDP GRO forwarding optimizations.
+- **Reverse Proxy**: **Caddy** handles internal TLS certificates automatically.
+- **NFS**: Server hosts `/mnt/storage`, automatically mounted by the Desktop client.
+- **Tailscale**: Configured as an **Exit Node** with UDP GRO forwarding optimizations.
 
 ### 🛠️ Development & Dotfiles
 
-  * **Neovim**: Fully configured via Lua (Lazy.nvim, LSP, Treesitter, Catppuccin).
-  * **Shell**: **Fish** shell paired with **Starship** prompt.
-  * **Dev Workflow**: Dotfiles (`nvim`, `cosmic`, `autostart`) are linked via `mkOutOfStoreSymlink` for live editing.
+- **Neovim**: Fully configured via Lua (Lazy.nvim, LSP, Treesitter, Catppuccin).
+- **Shell**: **Fish** shell paired with **Starship** prompt.
+- **Dev Workflow**: Dotfiles (`nvim`, `cosmic`, `autostart`) are linked via `mkOutOfStoreSymlink` for live editing.
 
------
+---
 
 ## 🚀 Quick Start
 
 ### 1\. Prerequisites
 
-  * A machine running NixOS.
-  * **Git** installed.
-  * **SSH Keys** generated for the machine.
+- A machine running NixOS.
+- **Git** installed.
+- **SSH Keys** generated for the machine.
 
 ### 2\. Installation
 
@@ -131,7 +129,7 @@ nh os switch -H minipc
 > **Note:** If `nh` is not installed yet (first run), use the standard command:
 > `sudo nixos-rebuild switch --flake .#<hostname>`
 
------
+---
 
 ## 🧰 Maintenance
 
@@ -162,10 +160,12 @@ nix develop
 pre-commit run --all-files
 ```
 
------
+---
 
 ## 📜 License
 
 MIT
+
+```
 
 ```

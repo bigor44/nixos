@@ -10,6 +10,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +34,10 @@
         "aarch64-linux"
       ];
 
+      imports = [
+        inputs.treefmt-nix.flakeModule
+      ];
+
       perSystem =
         {
           config,
@@ -37,31 +46,37 @@
           ...
         }:
         {
-          formatter = pkgs.nixfmt-rfc-style;
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs = {
+              nixfmt.enable = true;
+              stylua.enable = true;
+              yamlfmt.enable = true;
+              prettier.enable = true;
+            };
+          };
 
           checks = {
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                # Nix
-                nixfmt-rfc-style.enable = true;
+                # Lint
                 statix.enable = true;
                 deadnix.enable = true;
-
-                # Lua
-                stylua.enable = true;
                 luacheck.enable = true;
+
+                # Format
+                treefmt = {
+                  enable = true;
+                  package = config.treefmt.build.wrapper;
+                };
               };
             };
           };
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              nixfmt-rfc-style
-              statix
-              deadnix
-              stylua
-              nil # LSP Nix
+              nixd
               lua-language-server # LSP Lua
             ];
             inherit (config.checks.pre-commit-check) shellHook;

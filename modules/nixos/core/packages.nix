@@ -14,8 +14,6 @@
     # Nix
     statix
     deadnix
-    nixfmt-rfc-style
-    nixfmt-tree
 
     # Network tools
     dig
