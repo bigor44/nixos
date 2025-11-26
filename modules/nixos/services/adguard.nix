@@ -52,7 +52,6 @@ lib.mkIf config.adblocker.enable {
         parental_enabled = false;
         safe_search.enabled = false;
         rewrites = [
-          # Exact domain matches
           {
             domain = "grospc.bigor.lan";
             answer = config.myNetwork.ips.grospc;
@@ -79,17 +78,7 @@ lib.mkIf config.adblocker.enable {
             enabled = true;
           }
           {
-            domain = "grafana.bigor.lan";
-            answer = config.myNetwork.ips.minipc;
-            enabled = true;
-          }
-          {
             domain = "vault.bigor.lan";
-            answer = config.myNetwork.ips.minipc;
-            enabled = true;
-          }
-          {
-            domain = "alerts.bigor.lan";
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }

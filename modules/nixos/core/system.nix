@@ -9,6 +9,14 @@
       efi.canTouchEfiVariables = true;
     };
   };
+
+  #Networking
+  networking.extraHosts = ''
+    192.168.1.10 minipc
+    192.168.1.11 grospc
+  '';
+
+  # Certificat de Caddy
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
   ];
