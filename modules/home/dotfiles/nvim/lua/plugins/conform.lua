@@ -21,6 +21,7 @@ return {
       bash = { "shfmt" },
       json = { "jq" },
       markdown = { "prettier" },
+      python = { "isort", "black" },
     },
   },
 }
