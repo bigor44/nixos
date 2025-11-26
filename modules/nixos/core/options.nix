@@ -40,6 +40,11 @@ in
         default = "192.168.1.10";
         description = "Adresse IP statique du Serveur (minipc)";
       };
+      mainInterface = lib.mkOption {
+        type = lib.types.str;
+        default = "enp2s0"; # Valeur par défaut pour le minipc
+        description = "Interface réseau principale";
+      };
     };
   };
 }

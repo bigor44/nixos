@@ -12,6 +12,7 @@ _: {
 
     secrets.git_config = {
       owner = "bigor";
+      mode = "0400";
     };
   };
 }

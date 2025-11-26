@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "minipc";
@@ -22,7 +22,7 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.ethtool}/bin/ethtool -K enp2s0 rx-udp-gro-forwarding on rx-gro-list on";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -K ${config.myNetwork.mainInterface} rx-udp-gro-forwarding on rx-gro-list on";
       SuccessExitStatus = "0 1";
     };
   };
