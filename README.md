@@ -52,7 +52,7 @@ graph TD
 
 | Host | IP | Role | Kernel | Key Features |
 | :--- | :--- | :--- | :--- | :--- |
-| **`grospc`** | `192.168.1.1` | `desktop` | `linuxPackages_zen` | Cosmic DE, Plasma 6, Steam, Gaming optimization, NFS Client |
+| **`grospc`** | `192.168.1.11` | `desktop` | `linuxPackages_zen` | Cosmic DE, Plasma 6, Steam, Gaming optimization, NFS Client |
 | **`minipc`** | `192.168.1.10` | `server` | `linuxPackages_latest` | 24/7 Services, NFS Server, Tailscale Exit Node, Monitoring Hub |
 
 -----
