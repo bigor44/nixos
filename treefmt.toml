@@ -53,5 +53,4 @@ includes = [
   "*.css",
   "*.js",
   "*.ts",
-  "*.toml",  # ✅ Ajout pour formater ce fichier aussi
 ]
