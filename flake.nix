@@ -24,21 +24,19 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
       perSystem =
         {
           config,
-          pkgs,
+          pkgs, # Utilise le pkgs par défaut de flake-parts (rapide)
           system,
           ...
         }:
         {
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-
           formatter = pkgs.nixfmt-rfc-style;
 
           checks = {
@@ -50,7 +48,7 @@
                 statix.enable = true;
                 deadnix.enable = true;
 
-                #Lua
+                # Lua
                 stylua.enable = true;
                 luacheck.enable = true;
               };
@@ -63,6 +61,8 @@
               statix
               deadnix
               stylua
+              nil # LSP Nix
+              lua-language-server # LSP Lua
             ];
             inherit (config.checks.pre-commit-check) shellHook;
           };
@@ -83,8 +83,6 @@
                     useUserPackages = true;
                     users.bigor = import ./modules/home;
                     backupFileExtension = "backup";
-
-                    # C'est ICI qu'on injecte osConfig et inputs dans Home Manager
                     extraSpecialArgs = {
                       inherit inputs;
                       osConfig = config;
