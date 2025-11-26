@@ -36,7 +36,7 @@ return {
     })
 
     -- 3. Définition des Serveurs
-    local servers = { "bashls", "marksman", "jsonls", "yamlls", "lua_ls", "nixd" }
+    local servers = { "bashls", "marksman", "jsonls", "yamlls", "lua_ls", "nixd", "pyright" }
 
     for _, server in ipairs(servers) do
       local opts = {
