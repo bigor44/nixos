@@ -1,0 +1,49 @@
+# treefmt.toml
+# Configuration générée pour correspondre à votre flake.nix
+
+[global]
+# Fichier utilisé pour trouver la racine du projet
+project_root_file = "flake.nix"
+
+# Fichiers à ignorer lors du formatage
+excludes = [
+  ".git/**",
+  "*.png",
+  "*.jpg",
+  "*.jpeg",
+  "*.agekey",
+  "result",
+  "result-*",
+  "secrets/secrets.yaml", # Important : ne pas formater les secrets chiffrés
+  "lazy-lock.json",       # Souvent géré automatiquement, mieux vaut éviter de le toucher
+  "LICENSE"
+]
+
+# --- NIX (via nixfmt) ---
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
+
+# --- LUA (via stylua) ---
+# Utilise votre fichier stylua.toml existant pour les règles
+[formatter.lua]
+command = "stylua"
+includes = ["*.lua"]
+
+# --- YAML (via yamlfmt) ---
+[formatter.yaml]
+command = "yamlfmt"
+includes = ["*.yaml", "*.yml"]
+
+# --- PRETTIER (JSON, Markdown, etc.) ---
+[formatter.prettier]
+command = "prettier"
+options = []
+includes = [
+  "*.md",
+  "*.json",
+  "*.html",
+  "*.css",
+  "*.js",
+  "*.ts"
+]

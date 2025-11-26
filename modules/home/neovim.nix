@@ -18,13 +18,6 @@
       marksman
       nodePackages.vscode-langservers-extracted # JSON/YAML
 
-      # Formatters
-      nixfmt-rfc-style
-      stylua
-      shfmt
-      jq
-      nodePackages.prettier
-
       # Build tools & utilities
       ripgrep
       fd

@@ -17,6 +17,13 @@
       age
       sops
       ssh-to-age
+
+      treefmt
+      yamlfmt
+      stylua
+      nodePackages.prettier
+      nixfmt
+      shfmt
     ]
     ++ lib.optionals osConfig.desktop.enable [
       discord
