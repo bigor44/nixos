@@ -53,12 +53,18 @@
                   enable = true;
                   entry = "${pkgs.shfmt}/bin/shfmt -i 2 -s -w";
                 };
+                detect-secrets = {
+                  enable = true;
+                  entry = "${pkgs.detect-secrets}/bin/detect-secrets-hook --baseline .secrets.baseline";
+                  excludes = [ "^secrets/secrets\\.yaml$" ];
+                };
               };
             };
           };
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
+              detect-secrets
               # Langage Servers & Utils
               nixd
               lua-language-server
