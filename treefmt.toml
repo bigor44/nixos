@@ -13,8 +13,8 @@ excludes = [
   "secrets/secrets.yaml",
   "lazy-lock.json",
   "LICENSE",
-  "*.lock",  # ✅ Ajout : flake.lock ne doit pas être formaté
-  ".direnv/**",  # ✅ Ajout si vous utilisez direnv
+  "*.lock",
+  ".direnv/**",
 ]
 
 # --- NIX (via nixfmt) ---
@@ -54,3 +54,10 @@ includes = [
   "*.js",
   "*.ts",
 ]
+
+# --- TOML (via taplo) ---
+[formatter.taplo]
+command = "taplo"
+options = ["fmt", "-"]
+includes = ["*.toml"]
+

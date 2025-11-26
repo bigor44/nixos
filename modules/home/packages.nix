@@ -26,6 +26,7 @@
       shfmt
       isort
       black
+      taplo
     ]
     ++ lib.optionals osConfig.desktop.enable [
       discord
