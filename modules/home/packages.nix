@@ -12,6 +12,7 @@
       fd
       ripgrep
       jq
+      python3
       gemini-cli
       age
       sops
@@ -19,7 +20,6 @@
     ]
     ++ lib.optionals osConfig.desktop.enable [
       discord
-      python3
       brave
       onedrive
       youtube-music
