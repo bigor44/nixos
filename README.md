@@ -10,7 +10,7 @@ A **declarative, reproducible, and role-based** NixOS configuration managing a d
 
 ## 🏗️ Architecture
 
-This configuration uses a **Capability-based** design pattern. Hosts are assigned a `role` (desktop/server), which triggers specific capability flags (`desktop.enable`, `monitoring.isServer`, etc.).
+This configuration uses a **Capability-based** design pattern. Hosts are assigned a `role` (desktop/server), which triggers specific capability flags (`desktop.enable`,  etc.).
 
 
 

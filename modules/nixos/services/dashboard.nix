@@ -61,36 +61,6 @@ lib.mkIf config.dashboard.enable {
             };
           }
           {
-            "Alertmanager" = {
-              icon = "alertmanager.png";
-              href = "https://alerts.bigor.lan";
-              description = "Gestion des alertes";
-              widget = {
-                type = "customapi";
-                url = "http://127.0.0.1:9093/api/v2/alerts";
-                refreshInterval = 10000; # Rafraîchir toutes les 10s
-                mappings = [
-                  {
-                    field = "";
-                    label = "Alertes";
-                    format = "size"; # Compte le nombre d'éléments dans la liste 'data'
-                    state_map = [
-                      {
-                        value = 0;
-                        color = "green";
-                      }
-                      {
-                        operator = ">";
-                        value = 0;
-                        color = "red";
-                      }
-                    ];
-                  }
-                ];
-              };
-            };
-          }
-          {
             "AdGuard Home" = {
               icon = "adguard-home.png";
               href = "https://adguard.bigor.lan";
@@ -99,13 +69,6 @@ lib.mkIf config.dashboard.enable {
                 type = "adguard";
                 url = "http://127.0.0.1:3003";
               };
-            };
-          }
-          {
-            "Grafana" = {
-              icon = "grafana.png";
-              href = "https://grafana.bigor.lan";
-              description = "Monitoring & Logs";
             };
           }
         ];

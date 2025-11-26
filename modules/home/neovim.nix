@@ -11,7 +11,6 @@
       lua-language-server
       nixd
       bash-language-server
-      marksman
       nodePackages.vscode-langservers-extracted # JSON/YAML
 
       # Formatters
