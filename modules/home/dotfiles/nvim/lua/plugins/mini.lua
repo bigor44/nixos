@@ -19,5 +19,10 @@ return {
 
     -- Remplace vim-illuminate (surbrillance du mot sous le curseur)
     require("mini.cursorword").setup()
+
+    --  Remplace lualine ---
+    require("mini.statusline").setup({
+      use_icons = true, -- Utilise les icônes (nécessite une Nerd Font)
+    })
   end,
 }
