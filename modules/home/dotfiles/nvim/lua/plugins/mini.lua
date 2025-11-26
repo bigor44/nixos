@@ -1,74 +1,93 @@
 return {
   "echasnovski/mini.nvim",
-  version = false, -- Utiliser la version main (recommandé par l'auteur)
+  version = false,
   config = function()
-    -- Remplace nvim-autopairs
+    -- === MODULES DE BASE ===
     require("mini.pairs").setup()
-
-    -- Remplace Comment.nvim
     require("mini.comment").setup()
-
-    -- Remplace nvim-surround
     require("mini.surround").setup()
-
-    -- Remplace indent-blankline (optionnel, mini.indentscope est un peu différent mais très léger)
+    require("mini.cursorword").setup()
     require("mini.indentscope").setup({
       symbol = "│",
       options = { try_as_border = true },
     })
 
-    -- Remplace vim-illuminate (surbrillance du mot sous le curseur)
-    require("mini.cursorword").setup()
+    -- === EXPLORATEUR (Remplace Neo-tree) ===
+    require("mini.files").setup({
+      windows = { preview = true, width_focus = 30, width_preview = 30 },
+    })
+    vim.keymap.set("n", "<leader>e", function()
+      if not require("mini.files").close() then
+        require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+      end
+    end, { desc = "File Explorer" })
 
-    -- Remplace which-key
+    -- === 1. HIGHLIGHTS (Remplace Todo-comments & Colorizer) ===
+    local hipatterns = require("mini.hipatterns")
+    hipatterns.setup({
+      highlighters = {
+        -- Gestion des couleurs hexadécimales
+        hex_color = hipatterns.gen_highlighter.hex_color(),
+
+        -- Gestion des TODOs
+        fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+        hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+        todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+        note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+      },
+    })
+
+    -- === 2. FUZZY FINDER (Remplace Telescope) ===
+    local minipick = require("mini.pick")
+    minipick.setup()
+    -- Raccourcis style Telescope (Utilisation de la variable locale 'minipick' au lieu du global 'MiniPick')
+    vim.keymap.set("n", "<leader>ff", minipick.builtin.files, { desc = "Find Files" })
+    vim.keymap.set("n", "<leader>fg", minipick.builtin.grep_live, { desc = "Find Grep" })
+    vim.keymap.set("n", "<leader>fb", minipick.builtin.buffers, { desc = "Find Buffers" })
+    vim.keymap.set("n", "<leader>fh", minipick.builtin.help, { desc = "Find Help" })
+
+    -- === 3. GIT (Remplace Gitsigns) ===
+    require("mini.diff").setup({
+      view = {
+        style = "sign",
+        signs = { add = "+", change = "~", delete = "_" },
+      },
+    })
+
+    -- === STATUSLINE & CLUE ===
+    require("mini.statusline").setup({ use_icons = true })
+
     local miniclue = require("mini.clue")
     miniclue.setup({
       triggers = {
-        -- Leader triggers
         { mode = "n", keys = "<Leader>" },
         { mode = "x", keys = "<Leader>" },
-        -- Built-in completion
         { mode = "i", keys = "<C-x>" },
-        -- G marks
         { mode = "n", keys = "g" },
         { mode = "x", keys = "g" },
-        -- Registers
         { mode = "n", keys = '"' },
         { mode = "x", keys = '"' },
         { mode = "i", keys = "<C-r>" },
         { mode = "c", keys = "<C-r>" },
-        -- Window commands
         { mode = "n", keys = "<C-w>" },
-        -- z commands
         { mode = "n", keys = "z" },
         { mode = "x", keys = "z" },
       },
-
       clues = {
-        -- Descriptions automatiques intégrées
         miniclue.gen_clues.builtin_completion(),
         miniclue.gen_clues.g(),
         miniclue.gen_clues.marks(),
         miniclue.gen_clues.registers(),
         miniclue.gen_clues.windows(),
         miniclue.gen_clues.z(),
-
-        -- Tes groupes personnalisés (adaptés de ton ancien which-key)
+        -- Groupes personnalisés
         { mode = "n", keys = "<leader>f", desc = "+Find" },
         { mode = "n", keys = "<leader>c", desc = "+Code" },
         { mode = "n", keys = "<leader>d", desc = "+Debug" },
         { mode = "n", keys = "<leader>x", desc = "+Trouble" },
+        { mode = "n", keys = "<leader>e", desc = "Explorer" },
       },
-
-      window = {
-        delay = 300,
-        config = { width = "auto" },
-      },
-    })
-
-    --  Remplace lualine ---
-    require("mini.statusline").setup({
-      use_icons = true, -- Utilise les icônes (nécessite une Nerd Font)
+      window = { delay = 300, config = { width = "auto" } },
     })
   end,
 }

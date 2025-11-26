@@ -8,13 +8,9 @@ return {
       flavour = "mocha",
       integrations = {
         cmp = true,
-        gitsigns = true,
-        neotree = true,
         treesitter = true,
-        telescope = { enabled = true },
-        which_key = true,
         native_lsp = { enabled = true },
-        mini = { enabled = true },
+        mini = { enabled = true }, -- Important pour mini.files et mini.statusline
       },
     })
     vim.cmd.colorscheme("catppuccin")
