@@ -10,11 +10,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,41 +28,30 @@
         "x86_64-linux"
       ];
 
-      imports = [
-        inputs.treefmt-nix.flakeModule
-      ];
-
       perSystem =
         {
           config,
-          pkgs, # Utilise le pkgs par défaut de flake-parts (rapide)
+          pkgs,
           system,
           ...
         }:
         {
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixfmt.enable = true;
-              stylua.enable = true;
-              yamlfmt.enable = true;
-              prettier.enable = true;
-            };
-          };
-
           checks = {
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                # Lint
+                # --- Linters (Analyse statique) ---
                 statix.enable = true;
                 deadnix.enable = true;
                 luacheck.enable = true;
-
-                # Format
-                treefmt = {
+                # --- Formatteurs individuels --
+                nixfmt-rfc-style.enable = true;
+                stylua.enable = true;
+                yamlfmt.enable = true;
+                prettier.enable = true;
+                shfmt = {
                   enable = true;
-                  package = config.treefmt.build.wrapper;
+                  entry = "${pkgs.shfmt}/bin/shfmt -i 2 -s -w";
                 };
               };
             };
@@ -75,9 +59,19 @@
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
+              # Langage Servers & Utils
               nixd
-              lua-language-server # LSP Lua
+              lua-language-server
+
+              # Formatteurs (Disponibles manuellement dans le shell)
+              nixfmt-rfc-style
+              stylua
+              shfmt
+              yamlfmt
+              nodePackages.prettier
             ];
+
+            # Active les hooks git lors de l'entrée dans le shell (nix develop)
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };
@@ -112,7 +106,6 @@
               specialArgs = { inherit inputs; };
               modules = sharedModules ++ [ ./hosts/grospc ];
             };
-
             minipc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };

@@ -18,11 +18,10 @@
       sops
       ssh-to-age
 
-      treefmt
       yamlfmt
       stylua
       nodePackages.prettier
-      nixfmt
+      nixfmt-rfc-style
       shfmt
       isort
       black
