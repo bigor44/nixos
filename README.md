@@ -14,13 +14,13 @@ This repository contains my personal **NixOS** system configurations, managed wi
 - **Nix Flakes & Home Manager**: Purely functional dependency management and dotfile configuration.
 - **Secrets Management**: securely managed via **sops-nix** and **age** encryption.
 - **Desktop Environment**: Custom configuration for System76's **COSMIC DE** (alpha) with specific theming (Dark/Light modes) and panel layouts.
-- **Shell Environment**: **Fish** shell integrated with **Starship** prompt, **zoxide**, **fzf**, and **eza** for a modern terminal experience.
+- **Shell Environment**: **Fish** shell integrated with **zoxide**, **fzf**, and **eza** for a modern terminal experience.
 - **Neovim**: A robust, Lua-based Neovim configuration featuring **Lazy.nvim**, **LSP** (nixd, lua_ls, pyright), **Treesitter**, **Mini.nvim**, and **Catppuccin** theme.
 - **Services**:
   - **Reverse Proxy**: Caddy handling SSL for internal services (`*.bigor.lan`).
   - **Security**: AdGuard Home for DNS filtering and Vaultwarden for password management.
   - **Networking**: Tailscale for secure remote access and NFS for shared storage.
-  - **Dashboard**: Homepage dashboard for service monitoring.
+  - **Dashboard**: Homepage dashboard for service
 
 ## 📂 Project Structure
 
