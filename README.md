@@ -4,13 +4,17 @@
 [![Flakes](https://img.shields.io/badge/Nix-Flakes-7e57c2.svg)](https://nixos.wiki/wiki/Flakes)
 [![Sops-Nix](https://img.shields.io/badge/Secrets-Sops-green.svg)](https://github.com/Mic92/sops-nix)
 
-A **declarative, reproducible, and role-based** NixOS configuration managing a desktop and a homelab server. Built with Flakes, Home Manager, Sops-nix, and **nh**.
+A **declarative, reproducible, and role-based** NixOS configuration managing a
+desktop and a homelab server. Built with Flakes, Home Manager, Sops-nix, and
+**nh**.
 
 ---
 
 ## 🏗️ Architecture
 
-This configuration uses a **Capability-based** design pattern. Hosts are assigned a `role` (desktop/server), which triggers specific capability flags (`desktop.enable`, etc.).
+This configuration uses a **Capability-based** design pattern. Hosts are
+assigned a `role` (desktop/server), which triggers specific capability flags
+(`desktop.enable`, etc.).
 
 ```mermaid
 graph TD
@@ -59,15 +63,19 @@ graph TD
 
 ### 🎨 Desktop & Environment (Grospc)
 
-- **Desktop Environment**: Dual setup with **Cosmic Desktop** (Alpha) and **KDE Plasma 6**.
-- **Gaming**: Steam, Gamemode, and optimized scheduler parameters (`performance` governor).
+- **Desktop Environment**: Dual setup with **Cosmic Desktop** (Alpha) and **KDE
+  Plasma 6**.
+- **Gaming**: Steam, Gamemode, and optimized scheduler parameters (`performance`
+  governor).
 - **Terminal**: **Alacritty** with Catppuccin Mocha theme.
-- **Fonts**: Priority management for **Nerd Fonts** (JetBrainsMono) with full CJK and Emoji fallback support.
+- **Fonts**: Priority management for **Nerd Fonts** (JetBrainsMono) with full
+  CJK and Emoji fallback support.
 - **Audio**: Pipewire with low-latency configuration.
 
 ### 🏠 Homelab Services (Minipc)
 
-The server acts as a central hub reachable via local domains (`*.bigor.lan`) managed by AdGuard and Caddy.
+The server acts as a central hub reachable via local domains (`*.bigor.lan`)
+managed by AdGuard and Caddy.
 
 | Service          | Local Domain        | Description                               |
 | :--------------- | :------------------ | :---------------------------------------- |
@@ -78,14 +86,17 @@ The server acts as a central hub reachable via local domains (`*.bigor.lan`) man
 | **Vaultwarden**  | `vault.bigor.lan`   | Self-hosted password manager.             |
 
 - **Reverse Proxy**: **Caddy** handles internal TLS certificates automatically.
-- **NFS**: Server hosts `/mnt/storage`, automatically mounted by the Desktop client.
-- **Tailscale**: Configured as an **Exit Node** with UDP GRO forwarding optimizations.
+- **NFS**: Server hosts `/mnt/storage`, automatically mounted by the Desktop
+  client.
+- **Tailscale**: Configured as an **Exit Node** with UDP GRO forwarding
+  optimizations.
 
 ### 🛠️ Development & Dotfiles
 
 - **Neovim**: Fully configured via Lua (Lazy.nvim, LSP, Treesitter, Catppuccin).
 - **Shell**: **Fish** shell paired with **Starship** prompt.
-- **Dev Workflow**: Dotfiles (`nvim`, `cosmic`, `autostart`) are linked via `mkOutOfStoreSymlink` for live editing.
+- **Dev Workflow**: Dotfiles (`nvim`, `cosmic`, `autostart`) are linked via
+  `mkOutOfStoreSymlink` for live editing.
 
 ---
 
@@ -108,11 +119,14 @@ cd ~/nixos
 
 ### 3\. Secrets
 
-This config uses **sops-nix**. You must have the correct Age key in `~/.config/sops/age/keys.txt` or the SSH host key to decrypt `secrets/secrets.yaml`.
+This config uses **sops-nix**. You must have the correct Age key in
+`~/.config/sops/age/keys.txt` or the SSH host key to decrypt
+`secrets/secrets.yaml`.
 
 ### 4\. Deploy with `nh`
 
-This configuration includes **nh (Nix Helper)** for faster and prettier deployments.
+This configuration includes **nh (Nix Helper)** for faster and prettier
+deployments.
 
 **Apply configuration to the current machine:**
 
@@ -144,7 +158,8 @@ nh os switch --update
 
 ### Cleaning Up
 
-Garbage collect old generations using `nh` (cleaner and safer than standard nix-collect-garbage):
+Garbage collect old generations using `nh` (cleaner and safer than standard
+nix-collect-garbage):
 
 ```bash
 # Keep the last 3 generations and everything from the last 4 days

@@ -20,7 +20,10 @@ lib.mkIf config.adblocker.enable {
         enabled = true;
       };
       dns = {
-        bind_hosts = [ "0.0.0.0" ];
+        bind_hosts = [
+          "127.0.0.1"
+          config.myNetwork.ips.minipc
+        ];
         port = 53;
         upstream_dns = [
           "https://dns.cloudflare.com/dns-query"

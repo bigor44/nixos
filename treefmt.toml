@@ -1,11 +1,7 @@
 # treefmt.toml
-# Configuration générée pour correspondre à votre flake.nix
-
 [global]
-# Fichier utilisé pour trouver la racine du projet
 project_root_file = "flake.nix"
 
-# Fichiers à ignorer lors du formatage
 excludes = [
   ".git/**",
   "*.png",
@@ -14,36 +10,42 @@ excludes = [
   "*.agekey",
   "result",
   "result-*",
-  "secrets/secrets.yaml", # Important : ne pas formater les secrets chiffrés
-  "lazy-lock.json",       # Souvent géré automatiquement, mieux vaut éviter de le toucher
-  "LICENSE"
+  "secrets/secrets.yaml",
+  "lazy-lock.json",
+  "LICENSE",
+  "*.lock",  # ✅ Ajout : flake.lock ne doit pas être formaté
+  ".direnv/**",  # ✅ Ajout si vous utilisez direnv
 ]
 
 # --- NIX (via nixfmt) ---
 [formatter.nix]
 command = "nixfmt"
 includes = ["*.nix"]
+# ✅ Priorité pour éviter les conflits
+priority = 1
 
 # --- LUA (via stylua) ---
-# Utilise votre fichier stylua.toml existant pour les règles
 [formatter.lua]
 command = "stylua"
+options = ["--config-path", "stylua.toml"]  # ✅ Explicit config
 includes = ["*.lua"]
 
 # --- YAML (via yamlfmt) ---
 [formatter.yaml]
 command = "yamlfmt"
 includes = ["*.yaml", "*.yml"]
+excludes = ["secrets/**"]  # ✅ Double sécurité
 
 # --- PRETTIER (JSON, Markdown, etc.) ---
 [formatter.prettier]
 command = "prettier"
-options = []
+options = ["--write", "--prose-wrap", "always"]  # ✅ Markdown wrapping
 includes = [
   "*.md",
   "*.json",
   "*.html",
   "*.css",
   "*.js",
-  "*.ts"
+  "*.ts",
+  "*.toml",  # ✅ Ajout pour formater ce fichier aussi
 ]
