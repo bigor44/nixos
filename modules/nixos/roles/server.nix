@@ -11,8 +11,4 @@ lib.mkIf (config.system.role == "server") {
   vaultwarden.enable = lib.mkDefault true;
   nfs.server = lib.mkDefault true;
   reverse_proxy.enable = lib.mkDefault true;
-  monitoring = {
-    enable = lib.mkDefault true;
-    isServer = lib.mkDefault true;
-  };
 }

@@ -21,10 +21,6 @@ in
     reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
     tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
     vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
-    monitoring = {
-      enable = lib.mkEnableOption "Enable Monitoring (Node Exporter)";
-      isServer = lib.mkEnableOption "Enable Monitoring Server (Prometheus + Grafana)";
-    };
     nfs = {
       server = lib.mkEnableOption "Enable NFS Server Share";
       client = lib.mkEnableOption "Enable NFS Client Mount";
