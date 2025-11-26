@@ -24,5 +24,6 @@
       youtube-music
       whatsapp-electron
       antigravity-fhs
+      (callPackage ./turtle-wow.nix { })
     ];
 }
