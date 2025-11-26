@@ -37,10 +37,10 @@ lib.mkIf config.vaultwarden.enable {
       BACKUP_FILE="backup-$TIMESTAMP.sqlite3"
 
       # 1. Create consistent backup using SQLite API
-      ${pkgs.sqlite}/bin/sqlite3 $DATA_DIR/db.sqlite3 ".backup '$LOCAL_DIR/$BACKUP_FILE'"
+      ${pkgs.sqlite}/bin/sqlite3 $DATA_DIR/db.sqlite3 ".backup '$LOCAL_BACKUP_DIR/$BACKUP_FILE'"
 
       # 2. Copy to the separate drive
-      cp "$LOCAL_DIR/$BACKUP_FILE" "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
+      cp "$LOCAL_BACKUP_DIR./$BACKUP_FILE" "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
 
       # 3. Fix permissions so 'bigor' (1000) can manage them via NFS/SSH
       chown 1000:100 "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
