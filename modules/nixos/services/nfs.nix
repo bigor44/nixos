@@ -13,10 +13,8 @@ in
     (lib.mkIf cfg.server {
       services.nfs.server = {
         enable = true;
-        # Sécurisé : all_squash mappe tout accès vers l'utilisateur anonyme
-        # anonuid/anongid forcent l'utilisation de votre user (1000:100)
         exports = ''
-          /mnt/storage ${ips.grospc}(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
+          /mnt/storage 192.168.1.0/24(rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100)
         '';
       };
       networking.firewall.allowedTCPPorts = [ 2049 ];
