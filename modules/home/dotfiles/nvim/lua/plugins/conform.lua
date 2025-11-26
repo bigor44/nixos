@@ -20,7 +20,7 @@ return {
       sh = { "shfmt" },
       bash = { "shfmt" },
       json = { "jq" },
-      markdown = { "pretttier" },
+      markdown = { "prettier" },
     },
   },
 }
