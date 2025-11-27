@@ -8,6 +8,8 @@
   powerManagement.cpuFreqGovernor = "performance";
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
+  myNetwork.mainInterface = "enp14s0";
+
   fileSystems."/steamlibrary" = {
     device = "/dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";
     fsType = "ext4";
