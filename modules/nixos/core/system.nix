@@ -12,8 +12,8 @@ _: {
   #Networking
   networking = {
     extraHosts = ''
-      192.168.1.10 minipc
-      192.168.1.11 grospc
+      ${config.myNetwork.ips.minipc} minipc
+      ${config.myNetwork.ips.grospc} grospc
     '';
     usePredictableInterfaceNames = false;
   };
