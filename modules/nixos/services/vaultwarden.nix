@@ -34,12 +34,12 @@ lib.mkIf config.vaultwarden.enable {
         # Paths
         DATA_DIR="/var/lib/bitwarden_rs"
         # Note: The service creates this, vaultwarden user has access
-        LOCAL_BACKUP_DIR="/var/lib/bitwarden_rs/backups" 
+        LOCAL_BACKUP_DIR="/var/lib/bitwarden_rs/backups"
         EXTERNAL_BACKUP_DIR="/mnt/storage/backups/vaultwarden"
 
         mkdir -p $LOCAL_BACKUP_DIR
         # External dir is handled by tmpfiles, but mkdir -p is safe to keep
-        mkdir -p $EXTERNAL_BACKUP_DIR 
+        mkdir -p $EXTERNAL_BACKUP_DIR
 
         TIMESTAMP=$(date +%Y%m%d-%H%M)
         BACKUP_FILE="backup-$TIMESTAMP.sqlite3"
@@ -62,7 +62,7 @@ lib.mkIf config.vaultwarden.enable {
     };
 
     timers.vaultwarden-backup = {
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;

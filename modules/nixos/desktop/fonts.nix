@@ -44,7 +44,7 @@ lib.mkIf config.desktop.enable {
           "Noto Sans Mono CJK JP"
           "Noto Color Emoji"
         ];
-        emoji = [ "Noto Color Emoji" ];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };

@@ -2,12 +2,10 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.nfs;
   inherit (config.myNetwork) ips;
-in
-{
+in {
   config = lib.mkMerge [
     # --- Configuration SERVEUR (minipc) ---
     (lib.mkIf cfg.server {
@@ -17,7 +15,7 @@ in
           /mnt/storage 192.168.1.0/24(rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100)
         '';
       };
-      networking.firewall.allowedTCPPorts = [ 2049 ];
+      networking.firewall.allowedTCPPorts = [2049];
     })
 
     # --- Configuration CLIENT (grospc) ---

@@ -1,7 +1,7 @@
 {
   programs.git = {
     includes = [
-      { path = "/run/secrets/git_config"; }
+      {path = "/run/secrets/git_config";}
     ];
 
     enable = true;

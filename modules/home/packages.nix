@@ -3,10 +3,8 @@
   osConfig,
   lib,
   ...
-}:
-{
-  home.packages =
-    with pkgs;
+}: {
+  home.packages = with pkgs;
     [
       eza
       fd
@@ -21,7 +19,7 @@
       yamlfmt
       stylua
       nodePackages.prettier
-      nixfmt-rfc-style
+      alejandra
       shfmt
       isort
       black
@@ -34,6 +32,6 @@
       youtube-music
       whatsapp-electron
       antigravity-fhs
-      (callPackage ./turtle-wow.nix { })
+      (callPackage ./turtle-wow.nix {})
     ];
 }

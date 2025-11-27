@@ -3,11 +3,9 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.monitoring;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     services.netdata = {
       enable = true;

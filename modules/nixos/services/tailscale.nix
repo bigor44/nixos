@@ -16,9 +16,9 @@ lib.mkIf config.tailscale.enable {
 
   networking.firewall = {
     checkReversePath = "loose";
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ 41641 ];
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [41641];
   };
 
-  environment.systemPackages = [ pkgs.tailscale ];
+  environment.systemPackages = [pkgs.tailscale];
 }

@@ -1,6 +1,5 @@
-{ pkgs, ... }:
-{
-  imports = [ ./hardware-configuration.nix ];
+{pkgs, ...}: {
+  imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
 
   system.role = "desktop";
@@ -27,8 +26,8 @@
   systemd.services.pull-vaultwarden-backups = {
     description = "Sync Vaultwarden backups from minipc to local steamlibrary";
     # Dependency: Only run if the NFS share is actually mounted
-    requires = [ "mnt-storage.mount" ];
-    after = [ "mnt-storage.mount" ];
+    requires = ["mnt-storage.mount"];
+    after = ["mnt-storage.mount"];
 
     serviceConfig = {
       Type = "oneshot";
@@ -56,7 +55,7 @@
 
   # Run this check every day
   systemd.timers.pull-vaultwarden-backups = {
-    wantedBy = [ "timers.target" ];
+    wantedBy = ["timers.target"];
     timerConfig = {
       OnCalendar = "daily";
       Persistent = true;
