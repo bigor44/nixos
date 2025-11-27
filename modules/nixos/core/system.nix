@@ -10,10 +10,13 @@ _: {
   };
 
   #Networking
-  networking.extraHosts = ''
-    192.168.1.10 minipc
-    192.168.1.11 grospc
-  '';
+  networking = {
+    extraHosts = ''
+      192.168.1.10 minipc
+      192.168.1.11 grospc
+    '';
+    usePredictableInterfaceNames = false;
+  };
 
   # Certificat de Caddy
   security.pki.certificateFiles = [

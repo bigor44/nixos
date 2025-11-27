@@ -73,8 +73,11 @@ return {
             formatting = { command = { "nixfmt" } },
             options = {
               nixos = {
-                -- Adapte le chemin si ton flake n'est pas exactement ici
-                expr = '(builtins.getFlake "/home/bigor/nixos").nixosConfigurations.grospc.options',
+                expr = string.format(
+                  '(builtins.getFlake "%s").nixosConfigurations.%s.options',
+                  vim.env.NIXOS_FLAKE_PATH or "/home/bigor/nixos", -- Fallback to hardcoded path
+                  vim.env.NIXOS_HOSTNAME or "grospc" -- Fallback to desktop
+                ),
               },
             },
           },

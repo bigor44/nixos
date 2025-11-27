@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, osConfig, ... }:
 {
   programs.neovim = {
     enable = true;
@@ -28,5 +28,9 @@
       pyright
       python3
     ];
+  };
+  home.sessionVariables = {
+    NIXOS_HOSTNAME = osConfig.networking.hostName;
+    NIXOS_FLAKE_PATH = "/home/bigor/nixos";
   };
 }

@@ -28,7 +28,7 @@ in
     myNetwork = {
       mainInterface = lib.mkOption {
         type = lib.types.str;
-        default = "enp2s0";
+        default = "eth0";
         description = "Interface réseau principale";
       };
       ips = {
