@@ -35,7 +35,7 @@ This repository contains my personal **NixOS** system configurations, managed wi
 │   │   └── ...             # Shell, Git, Neovim, etc.
 │   └── nixos/              # System-wide NixOS modules
 │       ├── core/           # Base settings (users, locale, packages)
-│       ├── desktop/        # GUI related settings (audio, fonts, flatpak)
+│       ├── desktop/        # GUI related settings (audio, fonts)
 │       ├── roles/          # Profiles: desktop, server, hybrid
 │       └── services/       # Server services definitions
 ├── scripts/                # Utility scripts (e.g., config concatenator)
