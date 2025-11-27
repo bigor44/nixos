@@ -30,12 +30,6 @@ lib.mkIf config.reverse_proxy.enable {
           tls internal
         '';
       };
-      "monitor.bigor.lan" = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:19999
-          tls internal
-        '';
-      };
     };
   };
 

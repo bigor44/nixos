@@ -7,6 +7,5 @@
     ./caddy.nix
     ./tailscale.nix
     ./vaultwarden.nix
-    ./netdata.nix
   ];
 }

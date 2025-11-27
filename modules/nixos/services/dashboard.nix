@@ -71,17 +71,6 @@ lib.mkIf config.dashboard.enable {
               };
             };
           }
-          {
-            "Netdata" = {
-              icon = "netdata.png";
-              href = "https://monitor.bigor.lan";
-              description = "Server Monitoring";
-              widget = {
-                type = "netdata";
-                url = "http://127.0.0.1:19999"; # Accès direct local pour le widget
-              };
-            };
-          }
         ];
       }
     ];
