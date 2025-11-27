@@ -11,13 +11,10 @@
   };
 
   #Networking
-  networking = {
-    extraHosts = ''
-      ${config.myNetwork.ips.minipc} minipc
-      ${config.myNetwork.ips.grospc} grospc
-    '';
-    usePredictableInterfaceNames = false;
-  };
+  networking.extraHosts = ''
+    ${config.myNetwork.ips.minipc} minipc
+    ${config.myNetwork.ips.grospc} grospc
+  '';
 
   # Certificat de Caddy
   security.pki.certificateFiles = [
