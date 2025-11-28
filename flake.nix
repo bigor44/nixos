@@ -10,11 +10,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -86,7 +81,6 @@
           sharedModules = [
             ./modules/nixos
             inputs.home-manager.nixosModules.home-manager
-            inputs.sops-nix.nixosModules.sops
             (
               {config, ...}: {
                 home-manager = {

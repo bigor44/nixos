@@ -12,9 +12,6 @@
       jq
       python3
       gemini-cli
-      age
-      sops
-      ssh-to-age
 
       yamlfmt
       stylua
