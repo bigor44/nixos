@@ -26,10 +26,6 @@
       nodejs
       tree-sitter
       wl-clipboard
-
-      # Python
-      pyright
-      python3
     ];
   };
   home.sessionVariables = {

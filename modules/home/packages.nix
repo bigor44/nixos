@@ -10,8 +10,6 @@
       fd
       ripgrep
       jq
-      python3
-      python313Packages.debugpy
       gemini-cli
 
       yamlfmt
