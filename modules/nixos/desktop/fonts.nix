@@ -28,13 +28,11 @@ lib.mkIf config.desktop.enable {
         # 3. CJK pour le support asiatique
         # 4. Color Emoji en dernier recours pour forcer la couleur
         serif = [
-          "JetBrainsMono Nerd Font"
           "Noto Serif"
           "Noto Serif CJK JP"
           "Noto Color Emoji"
         ];
         sansSerif = [
-          "JetBrainsMono Nerd Font"
           "Noto Sans"
           "Noto Sans CJK JP"
           "Noto Color Emoji"
