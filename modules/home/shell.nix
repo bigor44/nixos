@@ -65,6 +65,13 @@
 
       # Additional fish configuration
       interactiveShellInit = ''
+        if test -f ${pkgs.nh}/share/fish/vendor_conf.d/nh.fish
+          source ${pkgs.nh}/share/fish/vendor_conf.d/nh.fish
+        end
+
+        # Nix flake completions
+        source ${pkgs.nix}/share/fish/vendor_completions.d/nix.fish
+
         # Disable greeting
         set fish_greeting
 
