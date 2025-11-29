@@ -61,16 +61,18 @@ return {
       elseif server == "lua_ls" then
         opts.settings = {
           Lua = {
-            diagnostics = { globals = { "vim" } },
+            -- "diagnostics.globals" est retiré car géré par lazydev.nvim
             workspace = { checkThirdParty = false },
             telemetry = { enable = false },
+            -- On s'assure que lua_ls ne formate pas (on utilise stylua via conform)
+            format = { enable = false },
           },
         }
       elseif server == "nixd" then
         opts.settings = {
           nixd = {
             nixpkgs = { expr = "import <nixpkgs> { }" },
-            formatting = { command = { "nixfmt" } },
+            formatting = { command = { "alejandra" } },
             options = {
               nixos = {
                 expr = string.format(

@@ -3,6 +3,11 @@ return {
   "echasnovski/mini.nvim",
   version = false,
   config = function()
+    -- === ICONS (Doit être chargé en premier) ===
+    local mini_icons = require("mini.icons")
+    mini_icons.setup()
+    mini_icons.mock_nvim_web_devicons()
+
     -- === EXPLORATEUR (avec preview automatique) ===
     local minifiles = require("mini.files")
     minifiles.setup({
