@@ -2,8 +2,6 @@
 result
 result-*
 .pre-commit-config.yaml
-GEMINI.md
-lazy-lock.json
 
 keys.txt
 age.agekey

@@ -9,7 +9,7 @@ lib.mkIf config.desktop.enable {
     powerOnBoot = true;
     settings = {
       General = {
-        ControllerMode = "bredr";
+        ControllerMode = "dual";
         Experimental = true;
         FastConnectable = true;
         Enable = "Source,Sink,Media,Socket";
