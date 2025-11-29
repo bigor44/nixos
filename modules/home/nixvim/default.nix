@@ -20,18 +20,8 @@
     #  EXTRA DEPENDENCIES
     # ========================================================================== #
     extraPackages = with pkgs; [
-      ripgrep
-      fd
       wl-clipboard
       gcc
-      nixfmt-rfc-style
-      stylua
-      shfmt
-      yamlfmt
-      isort
-      black
-      taplo
-      nodePackages.prettier
     ];
   };
 }

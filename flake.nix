@@ -41,10 +41,8 @@
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                # --- Linters (Analyse statique) ---
                 statix.enable = true;
                 deadnix.enable = true;
-                # --- Formatteurs individuels --
                 nixfmt-rfc-style.enable = true;
                 prettier.enable = true;
                 shfmt = {
@@ -71,8 +69,6 @@
               yamlfmt
               nodePackages.prettier
             ];
-
-            # Active les hooks git lors de l'entrée dans le shell (nix develop)
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };

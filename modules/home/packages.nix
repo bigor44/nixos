@@ -17,6 +17,8 @@
 
       nodePackages.prettier
       nixfmt-rfc-style
+      yamlfmt
+      stylua
       shfmt
       isort
       black
