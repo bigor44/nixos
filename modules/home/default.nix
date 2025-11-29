@@ -9,6 +9,6 @@
     ./packages.nix
     ./shell.nix
     ./git.nix
-    ./nixvim.nix
+    ./nixvim
   ];
 }
