@@ -15,8 +15,6 @@
       lazygit
       gemini-cli
 
-      yamlfmt
-      stylua
       nodePackages.prettier
       nixfmt-rfc-style
       shfmt

@@ -43,11 +43,8 @@
                 # --- Linters (Analyse statique) ---
                 statix.enable = true;
                 deadnix.enable = true;
-                luacheck.enable = true;
                 # --- Formatteurs individuels --
                 nixfmt-rfc-style.enable = true;
-                stylua.enable = true;
-                yamlfmt.enable = true;
                 prettier.enable = true;
                 shfmt = {
                   enable = true;
@@ -67,13 +64,8 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               detect-secrets
-              # Langage Servers & Utils
               nixd
-              lua-language-server
-
-              # Formatteurs (Disponibles manuellement dans le shell)
               nixfmt-rfc-style
-              stylua
               shfmt
               yamlfmt
               nodePackages.prettier
