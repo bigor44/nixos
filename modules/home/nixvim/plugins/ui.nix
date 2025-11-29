@@ -83,19 +83,20 @@
           pick = {
             window = {
               config = {
-                __raw = "''\n                  function()
+                __raw = ''
+                  function()
                     local height = math.floor(0.618 * vim.o.lines)
                     local width = math.floor(0.618 * vim.o.columns)
                     return {
-                      anchor = \"NW\",
+                      anchor = "NW",
                       height = height,
                       width = width,
                       row = math.floor(0.5 * (vim.o.lines - height)),
                       col = math.floor(0.5 * (vim.o.columns - width)),
-                      border = \"rounded\",
+                      border = "rounded",
                     }
                   end
-                ''";
+                '';
               };
             };
           };
@@ -109,7 +110,7 @@
               };
             };
             source = {
-              __raw = "''require(\"mini.diff\").gen_source.git()''";
+              __raw = ''require("mini.diff").gen_source.git()'';
             };
             delay = {
               text_change = 200;
@@ -118,7 +119,7 @@
           hipatterns = {
             highlighters = {
               hex_color = {
-                __raw = "''require(\"mini.hipatterns\").gen_highlighter.hex_color()''";
+                __raw = ''require("mini.hipatterns").gen_highlighter.hex_color()'';
               };
               fixme = {
                 pattern = "%f[%w]()FIXME()%f[%W]";
@@ -156,7 +157,7 @@
             draw = {
               delay = 100;
               animation = {
-                __raw = "''require(\"mini.indentscope\").gen_animation.none()''";
+                __raw = ''require("mini.indentscope").gen_animation.none()'';
               };
             };
           };
