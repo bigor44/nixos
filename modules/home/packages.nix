@@ -12,6 +12,7 @@
       fd
       ripgrep
       jq
+      lazygit
       gemini-cli
 
       yamlfmt

@@ -22,7 +22,6 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Width +" })
 -- Buffers
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
 
 -- Mouvements visuels
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
