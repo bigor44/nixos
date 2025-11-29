@@ -70,7 +70,7 @@ return {
         opts.settings = {
           nixd = {
             nixpkgs = { expr = "import <nixpkgs> { }" },
-            formatting = { command = { "alejandra" } },
+            formatting = { command = { "nixfmt" } },
             options = {
               nixos = {
                 expr = string.format(

@@ -62,7 +62,7 @@ lib.mkIf config.vaultwarden.enable {
     };
 
     timers.vaultwarden-backup = {
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;

@@ -2,10 +2,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.nfs;
   inherit (config.myNetwork) ips;
-in {
+in
+{
   config = lib.mkMerge [
     # --- Configuration SERVEUR (minipc) ---
     (lib.mkIf cfg.server {
@@ -16,8 +18,14 @@ in {
         '';
       };
       networking.firewall = {
-        allowedTCPPorts = [111 2049];
-        allowedUDPPorts = [111 2049];
+        allowedTCPPorts = [
+          111
+          2049
+        ];
+        allowedUDPPorts = [
+          111
+          2049
+        ];
       };
     })
 

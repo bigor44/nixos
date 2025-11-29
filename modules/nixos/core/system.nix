@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   boot = {
     loader = {
       systemd-boot = {

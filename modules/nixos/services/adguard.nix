@@ -20,7 +20,7 @@ lib.mkIf config.adblocker.enable {
         enabled = true;
       };
       dns = {
-        bind_hosts = ["0.0.0.0"];
+        bind_hosts = [ "0.0.0.0" ];
         port = 53;
         upstream_dns = [
           "https://dns.cloudflare.com/dns-query"
@@ -86,20 +86,20 @@ lib.mkIf config.adblocker.enable {
       };
       filters =
         map
-        (url: {
-          enabled = true;
-          inherit url;
-        })
-        [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt"
-          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt"
-        ];
+          (url: {
+            enabled = true;
+            inherit url;
+          })
+          [
+            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"
+            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"
+            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt"
+            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt"
+          ];
     };
   };
   networking.firewall = {
-    allowedTCPPorts = [53];
-    allowedUDPPorts = [53];
+    allowedTCPPorts = [ 53 ];
+    allowedUDPPorts = [ 53 ];
   };
 }
