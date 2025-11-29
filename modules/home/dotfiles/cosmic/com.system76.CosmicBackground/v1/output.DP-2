@@ -1,9 +1,0 @@
-(
-    output: "DP-2",
-    source: Path("/run/current-system/sw/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg"),
-    filter_by_theme: false,
-    rotation_frequency: 300,
-    filter_method: Lanczos,
-    scaling_mode: Zoom,
-    sampling_method: Alphanumeric,
-)

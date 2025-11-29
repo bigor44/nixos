@@ -39,6 +39,8 @@ in
           "x-systemd.automount"
           "noauto"
           "nfsvers=4.2"
+          "timeo=14"
+          "retrans=2"
         ];
       };
     })
