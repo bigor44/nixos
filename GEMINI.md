@@ -4,7 +4,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 
 ## Project Structure
 
-- **`flake.nix`**: The entry point. Defines inputs (nixpkgs, home-manager, nixvim, etc.) and outputs (system configurations).
+- **`flake.nix`**: The entry point. Defines inputs (nixpkgs, home-manager, etc.) and outputs (system configurations).
 - **`hosts/`**: Host-specific configurations.
   - `grospc/`: Configuration for the main desktop (Zen kernel, gaming setup, backups). Role: `desktop`.
   - `minipc/`: Configuration for the secondary machine. Role: `server`.
