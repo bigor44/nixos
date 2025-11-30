@@ -39,7 +39,6 @@ return {
       "b0o/schemastore.nvim",
     },
     config = function()
-      local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       local servers = {
@@ -109,7 +108,8 @@ return {
       for server, config in pairs(servers) do
         config.capabilities = capabilities
         config.on_attach = on_attach
-        lspconfig[server].setup(config)
+        vim.lsp.config(server, config)
+        vim.lsp.enable(server)
       end
     end,
   },
