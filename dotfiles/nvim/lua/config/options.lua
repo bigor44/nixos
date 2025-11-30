@@ -23,7 +23,7 @@ opt.spelllang = { "en", "fr" }
 
 -- Globals
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\"
+vim.g.maplocalleader = "\\"
 
 -- AutoCmds
 local function augroup(name)
