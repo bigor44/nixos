@@ -15,7 +15,7 @@ in
     };
 
     adblocker.enable = lib.mkEnableOption "Enable Adguard Home";
-    desktop.enable = lib.mkEnableOption "Enable Cosmic Desktop";
+    desktop.enable = lib.mkEnableOption "Enable Plasma 6 Desktop";
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
     dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
     reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
