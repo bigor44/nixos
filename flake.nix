@@ -45,6 +45,8 @@
                 deadnix.enable = true;
                 nixfmt-rfc-style.enable = true;
                 prettier.enable = true;
+                stylua.enable = true;
+                luacheck.enable = true;
                 shfmt = {
                   enable = true;
                   entry = "${pkgs.shfmt}/bin/shfmt -i 2 -s -w";
@@ -66,6 +68,8 @@
               nixd
               nixfmt-rfc-style
               shfmt
+              stylua
+              luaPackages.luacheck
               yamlfmt
               nodePackages.prettier
             ];

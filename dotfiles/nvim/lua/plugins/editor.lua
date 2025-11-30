@@ -47,10 +47,10 @@ return {
       source_selector = {
         winbar = true,
         sources = {
-            { source = "filesystem" },
-            { source = "buffers" },
-            { source = "git_status" },
-        }
+          { source = "filesystem" },
+          { source = "buffers" },
+          { source = "git_status" },
+        },
       },
     },
   },
