@@ -19,24 +19,25 @@
     };
 
     plugins = {
-      web-devicons.enable = true;
-
-      # --- Status Line ---
-      lualine = {
+      # --- Mini.nvim Suite ---
+      mini = {
         enable = true;
-        settings = {
-          options = {
-            theme = "catppuccin";
-            globalstatus = true;
-            component_separators = {
-              left = "|";
-              right = "|";
-            };
-            section_separators = {
-              left = "";
-              right = "";
-            };
-          };
+        mockDevIcons = true;
+        modules = {
+          # UI
+          statusline = { };
+          tabline = { };
+          cursorword = { };
+          indentscope = { };
+          icons = { };
+
+          # Editing
+          pairs = { };
+          surround = { };
+          comment = { };
+
+          # Utilities
+          trailspace = { };
         };
       };
 
@@ -104,10 +105,6 @@
       };
 
       # --- Utilities ---
-      nvim-autopairs.enable = true;
-      nvim-surround.enable = true;
-      comment.enable = true;
-
       colorizer = {
         enable = true;
         settings = {
