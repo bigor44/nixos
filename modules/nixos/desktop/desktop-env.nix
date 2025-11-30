@@ -18,10 +18,14 @@ lib.mkIf config.desktop.enable {
   # Desktop environment
   services = {
     displayManager = {
-      sddm.enable = true;
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
     };
     desktopManager = {
       plasma6.enable = true;
+      cosmic.enable = true;
     };
   };
 }

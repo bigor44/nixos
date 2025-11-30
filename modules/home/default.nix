@@ -8,6 +8,6 @@
     ./packages.nix
     ./shell.nix
     ./git.nix
-    ./nixvim
+    ./neovim.nix
   ];
 }
