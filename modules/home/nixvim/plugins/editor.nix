@@ -44,16 +44,18 @@
       # --- Neo-tree (File Explorer) ---
       neo-tree = {
         enable = true;
-        closeIfLastWindow = true;
-        sources = [
-          "filesystem"
-          "buffers"
-          "git_status"
-        ];
-        filesystem = {
-          bindToCwd = false;
-          followCurrentFile = {
-            enabled = true;
+        settings = {
+          close_if_last_window = true;
+          sources = [
+            "filesystem"
+            "buffers"
+            "git_status"
+          ];
+          filesystem = {
+            bind_to_cwd = false;
+            follow_current_file = {
+              enabled = true;
+            };
           };
         };
       };
