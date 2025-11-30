@@ -41,6 +41,9 @@ return {
     config = function()
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local keymaps = require("config.keymaps")
+      local hostname = vim.fn.hostname()
+      local home = vim.loop.os_homedir()
+      local flake_path = home .. "/nixos"
 
       local servers = {
         bashls = {},
@@ -78,7 +81,7 @@ return {
               formatting = { command = { "nixfmt" } },
               options = {
                 nixos = {
-                  expr = '(builtins.getFlake "/home/bigor/nixos").nixosConfigurations.grospc.options',
+                  expr = string.format('(builtins.getFlake "%s").nixosConfigurations.%s.options', flake_path, hostname),
                 },
               },
             },
