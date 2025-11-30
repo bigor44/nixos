@@ -7,8 +7,8 @@
 lib.mkIf config.tailscale.enable {
   services.tailscale.enable = true;
 
-  # --- CRITIQUE POUR EXIT NODE ---
-  # Ces lignes permettent au minipc de rediriger le trafic internet
+  # --- CRITICAL FOR EXIT NODE ---
+  # These lines allow the minipc to route internet traffic
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;

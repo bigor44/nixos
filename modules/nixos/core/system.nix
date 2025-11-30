@@ -10,13 +10,13 @@
     };
   };
 
-  #Networking
+  # Networking
   networking.extraHosts = ''
     ${config.myNetwork.ips.minipc} minipc
     ${config.myNetwork.ips.grospc} grospc
   '';
 
-  # Certificat de Caddy
+  # Caddy Certificate
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
   ];

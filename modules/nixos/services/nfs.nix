@@ -9,7 +9,7 @@ let
 in
 {
   config = lib.mkMerge [
-    # --- Configuration SERVEUR (minipc) ---
+    # --- SERVER Configuration (minipc) ---
     (lib.mkIf cfg.server {
       services.nfs.server = {
         enable = true;
@@ -29,12 +29,12 @@ in
       };
     })
 
-    # --- Configuration CLIENT (grospc) ---
+    # --- CLIENT Configuration (grospc) ---
     (lib.mkIf cfg.client {
       fileSystems."/mnt/storage" = {
         device = "${ips.minipc}:/mnt/storage";
         fsType = "nfs";
-        # x-systemd.automount évite de bloquer le boot si le serveur est éteint
+        # x-systemd.automount avoids blocking boot if server is off
         options = [
           "x-systemd.automount"
           "noauto"

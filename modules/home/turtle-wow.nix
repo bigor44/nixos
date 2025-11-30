@@ -11,7 +11,7 @@ let
     hash = "sha256-/4qRkc6m+F0djc0YoIfMZxwHaZsrowkyc9O6jS5fUEk=";
   };
 
-  # Chemins absolus des bibliothèques Wayland dans le store Nix
+  # Absolute paths of Wayland libraries in the Nix store
   waylandClient = "${lib.getLib pkgs.wayland}/lib/libwayland-client.so.0";
   waylandCursor = "${lib.getLib pkgs.wayland}/lib/libwayland-cursor.so.0";
   preload = lib.concatStringsSep ":" [
@@ -24,7 +24,7 @@ pkgs.appimageTools.wrapType2 {
   name = pname;
 
   extraInstallCommands = ''
-    # 1. Création du wrapper pour Wayland (code existant)
+    # 1. Creation of the Wayland wrapper (existing code)
     mv "$out/bin/${pname}" "$out/bin/${pname}-unwrapped"
 
     cat > "$out/bin/${pname}" <<'EOF'
@@ -34,7 +34,7 @@ pkgs.appimageTools.wrapType2 {
     EOF
     chmod +x "$out/bin/${pname}"
 
-    # 2. Création de l'entrée de menu .desktop (PARTIE MANQUANTE AJOUTÉE)
+    # 2. Creation of the .desktop menu entry (MISSING PART ADDED)
     mkdir -p $out/share/applications
     cat > $out/share/applications/${pname}.desktop <<EOF
     [Desktop Entry]

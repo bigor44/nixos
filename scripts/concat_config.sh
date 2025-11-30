@@ -2,65 +2,65 @@
 #
 # concat_config.sh
 #
-# Parcourt ~/nixos/ et construit un document *Markdown* contenant :
-#     * un titre de niveau 2 avec le chemin relatif du fichier
-#     * un bloc de code (fenced code block) avec le contenu du fichier
+# Scans ~/nixos/ and builds a *Markdown* document containing:
+#     * a level 2 heading with the relative path of the file
+#     * a code block (fenced code block) with the content of the file
 #
-# Extensions gérées : .nix, .lock, .lua, .md
+# Handled extensions: .nix, .lock, .lua, .md
 #
 # Usage :
-#   ./concat_nix_md.sh            # affiche le Markdown sur STDOUT
-#   ./concat_nix_md.sh /tmp/all.md   # écrit le Markdown dans /tmp/all.md
+#   ./concat_nix_md.sh            # prints the Markdown to STDOUT
+#   ./concat_nix_md.sh /tmp/all.md   # writes the Markdown to /tmp/all.md
 
 set -euo pipefail
 
 # ------------------------------------------------------------------
 # CONFIGURATION
 # ------------------------------------------------------------------
-BASE_DIR="$HOME/nixos" # répertoire à parcourir
+BASE_DIR="$HOME/nixos" # directory to scan
 
 # ------------------------------------------------------------------
 # ARGUMENTS
 # ------------------------------------------------------------------
-OUT_FILE=${1:-} # vide → stdout
+OUT_FILE=${1:-} # empty → stdout
 
-# Si on écrit dans un fichier, on le tronque/crée et on redirige stdout
+# If writing to a file, truncate/create it and redirect stdout
 if [[ -n $OUT_FILE ]]; then
-  # On s'assure d'avoir le chemin absolu pour la comparaison plus tard
-  # (au cas où OUT_FILE est relatif et qu'on change de dossier, bien que ce script ne cd pas)
+  # Ensure we have the absolute path for later comparison
+  # (in case OUT_FILE is relative and we change directory, although this script does not cd)
   touch "$OUT_FILE"
   OUT_FILE="$(realpath "$OUT_FILE")"
 
-  exec >"$OUT_FILE" # redirection de stdout vers le fichier
+  exec >"$OUT_FILE" # redirect stdout to the file
 fi
 
-# Progression – envoyée sur stderr pour ne pas polluer le Markdown
-echo "Écriture de la concaténation Markdown vers : ${OUT_FILE:-STDOUT}" >&2
-echo "Recherche des fichiers *.nix, *.lock, *.lua, *.md sous : $BASE_DIR" >&2
+# Progress – sent to stderr to avoid polluting the Markdown
+echo "Writing Markdown concatenation to: ${OUT_FILE:-STDOUT}" >&2
+echo "Searching for *.nix, *.lock, *.lua, *.md files under: $BASE_DIR" >&2
 echo >&2
 
 # ------------------------------------------------------------------
-# BOUCLE PRINCIPALE
+# MAIN LOOP
 # ------------------------------------------------------------------
-# find avec une clause OR (\( ... -o ... \)) pour les multiples extensions
+# find with an OR clause (\( ... -o ... \)) for multiple extensions
 find "$BASE_DIR" -type f \
   \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
   -print0 | sort -z |
   while IFS= read -r -d '' file; do
 
-    # Ignorer le fichier de sortie lui-même s'il se trouve dans le dossier scanné
-    # (Crucial maintenant qu'on scanne les .md !)
+    # Ignore the output file itself if it is in the scanned folder
+    # (Crucial now that we scan .md!)
     if [[ -n $OUT_FILE && $file == "$OUT_FILE" ]]; then
       continue
     fi
 
-    # Chemin relatif – utilisé pour le titre
+    # Relative path – used for the title
     rel_path="${file#$BASE_DIR/}"
 
-    # Extraction de l'extension pour la coloration syntaxique (nix, lua, md...)
+    # Extract extension for syntax highlighting (nix, lua, md...)
     ext="${file##*.}"
 
-    # Émettre un titre niveau 2 et le bloc de code avec le bon langage
+    # Output a level 2 title and the code block with the correct language
     printf '## %s\n\n```%s\n' "$rel_path" "$ext"
     cat -- "$file"
     printf '\n```\n\n'
@@ -68,5 +68,5 @@ find "$BASE_DIR" -type f \
   done
 
 # ------------------------------------------------------------------
-# FIN
+# END
 # ------------------------------------------------------------------

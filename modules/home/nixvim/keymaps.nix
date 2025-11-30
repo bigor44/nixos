@@ -109,7 +109,7 @@
       }
 
       # --- Diagnostics (Trouble) ---
-      # (Optionnel: Vous pouvez aussi déplacer ceci dans plugins/lsp.nix)
+      # (Optional: You can also move this to plugins/lsp.nix)
       {
         mode = "n";
         key = "<leader>xx";

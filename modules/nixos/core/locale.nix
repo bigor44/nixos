@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
-  # Fuseau horaire
+  # Timezone
   time.timeZone = "Europe/Paris";
 
-  # Langue et formatage
+  # Language and formatting
   i18n = {
     defaultLocale = "fr_FR.UTF-8";
     supportedLocales = [
@@ -23,13 +23,13 @@
     };
   };
 
-  # Clavier X11 (Graphique)
+  # X11 Keyboard (Graphical)
   services.xserver.xkb = {
     layout = "fr";
     variant = "";
   };
 
-  # Clavier & Police Console (TTY)
+  # Console Keyboard & Font (TTY)
   console = {
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132b.psf.gz";

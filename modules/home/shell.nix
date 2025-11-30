@@ -37,7 +37,7 @@
       };
 
       shellAbbrs = {
-        #Nix flake operations
+        # Nix flake operations
         nfc = "nix flake check";
         nfu = "nix flake update";
 

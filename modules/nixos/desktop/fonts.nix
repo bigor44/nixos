@@ -11,7 +11,7 @@ lib.mkIf config.desktop.enable {
       terminus_font
       powerline-fonts
 
-      # Polices CJK & Unicode
+      # CJK & Unicode Fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
       ipafont
@@ -23,10 +23,10 @@ lib.mkIf config.desktop.enable {
 
     fontconfig = {
       defaultFonts = {
-        # 1. Nerd Font en premier pour les icônes Dev/Système
-        # 2. Police principale (Noto)
-        # 3. CJK pour le support asiatique
-        # 4. Color Emoji en dernier recours pour forcer la couleur
+        # 1. Nerd Font first for Dev/System icons
+        # 2. Main font (Noto)
+        # 3. CJK for Asian support
+        # 4. Color Emoji as last resort to force color
         serif = [
           "Noto Serif"
           "Noto Serif CJK JP"
