@@ -1,3 +1,4 @@
+local M = {}
 local map = vim.keymap.set
 
 -- Standard Operations
@@ -30,3 +31,21 @@ map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
 
 -- Diagnostics (Trouble)
 map("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics" })
+
+function M.map_lsp_keymaps(bufnr)
+  local lsp_map = function(keys, func, desc)
+    vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+  end
+
+  lsp_map("gd", vim.lsp.buf.definition, "Goto Definition")
+  lsp_map("gD", vim.lsp.buf.declaration, "Goto Declaration")
+  lsp_map("K", vim.lsp.buf.hover, "Hover")
+  lsp_map("gr", vim.lsp.buf.references, "References")
+  lsp_map("<leader>rn", vim.lsp.buf.rename, "Rename")
+  lsp_map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+  lsp_map("<leader>d", vim.diagnostic.open_float, "Line Diagnostics")
+  lsp_map("[d", vim.diagnostic.goto_prev, "Prev Diagnostic")
+  lsp_map("]d", vim.diagnostic.goto_next, "Next Diagnostic")
+end
+
+return M

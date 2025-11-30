@@ -40,6 +40,7 @@ return {
     },
     config = function()
       local capabilities = require("blink.cmp").get_lsp_capabilities()
+      local keymaps = require("config.keymaps")
 
       local servers = {
         bashls = {},
@@ -89,20 +90,7 @@ return {
         if client.server_capabilities.documentFormattingProvider then
           client.server_capabilities.documentFormattingProvider = false
         end
-
-        local map = function(keys, func, desc)
-          vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
-        end
-
-        map("gd", vim.lsp.buf.definition, "Goto Definition")
-        map("gD", vim.lsp.buf.declaration, "Goto Declaration")
-        map("K", vim.lsp.buf.hover, "Hover")
-        map("gr", vim.lsp.buf.references, "References")
-        map("<leader>rn", vim.lsp.buf.rename, "Rename")
-        map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
-        map("<leader>d", vim.diagnostic.open_float, "Line Diagnostics")
-        map("[d", vim.diagnostic.goto_prev, "Prev Diagnostic")
-        map("]d", vim.diagnostic.goto_next, "Next Diagnostic")
+        keymaps.map_lsp_keymaps(bufnr)
       end
 
       for server, config in pairs(servers) do
