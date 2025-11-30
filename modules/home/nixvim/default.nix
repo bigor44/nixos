@@ -9,6 +9,7 @@
     ./options.nix
     ./keymaps.nix
     ./plugins/ui.nix
+    ./plugins/editor.nix
     ./plugins/lsp.nix
   ];
 
