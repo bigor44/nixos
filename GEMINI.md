@@ -12,10 +12,10 @@ This repository contains the NixOS system configurations for Bigor's machines, m
   - `nixos/`: Custom NixOS modules.
     - **Roles**: `desktop` (GUI, Audio, NFS Client), `server` (Headless, Infrastructure Services), `hybrid` (Desktop + SSH).
     - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `nfs` (File Sharing), `sshd`, `tailscale` (VPN), `vaultwarden` (Passwords).
-    - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (Plasma 6).
+    - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (Plasma 6, COSMIC).
     - **Core**: Options, Locale, System Packages, Users.
   - `home/`: Home Manager configuration for the user `bigor`.
-    - **CLI**: Git, Shell (Fish, Tmux), NixVim, Fastfetch, Btop.
+    - **CLI**: Git, Shell (Fish, Tmux), Neovim (Lua), Fastfetch, Btop.
     - **GUI Apps**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW (Custom Wrapper), Antigravity.
 - **`dotfiles/`**: Raw configuration files (e.g., desktop entries, COSMIC settings) meant to be linked or included.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh` for aggregating config files).
@@ -89,7 +89,7 @@ Or simply commit your changes, as the hooks are installed by `nix develop`.
 ## Custom Modules
 
 - **Roles:** The configuration uses a custom `system.role` option to conditionally enable groups of modules.
-  - `desktop`: Enables graphical environment (Plasma 6), audio, fonts, and NFS client.
+  - `desktop`: Enables graphical environment (Plasma 6, COSMIC), audio, fonts, and NFS client.
   - `server`: Enables headless operation and all infrastructure services (AdGuard, Dashboard, Vaultwarden, Tailscale, NFS Server, Caddy).
   - `hybrid`: Combines `desktop` features with `sshd` access.
 - **Secrets:** `detect-secrets` is configured to prevent committing sensitive data.
