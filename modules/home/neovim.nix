@@ -2,12 +2,12 @@
 {
   programs.neovim = {
     enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
+    defaultEditor = true; # Set $EDITOR to nvim
+    viAlias = true; # Alias vi to nvim
+    vimAlias = true; # Alias vim to nvim
 
     extraPackages = with pkgs; [
-      # Build dependencies
+      # Build tools required for installing/compiling plugins (e.g. Telescope fzf-native)
       gcc
       gnumake
       unzip
@@ -15,7 +15,7 @@
       ripgrep
       fd
 
-      # LSP Servers
+      # Language Servers (LSP)
       nodePackages.bash-language-server
       marksman
       pyright
@@ -24,7 +24,7 @@
       lua-language-server
       nixd
 
-      # Formatters
+      # Formatters & Linters
       nixfmt-rfc-style
       stylua
       selene
@@ -37,7 +37,9 @@
     ];
   };
 
-  # Link the configuration
-  # Using mkOutOfStoreSymlink allows editing the config in dotfiles/nvim without rebuilding
+  # Development Workflow Configuration
+  # We symlink the configuration from the local repository to ~/.config/nvim.
+  # This allows editing files in ~/nixos/dotfiles/nvim and seeing changes immediately
+  # without rebuilding the entire Home Manager environment.
   xdg.configFile.nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/dotfiles/nvim";
 }

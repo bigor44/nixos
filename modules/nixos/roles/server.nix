@@ -3,6 +3,9 @@
   lib,
   ...
 }:
+# Role: Server
+# Activates all infrastructure services and headless operation.
+# Includes dashboard, VPN, password manager, and file serving.
 lib.mkIf (config.system.role == "server") {
   adblocker.enable = lib.mkDefault true;
   sshd.enable = lib.mkDefault true;

@@ -1,5 +1,11 @@
+---
+-- Editor Plugins.
+-- Fuzzy finder, file explorer, version control, and other editor utilities.
+---
 return {
-  -- Telescope
+  -- ---------------------------------------------------------------------------
+  -- Telescope (Fuzzy Finder)
+  -- ---------------------------------------------------------------------------
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
@@ -7,7 +13,7 @@ return {
       "nvim-lua/plenary.nvim",
       {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
+        build = "make", -- Compiles fzf-native for speed
       },
     },
     keys = {
@@ -27,7 +33,9 @@ return {
     },
   },
 
-  -- Neo-tree
+  -- ---------------------------------------------------------------------------
+  -- Neo-tree (File Explorer)
+  -- ---------------------------------------------------------------------------
   {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
@@ -41,8 +49,8 @@ return {
     opts = {
       close_if_last_window = true,
       filesystem = {
-        bind_to_cwd = false,
-        follow_current_file = { enabled = true },
+        bind_to_cwd = false, -- Don't change Neovim's CWD when changing dirs in tree
+        follow_current_file = { enabled = true }, -- Highlight current file in tree
       },
       source_selector = {
         winbar = true,
@@ -55,14 +63,20 @@ return {
     },
   },
 
+  -- ---------------------------------------------------------------------------
   -- Todo Comments
+  -- ---------------------------------------------------------------------------
+  -- Highlights TODO, FIXME, HACK, etc. in comments.
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = true },
   },
 
+  -- ---------------------------------------------------------------------------
   -- LazyGit
+  -- ---------------------------------------------------------------------------
+  -- Terminal UI for Git integrated into Neovim.
   {
     "kdheepak/lazygit.nvim",
     cmd = {

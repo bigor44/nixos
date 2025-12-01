@@ -1,5 +1,13 @@
+---
+-- LSP Configuration.
+-- Sets up Treesitter for syntax highlighting, LSP servers for intelligence,
+-- formatting, and autocompletion.
+---
 return {
+  -- ---------------------------------------------------------------------------
   -- Treesitter
+  -- ---------------------------------------------------------------------------
+  -- Advanced syntax highlighting and text objects.
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -32,21 +40,23 @@ return {
     opts = { max_lines = 3 },
   },
 
-  -- LSP
+  -- ---------------------------------------------------------------------------
+  -- LSP Client
+  -- ---------------------------------------------------------------------------
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "b0o/schemastore.nvim",
+      "b0o/schemastore.nvim", -- Provides schemas for JSON/YAML
     },
     config = function()
-      -- Récupération des capacités pour blink.cmp
+      -- Get capabilities for blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local keymaps = require("config.keymaps")
       local hostname = vim.fn.hostname()
       local home = vim.loop.os_homedir()
       local flake_path = home .. "/nixos"
 
-      -- Définition des serveurs
+      -- Server Configurations
       local servers = {
         bashls = {},
         marksman = {},
@@ -82,6 +92,7 @@ return {
               nixpkgs = { expr = "import <nixpkgs> { }" },
               formatting = { command = { "nixfmt" } },
               options = {
+                -- Inject current system options for accurate completion
                 nixos = {
                   expr = string.format('(builtins.getFlake "%s").nixosConfigurations.%s.options', flake_path, hostname),
                 },
@@ -92,30 +103,26 @@ return {
       }
 
       local on_attach = function(client, bufnr)
-        -- Désactiver le formatage LSP si nécessaire (ex: si on préfère conform.nvim)
+        -- Disable LSP formatting if preferred (delegated to conform.nvim)
         if client.server_capabilities.documentFormattingProvider then
           client.server_capabilities.documentFormattingProvider = false
         end
         keymaps.map_lsp_keymaps(bufnr)
       end
 
-      -- CORRECTION : Utilisation de l'API native pour Neovim 0.11+
-      -- On n'utilise plus require("lspconfig")[server].setup()
+      -- Setup Servers
       for server, config in pairs(servers) do
         config.capabilities = capabilities
         config.on_attach = on_attach
-
-        -- Configuration native (Neovim 0.11+ / lspconfig 3.0)
-        -- 'vim.lsp.config' enregistre la configuration pour le serveur donné
         vim.lsp.config(server, config)
-
-        -- 'vim.lsp.enable' active le serveur (client)
         vim.lsp.enable(server)
       end
     end,
   },
 
-  -- Formatting (inchangé)
+  -- ---------------------------------------------------------------------------
+  -- Formatting
+  -- ---------------------------------------------------------------------------
   {
     "stevearc/conform.nvim",
     opts = {
@@ -142,7 +149,9 @@ return {
     },
   },
 
-  -- Autocompletion (inchangé)
+  -- ---------------------------------------------------------------------------
+  -- Autocompletion
+  -- ---------------------------------------------------------------------------
   {
     "saghen/blink.cmp",
     version = "*",
@@ -164,7 +173,9 @@ return {
     },
   },
 
-  -- Trouble (inchangé)
+  -- ---------------------------------------------------------------------------
+  -- Diagnostics (Trouble)
+  -- ---------------------------------------------------------------------------
   {
     "folke/trouble.nvim",
     opts = { focus = true },

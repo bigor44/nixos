@@ -1,36 +1,38 @@
 { pkgs, ... }:
 {
   programs = {
-    fish.enable = true;
-    tmux.enable = true;
+    fish.enable = true; # Modern shell with autosuggestions
+    tmux.enable = true; # Terminal multiplexer
     nh = {
-      enable = true;
-      clean.enable = true;
+      enable = true; # Nix Helper for simplified system management
+      clean.enable = true; # Automated garbage collection
       clean.extraArgs = "--keep-since 4d --keep 3";
       flake = "/home/bigor/nixos";
     };
   };
+
+  # System-wide packages available to all users
   environment.systemPackages = with pkgs; [
-    # Nix
+    # Nix Tooling
     statix
     deadnix
 
-    # Network tools
+    # Network Utilities
     dig
     wget
     curl
 
-    # System monitoring
+    # Monitoring & Performance
     btop
     htop
     sysstat
     lm_sensors
 
-    # File utilities
+    # Archiving
     zip
     unzip
 
-    # Misc
-    fastfetch
+    # Miscellaneous
+    fastfetch # System information fetcher
   ];
 }

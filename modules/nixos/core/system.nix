@@ -1,37 +1,47 @@
 { config, ... }:
 {
+  # Bootloader Configuration
+  # We use systemd-boot as it is simple, reliable, and well-integrated with UEFI.
   boot = {
     loader = {
       systemd-boot = {
         enable = true;
-        configurationLimit = 10;
+        configurationLimit = 10; # Keep the boot menu clean
       };
       efi.canTouchEfiVariables = true;
     };
   };
 
   # Networking
+  # Define static hostnames for local machines to ensure reliable resolution
+  # without relying on external DNS.
   networking.extraHosts = ''
     ${config.myNetwork.ips.minipc} minipc
     ${config.myNetwork.ips.grospc} grospc
   '';
 
-  # Caddy Certificate
+  # Certificates
+  # Trust the internal CA to allow secure communication between local services.
   security.pki.certificateFiles = [
     ../../../certs/minipc-ca.pem
   ];
+
+  # Allow proprietary software (drivers, codecs, etc.)
   nixpkgs.config.allowUnfree = true;
 
-  # Nix configuration enhancements
+  # Nix Configuration
   nix = {
     settings = {
-      auto-optimise-store = true;
-      # Enable flakes and new commands
+      auto-optimise-store = true; # Deduplicate identical files in the store
       experimental-features = [
         "nix-command"
         "flakes"
       ];
-      max-jobs = "auto";
+      max-jobs = "auto"; # Utilize all available CPU cores for building
+
+      # Binary Caches
+      # Use upstream caches and the Cosmic cache to speed up builds
+      # by downloading pre-built binaries.
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
@@ -43,6 +53,7 @@
         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
     };
+    # Periodic garbage collection is handled by 'nh'
     optimise.automatic = true;
   };
 }

@@ -1,3 +1,7 @@
+---
+-- UI Plugins.
+-- Themes, statusline, icons, and visual enhancements.
+---
 return {
   -- Colorscheme
   {
@@ -22,7 +26,7 @@ return {
     },
   },
 
-  -- Mini.nvim Suite
+  -- Mini.nvim Suite (Statusline, Tabline, Icons, etc.)
   {
     "echasnovski/mini.nvim",
     version = false,
@@ -52,7 +56,7 @@ return {
     },
   },
 
-  -- Noice (UI Enhancements)
+  -- Noice (UI Enhancements for messages, cmdline, and popupmenu)
   {
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -77,7 +81,7 @@ return {
     },
   },
 
-  -- Notify
+  -- Notify (Notification manager)
   {
     "rcarriga/nvim-notify",
     opts = {
@@ -85,7 +89,7 @@ return {
     },
   },
 
-  -- Dressing
+  -- Dressing (Better UI for input/select)
   {
     "stevearc/dressing.nvim",
     opts = {
@@ -97,7 +101,7 @@ return {
     },
   },
 
-  -- Colorizer
+  -- Colorizer (Highlight color codes)
   {
     "NvChad/nvim-colorizer.lua",
     opts = {
@@ -109,7 +113,7 @@ return {
     },
   },
 
-  -- Which Key
+  -- Which Key (Keybinding helper)
   {
     "folke/which-key.nvim",
     event = "VeryLazy",

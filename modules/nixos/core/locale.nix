@@ -1,9 +1,10 @@
 { pkgs, ... }:
 {
-  # Timezone
+  # Timezone Configuration
   time.timeZone = "Europe/Paris";
 
-  # Language and formatting
+  # Locale Settings
+  # Set system-wide locale to French (France) but keep support for English.
   i18n = {
     defaultLocale = "fr_FR.UTF-8";
     supportedLocales = [
@@ -23,13 +24,14 @@
     };
   };
 
-  # X11 Keyboard (Graphical)
+  # X11 Keyboard Layout (Graphical Session)
   services.xserver.xkb = {
     layout = "fr";
     variant = "";
   };
 
-  # Console Keyboard & Font (TTY)
+  # Console Keyboard Layout (TTY)
+  # Ensures the correct keymap is available before the graphical environment starts.
   console = {
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132b.psf.gz";

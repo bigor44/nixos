@@ -1,3 +1,5 @@
+# Entry point for Home Manager configuration.
+# Imports user-specific packages and dotfile modules.
 {
   home = {
     username = "bigor";

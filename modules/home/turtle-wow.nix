@@ -11,7 +11,9 @@ let
     hash = "sha256-/4qRkc6m+F0djc0YoIfMZxwHaZsrowkyc9O6jS5fUEk=";
   };
 
-  # Absolute paths of Wayland libraries in the Nix store
+  # Wayland Compatibility
+  # The game client requires specific Wayland libraries to be preloaded
+  # to function correctly in a pure Wayland environment.
   waylandClient = "${lib.getLib pkgs.wayland}/lib/libwayland-client.so.0";
   waylandCursor = "${lib.getLib pkgs.wayland}/lib/libwayland-cursor.so.0";
   preload = lib.concatStringsSep ":" [
@@ -24,9 +26,12 @@ pkgs.appimageTools.wrapType2 {
   name = pname;
 
   extraInstallCommands = ''
-    # 1. Creation of the Wayland wrapper (existing code)
+    # 1. Rename the original binary to allow wrapping
     mv "$out/bin/${pname}" "$out/bin/${pname}-unwrapped"
 
+    # 2. Create a wrapper script
+    # This script sets LD_PRELOAD to inject the necessary Wayland libraries
+    # before launching the actual game executable.
     cat > "$out/bin/${pname}" <<'EOF'
     #!${pkgs.runtimeShell}
     export LD_PRELOAD='${preload}'
@@ -34,13 +39,13 @@ pkgs.appimageTools.wrapType2 {
     EOF
     chmod +x "$out/bin/${pname}"
 
-    # 2. Creation of the .desktop menu entry (MISSING PART ADDED)
+    # 3. Create a desktop entry
     mkdir -p $out/share/applications
     cat > $out/share/applications/${pname}.desktop <<EOF
     [Desktop Entry]
     Type=Application
     Name=Turtle WoW
-    Comment=Client Turtle WoW
+    Comment=Turtle WoW Client
     Exec=${pname}
     Icon=applications-games
     Categories=Game;

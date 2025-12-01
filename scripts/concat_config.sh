@@ -2,71 +2,70 @@
 #
 # concat_config.sh
 #
-# Scans ~/nixos/ and builds a *Markdown* document containing:
-#     * a level 2 heading with the relative path of the file
-#     * a code block (fenced code block) with the content of the file
+# Description:
+#   Scans the project directory (default: ~/nixos/) and aggregates the content
+#   of specific configuration files (*.nix, *.lua, *.md, etc.) into a single
+#   Markdown document. This is useful for sharing or reviewing the entire
+#   configuration in one place.
 #
-# Handled extensions: .nix, .lock, .lua, .md
+# Usage:
+#   ./concat_config.sh [output_file]
 #
-# Usage :
-#   ./concat_nix_md.sh            # prints the Markdown to STDOUT
-#   ./concat_nix_md.sh /tmp/all.md   # writes the Markdown to /tmp/all.md
+# Examples:
+#   ./concat_config.sh            # Prints to STDOUT
+#   ./concat_config.sh full.md    # Saves to full.md
+#
 
 set -euo pipefail
 
-# ------------------------------------------------------------------
-# CONFIGURATION
-# ------------------------------------------------------------------
-BASE_DIR="$HOME/nixos" # directory to scan
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+BASE_DIR="$HOME/nixos"
 
-# ------------------------------------------------------------------
-# ARGUMENTS
-# ------------------------------------------------------------------
-OUT_FILE=${1:-} # empty → stdout
+# ------------------------------------------------------------------------------
+# Argument Parsing
+# ------------------------------------------------------------------------------
+OUT_FILE=${1:-}
 
-# If writing to a file, truncate/create it and redirect stdout
+# If an output file is specified, prepare it and redirect stdout.
 if [[ -n $OUT_FILE ]]; then
-  # Ensure we have the absolute path for later comparison
-  # (in case OUT_FILE is relative and we change directory, although this script does not cd)
+  # Create/Touch the file first to ensure realpath works.
   touch "$OUT_FILE"
   OUT_FILE="$(realpath "$OUT_FILE")"
 
-  exec >"$OUT_FILE" # redirect stdout to the file
+  # Redirect all subsequent standard output to the file.
+  exec >"$OUT_FILE"
 fi
 
-# Progress – sent to stderr to avoid polluting the Markdown
+# Log progress to stderr to keep stdout clean (if not redirected).
 echo "Writing Markdown concatenation to: ${OUT_FILE:-STDOUT}" >&2
-echo "Searching for *.nix, *.lock, *.lua, *.md files under: $BASE_DIR" >&2
+echo "Searching for configuration files under: $BASE_DIR" >&2
 echo >&2
 
-# ------------------------------------------------------------------
-# MAIN LOOP
-# ------------------------------------------------------------------
-# find with an OR clause (\( ... -o ... \)) for multiple extensions
+# ------------------------------------------------------------------------------
+# Main Processing Loop
+# ------------------------------------------------------------------------------
+# Find relevant files, handle special characters in filenames with print0/read.
 find "$BASE_DIR" -type f \
   \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
   -print0 | sort -z |
   while IFS= read -r -d '' file; do
 
-    # Ignore the output file itself if it is in the scanned folder
-    # (Crucial now that we scan .md!)
+    # Prevent the script from including its own output file if it's in the path.
     if [[ -n $OUT_FILE && $file == "$OUT_FILE" ]]; then
       continue
     fi
 
-    # Relative path – used for the title
+    # Compute path relative to the base directory for the section header.
     rel_path="${file#$BASE_DIR/}"
 
-    # Extract extension for syntax highlighting (nix, lua, md...)
+    # Extract file extension for Markdown code block syntax highlighting.
     ext="${file##*.}"
 
-    # Output a level 2 title and the code block with the correct language
+    # Generate Markdown Section
     printf '## %s\n\n```%s\n' "$rel_path" "$ext"
     cat -- "$file"
     printf '\n```\n\n'
 
   done
-
-# ------------------------------------------------------------------
-# END
-# ------------------------------------------------------------------

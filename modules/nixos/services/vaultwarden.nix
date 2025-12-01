@@ -15,7 +15,12 @@ lib.mkIf config.vaultwarden.enable {
     };
   };
 
-  # Ensure the backup directory exists with correct permissions before the service runs
+  # ----------------------------------------------------------------------------
+  # Automated Backup Service
+  # ----------------------------------------------------------------------------
+  # Periodically backs up the SQLite database to an external NFS share.
+
+  # Ensure the backup directory exists with correct permissions.
   systemd = {
     tmpfiles.rules = [
       "d /mnt/storage/backups/vaultwarden 0770 vaultwarden users - -"
@@ -25,38 +30,37 @@ lib.mkIf config.vaultwarden.enable {
       description = "Backup Vaultwarden SQLite Database";
       serviceConfig = {
         Type = "oneshot";
-        # Run as the service user, not root
+        # Run as 'vaultwarden' user to access the DB, but with 'users' group
+        # to be able to write to the NFS share (owned by bigor/users).
         User = "vaultwarden";
-        # Run as 'users' group so 'bigor' (GID 100) can read the files via NFS
         Group = "users";
       };
       script = ''
-        # Paths
+        # Configuration
         DATA_DIR="/var/lib/bitwarden_rs"
-        # Note: The service creates this, vaultwarden user has access
         LOCAL_BACKUP_DIR="/var/lib/bitwarden_rs/backups"
         EXTERNAL_BACKUP_DIR="/mnt/storage/backups/vaultwarden"
-
-        mkdir -p $LOCAL_BACKUP_DIR
-        # External dir is handled by tmpfiles, but mkdir -p is safe to keep
-        mkdir -p $EXTERNAL_BACKUP_DIR
-
         TIMESTAMP=$(date +%Y%m%d-%H%M)
         BACKUP_FILE="backup-$TIMESTAMP.sqlite3"
 
-        # 1. Create consistent backup using SQLite API
+        # Ensure directories exist
+        mkdir -p $LOCAL_BACKUP_DIR
+        mkdir -p $EXTERNAL_BACKUP_DIR
+
+        # 1. Create consistent backup using SQLite API (hot backup)
         ${pkgs.sqlite}/bin/sqlite3 $DATA_DIR/db.sqlite3 ".backup '$LOCAL_BACKUP_DIR/$BACKUP_FILE'"
 
-        # 2. Copy to the separate drive
+        # 2. Copy to the external drive (NFS Share) for redundancy
         cp "$LOCAL_BACKUP_DIR/$BACKUP_FILE" "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
 
         # 3. Secure permissions
-        # We don't need chown anymore because we are running as vaultwarden:users
-        # Mode 640 ensures vaultwarden (rw), users group (r), others (none)
+        # Mode 640: vaultwarden (rw), users (r), others (none).
         chmod 640 "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
 
-        # 4. Retention Policy: Keep last 30 days on storage, 14 days locally
+        # 4. Retention Policy
+        # Keep last 14 days on local disk
         find $LOCAL_BACKUP_DIR -name "backup-*.sqlite3" -type f -mtime +14 -delete
+        # Keep last 30 days on external storage
         find $EXTERNAL_BACKUP_DIR -name "backup-*.sqlite3" -type f -mtime +30 -delete
       '';
     };

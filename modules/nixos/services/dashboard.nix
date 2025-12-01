@@ -9,11 +9,10 @@ lib.mkIf config.dashboard.enable {
     listenPort = 8082;
     allowedHosts = "localhost:8082,home.bigor.lan";
 
-    # Global settings
+    # Global UI Settings
     settings = {
       title = "Bigor Home";
       background = {
-        # Use a nice Unsplash image or a local path
         image = "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&w=2000&q=80";
       };
       layout = {
@@ -24,7 +23,7 @@ lib.mkIf config.dashboard.enable {
       };
     };
 
-    # System Widgets (CPU, RAM, Disk)
+    # System Resource Widgets (CPU, RAM, Disk)
     widgets = [
       {
         resources = {
@@ -49,7 +48,7 @@ lib.mkIf config.dashboard.enable {
       }
     ];
 
-    # Your Apps
+    # Service Links & API Integrations
     services = [
       {
         "Infrastructure" = [
@@ -65,6 +64,7 @@ lib.mkIf config.dashboard.enable {
               icon = "adguard-home.png";
               href = "https://adguard.bigor.lan";
               description = "DNS & AdBlocker";
+              # API Integration for live stats on the dashboard
               widget = {
                 type = "adguard";
                 url = "http://127.0.0.1:3003";

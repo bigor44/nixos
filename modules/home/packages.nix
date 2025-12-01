@@ -8,13 +8,15 @@
   home.packages =
     with pkgs;
     [
-      eza
-      fd
-      ripgrep
-      jq
-      lazygit
+      # Modern CLI replacements
+      eza # ls replacement
+      fd # find replacement
+      ripgrep # grep replacement
+      jq # JSON processor
+      lazygit # Git terminal UI
       gemini-cli
 
+      # Code Quality Tools
       nodePackages.prettier
       nixfmt-rfc-style
       yamlfmt
@@ -24,6 +26,8 @@
       black
       taplo
     ]
+    # Desktop-only Applications
+    # Only install these if the system has a desktop environment enabled.
     ++ lib.optionals osConfig.desktop.enable [
       discord
       brave

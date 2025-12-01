@@ -7,11 +7,11 @@
 lib.mkIf config.desktop.enable {
   fonts = {
     packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-      terminus_font
+      nerd-fonts.jetbrains-mono # Developer font with icons
+      terminus_font # Clean bitmap font
       powerline-fonts
 
-      # CJK & Unicode Fonts
+      # CJK & Unicode Fonts (for better multilingual support)
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
       ipafont
@@ -21,6 +21,7 @@ lib.mkIf config.desktop.enable {
       noto-fonts-color-emoji
     ];
 
+    # Fontconfig Fallback Strategy
     fontconfig = {
       defaultFonts = {
         # 1. Nerd Font first for Dev/System icons

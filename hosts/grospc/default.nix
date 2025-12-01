@@ -3,64 +3,71 @@
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "grospc";
 
+  # Role: Desktop
+  # Optimized for interactive use, graphical applications, and gaming.
   system.role = "desktop";
 
+  # Performance Tuning
+  # Use the 'performance' governor for maximum responsiveness.
   powerManagement.cpuFreqGovernor = "performance";
+  # Zen kernel provides better desktop responsiveness and fsync patches.
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   myNetwork.mainInterface = "enp14s0";
 
+  # Secondary Storage for Games
   fileSystems."/steamlibrary" = {
     device = "/dev/disk/by-uuid/84c2f17e-37c6-4ef9-b98c-6862c808990b";
     fsType = "ext4";
     options = [
-      "noatime"
+      "noatime" # Reduce write wear
       "nodiratime"
     ];
   };
 
-  # ============================================================================
-  #  BACKUP STRATEGY: PULL FROM SERVER
-  # ============================================================================
-  # This service copies the Vaultwarden backups from the NFS share (minipc)
-  # to the local physical disk (steamlibrary).
+  # ----------------------------------------------------------------------------
+  # Backup Strategy: Pull from Server
+  # ----------------------------------------------------------------------------
+  # This service pulls Vaultwarden backups from the central server (minipc)
+  # to the local desktop storage for redundancy.
   systemd.services.pull-vaultwarden-backups = {
     description = "Sync Vaultwarden backups from minipc to local steamlibrary";
-    # Dependency: Only run if the NFS share is actually mounted
+    # Dependency: Ensure NFS share is available before running
     requires = [ "mnt-storage.mount" ];
     after = [ "mnt-storage.mount" ];
 
     serviceConfig = {
       Type = "oneshot";
-      User = "bigor"; # Run as your user (since you own the files now!)
+      User = "bigor"; # Execute as the user who owns the files
     };
 
     script = ''
-      # Source: NFS Mount (Remote)
+      # Source: NFS Mount (Remote on minipc)
       SOURCE="/mnt/storage/backups/vaultwarden"
-      # Dest: Local Disk (Safe)
+      # Destination: Local Disk (Redundant copy)
       DEST="/steamlibrary/backups/vaultwarden"
 
       mkdir -p "$DEST"
 
-      # Rsync ensures we only copy new files
-      # -a: Archive mode (preserve timestamps)
+      # Rsync synchronization:
+      # -a: Archive mode (preserve attributes)
       # -v: Verbose
-      # --ignore-existing: Don't re-copy files we already have
+      # --ignore-existing: Only copy new backups to avoid re-transferring
       ${pkgs.rsync}/bin/rsync -av --ignore-existing "$SOURCE/" "$DEST/"
 
-      # Retention Policy: Keep local desktop copies for 3 months
+      # Retention Policy:
+      # Keep local copies for 90 days to balance storage usage vs safety.
       find "$DEST" -name "backup-*.sqlite3" -type f -mtime +90 -delete
     '';
   };
 
-  # Run this check every day
+  # Schedule the backup pull daily.
   systemd.timers.pull-vaultwarden-backups = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "daily";
-      Persistent = true;
-      RandomizedDelaySec = "10m";
+      Persistent = true; # Run immediately if missed while off
+      RandomizedDelaySec = "10m"; # Avoid thundering herd (though unlikely here)
     };
   };
 }
