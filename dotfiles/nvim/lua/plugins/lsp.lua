@@ -39,12 +39,14 @@ return {
       "b0o/schemastore.nvim",
     },
     config = function()
+      -- Récupération des capacités pour blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local keymaps = require("config.keymaps")
       local hostname = vim.fn.hostname()
       local home = vim.loop.os_homedir()
       local flake_path = home .. "/nixos"
 
+      -- Définition des serveurs
       local servers = {
         bashls = {},
         marksman = {},
@@ -90,22 +92,30 @@ return {
       }
 
       local on_attach = function(client, bufnr)
+        -- Désactiver le formatage LSP si nécessaire (ex: si on préfère conform.nvim)
         if client.server_capabilities.documentFormattingProvider then
           client.server_capabilities.documentFormattingProvider = false
         end
         keymaps.map_lsp_keymaps(bufnr)
       end
 
+      -- CORRECTION : Utilisation de l'API native pour Neovim 0.11+
+      -- On n'utilise plus require("lspconfig")[server].setup()
       for server, config in pairs(servers) do
         config.capabilities = capabilities
         config.on_attach = on_attach
+
+        -- Configuration native (Neovim 0.11+ / lspconfig 3.0)
+        -- 'vim.lsp.config' enregistre la configuration pour le serveur donné
         vim.lsp.config(server, config)
+
+        -- 'vim.lsp.enable' active le serveur (client)
         vim.lsp.enable(server)
       end
     end,
   },
 
-  -- Formatting
+  -- Formatting (inchangé)
   {
     "stevearc/conform.nvim",
     opts = {
@@ -132,7 +142,7 @@ return {
     },
   },
 
-  -- Autocompletion
+  -- Autocompletion (inchangé)
   {
     "saghen/blink.cmp",
     version = "*",
@@ -154,7 +164,7 @@ return {
     },
   },
 
-  -- Trouble
+  -- Trouble (inchangé)
   {
     "folke/trouble.nvim",
     opts = { focus = true },
