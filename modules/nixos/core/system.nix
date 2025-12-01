@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 {
   # Bootloader Configuration
   # We use systemd-boot as it is simple, reliable, and well-integrated with UEFI.
@@ -56,4 +56,6 @@
     # Periodic garbage collection is handled by 'nh'
     optimise.automatic = true;
   };
+  environment.systemPackages = with pkgs; [ via ];
+  services.udev.packages = with pkgs; [ via ];
 }
