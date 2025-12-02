@@ -6,6 +6,18 @@
     viAlias = true; # Alias vi to nvim
     vimAlias = true; # Alias vim to nvim
 
+    plugins = with pkgs.vimPlugins; [
+      nvim-lspconfig
+      none-ls-nvim
+      nvim-treesitter.withAllGrammars
+      telescope-nvim
+      plenary-nvim
+      lazygit-nvim
+      gitsigns-nvim
+      nvim-web-devicons
+      sonokai
+    ];
+
     extraPackages = with pkgs; [
       # Build tools required for installing/compiling plugins (e.g. Telescope fzf-native)
       gcc
