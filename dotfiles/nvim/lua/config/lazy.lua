@@ -36,7 +36,7 @@ require("lazy").setup({
     version = false,
   },
   -- Install the colorscheme immediately during bootstrap
-  install = { colorscheme = { "onedark" } },
+  install = { colorscheme = { "catppuccin" } },
   checker = { enabled = true }, -- Check for updates automatically
   performance = {
     rtp = {
