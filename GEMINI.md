@@ -15,7 +15,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
     - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (COSMIC).
     - **Core**: Options, Locale, System Packages, Users.
   - `home/`: Home Manager configuration for the user `bigor`.
-    - **CLI**: Git, Shell (Fish, Tmux), Neovim (Lua), Fastfetch, Btop.
+    - **CLI**: Git, Shell (Fish, Tmux), Nixvim, Fastfetch, Btop.
     - **GUI Apps**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW (Custom Wrapper), Antigravity.
 - **`dotfiles/`**: Raw configuration files (e.g., desktop entries, COSMIC settings) meant to be linked or included.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh` for aggregating config files).
