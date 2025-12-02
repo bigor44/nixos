@@ -24,6 +24,10 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
+    end,
   },
 
   -- Mini.nvim Suite (Statusline, Tabline, Icons, etc.)

@@ -2,7 +2,7 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
-    # Stable/Unstable NixOS package sets
+    # Unstable NixOS package sets
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Flake Parts for modular flake structure
