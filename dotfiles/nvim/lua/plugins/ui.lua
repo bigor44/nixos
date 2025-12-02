@@ -5,20 +5,15 @@
 return {
   -- Colorscheme
   {
-    "ellisonleao/gruvbox.nvim",
-    name = "gruvbox",
+    "navarasu/onedark.nvim",
     lazy = false,
-    priority = 1000,
+    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      vim.o.background = "dark"
-      require("gruvbox").setup({
-        -- You can add or override default options here if needed
-        -- For example, to enable terminal colors:
-        terminal_colors = true,
-        -- To set a specific contrast, e.g., "hard", "soft", or "" (default)
-        contrast = "hard",
+      require("onedark").setup({
+        style = "darker", -- Example: set a specific style
+        transparent = true,
       })
-      vim.cmd.colorscheme("gruvbox")
+      require("onedark").load()
     end,
   },
 

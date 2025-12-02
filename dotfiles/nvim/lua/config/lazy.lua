@@ -36,7 +36,7 @@ require("lazy").setup({
     version = false,
   },
   -- Install the colorscheme immediately during bootstrap
-  install = { colorscheme = { "gruvbox" } },
+  install = { colorscheme = { "onedark" } },
   checker = { enabled = true }, -- Check for updates automatically
   performance = {
     rtp = {
