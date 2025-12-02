@@ -5,28 +5,20 @@
 return {
   -- Colorscheme
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "ellisonleao/gruvbox.nvim",
+    name = "gruvbox",
     lazy = false,
     priority = 1000,
-    opts = {
-      flavour = "mocha",
-      integrations = {
-        cmp = false,
-        blink_cmp = true,
-        treesitter = true,
-        gitsigns = true,
-        snacks = true,
-        noice = true,
-        mini = {
-          enabled = true,
-          indentscope_color = "",
-        },
-      },
-    },
-    config = function(_, opts)
-      require("catppuccin").setup(opts)
-      vim.cmd.colorscheme("catppuccin")
+    config = function()
+      vim.o.background = "dark"
+      require("gruvbox").setup({
+        -- You can add or override default options here if needed
+        -- For example, to enable terminal colors:
+        terminal_colors = true,
+        -- To set a specific contrast, e.g., "hard", "soft", or "" (default)
+        contrast = "hard",
+      })
+      vim.cmd.colorscheme("gruvbox")
     end,
   },
 
