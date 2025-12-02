@@ -1,0 +1,6 @@
+require("nvim.core")
+require("nvim.lsp")
+require("nvim.treesitter")
+require("nvim.telescope")
+require("nvim.git")
+require("nvim.formatting")
