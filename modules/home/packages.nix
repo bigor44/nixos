@@ -15,7 +15,6 @@
       jq # JSON processor
       lazygit # Git terminal UI
       gemini-cli
-      vim
 
       # Code Quality Tools
       nodePackages.prettier

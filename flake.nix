@@ -19,6 +19,13 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Nixvim - Nix-based Neovim configuration
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
 
   outputs =
@@ -49,6 +56,8 @@
                 deadnix.enable = true; # Scans Nix code for dead code
                 nixfmt-rfc-style.enable = true; # Formats Nix code
                 prettier.enable = true; # Formats various file types
+                stylua.enable = true; # Formats Lua code
+                luacheck.enable = true; # Lints Lua code
                 shfmt = {
                   enable = true;
                   entry = "${pkgs.shfmt}/bin/shfmt -i 2 -s -w"; # Formats Shell scripts
@@ -76,6 +85,8 @@
               nixd
               nixfmt-rfc-style
               shfmt
+              stylua
+              luaPackages.luacheck
               yamlfmt
               nodePackages.prettier
             ];
