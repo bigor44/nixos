@@ -47,7 +47,8 @@ map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 -- -----------------------------------------------------------------------------
 -- Plugin Specific
 -- -----------------------------------------------------------------------------
--- (Empty as plugins manage their own keymaps or are replaced)
+-- Trouble (Diagnostics)
+map("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Toggle Diagnostics (Trouble)" })
 
 --- Registers LSP-related keymaps for a specific buffer.
 --- @param bufnr number The buffer number to attach keymaps to.

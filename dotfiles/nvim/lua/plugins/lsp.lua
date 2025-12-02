@@ -49,6 +49,8 @@ return {
       "b0o/schemastore.nvim", -- Provides schemas for JSON/YAML
     },
     config = function()
+      -- Get capabilities for blink.cmp
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
       local keymaps = require("config.keymaps")
       local hostname = vim.fn.hostname()
       local home = vim.loop.os_homedir()
@@ -110,6 +112,7 @@ return {
 
       -- Setup Servers
       for server, config in pairs(servers) do
+        config.capabilities = capabilities
         config.on_attach = on_attach
         vim.lsp.config(server, config)
         vim.lsp.enable(server)
@@ -144,5 +147,37 @@ return {
         toml = { "taplo" },
       },
     },
+  },
+
+  -- ---------------------------------------------------------------------------
+  -- Autocompletion
+  -- ---------------------------------------------------------------------------
+  {
+    "saghen/blink.cmp",
+    version = "*",
+    dependencies = "rafamadriz/friendly-snippets",
+    opts = {
+      keymap = { preset = "default" },
+      appearance = {
+        use_nvim_cmp_as_default = true,
+        nerd_font_variant = "mono",
+      },
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer" },
+      },
+      completion = {
+        menu = { border = "rounded" },
+        documentation = { window = { border = "rounded" } },
+      },
+      signature = { enabled = true },
+    },
+  },
+
+  -- ---------------------------------------------------------------------------
+  -- Diagnostics (Trouble)
+  -- ---------------------------------------------------------------------------
+  {
+    "folke/trouble.nvim",
+    opts = { focus = true },
   },
 }
