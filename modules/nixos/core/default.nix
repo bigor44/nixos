@@ -4,6 +4,7 @@
   # These modules form the base system configuration shared by all hosts.
   imports = [
     ./options.nix # Custom configuration options
+    ./features.nix # Custom features logic
     ./system.nix # Bootloader, networking, and Nix settings
     ./locale.nix # Localization and timezone settings
     ./users.nix # User accounts and permissions

@@ -3,9 +3,11 @@
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "grospc";
 
-  # Role: Desktop
-  # Optimized for interactive use, graphical applications, and gaming.
-  system.role = "desktop";
+  system.features = [
+    "desktop"
+    "nfs-client"
+    "sshd"
+  ];
 
   # Performance Tuning
   # Use the 'performance' governor for maximum responsiveness.

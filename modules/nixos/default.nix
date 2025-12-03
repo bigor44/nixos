@@ -5,7 +5,6 @@
 {
   imports = [
     ./core
-    ./roles
     ./desktop
     ./services
   ];

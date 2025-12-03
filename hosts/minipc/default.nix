@@ -7,9 +7,10 @@
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "minipc";
 
-  # Role: Server
-  # Headless configuration for hosting infrastructure services.
-  system.role = "server";
+  system.features = [
+    "server"
+    "sshd"
+  ];
 
   # Kernel & Power Management
   # Use the standard kernel for stability.

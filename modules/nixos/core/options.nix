@@ -1,19 +1,14 @@
 { lib, ... }:
-let
-  roleEnum = [
-    "desktop"
-    "server"
-    "hybrid"
-  ];
-in
 {
   options = {
-    # Defines the high-level purpose of the machine.
-    # This triggers the activation of role-specific modules.
-    system.role = lib.mkOption {
-      type = lib.types.enum roleEnum;
-      default = "server";
-      description = "Defines the global system profile (desktop, server, etc.).";
+    system.features = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Liste des fonctionnalités actives (ex: 'desktop', 'sshd', 'server').";
+      example = [
+        "desktop"
+        "nfs-client"
+      ];
     };
 
     # Infrastructure services
