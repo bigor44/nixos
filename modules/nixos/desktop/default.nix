@@ -1,10 +1,10 @@
 { ... }:
 {
   imports = [
-    ./audio.nix
-    ./bluetooth.nix
+    ./base.nix
+    ./packages.nix
+    ./packages.nix
     ./desktop-env.nix
     ./fonts.nix
-    ./packages.nix
   ];
 }
