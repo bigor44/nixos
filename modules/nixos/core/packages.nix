@@ -26,6 +26,10 @@
     btop
     htop
     sysstat
+    inxi
+    pciutils
+    usbutils
+    mesa-demos
     lm_sensors
 
     # Archiving

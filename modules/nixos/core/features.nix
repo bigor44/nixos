@@ -18,7 +18,7 @@ in
       vaultwarden.enable = lib.mkDefault true;
       nfs.server = lib.mkDefault true;
       reverse_proxy.enable = lib.mkDefault true;
-      # Pas de desktop
+      glances.enable = lib.mkDefault true;
     })
 
     # --- Feature: SSHD ---

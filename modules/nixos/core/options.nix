@@ -17,6 +17,7 @@
     reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
     tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
     vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
+    glances.enable = lib.mkEnableOption "Enable Glances System Monitor";
 
     # Desktop features
     desktop.enable = lib.mkEnableOption "Enable COSMIC Desktop";
