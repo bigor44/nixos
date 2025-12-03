@@ -1,0 +1,35 @@
+# Generated to match flake.nix configuration for editor support
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
+
+[formatter.lua]
+command = "stylua"
+includes = ["*.lua"]
+
+[formatter.shell]
+command = "shfmt"
+includes = ["*.sh"]
+options = ["-i", "2", "-s", "-w"]
+
+[formatter.yaml]
+command = "yamlfmt"
+includes = ["*.yaml", "*.yml"]
+
+[formatter.toml]
+command = "taplo"
+includes = ["*.toml"]
+options = ["fmt", "-"]
+
+[formatter.prettier]
+command = "prettier"
+includes = ["*.json", "*.md", "*.html", "*.css", "*.js", "*.ts"]
+excludes = ["*.yaml", "*.yml"]
+
+[formatter.python]
+command = "black"
+includes = ["*.py"]
+
+[formatter.isort]
+command = "isort"
+includes = ["*.py"]

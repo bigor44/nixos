@@ -17,6 +17,7 @@
       gemini-cli
 
       # Code Quality Tools
+      treefmt
       nodePackages.prettier
       nixfmt-rfc-style
       yamlfmt
