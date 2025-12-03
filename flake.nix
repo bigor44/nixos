@@ -19,13 +19,29 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Treefmt for unified formatting
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
+    inputs@{
+      self,
+      flake-parts,
+      treefmt-nix,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
+      ];
+
+      # Import the treefmt module
+      imports = [
+        treefmt-nix.flakeModule
       ];
 
       perSystem =
@@ -37,24 +53,63 @@
         }:
         {
           # --------------------------------------------------------------------
+          # Treefmt Configuration
+          # --------------------------------------------------------------------
+          # The single source of truth for formatting across devShell, CI, and Editor.
+          treefmt = {
+            projectRootFile = "flake.nix";
+
+            # Enable the tools
+            programs = {
+              nixfmt.enable = true; # Nix
+              stylua.enable = true; # Lua
+              shfmt.enable = true; # Shell
+              yamlfmt.enable = true; # YAML
+              taplo.enable = true; # TOML
+              prettier.enable = true; # General (JSON, MD, etc.)
+              black.enable = true; # Python
+              isort.enable = true; # Python imports
+            };
+
+            # Grouped settings to satisfy statix and configure tools
+            settings = {
+              formatter = {
+                prettier = {
+                  excludes = [
+                    "*.yaml"
+                    "*.yml"
+                  ];
+                };
+                shfmt = {
+                  includes = [ "*.sh" ];
+                  options = [
+                    "-i"
+                    "2"
+                    "-s"
+                    "-w"
+                  ];
+                };
+              };
+            };
+          };
+
+          # --------------------------------------------------------------------
           # Pre-commit Checks
           # --------------------------------------------------------------------
-          # Ensures code quality before committing changes.
-          # Runs linters and formatters for Nix, Lua, Shell, etc.
+          # Runs linters and checks formatting before committing.
           checks = {
+            # Treefmt Check (Ensures everything is formatted according to above config)
+            formatting = config.treefmt.build.check self;
+
+            # Linters (Security & Code quality)
+            # Note: Formatters are removed from here as treefmt handles them now.
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
                 statix.enable = true; # Lints Nix code for anti-patterns
                 deadnix.enable = true; # Scans Nix code for dead code
-                nixfmt-rfc-style.enable = true; # Formats Nix code
-                prettier.enable = true; # Formats various file types
-                stylua.enable = true; # Formats Lua code
                 luacheck.enable = true; # Lints Lua code
-                shfmt = {
-                  enable = true;
-                  entry = "${pkgs.shfmt}/bin/shfmt -i 2 -s -w"; # Formats Shell scripts
-                };
+
                 detect-secrets = {
                   enable = true;
                   entry = "${pkgs.detect-secrets}/bin/detect-secrets-hook --baseline .secrets.baseline";
@@ -64,25 +119,28 @@
             };
           };
 
-          # Formatter to be used with 'nix fmt'
-          formatter = pkgs.nixfmt-rfc-style;
+          # --------------------------------------------------------------------
+          # Formatter
+          # --------------------------------------------------------------------
+          # Default formatter command `nix fmt`
+          formatter = config.treefmt.build.wrapper;
 
           # --------------------------------------------------------------------
           # Development Shell
           # --------------------------------------------------------------------
-          # Shell environment with all necessary tools for working on this configuration.
-          # Includes linters, formatters, and pre-commit hooks.
+          # Shell environment with all necessary tools.
           devShells.default = pkgs.mkShell {
-            packages = with pkgs; [
-              detect-secrets
-              nixd
-              nixfmt-rfc-style
-              shfmt
-              stylua
-              luaPackages.luacheck
-              yamlfmt
-              nodePackages.prettier
+            # Inherit inputs from treefmt and pre-commit-check
+            # This automatically adds treefmt, all enabled formatters, and linters to PATH.
+            inputsFrom = [
+              config.treefmt.build.devShell
+              config.checks.pre-commit-check
             ];
+
+            packages = with pkgs; [
+              nixd # Nix Language Server
+            ];
+
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };
@@ -116,15 +174,12 @@
           in
           {
             # Desktop Machine
-            # Optimized for daily usage, gaming, and development.
             grospc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = sharedModules ++ [ ./hosts/grospc ];
             };
-
             # Server Machine
-            # Headless setup for hosting services (AdGuard, Dashboard, etc.).
             minipc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
