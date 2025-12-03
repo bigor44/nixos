@@ -6,16 +6,16 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 
 - **`flake.nix`**: The entry point. Defines inputs (nixpkgs, home-manager, etc.) and outputs (system configurations).
 - **`hosts/`**: Host-specific configurations.
-  - `grospc/`: Configuration for the main desktop (Zen kernel, gaming setup, backups). Role: `desktop`.
-  - `minipc/`: Configuration for the secondary machine. Role: `server`.
+  - `grospc/`: Configuration for the main desktop (Zen kernel, gaming setup, backups). Features: `desktop`, `sshd`, `nfs-client`.
+  - `minipc/`: Configuration for the secondary machine. Features: `server`, `sshd`.
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
-    - **Roles**: `desktop` (GUI, Audio, NFS Client), `server` (Headless, Infrastructure Services), `hybrid` (Desktop + SSH).
+    - **Features**: `desktop` (GUI, Audio), `server` (Headless, Infrastructure Services), `sshd`, `nfs-client`.
     - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `nfs` (File Sharing), `sshd`, `tailscale` (VPN), `vaultwarden` (Passwords).
     - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (COSMIC).
     - **Core**: Options, Locale, System Packages (Tmux, Fastfetch, Btop, Nh), Users.
   - `home/`: Home Manager configuration for the user `bigor`.
-    - **CLI**: Git, Shell (Fish), Neovim (Lua), Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli.
+    - **CLI**: Git, Shell (Fish), Neovim (Lua), Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Fzf, Zoxide, Bat.
     - **GUI Apps**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW (Custom Wrapper), Antigravity.
 - **`dotfiles/`**: Raw configuration files (e.g., desktop entries, COSMIC settings) meant to be linked or included.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh` for aggregating config files).
@@ -88,8 +88,9 @@ Or simply commit your changes, as the hooks are installed by `nix develop`.
 
 ## Custom Modules
 
-- **Roles:** The configuration uses a custom `system.role` option to conditionally enable groups of modules.
-  - `desktop`: Enables graphical environment (COSMIC), audio, fonts, and NFS client.
+- **Features:** The configuration uses a custom `system.features` list to conditionally enable groups of modules.
+  - `desktop`: Enables graphical environment (COSMIC), audio, fonts.
   - `server`: Enables headless operation and all infrastructure services (AdGuard, Dashboard, Vaultwarden, Tailscale, NFS Server, Caddy).
-  - `hybrid`: Combines `desktop` features with `sshd` access.
+  - `sshd`: Enables SSH server.
+  - `nfs-client`: Enables NFS client mount.
 - **Secrets:** `detect-secrets` is configured to prevent committing sensitive data.
