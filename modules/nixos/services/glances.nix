@@ -7,9 +7,5 @@ lib.mkIf config.glances.enable {
   services.glances = {
     enable = true;
     openFirewall = false; # Opens port 61208 only to localhost
-    extraArgs = [
-      "--webserver" # Enable Web UI (accessible via browser)
-      "--bind 127.0.0.1"
-    ];
   };
 }
