@@ -33,6 +33,14 @@ lib.mkIf config.reverse_proxy.enable {
           tls internal
         '';
       };
+
+      # Glances (System Monitoring)
+      "glances.bigor.lan" = {
+        extraConfig = ''
+          reverse_proxy 127.0.0.1:61208
+          tls internal
+        '';
+      };
     };
   };
 

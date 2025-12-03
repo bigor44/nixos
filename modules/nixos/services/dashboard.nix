@@ -71,6 +71,13 @@ lib.mkIf config.dashboard.enable {
               };
             };
           }
+          {
+            "Glances" = {
+              icon = "glances.png";
+              href = "https://glances.bigor.lan";
+              description = "System Monitoring";
+            };
+          }
         ];
       }
     ];
