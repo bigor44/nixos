@@ -9,5 +9,6 @@
     ./shell.nix
     ./git.nix
     ./neovim.nix
+    ./dotfiles.nix
   ];
 }
