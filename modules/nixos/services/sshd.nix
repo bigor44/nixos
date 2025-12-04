@@ -9,8 +9,8 @@ lib.mkIf config.sshd.enable {
     openFirewall = true;
     settings = {
       # Security Hardening
-      PermitRootLogin = "no"; # Disable root login
-      PasswordAuthentication = false; # Require SSH keys
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
     };
   };
 }

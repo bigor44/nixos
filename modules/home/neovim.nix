@@ -2,9 +2,9 @@
 {
   programs.neovim = {
     enable = true;
-    defaultEditor = true; # Set $EDITOR to nvim
-    viAlias = true; # Alias vi to nvim
-    vimAlias = true; # Alias vim to nvim
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
 
     extraPackages = with pkgs; [
       # Build tools required for installing/compiling plugins (e.g. Telescope fzf-native)

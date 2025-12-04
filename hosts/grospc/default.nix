@@ -55,9 +55,6 @@
 
       mkdir -p "$DEST"
 
-      # Rsync synchronization:
-      # -a: Archive mode (preserve attributes)
-      # -v: Verbose
       # --ignore-existing: Only copy new backups to avoid re-transferring
       ${pkgs.rsync}/bin/rsync -av --ignore-existing "$SOURCE/" "$DEST/"
 
@@ -73,7 +70,7 @@
     timerConfig = {
       OnCalendar = "daily";
       Persistent = true; # Run immediately if missed while off
-      RandomizedDelaySec = "10m"; # Avoid thundering herd (though unlikely here)
+      RandomizedDelaySec = "10m"; # Avoid thundering herd
     };
   };
 }

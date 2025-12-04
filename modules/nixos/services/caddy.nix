@@ -8,7 +8,6 @@ lib.mkIf config.reverse_proxy.enable {
     enable = true;
 
     # Virtual Hosts Configuration
-    # Maps domain names to internal service ports.
     virtualHosts = {
       # Dashboard (Homepage)
       "home.bigor.lan" = {
@@ -44,7 +43,6 @@ lib.mkIf config.reverse_proxy.enable {
     };
   };
 
-  # Open HTTP/HTTPS ports
   networking.firewall.allowedTCPPorts = [
     80
     443

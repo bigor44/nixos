@@ -28,7 +28,7 @@ lib.mkIf config.desktop.enable {
     };
   };
 
-  # --- Paquets de base Desktop ---
+  # --- Desktop Base Packages ---
   programs = {
     firefox.enable = true;
     gamemode.enable = true;

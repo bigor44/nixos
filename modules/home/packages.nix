@@ -9,11 +9,11 @@
     with pkgs;
     [
       # Modern CLI replacements
-      eza # ls replacement
-      fd # find replacement
-      ripgrep # grep replacement
-      jq # JSON processor
-      lazygit # Git terminal UI
+      eza
+      fd
+      ripgrep
+      jq
+      lazygit
       gemini-cli
 
       # Code Quality Tools

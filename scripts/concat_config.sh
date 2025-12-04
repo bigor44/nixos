@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #
-# concat_config.sh
-#
 # Description:
 #   Scans the project directory (default: ~/nixos/) and aggregates the content
 #   of specific configuration files (*.nix, *.lua, *.md, etc.) into a single

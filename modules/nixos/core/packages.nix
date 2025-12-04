@@ -1,17 +1,16 @@
 { pkgs, ... }:
 {
   programs = {
-    fish.enable = true; # Modern shell with autosuggestions
-    tmux.enable = true; # Terminal multiplexer
+    fish.enable = true;
+    tmux.enable = true;
     nh = {
-      enable = true; # Nix Helper for simplified system management
-      clean.enable = true; # Automated garbage collection
+      enable = true;
+      clean.enable = true;
       clean.extraArgs = "--keep-since 4d --keep 3";
       flake = "/home/bigor/nixos";
     };
   };
 
-  # System-wide packages available to all users
   environment.systemPackages = with pkgs; [
     # Nix Tooling
     statix
@@ -37,6 +36,6 @@
     unzip
 
     # Miscellaneous
-    fastfetch # System information fetcher
+    fastfetch
   ];
 }

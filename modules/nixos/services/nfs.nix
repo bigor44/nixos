@@ -41,14 +41,12 @@ in
     # --------------------------------------------------------------------------
     # Client Configuration (grospc)
     # --------------------------------------------------------------------------
-    # Mounts the remote NFS share.
     (lib.mkIf cfg.client {
       fileSystems."/mnt/storage" = {
         device = "${ips.minipc}:/mnt/storage";
         fsType = "nfs";
         # x-systemd.automount: Mounts on demand (access) rather than boot
         # noauto: Don't mount automatically at boot (handled by automount)
-        # timeo/retrans: Network timeout settings
         options = [
           "x-systemd.automount"
           "noauto"

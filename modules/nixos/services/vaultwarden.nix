@@ -43,7 +43,6 @@ lib.mkIf config.vaultwarden.enable {
         TIMESTAMP=$(date +%Y%m%d-%H%M)
         BACKUP_FILE="backup-$TIMESTAMP.sqlite3"
 
-        # Ensure directories exist
         mkdir -p $LOCAL_BACKUP_DIR
         mkdir -p $EXTERNAL_BACKUP_DIR
 
@@ -58,9 +57,7 @@ lib.mkIf config.vaultwarden.enable {
         chmod 640 "$EXTERNAL_BACKUP_DIR/$BACKUP_FILE"
 
         # 4. Retention Policy
-        # Keep last 14 days on local disk
         find $LOCAL_BACKUP_DIR -name "backup-*.sqlite3" -type f -mtime +14 -delete
-        # Keep last 30 days on external storage
         find $EXTERNAL_BACKUP_DIR -name "backup-*.sqlite3" -type f -mtime +30 -delete
       '';
     };

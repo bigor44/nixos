@@ -33,8 +33,6 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      # rx-udp-gro-forwarding: Allows forwarding of GROed UDP packets
-      # rx-gro-list: Enables GRO for UDP
       ExecStart = "${pkgs.ethtool}/bin/ethtool -K ${config.myNetwork.mainInterface} rx-udp-gro-forwarding on rx-gro-list on";
       SuccessExitStatus = "0 1";
     };

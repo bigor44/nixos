@@ -1,7 +1,7 @@
 { config, ... }:
 {
   # Bootloader Configuration
-  # We use sstemd-boot as it is simple, reliable, and well-integrated with UEFI.
+  # We use systemd-boot as it is simple, reliable, and well-integrated with UEFI.
   boot = {
     loader = {
       systemd-boot = {
@@ -32,12 +32,12 @@
   # Nix Configuration
   nix = {
     settings = {
-      auto-optimise-store = true; # Deduplicate identical files in the store
+      auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
       ];
-      max-jobs = "auto"; # Utilize all available CPU cores for building
+      max-jobs = "auto";
 
       # Binary Caches
       # Use upstream caches and the Cosmic cache to speed up builds

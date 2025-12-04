@@ -6,7 +6,6 @@
 lib.mkIf config.adblocker.enable {
   services.adguardhome = {
     enable = true;
-    # Port for the web interface
     port = 3003;
     host = "127.0.0.1";
     mutableSettings = false; # Enforce declarative configuration via Nix
@@ -37,7 +36,7 @@ lib.mkIf config.adblocker.enable {
         ];
         upstream_mode = "load_balance"; # Distribute queries for speed
         cache_enabled = true;
-        cache_size = 4194304; # 4MB cache
+        cache_size = 4194304;
         cache_ttl_min = 60;
         cache_ttl_max = 86400;
         anonymize_client_ip = false; # Useful for internal logging

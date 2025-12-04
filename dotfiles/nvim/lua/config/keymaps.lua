@@ -1,8 +1,3 @@
----
--- Keymap configuration.
--- Defines global keybindings and utility functions for LSP mapping.
----
-
 local M = {}
 local map = vim.keymap.set
 
@@ -15,13 +10,11 @@ map("n", "<leader>h", "<cmd>nohl<cr>", { desc = "Clear search highlights (Altern
 -- -----------------------------------------------------------------------------
 -- Window Navigation & Management
 -- -----------------------------------------------------------------------------
--- Move focus (Ctrl + hjkl)
 map("n", "<C-h>", "<C-w>h", { desc = "Focus left window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Focus lower window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Focus upper window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Focus right window" })
 
--- Resize windows (Ctrl + Arrows)
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
 map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
@@ -47,7 +40,6 @@ map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 -- -----------------------------------------------------------------------------
 -- Plugin Specific
 -- -----------------------------------------------------------------------------
--- Trouble (Diagnostics)
 map("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Toggle Diagnostics (Trouble)" })
 
 --- Registers LSP-related keymaps for a specific buffer.

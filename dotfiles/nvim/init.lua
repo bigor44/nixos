@@ -1,5 +1,4 @@
 ---
--- Entry point for Neovim configuration.
 -- Orchestrates the loading of options, keymaps, and the package manager.
 ---
 

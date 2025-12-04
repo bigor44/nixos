@@ -7,8 +7,8 @@
 lib.mkIf config.desktop.enable {
   fonts = {
     packages = with pkgs; [
-      nerd-fonts.jetbrains-mono # Developer font with icons
-      terminus_font # Clean bitmap font
+      nerd-fonts.jetbrains-mono
+      terminus_font
       powerline-fonts
 
       # CJK & Unicode Fonts (for better multilingual support)

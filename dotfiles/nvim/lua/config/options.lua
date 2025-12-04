@@ -1,42 +1,39 @@
--- Neovim options configuration.
--- Sets up global, window, and buffer-local options.
-
 local opt = vim.opt
 
 -- -----------------------------------------------------------------------------
 -- UI Options
 -- -----------------------------------------------------------------------------
-opt.number = true -- Show line numbers
-opt.relativenumber = true -- Show relative line numbers for easier jumps
-opt.termguicolors = true -- Enable 24-bit RGB color support
-opt.signcolumn = "yes" -- Always show sign column to prevent text shifting
-opt.cursorline = true -- Highlight the current line
-opt.scrolloff = 8 -- Keep 8 lines of context above/below cursor
-opt.mouse = "a" -- Enable mouse support in all modes
+opt.number = true
+opt.relativenumber = true
+opt.termguicolors = true
+opt.signcolumn = "yes"
+opt.cursorline = true
+opt.scrolloff = 8
+opt.mouse = "a"
 
 -- -----------------------------------------------------------------------------
 -- Tab / Indentation
 -- -----------------------------------------------------------------------------
-opt.tabstop = 2 -- Number of spaces a tab counts for
-opt.shiftwidth = 2 -- Size of an indent
-opt.expandtab = true -- Use spaces instead of actual tabs
-opt.smartindent = true -- Insert indents automatically based on syntax
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.expandtab = true
+opt.smartindent = true
 
 -- -----------------------------------------------------------------------------
 -- Search
 -- -----------------------------------------------------------------------------
-opt.ignorecase = true -- Ignore case in search patterns
-opt.smartcase = true -- Override ignorecase if search contains capitals
+opt.ignorecase = true
+opt.smartcase = true
 
 -- -----------------------------------------------------------------------------
 -- Performance / Behavior
 -- -----------------------------------------------------------------------------
-opt.updatetime = 250 -- Decrease update time for faster event triggers
-opt.timeoutlen = 300 -- Time (ms) to wait for a mapped sequence to complete
-opt.undofile = true -- Enable persistent undo across sessions
-opt.clipboard = "unnamedplus" -- Sync with system clipboard
-opt.completeopt = "menu,menuone,noselect" -- Better completion menu experience
-opt.spelllang = { "en", "fr" } -- Spellcheck languages
+opt.updatetime = 250
+opt.timeoutlen = 300
+opt.undofile = true
+opt.clipboard = "unnamedplus"
+opt.completeopt = "menu,menuone,noselect"
+opt.spelllang = { "en", "fr" }
 
 -- -----------------------------------------------------------------------------
 -- Globals

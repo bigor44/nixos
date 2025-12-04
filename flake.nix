@@ -2,25 +2,20 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
-    # Unstable NixOS package sets
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Flake Parts for modular flake structure
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    # Home Manager for user-level configuration
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Pre-commit hooks for code quality
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Treefmt for unified formatting
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,7 +34,6 @@
         "x86_64-linux"
       ];
 
-      # Import the treefmt module
       imports = [
         treefmt-nix.flakeModule
       ];
@@ -59,19 +53,17 @@
           treefmt = {
             projectRootFile = "flake.nix";
 
-            # Enable the tools
             programs = {
-              nixfmt.enable = true; # Nix
-              stylua.enable = true; # Lua
-              shfmt.enable = true; # Shell
-              yamlfmt.enable = true; # YAML
-              taplo.enable = true; # TOML
-              prettier.enable = true; # General (JSON, MD, etc.)
-              black.enable = true; # Python
-              isort.enable = true; # Python imports
+              nixfmt.enable = true;
+              stylua.enable = true;
+              shfmt.enable = true;
+              yamlfmt.enable = true;
+              taplo.enable = true;
+              prettier.enable = true;
+              black.enable = true;
+              isort.enable = true;
             };
 
-            # Grouped settings to satisfy statix and configure tools
             settings = {
               formatter = {
                 prettier = {
@@ -96,19 +88,16 @@
           # --------------------------------------------------------------------
           # Pre-commit Checks
           # --------------------------------------------------------------------
-          # Runs linters and checks formatting before committing.
           checks = {
-            # Treefmt Check (Ensures everything is formatted according to above config)
             formatting = config.treefmt.build.check self;
 
-            # Linters (Security & Code quality)
             # Note: Formatters are removed from here as treefmt handles them now.
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                statix.enable = true; # Lints Nix code for anti-patterns
-                deadnix.enable = true; # Scans Nix code for dead code
-                luacheck.enable = true; # Lints Lua code
+                statix.enable = true;
+                deadnix.enable = true;
+                luacheck.enable = true;
 
                 detect-secrets = {
                   enable = true;
@@ -119,26 +108,20 @@
             };
           };
 
-          # --------------------------------------------------------------------
-          # Formatter
-          # --------------------------------------------------------------------
-          # Default formatter command `nix fmt`
           formatter = config.treefmt.build.wrapper;
 
           # --------------------------------------------------------------------
           # Development Shell
           # --------------------------------------------------------------------
-          # Shell environment with all necessary tools.
           devShells.default = pkgs.mkShell {
-            # Inherit inputs from treefmt and pre-commit-check
-            # This automatically adds treefmt, all enabled formatters, and linters to PATH.
+            # Inherit inputs from treefmt and pre-commit-check to add tools to PATH.
             inputsFrom = [
               config.treefmt.build.devShell
               config.checks.pre-commit-check
             ];
 
             packages = with pkgs; [
-              nixd # Nix Language Server
+              nixd
             ];
 
             inherit (config.checks.pre-commit-check) shellHook;
@@ -151,7 +134,6 @@
         # ----------------------------------------------------------------------
         nixosConfigurations =
           let
-            # Common modules shared across all systems
             sharedModules = [
               ./modules/nixos
               inputs.home-manager.nixosModules.home-manager
@@ -173,13 +155,11 @@
             ];
           in
           {
-            # Desktop Machine
             grospc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = sharedModules ++ [ ./hosts/grospc ];
             };
-            # Server Machine
             minipc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };

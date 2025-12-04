@@ -4,14 +4,13 @@
     fish = {
       enable = true;
 
-      # Fish Plugins
       plugins = [
         {
-          name = "bobthefisher"; # Theme
+          name = "bobthefisher";
           inherit (pkgs.fishPlugins.bobthefisher) src;
         }
         {
-          name = "autopair"; # Auto-close quotes and brackets
+          name = "autopair";
           inherit (pkgs.fishPlugins.autopair) src;
         }
         {
@@ -20,25 +19,20 @@
         }
       ];
 
-      # Aliases
       shellAliases = {
-        # Enhanced ls with eza
         ll = "eza -l --icons --git";
         la = "eza -lah --icons --git";
         lt = "eza --tree --level=2 --icons";
 
-        # Safety nets
         rm = "rm -i";
         cp = "cp -i";
         mv = "mv -i";
 
-        # Navigation
         ".." = "cd ..";
         "..." = "cd ../..";
         "...." = "cd ../../..";
       };
 
-      # Abbreviations (expand on space)
       shellAbbrs = {
         # Nix flake operations
         nfc = "nix flake check";
@@ -66,25 +60,19 @@
         diskinfo = "df -h";
       };
 
-      # Interactive Shell Initialization
       interactiveShellInit = ''
-        # Initialize nh (Nix Helper) if available
         if test -f ${pkgs.nh}/share/fish/vendor_conf.d/nh.fish
           source ${pkgs.nh}/share/fish/vendor_conf.d/nh.fish
         end
 
-        # Nix flake completions
         source ${pkgs.nix}/share/fish/vendor_completions.d/nix.fish
 
-        # Disable welcome message
         set fish_greeting
 
-        # Theme configuration (Bobthefisher)
         set -gx EZA_COLORS "da=38;5;240:gm=38;5;240"
       '';
     };
 
-    # Fuzzy Finder
     fzf = {
       enable = true;
       enableFishIntegration = true;
@@ -97,14 +85,12 @@
       ];
     };
 
-    # Smarter 'cd'
     zoxide = {
       enable = true;
       enableFishIntegration = true;
       options = [ "--cmd cd" ];
     };
 
-    # Better 'cat'
     bat = {
       enable = true;
       config = {

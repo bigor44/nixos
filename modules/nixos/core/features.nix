@@ -22,7 +22,7 @@ in
     })
 
     # --- Feature: SSHD ---
-    # Remplace l'ancien rôle "hybrid" qui n'était que desktop + sshd
+    # Replaces the old "hybrid" role which was just desktop + sshd
     (lib.mkIf (hasFeature "sshd") {
       sshd.enable = true;
     })

@@ -27,10 +27,8 @@ pkgs.appimageTools.wrapType2 {
   name = pname;
 
   extraInstallCommands = ''
-    # 1. Rename the original binary to allow wrapping
     mv "$out/bin/${pname}" "$out/bin/${pname}-unwrapped"
 
-    # 2. Create a wrapper script
     # This script sets LD_PRELOAD to inject the necessary Wayland libraries
     # before launching the actual game executable.
     cat > "$out/bin/${pname}" <<'EOF'
@@ -40,7 +38,6 @@ pkgs.appimageTools.wrapType2 {
     EOF
     chmod +x "$out/bin/${pname}"
 
-    # 3. Create a desktop entry
     mkdir -p $out/share/applications
     cat > $out/share/applications/${pname}.desktop <<EOF
     [Desktop Entry]
