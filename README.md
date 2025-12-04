@@ -11,11 +11,11 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
     - **Features**: `desktop` (GUI, Audio), `server` (Headless, Infrastructure Services), `sshd`, `nfs-client`.
-    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `nfs` (File Sharing), `sshd`, `tailscale` (VPN), `vaultwarden` (Passwords).
+    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances` (System Monitoring), `nfs` (File Sharing), `sshd`, `tailscale` (VPN), `vaultwarden` (Passwords).
     - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (COSMIC).
-    - **Core**: Options, Locale, System Packages (Tmux, Fastfetch, Btop, Nh), Users.
+    - **Core**: Options, Locale, System Packages (Tmux, Fastfetch, Btop, Htop, Nh, Network/Monitoring Utils), Users.
   - `home/`: Home Manager configuration for the user `bigor`.
-    - **CLI**: Git, Shell (Fish), Neovim (Lua), Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Fzf, Zoxide, Bat.
+    - **CLI**: Git, Shell (Fish), Neovim (Lua), Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Fzf, Zoxide, Bat, Code Quality Tools (Treefmt, Prettier, Nixfmt, etc.).
     - **GUI Apps**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW (Custom Wrapper), Antigravity.
 - **`dotfiles/`**: Raw configuration files (e.g., desktop entries, COSMIC settings) meant to be linked or included.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh` for aggregating config files).
