@@ -3,6 +3,10 @@
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "grospc";
 
+  # Enable AMD P-State EPP (Replace ACPI CPUFreq)
+  # "active" enables the guided mode which allows the governor to work more effectively.
+  boot.kernelParams = [ "amd_pstate=active" ];
+
   system.features = [
     "desktop"
     "nfs-client"
