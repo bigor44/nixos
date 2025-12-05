@@ -38,38 +38,4 @@
       SuccessExitStatus = "0 1";
     };
   };
-
-  # Remote Build (Offload to grospc)
-  nix = {
-    distributedBuilds = true;
-    buildMachines = [
-      {
-        hostName = "grospc";
-        system = "x86_64-linux";
-        protocol = "ssh-ng";
-        maxJobs = 16;
-        speedFactor = 2;
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
-        mandatoryFeatures = [ ];
-      }
-    ];
-    extraOptions = ''
-      builders-use-substitutes = true
-    '';
-  };
-
-  # VM Testing
-  # Allows testing the configuration in a VM: 'nixos-rebuild build-vm --flake .#minipc'
-  virtualisation.vmVariant = {
-    virtualisation = {
-      memorySize = 4096; # 4GB
-      cores = 2;
-      graphics = false; # Headless
-    };
-  };
 }
