@@ -4,67 +4,62 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 
 ## Project Structure
 
-- **`flake.nix`**: The entry point. Defines inputs (nixpkgs, home-manager, etc.) and outputs (system configurations).
+- **`flake.nix`**: The entry point. Defines inputs and outputs (system configurations).
 - **`hosts/`**: Host-specific configurations.
-  - `grospc/`: Configuration for the main desktop (Zen kernel, gaming setup, backups). Features: `desktop`, `sshd`, `nfs-client`.
-  - `minipc/`: Configuration for the secondary machine. Features: `server`, `sshd`.
+  - `grospc/`: Main desktop workstation.
+    - **Channel**: `nixos-unstable`
+    - **Role**: Gaming, Development.
+    - **Features**: `desktop`, `sshd`, `nfs-client`.
+  - `minipc/`: Secondary home server.
+    - **Channel**: `nixos-25.11` (Stable)
+    - **Role**: Infrastructure Services.
+    - **Features**: `server`, `sshd`.
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
-    - **Features**: `desktop` (GUI, Audio), `server` (Headless, Infrastructure Services), `sshd`, `nfs-client`.
-    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances` (System Monitoring), `nfs` (File Sharing), `sshd`, `tailscale` (VPN), `vaultwarden` (Passwords).
-    - **Desktop**: Configuration for Audio, Bluetooth, Fonts, Desktop Environment (COSMIC).
-    - **Core**: Options, Locale, System Packages (Tmux, Fastfetch, Btop, Htop, Nh, Network/Monitoring Utils), Users.
-  - `home/`: Home Manager configuration for the user `bigor`.
-    - **CLI**: Git, Shell (Fish), Neovim (Lua), Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Fzf, Zoxide, Bat, Code Quality Tools (Treefmt, Prettier, Nixfmt, etc.).
-    - **GUI Apps**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW (Custom Wrapper), Antigravity.
-- **`dotfiles/`**: Raw configuration files (e.g., desktop entries, COSMIC settings) meant to be linked or included.
-- **`scripts/`**: Utility scripts (e.g., `concat_config.sh` for aggregating config files).
-- **`certs/`**: Custom certificates (e.g., `minipc-ca.pem`).
+    - **Features**: `desktop` (COSMIC DE, Audio, Fonts), `server` (Headless), `sshd`.
+    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN), `vaultwarden`.
+    - **Core**: System options, Locale, User management.
+  - `home/`: Home Manager configuration for user `bigor`.
+    - **CLI**: Git, Fish, Neovim, Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Treefmt.
+    - **GUI**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW, Antigravity.
+- **`dotfiles/`**: Configuration files managed via symlinks (COSMIC, Desktop entries).
+- **`scripts/`**: Utility scripts.
+- **`certs/`**: Custom certificates.
 
 ## Systems
 
 Defined in `flake.nix`:
 
-- **`grospc`**: `x86_64-linux`. Role: **Desktop**. Main workstation with gaming optimizations.
-- **`minipc`**: `x86_64-linux`. Role: **Server**. Runs infrastructure services (AdGuard, Vaultwarden, Dashboard, Caddy, NFS Server).
+| Host         | Architecture   | Branch         | Description                            |
+| :----------- | :------------- | :------------- | :------------------------------------- |
+| **`grospc`** | `x86_64-linux` | Unstable       | High-performance desktop (Zen Kernel). |
+| **`minipc`** | `x86_64-linux` | Stable (25.11) | Stable home server for services.       |
 
 ## Key Commands
 
 ### Applying Configuration
 
-This configuration uses `nh` (Nix Helper) for faster and prettier deployments.
-
-To apply the configuration for the current machine:
+Using `nh` (Nix Helper):
 
 ```bash
+# Apply for the current machine
 nh os switch
-```
 
-To apply for a specific host (e.g., `grospc`):
-
-```bash
-nh os switch --hostname grospc
+# Apply for a specific host
+nh os switch --hostname minipc
 ```
 
 ### Managing Dependencies
 
-Update all flake inputs:
+Update all flake inputs (both stable and unstable):
 
 ```bash
 nix flake update
 ```
 
-### Cleaning Up
-
-Garbage collect old generations:
-
-```bash
-nh clean all
-```
-
 ### Development & Quality Assurance
 
-This project uses `pre-commit-hooks` via `flake-parts` to ensure code quality.
+This project ensures code quality using **Treefmt** (formatting) and **Pre-commit hooks** (linting).
 
 **Enter the development shell:**
 
@@ -72,25 +67,39 @@ This project uses `pre-commit-hooks` via `flake-parts` to ensure code quality.
 nix develop
 ```
 
-**Run checks (linters & formatters):**
+**Tools included:**
+
+- **Formatters** (managed by `treefmt`):
+  - `nixfmt` (Nix)
+  - `prettier` (Markdown, JSON, YAML, etc.)
+  - `stylua` (Lua)
+  - `shfmt` (Shell)
+  - `black` & `isort` (Python)
+  - `taplo` (TOML)
+  - `yamlfmt` (YAML)
+- **Linters** (via `pre-commit-hooks`):
+  - `statix` & `deadnix` (Nix)
+  - `luacheck` (Lua)
+  - `detect-secrets` (Secret scanning)
+
+**Running Checks:**
 
 ```bash
+# Run all formatters
+treefmt
+
+# Run pre-commit checks manually
 nix build .#checks.x86_64-linux.pre-commit-check
 ```
 
-Or simply commit your changes, as the hooks are installed by `nix develop`.
-
-**Tools included:**
-
-- **Formatters:** `nixfmt-rfc-style` (Nix), `prettier` (general), `shfmt` (Shell).
-- **Linters:** `statix`, `deadnix` (Nix), `detect-secrets`.
-- **CLI Tools:** `nh`, `gemini-cli`.
-
 ## Custom Modules
 
-- **Features:** The configuration uses a custom `system.features` list to conditionally enable groups of modules.
-  - `desktop`: Enables graphical environment (COSMIC), audio, fonts.
-  - `server`: Enables headless operation and all infrastructure services (AdGuard, Dashboard, Vaultwarden, Tailscale, NFS Server, Caddy).
-  - `sshd`: Enables SSH server.
-  - `nfs-client`: Enables NFS client mount.
-- **Secrets:** `detect-secrets` is configured to prevent committing sensitive data.
+- **Features**: High-level switches in `system.features`.
+  - `desktop`: Enables GUI, audio, fonts, and desktop apps.
+  - `server`: Enables headless mode and server services.
+  - `sshd`: Enables SSH access.
+  - `nfs-client`: Mounts the NFS share from `minipc`.
+- **NFS**:
+  - **Server**: Enabled on `minipc`. Exports `/mnt/storage`.
+  - **Client**: Enabled on `grospc`. Automounts storage.
+- **Secrets**: `detect-secrets` baseline is used to prevent committing sensitive data.
