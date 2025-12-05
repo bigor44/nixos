@@ -6,6 +6,7 @@
 {
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "minipc";
+  system.stateVersion = "25.05";
 
   system.features = [
     "server"
