@@ -11,7 +11,6 @@
   system.features = [
     "server"
     "sshd"
-    "binary-cache"
   ];
 
   # Kernel & Power Management
