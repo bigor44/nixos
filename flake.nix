@@ -2,14 +2,24 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
+    # --- Unstable Inputs (Pour Desktop/Gaming) ---
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # --- Stable Inputs (Pour Serveur/MiniPC - Version 25.11) ---
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+
+    home-manager-stable = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+
+    # --- Utils ---
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -52,7 +62,6 @@
           # The single source of truth for formatting across devShell, CI, and Editor.
           treefmt = {
             projectRootFile = "flake.nix";
-
             programs = {
               nixfmt.enable = true;
               stylua.enable = true;
@@ -90,7 +99,6 @@
           # --------------------------------------------------------------------
           checks = {
             formatting = config.treefmt.build.check self;
-
             # Note: Formatters are removed from here as treefmt handles them now.
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
@@ -119,11 +127,9 @@
               config.treefmt.build.devShell
               config.checks.pre-commit-check
             ];
-
             packages = with pkgs; [
               nixd
             ];
-
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };
@@ -134,36 +140,71 @@
         # ----------------------------------------------------------------------
         nixosConfigurations =
           let
-            sharedModules = [
+            # Modules de base NixOS (partagés par tous les hôtes)
+            coreModules = [
               ./modules/nixos
-              inputs.home-manager.nixosModules.home-manager
-              (
-                { config, ... }:
-                {
-                  home-manager = {
-                    useGlobalPkgs = true;
-                    useUserPackages = true;
-                    users.bigor = import ./modules/home;
-                    backupFileExtension = "backup";
-                    extraSpecialArgs = {
-                      inherit inputs;
-                      osConfig = config;
-                    };
-                  };
-                }
-              )
             ];
+
+            # Configuration Home Manager factorisée
+            # Cette fonction génère le bloc de configuration HM
+            hmConfig =
+              { inputs, ... }:
+              {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.bigor = import ./modules/home;
+                backupFileExtension = "backup";
+                extraSpecialArgs = {
+                  inherit inputs;
+                  # 'osConfig' est injecté automatiquement par le module HM
+                };
+              };
           in
           {
+            # --- GROSPC (Unstable / Rolling Release) ---
             grospc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
-              modules = sharedModules ++ [ ./hosts/grospc ];
+              modules = coreModules ++ [
+                # Module HM Unstable
+                inputs.home-manager.nixosModules.home-manager
+                (
+                  { config, ... }:
+                  {
+                    home-manager = hmConfig { inherit inputs; } // {
+                      # On passe osConfig manuellement via extraSpecialArgs si nécessaire
+                      # (bien que les versions récentes le fassent souvent auto)
+                      extraSpecialArgs = {
+                        inherit inputs;
+                        osConfig = config;
+                      };
+                    };
+                  }
+                )
+                ./hosts/grospc
+              ];
             };
-            minipc = inputs.nixpkgs.lib.nixosSystem {
+
+            # --- MINIPC (Stable 25.11) ---
+            minipc = inputs.nixpkgs-stable.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
-              modules = sharedModules ++ [ ./hosts/minipc ];
+              modules = coreModules ++ [
+                # Module HM Stable
+                inputs.home-manager-stable.nixosModules.home-manager
+                (
+                  { config, ... }:
+                  {
+                    home-manager = hmConfig { inherit inputs; } // {
+                      extraSpecialArgs = {
+                        inherit inputs;
+                        osConfig = config;
+                      };
+                    };
+                  }
+                )
+                ./hosts/minipc
+              ];
             };
           };
       };
