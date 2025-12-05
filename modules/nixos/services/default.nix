@@ -9,5 +9,6 @@
     ./tailscale.nix
     ./vaultwarden.nix
     ./glances.nix
+    ./binary-cache.nix
   ];
 }

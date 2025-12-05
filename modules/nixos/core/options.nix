@@ -18,6 +18,7 @@
     tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
     vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
     glances.enable = lib.mkEnableOption "Enable Glances System Monitor";
+    binary_cache.enable = lib.mkEnableOption "Enable Binary Cache (nix-serve)";
 
     # Desktop features
     desktop.enable = lib.mkEnableOption "Enable COSMIC Desktop";

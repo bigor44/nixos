@@ -21,6 +21,11 @@ in
       glances.enable = lib.mkDefault true;
     })
 
+    # --- Feature: Binary Cache ---
+    (lib.mkIf (hasFeature "binary-cache") {
+      binary_cache.enable = true;
+    })
+
     # --- Feature: SSHD ---
     # Replaces the old "hybrid" role which was just desktop + sshd
     (lib.mkIf (hasFeature "sshd") {
