@@ -1,6 +1,19 @@
 {
   description = "Bigor's NixOS Configuration Flake";
 
+  # ============================================================================
+  # Bigor's NixOS Flake
+  # ============================================================================
+  # This flake manages the system configurations for 'grospc' (Desktop) and
+  # 'minipc' (Server). It integrates NixOS for system-level management and
+  # Home Manager for user environment configuration.
+  #
+  # Highlights:
+  # - Reproducible builds via Flakes.
+  # - Unified formatting with Treefmt.
+  # - Automated checks via Pre-commit hooks.
+  # ============================================================================
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 

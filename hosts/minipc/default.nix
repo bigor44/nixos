@@ -1,3 +1,12 @@
+# Host Configuration: minipc
+# ------------------------------------------------------------------------------
+# Role: Home Lab Server & Infrastructure
+# Hardware: Power-efficient x86_64
+# Key Features:
+# - Headless Server (roles.homelab_master)
+# - NFS Server for centralized storage
+# - Tailscale Exit Node/Relay with UDP GRO optimization
+# ------------------------------------------------------------------------------
 {
   config,
   pkgs,

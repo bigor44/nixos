@@ -1,3 +1,12 @@
+# Host Configuration: grospc
+# ------------------------------------------------------------------------------
+# Role: Main Desktop Workstation
+# Hardware: High-performance x86_64 (Zen Kernel)
+# Key Features:
+# - Gaming & Development focus (roles.desktop)
+# - NFS Client for storage access
+# - Performance tuning (amd_pstate, cpuFreqGovernor)
+# ------------------------------------------------------------------------------
 { pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
