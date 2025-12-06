@@ -8,19 +8,19 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 - **`hosts/`**: Host-specific configurations.
   - `grospc/`: Main desktop workstation.
     - **Channel**: `nixos-unstable`
-    - **Role**: Gaming, Development.
-    - **Features**: `desktop`, `sshd`, `nfs-client`.
+    - **Role**: Gaming, Development (`roles.desktop`).
+    - **Features**: `sshd`, `nfs.client`, **Backup Sync** (Vaultwarden redundancy).
   - `minipc/`: Secondary home server.
     - **Channel**: `nixos-25.11` (Stable)
-    - **Role**: Infrastructure Services.
-    - **Features**: `server`, `sshd`.
+    - **Role**: Infrastructure Services (`roles.homelab_master`).
+    - **Features**: `sshd`, `nfs.server`, **Tailscale Optimization** (UDP GRO).
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
-    - **Features**: `desktop` (COSMIC DE, Audio, Fonts), `server` (Headless), `sshd`.
+    - **Roles**: `roles.desktop` (COSMIC DE, Audio, Fonts), `roles.homelab_master` (Headless Server).
     - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN), `vaultwarden`.
     - **Core**: System options, Locale, User management.
   - `home/`: Home Manager configuration for user `bigor`.
-    - **CLI**: Git, Fish, Neovim, Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Treefmt.
+    - **CLI**: Git, Fish, Neovim, Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Treefmt, Fzf, Zoxide, Bat.
     - **GUI**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW, Antigravity.
 - **`dotfiles/`**: Configuration files managed via symlinks (COSMIC, Desktop entries).
 - **`scripts/`**: Utility scripts.
@@ -94,12 +94,12 @@ nix build .#checks.x86_64-linux.pre-commit-check
 
 ## Custom Modules
 
-- **Features**: High-level switches in `system.features`.
-  - `desktop`: Enables GUI, audio, fonts, and desktop apps.
-  - `server`: Enables headless mode and server services.
-  - `sshd`: Enables SSH access.
-  - `nfs-client`: Mounts the NFS share from `minipc`.
+- **Roles & Options**: High-level switches defined in `modules/nixos/core/options.nix`.
+  - `roles.desktop`: Enables GUI (COSMIC), audio, fonts, and user apps.
+  - `roles.homelab_master`: Enables headless server services and container orchestration.
+  - `sshd.enable`: Enables SSH access with secure defaults.
+  - `nfs.client` / `nfs.server`: Manages NFS file sharing.
 - **NFS**:
-  - **Server**: Enabled on `minipc`. Exports `/mnt/storage`.
-  - **Client**: Enabled on `grospc`. Automounts storage.
+  - **Server**: Enabled on `minipc` (`nfs.server = true`). Exports `/mnt/storage`.
+  - **Client**: Enabled on `grospc` (`nfs.client = true`). Automounts storage.
 - **Secrets**: `detect-secrets` baseline is used to prevent committing sensitive data.
