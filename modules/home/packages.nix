@@ -36,6 +36,7 @@
       youtube-music
       whatsapp-electron
       antigravity-fhs
+      gnome-tweaks
       (callPackage ./turtle-wow.nix { })
     ];
 }
