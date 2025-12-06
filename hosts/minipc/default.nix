@@ -8,13 +8,8 @@
   networking.hostName = "minipc";
   system.stateVersion = "25.05";
 
-  adblocker.enable = true;
-  dashboard.enable = true;
-  tailscale.enable = true;
-  vaultwarden.enable = true;
+  roles.homelab_master = true;
   nfs.server = true;
-  reverse_proxy.enable = true;
-  glances.enable = true;
   sshd.enable = true;
 
   # Kernel & Power Management

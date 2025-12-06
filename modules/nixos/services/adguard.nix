@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.adblocker.enable {
+lib.mkIf config.roles.homelab_master {
   services.adguardhome = {
     enable = true;
     port = 3003;

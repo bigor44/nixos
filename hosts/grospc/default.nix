@@ -8,7 +8,7 @@
   # "active" enables the guided mode which allows the governor to work more effectively.
   boot.kernelParams = [ "amd_pstate=active" ];
 
-  system.features.desktop = true;
+  roles.desktop = true;
   nfs.client = true;
   sshd.enable = true;
 

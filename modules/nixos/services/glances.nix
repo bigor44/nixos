@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.glances.enable {
+lib.mkIf config.roles.homelab_master {
   services.glances = {
     enable = true;
     openFirewall = false;

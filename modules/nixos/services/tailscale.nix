@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.mkIf config.tailscale.enable {
+lib.mkIf config.roles.homelab_master {
   services.tailscale.enable = true;
 
   # ----------------------------------------------------------------------------

@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.mkIf config.system.features.desktop {
+lib.mkIf config.roles.desktop {
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono

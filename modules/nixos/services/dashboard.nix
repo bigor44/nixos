@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.dashboard.enable {
+lib.mkIf config.roles.homelab_master {
   services.homepage-dashboard = {
     enable = true;
     listenPort = 8082;

@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.reverse_proxy.enable {
+lib.mkIf config.roles.homelab_master {
   services.caddy = {
     enable = true;
 

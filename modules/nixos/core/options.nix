@@ -1,17 +1,10 @@
 { lib, ... }:
 {
   options = {
-    system.features = {
+    roles = {
       desktop = lib.mkEnableOption "Enable Desktop features";
+      homelab_master = lib.mkEnableOption "Enable Homelab Master features";
     };
-
-    # Infrastructure services
-    adblocker.enable = lib.mkEnableOption "Enable Adguard Home";
-    dashboard.enable = lib.mkEnableOption "Enable Homepage Dashboard";
-    reverse_proxy.enable = lib.mkEnableOption "Enable Caddy Reverse Proxy";
-    tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
-    vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
-    glances.enable = lib.mkEnableOption "Enable Glances System Monitor";
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
 
     # File Sharing

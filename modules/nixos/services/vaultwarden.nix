@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.mkIf config.vaultwarden.enable {
+lib.mkIf config.roles.homelab_master {
   services.vaultwarden = {
     enable = true;
     config = {
