@@ -10,5 +10,6 @@
     ./git.nix
     ./neovim.nix
     ./dotfiles.nix
+    ./theme.nix
   ];
 }
