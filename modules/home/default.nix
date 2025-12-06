@@ -1,3 +1,4 @@
+{ lib, osConfig, ... }:
 {
   home = {
     username = "bigor";
@@ -10,6 +11,6 @@
     ./git.nix
     ./neovim.nix
     ./dotfiles.nix
-    ./theme.nix
-  ];
+  ]
+  ++ lib.optional (osConfig.services.desktopManager.gnome.enable or false) ./theme.nix;
 }
