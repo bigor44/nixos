@@ -9,8 +9,8 @@ lib.mkIf osConfig.roles.desktop {
     enable = true;
     package = pkgs.brave;
     commandLineArgs = [
-      "--ozone-platform-hint=auto"
-      "--enable-features=WaylandWindowDecorations"
+      "--password-store=basic"
+      "--ozone-platform=wayland"
     ];
   };
 }
