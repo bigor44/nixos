@@ -154,10 +154,9 @@
               ./modules/nixos
             ];
 
-            # Factored Home Manager configuration
-            # This function generates the HM configuration block
-            hmConfig =
-              { inputs, ... }:
+            # Helper to generate Home Manager configuration
+            mkHomeManagerConfig =
+              { inputs, config }:
               {
                 useGlobalPkgs = true;
                 useUserPackages = true;
@@ -165,56 +164,37 @@
                 backupFileExtension = "backup";
                 extraSpecialArgs = {
                   inherit inputs;
-                  # 'osConfig' est injecté automatiquement par le module HM
+                  osConfig = config;
                 };
+              };
+
+            # System builder helper
+            mkSystem =
+              {
+                hostname,
+                system ? "x86_64-linux",
+              }:
+              inputs.nixpkgs.lib.nixosSystem {
+                inherit system;
+                specialArgs = { inherit inputs; };
+                modules = coreModules ++ [
+                  inputs.home-manager.nixosModules.home-manager
+                  (
+                    { config, ... }:
+                    {
+                      home-manager = mkHomeManagerConfig { inherit inputs config; };
+                    }
+                  )
+                  ./hosts/${hostname}
+                ];
               };
           in
           {
             # --- GROSPC (Stable 25.11) ---
-            grospc = inputs.nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = { inherit inputs; };
-              modules = coreModules ++ [
-                # Stable HM Module
-                inputs.home-manager.nixosModules.home-manager
-                (
-                  { config, ... }:
-                  {
-                    home-manager = hmConfig { inherit inputs; } // {
-                      # Pass osConfig manually via extraSpecialArgs if necessary
-                      # (although recent versions often do this automatically)
-                      extraSpecialArgs = {
-                        inherit inputs;
-                        osConfig = config;
-                      };
-                    };
-                  }
-                )
-                ./hosts/grospc
-              ];
-            };
+            grospc = mkSystem { hostname = "grospc"; };
 
             # --- MINIPC (Stable 25.11) ---
-            minipc = inputs.nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = { inherit inputs; };
-              modules = coreModules ++ [
-                # Stable HM Module
-                inputs.home-manager.nixosModules.home-manager
-                (
-                  { config, ... }:
-                  {
-                    home-manager = hmConfig { inherit inputs; } // {
-                      extraSpecialArgs = {
-                        inherit inputs;
-                        osConfig = config;
-                      };
-                    };
-                  }
-                )
-                ./hosts/minipc
-              ];
-            };
+            minipc = mkSystem { hostname = "minipc"; };
           };
       };
     };
