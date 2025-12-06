@@ -2,7 +2,6 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
-    # --- Stable Inputs (For Server/MiniPC - Version 25.11) ---
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
     home-manager = {
