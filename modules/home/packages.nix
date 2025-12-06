@@ -31,7 +31,6 @@
     # Only install these if the system has a desktop environment enabled.
     ++ lib.optionals osConfig.roles.desktop [
       discord
-      brave
       onedrive
       youtube-music
       whatsapp-electron

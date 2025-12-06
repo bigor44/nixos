@@ -7,6 +7,7 @@
   };
   imports = [
     ./packages.nix
+    ./brave.nix
     ./shell.nix
     ./git.nix
     ./neovim.nix
