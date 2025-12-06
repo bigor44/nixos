@@ -34,32 +34,37 @@ return {
   },
 
   -- ---------------------------------------------------------------------------
-  -- Neo-tree (File Explorer)
+  -- Mini.files (File Explorer)
   -- ---------------------------------------------------------------------------
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    lazy = false,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
+    "echasnovski/mini.files",
+    version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
-      { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer" },
+      {
+        "<leader>e",
+        function()
+          require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+        end,
+        desc = "Open mini.files (Directory of Current File)",
+      },
+      {
+        "<leader>E",
+        function()
+          require("mini.files").open(vim.uv.cwd(), true)
+        end,
+        desc = "Open mini.files (cwd)",
+      },
     },
     opts = {
-      close_if_last_window = true,
-      filesystem = {
-        bind_to_cwd = false, -- Don't change Neovim's CWD when changing dirs in tree
-        follow_current_file = { enabled = true }, -- Highlight current file in tree
+      windows = {
+        preview = true,
+        width_focus = 30,
+        width_preview = 30,
       },
-      source_selector = {
-        winbar = true,
-        sources = {
-          { source = "filesystem" },
-          { source = "buffers" },
-          { source = "git_status" },
-        },
+      options = {
+        -- Whether to use for editing directories
+        use_as_default_explorer = true,
       },
     },
   },
