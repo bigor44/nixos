@@ -131,30 +131,24 @@ return {
         timeout_ms = 500,
         lsp_fallback = true,
       },
-      -- ALIGNMENT: Use treefmt for all supported filetypes.
-      -- This relies on `treefmt` being available in your PATH (provided by devShell).
       formatters_by_ft = {
-        nix = { "treefmt" },
-        lua = { "treefmt" },
-        sh = { "treefmt" },
-        bash = { "treefmt" },
-        json = { "treefmt" },
-        yaml = { "treefmt" },
-        markdown = { "treefmt" },
-        python = { "treefmt" },
-        javascript = { "treefmt" },
-        typescript = { "treefmt" },
-        css = { "treefmt" },
-        html = { "treefmt" },
-        toml = { "treefmt" },
-        -- Fallback for others
-        ["*"] = { "treefmt" },
+        nix = { "nixfmt" },
+        lua = { "stylua" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
+        json = { "prettier" },
+        yaml = { "yamlfmt" },
+        markdown = { "prettier" },
+        python = { "isort", "black" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        css = { "prettier" },
+        html = { "prettier" },
+        toml = { "taplo" },
       },
-      -- Configure treefmt to read from stdin for better performance in Neovim
       formatters = {
-        treefmt = {
-          command = "treefmt",
-          args = { "--stdin", "$FILENAME" },
+        shfmt = {
+          prepend_args = { "-i", "2", "-s" },
         },
       },
     },
