@@ -7,7 +7,6 @@
     ./nfs.nix
     ./caddy.nix
     ./tailscale.nix
-    ./vaultwarden.nix
     ./glances.nix
   ];
 }

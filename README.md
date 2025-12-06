@@ -9,7 +9,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
   - `grospc/`: Main desktop workstation.
     - **Channel**: `nixos-25.11` (Stable)
     - **Role**: Gaming, Development (`roles.desktop`).
-    - **Features**: `sshd`, `nfs.client`, **Backup Sync** (Vaultwarden redundancy).
+    - **Features**: `sshd`, `nfs.client`.
   - `minipc/`: Secondary home server.
     - **Channel**: `nixos-25.11` (Stable)
     - **Role**: Infrastructure Services (`roles.homelab_master`).
@@ -17,7 +17,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
     - **Roles**: `roles.desktop` (COSMIC DE, Audio, Fonts), `roles.homelab_master` (Headless Server).
-    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN), `vaultwarden`.
+    - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN).
     - **Core**: System options, Locale, User management.
   - `home/`: Home Manager configuration for user `bigor`.
     - **CLI**: Git, Fish, Neovim, Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Treefmt, Fzf, Zoxide, Bat.

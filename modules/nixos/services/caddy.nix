@@ -17,14 +17,6 @@ lib.mkIf config.roles.homelab_master {
         '';
       };
 
-      # Vaultwarden (Password Manager)
-      "vault.bigor.lan" = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:8222
-          tls internal
-        '';
-      };
-
       # AdGuard Home (DNS Admin)
       "adguard.bigor.lan" = {
         extraConfig = ''
