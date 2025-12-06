@@ -5,6 +5,7 @@ Welcome to **Bigor's NixOS Flake Configuration**. This repository manages the Ni
 ## 🌟 Overview
 
 This project uses modern NixOS practices:
+
 - **Flakes**: For hermetic and reproducible builds.
 - **Home Manager**: For managing dotfiles and user packages.
 - **Treefmt**: For a unified formatting toolchain.
@@ -27,25 +28,28 @@ This project uses modern NixOS practices:
 
 ## 🖥️ Systems
 
-| Host | Type | Branch | Description |
-| :--- | :--- | :--- | :--- |
+| Host         | Type    | Branch         | Description                                              |
+| :----------- | :------ | :------------- | :------------------------------------------------------- |
 | **`grospc`** | Desktop | Stable (25.11) | High-performance workstation (Zen Kernel). Gaming & Dev. |
-| **`minipc`** | Server | Stable (25.11) | Home infrastructure. NFS Server, Tailscale optimized. |
+| **`minipc`** | Server  | Stable (25.11) | Home infrastructure. NFS Server, Tailscale optimized.    |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Nix installed with Flakes enabled.
 - `nh` (Nix Helper) is recommended for applying configurations.
 
 ### Applying Configuration
 
 Apply the configuration for the current hostname:
+
 ```bash
 nh os switch
 ```
 
 Apply for a specific host:
+
 ```bash
 nh os switch --hostname minipc
 ```
@@ -53,6 +57,7 @@ nh os switch --hostname minipc
 ### Managing Dependencies
 
 Update all flake inputs:
+
 ```bash
 nix flake update
 ```
@@ -71,12 +76,14 @@ This project enforces strict code quality standards.
 
 **Formatting:**
 Run `treefmt` to format all files (Nix, Lua, Shell, Prettier, etc.):
+
 ```bash
 treefmt
 ```
 
 **Linting:**
 Run pre-commit checks manually:
+
 ```bash
 nix build .#checks.x86_64-linux.pre-commit-check
 ```
@@ -84,10 +91,12 @@ nix build .#checks.x86_64-linux.pre-commit-check
 ## 🧩 Key Modules
 
 ### Roles
+
 - **`roles.desktop`**: Enables COSMIC DE, audio, fonts, and GUI apps.
 - **`roles.homelab_master`**: Enables headless server services (Caddy, Dashboard, Glances).
 
 ### Services
+
 - **NFS**: `minipc` acts as the server (`/mnt/storage`), `grospc` as the client.
 - **Tailscale**: VPN mesh with UDP GRO optimization on `minipc`.
 - **Security**: SSH with secure defaults, AdGuard Home.
