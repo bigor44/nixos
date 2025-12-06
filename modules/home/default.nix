@@ -1,4 +1,4 @@
-{ lib, osConfig, ... }:
+{ ... }:
 {
   home = {
     username = "bigor";
@@ -7,11 +7,9 @@
   };
   imports = [
     ./packages.nix
-    ./brave.nix
     ./shell.nix
     ./git.nix
     ./neovim.nix
     ./dotfiles.nix
-  ]
-  ++ lib.optional (osConfig.services.desktopManager.gnome.enable or false) ./theme.nix;
+  ];
 }

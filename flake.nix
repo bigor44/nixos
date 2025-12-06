@@ -2,20 +2,12 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
-    # --- Unstable Inputs (For Desktop/Gaming) ---
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # --- Stable Inputs (For Server/MiniPC - Version 25.11) ---
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # --- Stable Inputs (For Server/MiniPC - Version 25.11) ---
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-
-    home-manager-stable = {
       url = "github:nix-community/home-manager/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # --- Utils ---
@@ -167,12 +159,12 @@
           in
           {
             # --- GROSPC (Stable 25.11) ---
-            grospc = inputs.nixpkgs-stable.lib.nixosSystem {
+            grospc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = coreModules ++ [
                 # Stable HM Module
-                inputs.home-manager-stable.nixosModules.home-manager
+                inputs.home-manager.nixosModules.home-manager
                 (
                   { config, ... }:
                   {
@@ -191,12 +183,12 @@
             };
 
             # --- MINIPC (Stable 25.11) ---
-            minipc = inputs.nixpkgs-stable.lib.nixosSystem {
+            minipc = inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = coreModules ++ [
                 # Stable HM Module
-                inputs.home-manager-stable.nixosModules.home-manager
+                inputs.home-manager.nixosModules.home-manager
                 (
                   { config, ... }:
                   {

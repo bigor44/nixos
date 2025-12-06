@@ -21,12 +21,12 @@ lib.mkIf config.roles.desktop {
   # Desktop Environment: COSMIC
   services = {
     displayManager = {
-      # cosmic-greeter.enable = true;
-      gdm.enable = true;
+      cosmic-greeter.enable = true;
+      # gdm.enable = true;
     };
     desktopManager = {
-      # cosmic.enable = true;
-      gnome.enable = true;
+      cosmic.enable = true;
+      # gnome.enable = true;
     };
 
   };
