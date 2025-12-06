@@ -166,13 +166,13 @@
               };
           in
           {
-            # --- GROSPC (Unstable / Rolling Release) ---
-            grospc = inputs.nixpkgs.lib.nixosSystem {
+            # --- GROSPC (Stable 25.11) ---
+            grospc = inputs.nixpkgs-stable.lib.nixosSystem {
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = coreModules ++ [
-                # Unstable HM Module
-                inputs.home-manager.nixosModules.home-manager
+                # Stable HM Module
+                inputs.home-manager-stable.nixosModules.home-manager
                 (
                   { config, ... }:
                   {
