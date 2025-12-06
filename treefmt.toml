@@ -12,10 +12,6 @@ command = "shfmt"
 includes = ["*.sh"]
 options = ["-i", "2", "-s", "-w"]
 
-[formatter.yaml]
-command = "yamlfmt"
-includes = ["*.yaml", "*.yml"]
-
 [formatter.toml]
 command = "taplo"
 includes = ["*.toml"]
@@ -23,8 +19,16 @@ options = ["fmt", "-"]
 
 [formatter.prettier]
 command = "prettier"
-includes = ["*.json", "*.md", "*.html", "*.css", "*.js", "*.ts"]
-excludes = ["*.yaml", "*.yml"]
+includes = [
+  "*.json",
+  "*.md",
+  "*.html",
+  "*.css",
+  "*.js",
+  "*.ts",
+  "*.yaml",
+  "*.yml",
+]
 
 [formatter.python]
 command = "black"

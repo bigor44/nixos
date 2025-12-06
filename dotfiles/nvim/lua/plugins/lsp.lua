@@ -137,7 +137,7 @@ return {
         sh = { "shfmt" },
         bash = { "shfmt" },
         json = { "prettier" },
-        yaml = { "yamlfmt" },
+        yaml = { "prettier" },
         markdown = { "prettier" },
         python = { "isort", "black" },
         javascript = { "prettier" },

@@ -66,7 +66,6 @@
               nixfmt.enable = true;
               stylua.enable = true;
               shfmt.enable = true;
-              yamlfmt.enable = true;
               taplo.enable = true;
               prettier.enable = true;
               black.enable = true;
@@ -76,7 +75,13 @@
             settings = {
               formatter = {
                 prettier = {
-                  excludes = [
+                  includes = [
+                    "*.css"
+                    "*.html"
+                    "*.js"
+                    "*.json"
+                    "*.md"
+                    "*.ts"
                     "*.yaml"
                     "*.yml"
                   ];

@@ -76,7 +76,7 @@ nix develop
   - `shfmt` (Shell)
   - `black` & `isort` (Python)
   - `taplo` (TOML)
-  - `yamlfmt` (YAML)
+
 - **Linters** (via `pre-commit-hooks`):
   - `statix` & `deadnix` (Nix)
   - `luacheck` (Lua)

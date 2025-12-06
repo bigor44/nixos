@@ -30,7 +30,7 @@
       selene
       shfmt
       nodePackages.prettier
-      yamlfmt
+
       isort
       black
       taplo
