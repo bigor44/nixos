@@ -13,8 +13,6 @@
     tailscale.enable = lib.mkEnableOption "Enable Tailscale VPN";
     vaultwarden.enable = lib.mkEnableOption "Enable Vaultwarden Password Manager";
     glances.enable = lib.mkEnableOption "Enable Glances System Monitor";
-
-    # Desktop features
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
 
     # File Sharing

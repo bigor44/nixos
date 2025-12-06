@@ -2,7 +2,7 @@
   description = "Bigor's NixOS Configuration Flake";
 
   inputs = {
-    # --- Unstable Inputs (Pour Desktop/Gaming) ---
+    # --- Unstable Inputs (For Desktop/Gaming) ---
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
@@ -10,7 +10,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Stable Inputs (Pour Serveur/MiniPC - Version 25.11) ---
+    # --- Stable Inputs (For Server/MiniPC - Version 25.11) ---
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     home-manager-stable = {
@@ -140,13 +140,13 @@
         # ----------------------------------------------------------------------
         nixosConfigurations =
           let
-            # Modules de base NixOS (partagés par tous les hôtes)
+            # Base NixOS modules (shared by all hosts)
             coreModules = [
               ./modules/nixos
             ];
 
-            # Configuration Home Manager factorisée
-            # Cette fonction génère le bloc de configuration HM
+            # Factored Home Manager configuration
+            # This function generates the HM configuration block
             hmConfig =
               { inputs, ... }:
               {
@@ -166,14 +166,14 @@
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = coreModules ++ [
-                # Module HM Unstable
+                # Unstable HM Module
                 inputs.home-manager.nixosModules.home-manager
                 (
                   { config, ... }:
                   {
                     home-manager = hmConfig { inherit inputs; } // {
-                      # On passe osConfig manuellement via extraSpecialArgs si nécessaire
-                      # (bien que les versions récentes le fassent souvent auto)
+                      # Pass osConfig manually via extraSpecialArgs if necessary
+                      # (although recent versions often do this automatically)
                       extraSpecialArgs = {
                         inherit inputs;
                         osConfig = config;
@@ -190,7 +190,7 @@
               system = "x86_64-linux";
               specialArgs = { inherit inputs; };
               modules = coreModules ++ [
-                # Module HM Stable
+                # Stable HM Module
                 inputs.home-manager-stable.nixosModules.home-manager
                 (
                   { config, ... }:
