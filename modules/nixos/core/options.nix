@@ -3,7 +3,6 @@
   options = {
     system.features = {
       desktop = lib.mkEnableOption "Enable Desktop features";
-      server = lib.mkEnableOption "Enable Server features";
     };
 
     # Infrastructure services

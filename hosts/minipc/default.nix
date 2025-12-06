@@ -8,10 +8,6 @@
   networking.hostName = "minipc";
   system.stateVersion = "25.05";
 
-  system.features.server = true;
-  sshd.enable = true;
-
-  # Explicitly enabled services for minipc
   adblocker.enable = true;
   dashboard.enable = true;
   tailscale.enable = true;
@@ -19,6 +15,7 @@
   nfs.server = true;
   reverse_proxy.enable = true;
   glances.enable = true;
+  sshd.enable = true;
 
   # Kernel & Power Management
   # Use the standard kernel for stability.
