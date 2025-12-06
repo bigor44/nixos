@@ -70,13 +70,27 @@ return {
   },
 
   -- ---------------------------------------------------------------------------
-  -- Todo Comments
+  -- Mini.hipatterns (Highlight patterns & Todo)
   -- ---------------------------------------------------------------------------
-  -- Highlights TODO, FIXME, HACK, etc. in comments.
   {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = { signs = true },
+    "echasnovski/mini.hipatterns",
+    version = false,
+    event = "BufReadPre",
+    config = function()
+      local hipatterns = require("mini.hipatterns")
+      hipatterns.setup({
+        highlighters = {
+          -- Highlight hex color strings
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+
+          -- Highlight Todo comments
+          fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+          hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+          todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+          note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+        },
+      })
+    end,
   },
 
   -- ---------------------------------------------------------------------------
