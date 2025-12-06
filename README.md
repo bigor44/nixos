@@ -7,7 +7,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
 - **`flake.nix`**: The entry point. Defines inputs and outputs (system configurations).
 - **`hosts/`**: Host-specific configurations.
   - `grospc/`: Main desktop workstation.
-    - **Channel**: `nixos-unstable`
+    - **Channel**: `nixos-25.11` (Stable)
     - **Role**: Gaming, Development (`roles.desktop`).
     - **Features**: `sshd`, `nfs.client`, **Backup Sync** (Vaultwarden redundancy).
   - `minipc/`: Secondary home server.
@@ -21,7 +21,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
     - **Core**: System options, Locale, User management.
   - `home/`: Home Manager configuration for user `bigor`.
     - **CLI**: Git, Fish, Neovim, Eza, Fd, Ripgrep, Jq, Lazygit, Gemini-cli, Treefmt, Fzf, Zoxide, Bat.
-    - **GUI**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW, Antigravity.
+    - **GUI**: Brave, Discord, OneDrive, YouTube Music, WhatsApp, Turtle WoW, Antigravity (FHS).
 - **`dotfiles/`**: Configuration files managed via symlinks (COSMIC, Desktop entries).
 - **`scripts/`**: Utility scripts.
 - **`certs/`**: Custom certificates.
@@ -32,7 +32,7 @@ Defined in `flake.nix`:
 
 | Host         | Architecture   | Branch         | Description                            |
 | :----------- | :------------- | :------------- | :------------------------------------- |
-| **`grospc`** | `x86_64-linux` | Unstable       | High-performance desktop (Zen Kernel). |
+| **`grospc`** | `x86_64-linux` | Stable (25.11) | High-performance desktop (Zen Kernel). |
 | **`minipc`** | `x86_64-linux` | Stable (25.11) | Stable home server for services.       |
 
 ## Key Commands

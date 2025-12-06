@@ -16,7 +16,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
     - **Features**: `sshd`, `nfs.server`, **Tailscale Optimization** (UDP GRO).
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
-    **Roles**: `roles.desktop` (COSMIC DE, Audio, Fonts), `roles.homelab_master` (Headless Server).
+    - **Roles**: `roles.desktop` (COSMIC DE, Audio, Fonts), `roles.homelab_master` (Headless Server).
     - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN), `vaultwarden`.
     - **Core**: System options, Locale, User management.
   - `home/`: Home Manager configuration for user `bigor`.
