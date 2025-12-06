@@ -8,10 +8,8 @@
   networking.hostName = "minipc";
   system.stateVersion = "25.05";
 
-  system.features = [
-    "server"
-    "sshd"
-  ];
+  system.features.server = true;
+  sshd.enable = true;
 
   # Kernel & Power Management
   # Use the standard kernel for stability.

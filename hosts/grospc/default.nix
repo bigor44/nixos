@@ -8,11 +8,9 @@
   # "active" enables the guided mode which allows the governor to work more effectively.
   boot.kernelParams = [ "amd_pstate=active" ];
 
-  system.features = [
-    "desktop"
-    "nfs-client"
-    "sshd"
-  ];
+  system.features.desktop = true;
+  nfs.client = true;
+  sshd.enable = true;
 
   # Performance Tuning
   # Use the 'performance' governor for maximum responsiveness.

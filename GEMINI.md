@@ -16,7 +16,7 @@ This repository contains the NixOS system configurations for Bigor's machines, m
     - **Features**: `server`, `sshd`.
 - **`modules/`**: Reusable modules.
   - `nixos/`: Custom NixOS modules.
-    - **Features**: `desktop` (COSMIC DE, Audio, Fonts), `server` (Headless), `sshd`.
+    - **Features**: `desktop` (COSMIC DE, Audio, Fonts), `server` (Headless).
     - **Services**: `adguard`, `caddy` (Reverse Proxy), `dashboard` (Homepage), `glances`, `nfs` (Server & Client), `tailscale` (VPN), `vaultwarden`.
     - **Core**: System options, Locale, User management.
   - `home/`: Home Manager configuration for user `bigor`.
@@ -94,11 +94,9 @@ nix build .#checks.x86_64-linux.pre-commit-check
 
 ## Custom Modules
 
-- **Features**: High-level switches in `system.features`.
+- **Features**: High-level switches in `system.features` (boolean options).
   - `desktop`: Enables GUI, audio, fonts, and desktop apps.
   - `server`: Enables headless mode and server services.
-  - `sshd`: Enables SSH access.
-  - `nfs-client`: Mounts the NFS share from `minipc`.
 - **NFS**:
   - **Server**: Enabled on `minipc`. Exports `/mnt/storage`.
   - **Client**: Enabled on `grospc`. Automounts storage.

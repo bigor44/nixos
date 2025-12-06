@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.desktop.enable {
+lib.mkIf config.system.features.desktop {
   # --- Audio (Pipewire & Realtime) ---
   services.pipewire = {
     enable = true;

@@ -29,7 +29,7 @@
     ]
     # Desktop-only Applications
     # Only install these if the system has a desktop environment enabled.
-    ++ lib.optionals osConfig.desktop.enable [
+    ++ lib.optionals osConfig.system.features.desktop [
       discord
       brave
       onedrive

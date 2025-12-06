@@ -1,14 +1,9 @@
 { lib, ... }:
 {
   options = {
-    system.features = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Liste des fonctionnalités actives (ex: 'desktop', 'sshd', 'server').";
-      example = [
-        "desktop"
-        "nfs-client"
-      ];
+    system.features = {
+      desktop = lib.mkEnableOption "Enable Desktop features";
+      server = lib.mkEnableOption "Enable Server features";
     };
 
     # Infrastructure services
@@ -20,7 +15,6 @@
     glances.enable = lib.mkEnableOption "Enable Glances System Monitor";
 
     # Desktop features
-    desktop.enable = lib.mkEnableOption "Enable COSMIC Desktop";
     sshd.enable = lib.mkEnableOption "Enable SSH Server";
 
     # File Sharing

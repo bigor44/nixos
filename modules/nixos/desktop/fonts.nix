@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.mkIf config.desktop.enable {
+lib.mkIf config.system.features.desktop {
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
