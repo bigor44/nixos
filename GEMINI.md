@@ -36,15 +36,15 @@ This document provides context for the AI agent (Gemini) regarding the structure
 
 These options act as high-level feature flags.
 
-| Option                     | Description                                                                      |
-| :------------------------- | :------------------------------------------------------------------------------- |
-| **`roles.desktop`**        | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
-| **`roles.homelab_master`** | Enables headless server services, container orchestration, and monitoring.       |
-| **`sshd.enable`**          | Enables hardened OpenSSH server (no root login, key-based auth).                 |
-| **`nfs.server`**           | Exports `/mnt/storage` via NFS.                                                  |
-| **`nfs.client`**           | Mounts the shared NFS storage.                                                   |
-| **`myNetwork.ips`**        | Defines static IPs for `grospc` and `minipc`.                                    |
-| **`myNetwork.mainInterface`**| Defines the primary network interface (e.g., `enp2s0`).                        |
+| Option                        | Description                                                                      |
+| :---------------------------- | :------------------------------------------------------------------------------- |
+| **`roles.desktop`**           | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
+| **`roles.homelab_master`**    | Enables headless server services, container orchestration, and monitoring.       |
+| **`sshd.enable`**             | Enables hardened OpenSSH server (no root login, key-based auth).                 |
+| **`nfs.server`**              | Exports `/mnt/storage` via NFS.                                                  |
+| **`nfs.client`**              | Mounts the shared NFS storage.                                                   |
+| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
+| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
 
 ## Development Workflow
 

@@ -36,66 +36,66 @@ This repository contains my personal NixOS flake configuration, designed to mana
 
 These options are defined in `modules/nixos/core/options.nix` and act as high-level feature flags to control the system configuration.
 
-| Option                     | Description                                                                      |
-| :------------------------- | :------------------------------------------------------------------------------- |
-| **`roles.desktop`**        | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
-| **`roles.homelab_master`** | Enables headless server services, container orchestration, and monitoring.       |
-| **`sshd.enable`**          | Enables hardened OpenSSH server (no root login, key-based auth).                 |
-| **`nfs.server`**           | Exports `/mnt/storage` via NFS.                                                  |
-| **`nfs.client`**           | Mounts the shared NFS storage.                                                   |
-| **`myNetwork.ips`**        | Defines static IPs for `grospc` and `minipc`.                                    |
-| **`myNetwork.mainInterface`**| Defines the primary network interface (e.g., `enp2s0`).                        |
+| Option                        | Description                                                                      |
+| :---------------------------- | :------------------------------------------------------------------------------- |
+| **`roles.desktop`**           | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
+| **`roles.homelab_master`**    | Enables headless server services, container orchestration, and monitoring.       |
+| **`sshd.enable`**             | Enables hardened OpenSSH server (no root login, key-based auth).                 |
+| **`nfs.server`**              | Exports `/mnt/storage` via NFS.                                                  |
+| **`nfs.client`**              | Mounts the shared NFS storage.                                                   |
+| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
+| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
 
-## Installation
+## Development Workflow
 
-To set up a new machine with this configuration:
+### 1. Apply Changes
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Bigor/nixos.git ~/.config/nixos # Adjust path as needed
-    cd ~/.config/nixos
-    ```
-2.  **Edit `flake.nix` (if necessary):**
-    You might need to adjust the `hosts` section in `flake.nix` to match your new machine's hostname or specific requirements.
-3.  **Apply the configuration:**
-    It is recommended to use `nh` (Nix Helper) for applying configurations, as it provides better generation management and cleaning than raw `nixos-rebuild`.
-
-    For the current host:
-    ```bash
-    nh os switch
-    ```
-    For a remote host (e.g., `minipc`):
-    ```bash
-    nh os switch -H minipc
-    ```
-
-## Usage
-
-### Managing Hosts
-
-Configurations for different machines are located under the `hosts/` directory. Each host has its own `default.nix` and `hardware-configuration.nix`.
-
-### Updating Flake Inputs
-
-To update the upstream dependencies (e.g., Nixpkgs, Home Manager) defined in `flake.nix`:
+Use `nh` (Nix Helper) for best results. It handles generation management and cleaning better than raw `nixos-rebuild`.
 
 ```bash
-nix flake update
+nh os switch              # Apply to current host
+nh os switch -H minipc    # Apply to remote host
 ```
 
-## Contributing
+### 2. Dependency Management
+
+```bash
+nix flake update          # Update lockfile with new inputs
+```
+
+### 3. Code Quality & Commit Hooks
+
+This project uses `pre-commit` hooks to ensure code quality and consistency.
+
+**Automatic Setup:**
+When you enter the development shell, the git hooks are automatically installed:
+
+```bash
+nix develop
+```
+
+**Manual Execution:**
+You can run the full suite of checks manually at any time:
+
+```bash
+nix build .#checks.x86_64-linux.pre-commit-check
+```
+
+**Enabled Checks:**
+
+- **`statix` & `deadnix`**: Lints and checks for unused code in Nix files.
+- **`luacheck`**: Lints Lua configuration files (e.g., Neovim).
+- **`typos`**: Checks for spelling errors across the codebase.
+- **`commitizen`**: Enforces [Conventional Commits](https://www.conventionalcommits.org/) standards for commit messages.
+
+### 4. Contributing
 
 Contributions are welcome! Please ensure your changes adhere to the existing code style and pass all quality checks.
 
 1.  Fork the repository.
 2.  Create a new branch for your feature or bug fix.
 3.  Make your changes.
-4.  Run code quality checks:
-    ```bash
-    nix develop               # Enter dev shell
-    treefmt                   # Format code
-    nix build .#checks.x86_64-linux.pre-commit-check # Run linters
-    ```
+4.  Run code quality checks (see above).
 5.  Submit a pull request.
 
 ## License
