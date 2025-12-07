@@ -70,7 +70,7 @@ nix develop
 **Tools included:**
 
 - **Formatters** (managed by `treefmt`):
-  - `nixpkgs-fmt` (Nix)
+  - `nixfmt-rfc-style` (Nix)
   - `prettier` (Markdown, JSON, YAML, etc.)
   - `stylua` (Lua)
   - `shfmt` (Shell)

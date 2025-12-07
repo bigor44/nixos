@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.roles.desktop {
   # Boot Configuration
   boot = {

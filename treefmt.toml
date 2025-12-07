@@ -1,6 +1,6 @@
 # Generated to match flake.nix configuration for editor support
 [formatter.nix]
-command = "nixpkgs-fmt"
+command = "nixfmt"
 includes = ["*.nix"]
 
 [formatter.lua]

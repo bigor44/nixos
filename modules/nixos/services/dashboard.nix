@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.roles.homelab_master {
   services.homepage-dashboard = {
     enable = true;

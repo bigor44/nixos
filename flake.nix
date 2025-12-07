@@ -37,10 +37,11 @@
   };
 
   outputs =
-    inputs@{ self
-    , flake-parts
-    , treefmt-nix
-    , ...
+    inputs@{
+      self,
+      flake-parts,
+      treefmt-nix,
+      ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
@@ -48,10 +49,11 @@
       imports = [ treefmt-nix.flakeModule ];
 
       perSystem =
-        { config
-        , pkgs
-        , system
-        , ...
+        {
+          config,
+          pkgs,
+          system,
+          ...
         }:
         {
           # --------------------------------------------------------------------
@@ -61,7 +63,7 @@
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
-              nixpkgs-fmt.enable = true;
+              nixfmt.enable = true;
               stylua.enable = true;
               shfmt.enable = true;
               taplo.enable = true;
@@ -147,7 +149,10 @@
 
             # Helper to generate Home Manager configuration
             mkHomeManagerConfig =
-              { inputs, config }:
+              {
+                inputs,
+                config,
+              }:
               {
                 useGlobalPkgs = true;
                 useUserPackages = true;
@@ -161,9 +166,9 @@
 
             # System builder helper
             mkSystem =
-              { hostname
-              , system ? "x86_64-linux"
-              ,
+              {
+                hostname,
+                system ? "x86_64-linux",
               }:
               inputs.nixpkgs.lib.nixosSystem {
                 inherit system;

@@ -25,7 +25,7 @@
       nixd
 
       # Formatters & Linters
-      nixpkgs-fmt
+      nixfmt-rfc-style
       stylua
       selene
       shfmt

@@ -1,7 +1,8 @@
-{ pkgs
-, osConfig
-, lib
-, ...
+{
+  pkgs,
+  osConfig,
+  lib,
+  ...
 }:
 {
   home.packages =
@@ -18,7 +19,7 @@
       # Code Quality Tools
       treefmt
       nodePackages.prettier
-      nixpkgs-fmt
+      nixfmt-rfc-style
 
       stylua
       shfmt

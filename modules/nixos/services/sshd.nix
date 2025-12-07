@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 lib.mkIf config.sshd.enable {
   services.openssh = {
     enable = true;
