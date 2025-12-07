@@ -22,9 +22,7 @@
 
   # Certificates
   # Trust the internal CA to allow secure communication between local services.
-  security.pki.certificateFiles = [
-    ../../../certs/minipc-ca.pem
-  ];
+  security.pki.certificateFiles = [ ../../../certs/minipc-ca.pem ];
 
   # Allow proprietary software (drivers, codecs, etc.)
   nixpkgs.config.allowUnfree = true;

@@ -7,10 +7,7 @@
 # - NFS Server for centralized storage
 # - Tailscale Exit Node/Relay with UDP GRO optimization
 # ------------------------------------------------------------------------------
-{ config
-, pkgs
-, ...
-}:
+{ config, pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
   networking.hostName = "minipc";

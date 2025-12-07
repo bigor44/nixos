@@ -43,13 +43,9 @@
     , ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-      ];
+      systems = [ "x86_64-linux" ];
 
-      imports = [
-        treefmt-nix.flakeModule
-      ];
+      imports = [ treefmt-nix.flakeModule ];
 
       perSystem =
         { config
@@ -135,9 +131,7 @@
               config.treefmt.build.devShell
               config.checks.pre-commit-check
             ];
-            packages = with pkgs; [
-              nixd
-            ];
+            packages = with pkgs; [ nixd ];
             inherit (config.checks.pre-commit-check) shellHook;
           };
         };
@@ -149,9 +143,7 @@
         nixosConfigurations =
           let
             # Base NixOS modules (shared by all hosts)
-            coreModules = [
-              ./modules/nixos
-            ];
+            coreModules = [ ./modules/nixos ];
 
             # Helper to generate Home Manager configuration
             mkHomeManagerConfig =

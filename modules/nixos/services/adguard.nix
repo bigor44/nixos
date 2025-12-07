@@ -1,7 +1,4 @@
-{ config
-, lib
-, ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.roles.homelab_master {
   services.adguardhome = {
     enable = true;

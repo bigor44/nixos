@@ -1,6 +1,4 @@
-{ pkgs
-, ...
-}:
+{ pkgs, ... }:
 let
   inherit (pkgs) lib;
   pname = "turtle-wow";

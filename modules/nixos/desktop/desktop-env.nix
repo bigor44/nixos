@@ -1,16 +1,11 @@
-{ config
-, lib
-, ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.roles.desktop {
   # Boot Configuration
   boot = {
     # Reduce console log level to hide non-critical kernel messages during boot.
     consoleLogLevel = 3;
     # "quiet" parameter to suppress most boot messages for a cleaner boot experience.
-    kernelParams = [
-      "quiet"
-    ];
+    kernelParams = [ "quiet" ];
   };
 
   # Network Manager
@@ -25,6 +20,5 @@ lib.mkIf config.roles.desktop {
     desktopManager = {
       cosmic.enable = true;
     };
-
   };
 }
