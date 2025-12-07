@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   imports = [
     ./base.nix
     ./desktop-env.nix

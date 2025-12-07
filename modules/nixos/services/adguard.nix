@@ -20,7 +20,7 @@ lib.mkIf config.roles.homelab_master {
         enabled = true;
       };
       dns = {
-        bind_hosts = [ "0.0.0.0" ];
+        bind_hosts = ["0.0.0.0"];
         port = 53;
         # Upstream DNS providers (Privacy focused + Google as backup)
         upstream_dns = [
@@ -92,22 +92,22 @@ lib.mkIf config.roles.homelab_master {
       # Blocklists
       filters =
         map
-          (url: {
-            enabled = true;
-            inherit url;
-          })
-          [
-            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # Malicious URL Blocklist (URLHaus)
-            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # Hagezi Multi Normal
-            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
-          ];
+        (url: {
+          enabled = true;
+          inherit url;
+        })
+        [
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # Malicious URL Blocklist (URLHaus)
+          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # Hagezi Multi Normal
+          "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
+        ];
     };
   };
 
   # Open DNS ports for local network clients
   networking.firewall = {
-    allowedTCPPorts = [ 53 ];
-    allowedUDPPorts = [ 53 ];
+    allowedTCPPorts = [53];
+    allowedUDPPorts = [53];
   };
 }

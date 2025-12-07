@@ -31,31 +31,36 @@ This document provides context for the AI agent (Gemini) regarding the structure
 
 These options act as high-level feature flags.
 
-| Option | Description |
-| :--- | :--- |
-| **`roles.desktop`** | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
-| **`roles.homelab_master`** | Enables headless server services, container orchestration, and monitoring. |
-| **`sshd.enable`** | Enables hardened OpenSSH server (no root login, key-based auth). |
-| **`nfs.server`** | Exports `/mnt/storage` via NFS. |
-| **`nfs.client`** | Mounts the shared NFS storage. |
-| **`myNetwork.ips`** | Defines static IPs for `grospc` and `minipc`. |
+| Option                     | Description                                                                      |
+| :------------------------- | :------------------------------------------------------------------------------- |
+| **`roles.desktop`**        | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
+| **`roles.homelab_master`** | Enables headless server services, container orchestration, and monitoring.       |
+| **`sshd.enable`**          | Enables hardened OpenSSH server (no root login, key-based auth).                 |
+| **`nfs.server`**           | Exports `/mnt/storage` via NFS.                                                  |
+| **`nfs.client`**           | Mounts the shared NFS storage.                                                   |
+| **`myNetwork.ips`**        | Defines static IPs for `grospc` and `minipc`.                                    |
 
 ## Development Workflow
 
 ### 1. Apply Changes
+
 Use `nh` for best results.
+
 ```bash
 nh os switch              # Apply to current host
 nh os switch -H minipc    # Apply to remote host
 ```
 
 ### 2. Dependency Management
+
 ```bash
 nix flake update          # Update lockfile
 ```
 
 ### 3. Code Quality
+
 **ALWAYS** run before committing:
+
 ```bash
 nix develop               # Enter dev shell
 treefmt                   # Format code

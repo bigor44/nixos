@@ -20,9 +20,9 @@ lib.mkIf config.roles.homelab_master {
   networking.firewall = {
     # "loose" allows reverse path filtering to pass Tailscale traffic
     checkReversePath = "loose";
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ 41641 ]; # Tailscale randomized port
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [41641]; # Tailscale randomized port
   };
 
-  environment.systemPackages = [ pkgs.tailscale ];
+  environment.systemPackages = [pkgs.tailscale];
 }

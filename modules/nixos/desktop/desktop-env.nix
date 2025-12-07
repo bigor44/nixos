@@ -9,7 +9,7 @@ lib.mkIf config.roles.desktop {
     # Reduce console log level to hide non-critical kernel messages during boot.
     consoleLogLevel = 3;
     # "quiet" parameter to suppress most boot messages for a cleaner boot experience.
-    kernelParams = [ "quiet" ];
+    kernelParams = ["quiet"];
   };
 
   # Network Manager

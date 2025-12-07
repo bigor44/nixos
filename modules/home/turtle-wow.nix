@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   inherit (pkgs) lib;
   pname = "turtle-wow";
   version = "27082025";
@@ -19,32 +18,32 @@ let
     waylandCursor
   ];
 in
-pkgs.appimageTools.wrapType2 {
-  inherit pname version src;
-  name = pname;
+  pkgs.appimageTools.wrapType2 {
+    inherit pname version src;
+    name = pname;
 
-  extraInstallCommands = ''
-    mv "$out/bin/${pname}" "$out/bin/${pname}-unwrapped"
+    extraInstallCommands = ''
+      mv "$out/bin/${pname}" "$out/bin/${pname}-unwrapped"
 
-    # This script sets LD_PRELOAD to inject the necessary Wayland libraries
-    # before launching the actual game executable.
-    cat > "$out/bin/${pname}" <<'EOF'
-    #!${pkgs.runtimeShell}
-    export LD_PRELOAD='${preload}'
-    exec "$(dirname "$0")/${pname}-unwrapped" "$@"
-    EOF
-    chmod +x "$out/bin/${pname}"
+      # This script sets LD_PRELOAD to inject the necessary Wayland libraries
+      # before launching the actual game executable.
+      cat > "$out/bin/${pname}" <<'EOF'
+      #!${pkgs.runtimeShell}
+      export LD_PRELOAD='${preload}'
+      exec "$(dirname "$0")/${pname}-unwrapped" "$@"
+      EOF
+      chmod +x "$out/bin/${pname}"
 
-    mkdir -p $out/share/applications
-    cat > $out/share/applications/${pname}.desktop <<EOF
-    [Desktop Entry]
-    Type=Application
-    Name=Turtle WoW
-    Comment=Turtle WoW Client
-    Exec=${pname}
-    Icon=applications-games
-    Categories=Game;
-    Terminal=false
-    EOF
-  '';
-}
+      mkdir -p $out/share/applications
+      cat > $out/share/applications/${pname}.desktop <<EOF
+      [Desktop Entry]
+      Type=Application
+      Name=Turtle WoW
+      Comment=Turtle WoW Client
+      Exec=${pname}
+      Icon=applications-games
+      Categories=Game;
+      Terminal=false
+      EOF
+    '';
+  }

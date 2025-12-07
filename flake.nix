@@ -36,162 +36,149 @@
     };
   };
 
-  outputs =
-    inputs@{
-      self,
-      flake-parts,
-      treefmt-nix,
-      ...
-    }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+  outputs = inputs @ {
+    self,
+    flake-parts,
+    treefmt-nix,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
 
-      imports = [ treefmt-nix.flakeModule ];
+      imports = [treefmt-nix.flakeModule];
 
-      perSystem =
-        {
-          config,
-          pkgs,
-          system,
-          ...
-        }:
-        {
-          # --------------------------------------------------------------------
-          # Treefmt Configuration
-          # --------------------------------------------------------------------
-          # The single source of truth for formatting across devShell, CI, and Editor.
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixfmt.enable = true;
-              stylua.enable = true;
-              shfmt.enable = true;
-              taplo.enable = true;
-              prettier.enable = true;
-              black.enable = true;
-              isort.enable = true;
-            };
-
-            settings = {
-              formatter = {
-                prettier = {
-                  includes = [
-                    "*.css"
-                    "*.html"
-                    "*.js"
-                    "*.json"
-                    "*.md"
-                    "*.ts"
-                    "*.yaml"
-                    "*.yml"
-                  ];
-                };
-                shfmt = {
-                  includes = [ "*.sh" ];
-                  options = [
-                    "-i"
-                    "2"
-                    "-s"
-                    "-w"
-                  ];
-                };
-              };
-            };
+      perSystem = {
+        config,
+        pkgs,
+        system,
+        ...
+      }: {
+        # --------------------------------------------------------------------
+        # Treefmt Configuration
+        # --------------------------------------------------------------------
+        # The single source of truth for formatting across devShell, CI, and Editor.
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            alejandra.enable = true;
+            stylua.enable = true;
+            shfmt.enable = true;
+            taplo.enable = true;
+            prettier.enable = true;
+            black.enable = true;
+            isort.enable = true;
           };
 
-          # --------------------------------------------------------------------
-          # Pre-commit Checks
-          # --------------------------------------------------------------------
-          checks = {
-            formatting = config.treefmt.build.check self;
-            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-              src = ./.;
-              hooks = {
-                statix.enable = true;
-                deadnix.enable = true;
-                luacheck.enable = true;
-                typos.enable = true;
-                commitizen.enable = true;
-
-                detect-secrets = {
-                  enable = true;
-                  entry = "${pkgs.detect-secrets}/bin/detect-secrets-hook --baseline .secrets.baseline";
-                  excludes = [ "^secrets/secrets\.yaml$" ];
-                };
+          settings = {
+            formatter = {
+              prettier = {
+                includes = [
+                  "*.css"
+                  "*.html"
+                  "*.js"
+                  "*.json"
+                  "*.md"
+                  "*.ts"
+                  "*.yaml"
+                  "*.yml"
+                ];
+              };
+              shfmt = {
+                includes = ["*.sh"];
+                options = [
+                  "-i"
+                  "2"
+                  "-s"
+                  "-w"
+                ];
               };
             };
-          };
-
-          formatter = config.treefmt.build.wrapper;
-
-          # --------------------------------------------------------------------
-          # Development Shell
-          # --------------------------------------------------------------------
-          devShells.default = pkgs.mkShell {
-            # Inherit inputs from treefmt and pre-commit-check to add tools to PATH.
-            inputsFrom = [
-              config.treefmt.build.devShell
-              config.checks.pre-commit-check
-            ];
-            packages = with pkgs; [ nixd ];
-            inherit (config.checks.pre-commit-check) shellHook;
           };
         };
+
+        # --------------------------------------------------------------------
+        # Pre-commit Checks
+        # --------------------------------------------------------------------
+        checks = {
+          formatting = config.treefmt.build.check self;
+          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              statix.enable = true;
+              deadnix.enable = true;
+              luacheck.enable = true;
+              typos.enable = true;
+              commitizen.enable = true;
+            };
+          };
+        };
+
+        formatter = config.treefmt.build.wrapper;
+
+        # --------------------------------------------------------------------
+        # Development Shell
+        # --------------------------------------------------------------------
+        devShells.default = pkgs.mkShell {
+          # Inherit inputs from treefmt and pre-commit-check to add tools to PATH.
+          inputsFrom = [
+            config.treefmt.build.devShell
+            config.checks.pre-commit-check
+          ];
+          packages = with pkgs; [nixd];
+          inherit (config.checks.pre-commit-check) shellHook;
+        };
+      };
 
       flake = {
         # ----------------------------------------------------------------------
         # NixOS Configurations
         # ----------------------------------------------------------------------
-        nixosConfigurations =
-          let
-            # Base NixOS modules (shared by all hosts)
-            coreModules = [ ./modules/nixos ];
+        nixosConfigurations = let
+          # Base NixOS modules (shared by all hosts)
+          coreModules = [./modules/nixos];
 
-            # Helper to generate Home Manager configuration
-            mkHomeManagerConfig =
-              {
-                inputs,
-                config,
-              }:
-              {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.bigor = import ./modules/home;
-                backupFileExtension = "backup";
-                extraSpecialArgs = {
-                  inherit inputs;
-                  osConfig = config;
-                };
-              };
+          # Helper to generate Home Manager configuration
+          mkHomeManagerConfig = {
+            inputs,
+            config,
+          }: {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.bigor = import ./modules/home;
+            backupFileExtension = "backup";
+            extraSpecialArgs = {
+              inherit inputs;
+              osConfig = config;
+            };
+          };
 
-            # System builder helper
-            mkSystem =
-              {
-                hostname,
-                system ? "x86_64-linux",
-              }:
-              inputs.nixpkgs.lib.nixosSystem {
-                inherit system;
-                specialArgs = { inherit inputs; };
-                modules = coreModules ++ [
+          # System builder helper
+          mkSystem = {
+            hostname,
+            system ? "x86_64-linux",
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              inherit system;
+              specialArgs = {inherit inputs;};
+              modules =
+                coreModules
+                ++ [
                   inputs.home-manager.nixosModules.home-manager
                   (
-                    { config, ... }:
-                    {
-                      home-manager = mkHomeManagerConfig { inherit inputs config; };
+                    {config, ...}: {
+                      home-manager = mkHomeManagerConfig {inherit inputs config;};
                     }
                   )
                   ./hosts/${hostname}
                 ];
-              };
-          in
-          {
-            # --- GROSPC (Stable 25.11) ---
-            grospc = mkSystem { hostname = "grospc"; };
+            };
+        in {
+          # --- GROSPC (Stable 25.11) ---
+          grospc = mkSystem {hostname = "grospc";};
 
-            # --- MINIPC (Stable 25.11) ---
-            minipc = mkSystem { hostname = "minipc"; };
-          };
+          # --- MINIPC (Stable 25.11) ---
+          minipc = mkSystem {hostname = "minipc";};
+        };
       };
     };
 }

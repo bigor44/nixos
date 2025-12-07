@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -25,7 +24,7 @@
       nixd
 
       # Formatters & Linters
-      nixfmt-rfc-style
+      alejandra
       stylua
       selene
       shfmt

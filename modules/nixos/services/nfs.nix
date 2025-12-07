@@ -2,12 +2,10 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.nfs;
   inherit (config.myNetwork) ips;
-in
-{
+in {
   config = lib.mkMerge [
     # --------------------------------------------------------------------------
     # Server Configuration (minipc)

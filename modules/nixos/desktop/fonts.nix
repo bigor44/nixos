@@ -43,7 +43,7 @@ lib.mkIf config.roles.desktop {
           "Noto Sans Mono CJK JP"
           "Noto Color Emoji"
         ];
-        emoji = [ "Noto Color Emoji" ];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };

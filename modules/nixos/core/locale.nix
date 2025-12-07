@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   time.timeZone = "Europe/Paris";
 
   # Set system-wide locale to French (France) but keep support for English.

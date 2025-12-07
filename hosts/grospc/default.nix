@@ -7,15 +7,14 @@
 # - NFS Client for storage access
 # - Performance tuning (amd_pstate, cpuFreqGovernor)
 # ------------------------------------------------------------------------------
-{ pkgs, ... }:
-{
-  imports = [ ./hardware-configuration.nix ];
+{pkgs, ...}: {
+  imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
   system.stateVersion = "25.05";
 
   # Enable AMD P-State EPP (Replace ACPI CPUFreq)
   # "active" enables the guided mode which allows the governor to work more effectively.
-  boot.kernelParams = [ "amd_pstate=active" ];
+  boot.kernelParams = ["amd_pstate=active"];
 
   roles.desktop = true;
   nfs.client = true;

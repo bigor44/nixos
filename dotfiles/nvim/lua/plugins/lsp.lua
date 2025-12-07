@@ -90,7 +90,7 @@ return {
           settings = {
             nixd = {
               nixpkgs = { expr = "import <nixpkgs> { }" },
-              formatting = { command = { "nixfmt" } },
+              formatting = { command = { "alejandra" } },
               options = {
                 -- Inject current system options for accurate completion
                 nixos = {
@@ -132,7 +132,7 @@ return {
         lsp_fallback = true,
       },
       formatters_by_ft = {
-        nix = { "nixfmt" },
+        nix = { "alejandra" },
         lua = { "stylua" },
         sh = { "shfmt" },
         bash = { "shfmt" },

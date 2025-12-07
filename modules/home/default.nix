@@ -1,8 +1,7 @@
 # Entry point for Home Manager configuration.
 # This module defines the user environment for 'bigor', including
 # shell configuration, GUI applications, and dotfiles management.
-{ ... }:
-{
+{...}: {
   home = {
     username = "bigor";
     homeDirectory = "/home/bigor";

@@ -3,10 +3,8 @@
   osConfig,
   lib,
   ...
-}:
-{
-  home.packages =
-    with pkgs;
+}: {
+  home.packages = with pkgs;
     [
       # Modern CLI replacements
       eza
@@ -19,7 +17,7 @@
       # Code Quality Tools
       treefmt
       nodePackages.prettier
-      nixfmt-rfc-style
+      alejandra
 
       stylua
       shfmt
@@ -36,6 +34,6 @@
       whatsapp-electron
       antigravity-fhs
       brave
-      (callPackage ./turtle-wow.nix { })
+      (callPackage ./turtle-wow.nix {})
     ];
 }

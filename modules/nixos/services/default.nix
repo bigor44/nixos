@@ -3,8 +3,7 @@
 # Imports all optional system services. These are typically enabled via
 # the flags defined in `modules/nixos/core/options.nix`.
 # ------------------------------------------------------------------------------
-{ ... }:
-{
+{...}: {
   imports = [
     ./sshd.nix
     ./adguard.nix

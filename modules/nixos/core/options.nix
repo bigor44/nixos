@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   options = {
     roles = {
       desktop = lib.mkOption {
