@@ -1,102 +1,108 @@
 # Bigor's NixOS Flake Configuration
 
-Welcome to **Bigor's NixOS Flake Configuration**. This repository manages the NixOS system configurations for my personal infrastructure, unifying system-level setup (NixOS) and user-level customization (Home Manager) into a single reproducible **Nix Flake**.
+Welcome to **Bigor's NixOS Flake Configuration**. This repository manages the system configurations for my personal infrastructure, unifying system-level setup (NixOS) and user-level customization (Home Manager) into a single, reproducible **Nix Flake**.
 
-## 🌟 Overview
+## 🌟 Features
 
-This project uses modern NixOS practices:
-
-- **Flakes**: For hermetic and reproducible builds.
-- **Home Manager**: For managing dotfiles and user packages.
-- **Treefmt**: For a unified formatting toolchain.
-- **Pre-commit hooks**: For ensuring code quality and secrets safety.
+- **Reproducibility**: Entire system state defined in code (Infrastructure as Code).
+- **Atomic Upgrades**: Risk-free updates with the ability to rollback anytime.
+- **Unified Styling**: Code formatting enforced via `treefmt` (Nix, Lua, Shell, etc.).
+- **Modular Design**: Reusable modules for roles (Desktop, Server) and services.
+- **Secrets Management**: Integration with `detect-secrets` to prevent accidental leaks.
+- **Development Environment**: A robust `devShell` with all necessary tooling pre-configured.
 
 ## 📂 Project Structure
 
-```
-├── flake.nix        # Entry point: defines inputs (Nixpkgs) and outputs (Systems)
-├── hosts/           # Host-specific configurations
-│   ├── grospc/      # Main Desktop (Gaming, Dev)
-│   └── minipc/      # Home Server (Homelab, NAS)
-├── modules/         # Reusable modules
-│   ├── nixos/       # System-level modules (Roles, Services, Core)
-│   └── home/        # User-level modules (Shell, GUI, Dotfiles)
-├── dotfiles/        # Raw configuration files (symlinked via Home Manager)
-├── scripts/         # Utility scripts
-└── certs/           # Custom certificates
+```bash
+├── flake.nix          # Entry point: defines inputs (Nixpkgs) and outputs (Systems)
+├── hosts/             # Host-specific configurations
+│   ├── grospc/        # Main Desktop (Gaming, Dev)
+│   └── minipc/        # Home Server (Homelab, NAS)
+├── modules/           # Reusable modules
+│   ├── nixos/         # System-level modules (Roles, Services, Core)
+│   └── home/          # User-level modules (Shell, GUI, Dotfiles)
+├── dotfiles/          # Raw configuration files (symlinked via Home Manager)
+├── scripts/           # Utility scripts
+└── certs/             # Custom certificates
 ```
 
 ## 🖥️ Systems
 
-| Host         | Type    | Branch         | Description                                              |
+| Host         | Type    | Architecture   | Description                                              |
 | :----------- | :------ | :------------- | :------------------------------------------------------- |
-| **`grospc`** | Desktop | Stable (25.11) | High-performance workstation (Zen Kernel). Gaming & Dev. |
-| **`minipc`** | Server  | Stable (25.11) | Home infrastructure. NFS Server, Tailscale optimized.    |
+| **`grospc`** | Desktop | `x86_64-linux` | High-performance workstation (Zen Kernel). Gaming & Dev. |
+| **`minipc`** | Server  | `x86_64-linux` | Home infrastructure. NFS Server, Tailscale optimized.    |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Nix installed with Flakes enabled.
-- `nh` (Nix Helper) is recommended for applying configurations.
+- **Nix** installed with **Flakes** enabled.
+- **[nh](https://github.com/viperML/nh)** (Nix Helper) is highly recommended for faster and prettier builds.
 
 ### Applying Configuration
 
-Apply the configuration for the current hostname:
-
+**For the current machine:**
 ```bash
 nh os switch
 ```
 
-Apply for a specific host:
-
+**For a specific remote host (via SSH):**
 ```bash
 nh os switch --hostname minipc
 ```
 
+**Bootstrapping a new machine:**
+If `nh` is not yet installed:
+```bash
+sudo nixos-rebuild switch --flake .#<hostname>
+```
+
 ### Managing Dependencies
 
-Update all flake inputs:
-
+Update all flake inputs to their latest versions:
 ```bash
 nix flake update
 ```
 
 ## 🛠️ Development
 
-Enter the development environment with all necessary tools (LSP, Formatters, Linters):
+This project includes a comprehensive development environment.
 
+**Enter the shell:**
 ```bash
 nix develop
 ```
 
-### Code Quality
+### Code Quality & Formatting
 
-This project enforces strict code quality standards.
+We use **Treefmt** to ensure consistent code style across the entire repository.
 
-**Formatting:**
-Run `treefmt` to format all files (Nix, Lua, Shell, Prettier, etc.):
-
+**Format all files:**
 ```bash
 treefmt
 ```
 
-**Linting:**
-Run pre-commit checks manually:
-
+**Run Linting Checks:**
+We use pre-commit hooks to catch issues before they are committed.
 ```bash
 nix build .#checks.x86_64-linux.pre-commit-check
 ```
 
-## 🧩 Key Modules
+## 🧩 Customization Guide
 
-### Roles
+### Adding a User Package
+Edit `modules/home/packages.nix` and add the package to the list:
+```nix
+home.packages = with pkgs; [
+  ripgrep
+  # ... other packages
+];
+```
 
-- **`roles.desktop`**: Enables COSMIC DE, audio, fonts, and GUI apps.
-- **`roles.homelab_master`**: Enables headless server services (Caddy, Dashboard, Glances).
+### Modifying System Options
+Edit `modules/nixos/core/options.nix` to define new flags, then implement them in the relevant module (e.g., `modules/nixos/services/myservice.nix`).
 
-### Services
+## 📜 License
 
-- **NFS**: `minipc` acts as the server (`/mnt/storage`), `grospc` as the client.
-- **Tailscale**: VPN mesh with UDP GRO optimization on `minipc`.
-- **Security**: SSH with secure defaults, AdGuard Home.
+[MIT](LICENSE)

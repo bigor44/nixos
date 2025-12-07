@@ -2,15 +2,35 @@
 {
   options = {
     roles = {
-      desktop = lib.mkEnableOption "Enable Desktop features";
-      homelab_master = lib.mkEnableOption "Enable Homelab Master features";
+      desktop = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enables the full graphical desktop environment (COSMIC), audio subsystem (Pipewire), fonts, and GUI applications suitable for a workstation.";
+      };
+      homelab_master = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enables headless server services, container orchestration tools (Docker/Podman), and infrastructure management utilities.";
+      };
     };
-    sshd.enable = lib.mkEnableOption "Enable SSH Server";
+    sshd.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enables the OpenSSH daemon with hardened security defaults (no root login, key-based auth only).";
+    };
 
     # File Sharing
     nfs = {
-      server = lib.mkEnableOption "Enable NFS Server Share";
-      client = lib.mkEnableOption "Enable NFS Client Mount";
+      server = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Configures the machine as an NFS host, exporting defined storage directories (e.g., /mnt/storage).";
+      };
+      client = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Configures the machine to mount remote NFS shares defined in the configuration.";
+      };
     };
 
     # Network Configuration
@@ -18,18 +38,18 @@
       mainInterface = lib.mkOption {
         type = lib.types.str;
         default = "enp2s0";
-        description = "Main network interface.";
+        description = "The name of the primary network interface to configure (e.g., for Wake-on-LAN or optimizations).";
       };
       ips = {
         grospc = lib.mkOption {
           type = lib.types.str;
           default = "192.168.1.11";
-          description = "Static IP address for the Desktop (grospc).";
+          description = "Static IP address reserved for the Desktop (grospc).";
         };
         minipc = lib.mkOption {
           type = lib.types.str;
           default = "192.168.1.10";
-          description = "Static IP address for the Server (minipc).";
+          description = "Static IP address reserved for the Server (minipc).";
         };
       };
     };
