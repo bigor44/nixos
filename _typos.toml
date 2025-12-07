@@ -1,0 +1,10 @@
+[default.extend-words]
+grospc = "grospc"
+minipc = "minipc"
+bigor = "bigor"
+homelab = "homelab"
+Noice = "Noice"
+noice = "noice"
+
+[files]
+extend-exclude = ["*.desktop"]

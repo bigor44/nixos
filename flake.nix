@@ -114,6 +114,8 @@
                 statix.enable = true;
                 deadnix.enable = true;
                 luacheck.enable = true;
+                typos.enable = true;
+                commitizen.enable = true;
 
                 detect-secrets = {
                   enable = true;
