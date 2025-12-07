@@ -25,8 +25,8 @@
     # --- Utils ---
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -101,7 +101,7 @@
         # --------------------------------------------------------------------
         checks = {
           formatting = config.treefmt.build.check self;
-          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+          git-hooks-check = inputs.git-hooks-nix.lib.${system}.run {
             src = ./.;
             hooks = {
               statix.enable = true;
@@ -122,10 +122,10 @@
           # Inherit inputs from treefmt and pre-commit-check to add tools to PATH.
           inputsFrom = [
             config.treefmt.build.devShell
-            config.checks.pre-commit-check
+            config.checks.git-hooks-check
           ];
           packages = with pkgs; [nixd];
-          inherit (config.checks.pre-commit-check) shellHook;
+          inherit (config.checks.git-hooks-check) shellHook;
         };
       };
 
