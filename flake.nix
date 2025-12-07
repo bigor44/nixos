@@ -16,20 +16,16 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     # --- Utils ---
     flake-parts.url = "github:hercules-ci/flake-parts";
-
     git-hooks-nix = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,13 +40,15 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux"];
-
-      imports = [treefmt-nix.flakeModule];
+      # Importation des modules flake-parts pour treefmt et git-hooks
+      imports = [
+        treefmt-nix.flakeModule
+        inputs.git-hooks-nix.flakeModule
+      ];
 
       perSystem = {
         config,
         pkgs,
-        system,
         ...
       }: {
         # --------------------------------------------------------------------
@@ -68,7 +66,6 @@
             black.enable = true;
             isort.enable = true;
           };
-
           settings = {
             formatter = {
               prettier = {
@@ -97,11 +94,12 @@
         };
 
         # --------------------------------------------------------------------
-        # Git Hooks Checks
+        # Git Hooks Checks (Pre-commit Module)
         # --------------------------------------------------------------------
-        checks = {
-          formatting = config.treefmt.build.check self;
-          git-hooks-check = inputs.git-hooks-nix.lib.${system}.run {
+        # Configuration déclarative via le module git-hooks.nix
+        pre-commit = {
+          check.enable = true;
+          settings = {
             src = ./.;
             hooks = {
               statix.enable = true;
@@ -113,19 +111,26 @@
           };
         };
 
+        # --------------------------------------------------------------------
+        # Checks
+        # --------------------------------------------------------------------
+        checks = {
+          formatting = config.treefmt.build.check self;
+          # Note: Le module pre-commit ajoute automatiquement son check ici
+        };
+
         formatter = config.treefmt.build.wrapper;
 
         # --------------------------------------------------------------------
         # Development Shell
         # --------------------------------------------------------------------
         devShells.default = pkgs.mkShell {
-          # Inherit inputs from treefmt and git-hooks-check to add tools to PATH.
+          # Inherit inputs from treefmt and pre-commit to add tools to PATH.
           inputsFrom = [
             config.treefmt.build.devShell
-            config.checks.git-hooks-check
+            config.pre-commit.devShell
           ];
           packages = with pkgs; [nixd];
-          inherit (config.checks.git-hooks-check) shellHook;
         };
       };
 
@@ -136,7 +141,6 @@
         nixosConfigurations = let
           # Base NixOS modules (shared by all hosts)
           coreModules = [./modules/nixos];
-
           # Helper to generate Home Manager configuration
           mkHomeManagerConfig = {
             inputs,
@@ -175,7 +179,6 @@
         in {
           # --- GROSPC (Stable 25.11) ---
           grospc = mkSystem {hostname = "grospc";};
-
           # --- MINIPC (Stable 25.11) ---
           minipc = mkSystem {hostname = "minipc";};
         };
