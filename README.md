@@ -88,7 +88,17 @@ nix build .#checks.x86_64-linux.git-hooks-check
 - **`typos`**: Checks for spelling errors across the codebase.
 - **`commitizen`**: Enforces [Conventional Commits](https://www.conventionalcommits.org/) standards for commit messages.
 
-### 4. Contributing
+### 4. AI-Assisted Commits
+
+A custom Fish shell function `gai` (Git AI) is available to generate conventional commit messages using the Gemini CLI.
+
+**Usage:**
+
+1. Stage your changes: `git add ...`
+2. Run the assistant: `gai`
+3. Review the generated message and confirm to commit.
+
+### 5. Contributing
 
 Contributions are welcome! Please ensure your changes adhere to the existing code style and pass all quality checks.
 
