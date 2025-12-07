@@ -108,7 +108,6 @@
           # --------------------------------------------------------------------
           checks = {
             formatting = config.treefmt.build.check self;
-            # Note: Formatters are removed from here as treefmt handles them now.
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {

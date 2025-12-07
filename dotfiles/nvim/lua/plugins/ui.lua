@@ -10,7 +10,7 @@ return {
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       require("onedark").setup({
-        style = "darker", -- Example: set a specific style
+        style = "darker",
         transparent = false,
       })
       require("onedark").load()

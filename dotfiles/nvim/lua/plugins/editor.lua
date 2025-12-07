@@ -51,7 +51,7 @@ return {
       close_if_last_window = true,
       filesystem = {
         bind_to_cwd = false, -- Don't change Neovim's CWD when changing dirs in tree
-        follow_current_file = { enabled = true }, -- Highlight current file in tree
+        follow_current_file = { enabled = true },
       },
       source_selector = {
         winbar = true,
