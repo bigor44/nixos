@@ -31,7 +31,5 @@ lib.mkIf config.roles.desktop {
   # --- Desktop Base Packages ---
   programs = {
     firefox.enable = true;
-    gamemode.enable = true;
-    steam.enable = true;
   };
 }
