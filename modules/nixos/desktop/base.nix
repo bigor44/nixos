@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 lib.mkIf config.roles.desktop {
   # --- Audio (Pipewire & Realtime) ---

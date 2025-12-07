@@ -37,11 +37,10 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      flake-parts,
-      treefmt-nix,
-      ...
+    inputs@{ self
+    , flake-parts
+    , treefmt-nix
+    , ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
@@ -53,11 +52,10 @@
       ];
 
       perSystem =
-        {
-          config,
-          pkgs,
-          system,
-          ...
+        { config
+        , pkgs
+        , system
+        , ...
         }:
         {
           # --------------------------------------------------------------------
@@ -67,7 +65,7 @@
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
-              nixfmt.enable = true;
+              nixpkgs-fmt.enable = true;
               stylua.enable = true;
               shfmt.enable = true;
               taplo.enable = true;
@@ -171,9 +169,9 @@
 
             # System builder helper
             mkSystem =
-              {
-                hostname,
-                system ? "x86_64-linux",
+              { hostname
+              , system ? "x86_64-linux"
+              ,
               }:
               inputs.nixpkgs.lib.nixosSystem {
                 inherit system;

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 lib.mkIf config.roles.homelab_master {
   services.tailscale.enable = true;
