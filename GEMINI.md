@@ -70,5 +70,5 @@ nix flake update          # Update lockfile with new inputs
 ```bash
 nix develop               # Enter dev shell
 treefmt                   # Format code
-nix build .#checks.x86_64-linux.pre-commit-check # Run linters
+nix build .#checks.x86_64-linux.git-hooks-check # Run linters
 ```

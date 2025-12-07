@@ -65,7 +65,7 @@ nix flake update          # Update lockfile with new inputs
 
 ### 3. Code Quality & Commit Hooks
 
-This project uses `pre-commit` hooks to ensure code quality and consistency.
+This project uses `git-hooks` to ensure code quality and consistency.
 
 **Automatic Setup:**
 When you enter the development shell, the git hooks are automatically installed:
@@ -78,7 +78,7 @@ nix develop
 You can run the full suite of checks manually at any time:
 
 ```bash
-nix build .#checks.x86_64-linux.pre-commit-check
+nix build .#checks.x86_64-linux.git-hooks-check
 ```
 
 **Enabled Checks:**

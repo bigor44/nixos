@@ -11,7 +11,7 @@
   # Highlights:
   # - Reproducible builds via Flakes.
   # - Unified formatting with Treefmt.
-  # - Automated checks via Pre-commit hooks.
+  # - Automated checks via Git hooks.
   # ============================================================================
 
   inputs = {
@@ -97,7 +97,7 @@
         };
 
         # --------------------------------------------------------------------
-        # Pre-commit Checks
+        # Git Hooks Checks
         # --------------------------------------------------------------------
         checks = {
           formatting = config.treefmt.build.check self;
@@ -119,7 +119,7 @@
         # Development Shell
         # --------------------------------------------------------------------
         devShells.default = pkgs.mkShell {
-          # Inherit inputs from treefmt and pre-commit-check to add tools to PATH.
+          # Inherit inputs from treefmt and git-hooks-check to add tools to PATH.
           inputsFrom = [
             config.treefmt.build.devShell
             config.checks.git-hooks-check
