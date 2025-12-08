@@ -1,8 +1,12 @@
 # modules/nixos/services/monitoring/firewall.nix
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.services.monitoring;
 in {
-  networking.firewall = {
+  networking.firewall = lib.mkIf cfg.enable {
     allowedTCPPorts = [
       cfg.prometheus.port
       cfg.grafana.port

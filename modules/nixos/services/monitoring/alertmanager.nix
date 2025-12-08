@@ -1,8 +1,12 @@
 # modules/nixos/services/monitoring/alertmanager.nix
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.services.monitoring;
 in {
-  services.prometheus.alertmanager = {
+  services.prometheus.alertmanager = lib.mkIf cfg.enable {
     enable = true;
     inherit (cfg.prometheus.alertmanager) port;
     openFirewall = false;

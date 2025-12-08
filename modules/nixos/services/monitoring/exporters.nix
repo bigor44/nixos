@@ -7,7 +7,7 @@
 }: let
   cfg = config.services.monitoring;
 in {
-  services = {
+  services = lib.mkIf cfg.enable {
     # Node Exporter - System metrics
     prometheus.exporters.node = lib.mkIf cfg.exporters.node {
       enable = true;

@@ -82,11 +82,17 @@ in {
     };
   };
 
-  config = lib.mkIf (config.roles.homelab_master && cfg.enable) {
-    # This block is now mostly empty, as the configuration is handled by the imported modules.
-    # We can still have some top-level configuration here if needed.
-    environment.systemPackages = with pkgs; [];
+  config = lib.mkMerge [
+    (lib.mkIf config.roles.homelab_master {
+      services.monitoring.enable = lib.mkDefault true;
+    })
 
-    environment.etc."grafana-dashboards/nixos-system.json".source = ../../grafana-dashboards/nixos-system.json;
-  };
+    (lib.mkIf (config.roles.homelab_master && cfg.enable) {
+      # This block is now mostly empty, as the configuration is handled by the imported modules.
+      # We can still have some top-level configuration here if needed.
+      environment.systemPackages = with pkgs; [];
+
+      environment.etc."grafana-dashboards/nixos-system.json".source = ../grafana-dashboards/nixos-system.json;
+    })
+  ];
 }

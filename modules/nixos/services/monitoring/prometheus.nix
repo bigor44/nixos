@@ -7,7 +7,7 @@
 }: let
   cfg = config.services.monitoring;
 in {
-  services.prometheus = {
+  services.prometheus = lib.mkIf cfg.enable {
     enable = true;
     inherit (cfg.prometheus) port; # Access through Caddy reverse proxy
 

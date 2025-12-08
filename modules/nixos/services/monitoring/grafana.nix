@@ -1,8 +1,12 @@
 # modules/nixos/services/monitoring/grafana.nix
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.services.monitoring;
 in {
-  services.grafana = {
+  services.grafana = lib.mkIf cfg.enable {
     enable = true;
     settings = {
       server = {
