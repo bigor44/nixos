@@ -7,11 +7,9 @@
   imports = [
     ./sshd.nix
     ./adguard.nix
-    ./dashboard.nix
     ./nfs.nix
     ./caddy.nix
     ./tailscale.nix
-    ./glances.nix
     ./prometheus.nix
     ./grafana.nix
     ./alert-manager.nix
