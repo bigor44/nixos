@@ -11,6 +11,6 @@
     ./nfs.nix
     ./caddy.nix
     ./tailscale.nix
-    ./glances.nix
+    ./monitoring/default.nix
   ];
 }
