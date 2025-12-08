@@ -21,6 +21,7 @@ This repository contains my personal NixOS flake configuration, designed to mana
     - **`services/`**:
       - **Infrastructure**: NFS, Tailscale, SSH.
       - **Applications**: AdGuard, Caddy, Dashboard (Homepage), Glances (Monitoring).
+      - **Pattern**: Services are self-contained. They define their own Caddy `virtualHosts` and AdGuard `rewrites` within their own `.nix` file using `services.caddy.virtualHosts` and `services.adguardhome.settings.filtering.rewrites`.
   - **`home/`**: User-level modules (Home Manager for user `bigor`).
     - **`dotfiles.nix`**: Symlink management for files in `dotfiles/`.
     - **`packages.nix`**: User CLI/GUI packages.
