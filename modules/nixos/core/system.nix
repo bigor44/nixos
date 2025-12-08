@@ -49,6 +49,7 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
+      trusted-users = [ "@wheel" ];
     };
     # Periodic garbage collection is handled by 'nh'
     optimise.automatic = true;

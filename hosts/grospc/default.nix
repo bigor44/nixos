@@ -7,7 +7,11 @@
 # - NFS Client for storage access
 # - Performance tuning (amd_pstate, cpuFreqGovernor)
 # ------------------------------------------------------------------------------
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
   system.stateVersion = "25.05";
@@ -26,7 +30,15 @@
   # Zen kernel provides better desktop responsiveness and fsync patches.
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
+  
+  # Set DNS to AdGuard on minipc
+  networking.nameservers = [
+    config.myNetwork.ips.minipc
+    "1.1.1.1" # Fallback
+  ];
+
   myNetwork.mainInterface = "enp14s0";
+
 
   # Secondary Storage for Games
   fileSystems."/steamlibrary" = {
