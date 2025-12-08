@@ -83,11 +83,6 @@ lib.mkIf config.roles.homelab_master {
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
-          {
-            domain = "glances.bigor.lan";
-            answer = config.myNetwork.ips.minipc;
-            enabled = true;
-          }
         ];
       };
 
