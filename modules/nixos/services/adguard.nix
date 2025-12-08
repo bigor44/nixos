@@ -4,6 +4,13 @@
   ...
 }:
 lib.mkIf config.roles.homelab_master {
+  services.caddy.virtualHosts."adguard.bigor.lan" = {
+    extraConfig = ''
+      reverse_proxy 127.0.0.1:3003
+      tls internal
+    '';
+  };
+
   services.adguardhome = {
     enable = true;
     port = 3003;
@@ -68,11 +75,6 @@ lib.mkIf config.roles.homelab_master {
           }
           {
             domain = "bigor.lan";
-            answer = config.myNetwork.ips.minipc;
-            enabled = true;
-          }
-          {
-            domain = "home.bigor.lan";
             answer = config.myNetwork.ips.minipc;
             enabled = true;
           }
