@@ -56,7 +56,7 @@ find "$BASE_DIR" -type f \
     fi
 
     # Compute path relative to the base directory for the section header.
-    rel_path="${file#$BASE_DIR/}"
+    rel_path="${file#"$BASE_DIR"/}"
 
     # Extract file extension for Markdown code block syntax highlighting.
     ext="${file##*.}"
