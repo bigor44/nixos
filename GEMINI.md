@@ -17,6 +17,7 @@ This document provides context for the AI agent (Gemini) regarding the structure
 - **`modules/`**: Reusable configuration logic.
   - **`nixos/`**: System-level modules (root).
     - **`core/`**: System defaults, locale, users, `options.nix` (feature flags).
+      - **`nixvim/`**: Neovim configuration (modularized).
     - **`desktop/`**: GUI environment (COSMIC), Audio (Pipewire), Fonts, Gaming.
     - **`services/`**:
       - **Infrastructure**: NFS, Tailscale, SSH.
@@ -27,10 +28,9 @@ This document provides context for the AI agent (Gemini) regarding the structure
     - **`packages.nix`**: User CLI/GUI packages.
     - **`shell.nix`**: Shell configuration (Fish, Starship, tools).
     - **`git.nix`**: Git configuration.
-    - **`neovim.nix`**: Neovim configuration.
     - **`turtle-wow.nix`**: Turtle WoW game client wrapper (AppImage + Wayland fixes).
 - **`dotfiles/`**: Raw config files (symlinked).
-  - `cosmic/`, `nvim/`, `autostart/`.
+  - `cosmic/`, `autostart/`.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh`).
 
 ## Custom Options API (`modules/nixos/core/options.nix`)

@@ -1,12 +1,25 @@
 {pkgs, ...}: {
-  programs.neovim = {
+  imports = [
+    ./opts.nix
+    ./keymaps.nix
+    ./autocmds.nix
+    ./plugins
+  ];
+
+  programs.nixvim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
 
+    # For things not easily covered by modules (like vim.notify override)
+    extraConfigLua = ''
+      -- Override notify with mini.notify
+      vim.notify = require("mini.notify").make_notify()
+    '';
+
     extraPackages = with pkgs; [
-      # Build tools required for installing/compiling plugins (e.g. Telescope fzf-native)
+      # Build tools
       gcc
       gnumake
       unzip
@@ -29,7 +42,6 @@
       selene
       shfmt
       nodePackages.prettier
-
       isort
       black
       taplo

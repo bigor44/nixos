@@ -27,10 +27,9 @@ This repository contains my personal NixOS flake configuration, designed to mana
     - **`packages.nix`**: User CLI/GUI packages.
     - **`shell.nix`**: Shell configuration (Fish, Starship, tools).
     - **`git.nix`**: Git configuration.
-    - **`neovim.nix`**: Neovim configuration.
     - **`turtle-wow.nix`**: Turtle WoW game client wrapper (AppImage + Wayland fixes).
 - **`dotfiles/`**: Raw config files (symlinked).
-  - `cosmic/`, `nvim/`, `autostart/`.
+  - `cosmic/`, `autostart/`.
 - **`scripts/`**: Utility scripts (e.g., `concat_config.sh`).
 
 ## Custom Options API
@@ -44,8 +43,8 @@ These options are defined in `modules/nixos/core/options.nix` and act as high-le
 | **`sshd.enable`**             | Enables hardened OpenSSH server (no root login, key-based auth).                 |
 | **`nfs.server`**              | Exports `/mnt/storage` via NFS.                                                  |
 | **`nfs.client`**              | Mounts the shared NFS storage.                                                   |
-| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
-| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
+| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.
+| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).
 
 ## Development Workflow
 
