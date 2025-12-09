@@ -1,76 +1,103 @@
 {
-  programs.nixvim.plugins = {
-    web-devicons.enable = true;
-
-    gitsigns = {
-      enable = true;
-      settings = {
-        current_line_blame = true;
-        signs = {
-          add.text = "│";
-          change.text = "│";
-          delete.text = "_";
-        };
+  programs.nixvim = {
+    highlight = {
+      MiniNotifyNormal = {
+        bg = "#1c1f24";
+      };
+      MiniNotifyBorder = {
+        fg = "#e5c07b";
+      };
+      MiniNotifyTitle = {
+        fg = "#e5c07b";
+        bold = true;
       };
     };
 
-    noice = {
-      enable = true;
-      settings = {
-        notify.enabled = false;
-        lsp.override = {
-          "vim.lsp.util.convert_input_to_markdown_lines" = true;
-          "vim.lsp.util.stylize_markdown" = true;
-        };
-        presets = {
-          bottom_search = true;
-          command_palette = true;
-          long_message_to_split = true;
-          inc_rename = false;
-          lsp_doc_border = false;
+    plugins = {
+      web-devicons.enable = true;
+
+      gitsigns = {
+        enable = true;
+        settings = {
+          current_line_blame = true;
+          signs = {
+            add.text = "│";
+            change.text = "│";
+            delete.text = "_";
+          };
         };
       };
-    };
 
-    dressing = {
-      enable = true;
-      settings = {
-        input.enabled = true;
-        select = {
-          enabled = true;
-          backend = ["telescope" "builtin"];
+      noice = {
+        enable = true;
+        settings = {
+          notify.enabled = false;
+          lsp.override = {
+            "vim.lsp.util.convert_input_to_markdown_lines" = true;
+            "vim.lsp.util.stylize_markdown" = true;
+          };
+          presets = {
+            bottom_search = true;
+            command_palette = true;
+            long_message_to_split = true;
+            inc_rename = false;
+            lsp_doc_border = false;
+          };
         };
       };
-    };
 
-    mini = {
-      enable = true;
-      modules = {
-        statusline = {};
-        tabline = {};
-        icons = {};
-        notify = {};
-        # Hipatterns needs special handling for hex_color/custom patterns which are functions/tables
-        hipatterns = {
-          highlighters = {
-            # Hex color is standard in hipatterns, we might need __raw if the module doesn't expose it easily
-            # But NixVim's mini module often simplifies this. Let's check docs or use __raw for safety.
-            hex_color = {__raw = "require('mini.hipatterns').gen_highlighter.hex_color()";};
-            fixme = {
-              pattern = "%f[%w]()FIXME()%f[%W]";
-              group = "MiniHipatternsFixme";
+      dressing = {
+        enable = true;
+        settings = {
+          input.enabled = true;
+          select = {
+            enabled = true;
+            backend = [
+              "telescope"
+              "builtin"
+            ];
+          };
+        };
+      };
+
+      mini = {
+        enable = true;
+        modules = {
+          statusline = {};
+          tabline = {};
+          icons = {};
+          notify = {
+            window = {
+              config = {
+                border = "double";
+              };
+              winblend = 0;
             };
-            hack = {
-              pattern = "%f[%w]()HACK()%f[%W]";
-              group = "MiniHipatternsHack";
-            };
-            todo = {
-              pattern = "%f[%w]()TODO()%f[%W]";
-              group = "MiniHipatternsTodo";
-            };
-            note = {
-              pattern = "%f[%w]()NOTE()%f[%W]";
-              group = "MiniHipatternsNote";
+          };
+          # Hipatterns needs special handling for hex_color/custom patterns which are functions/tables
+          hipatterns = {
+            highlighters = {
+              # Hex color is standard in hipatterns, we might need __raw if the module doesn't expose it easily
+              # But NixVim's mini module often simplifies this. Let's check docs or use __raw for safety.
+              hex_color = {
+                __raw = "require('mini.hipatterns').gen_highlighter.hex_color()";
+              };
+              fixme = {
+                pattern = "%f[%w]()FIXME()%f[%W]";
+                group = "MiniHipatternsFixme";
+              };
+              hack = {
+                pattern = "%f[%w]()HACK()%f[%W]";
+                group = "MiniHipatternsHack";
+              };
+              todo = {
+                pattern = "%f[%w]()TODO()%f[%W]";
+                group = "MiniHipatternsTodo";
+              };
+              note = {
+                pattern = "%f[%w]()NOTE()%f[%W]";
+                group = "MiniHipatternsNote";
+              };
             };
           };
         };

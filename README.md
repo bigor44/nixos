@@ -43,8 +43,8 @@ These options are defined in `modules/nixos/core/options.nix` and act as high-le
 | **`sshd.enable`**             | Enables hardened OpenSSH server (no root login, key-based auth).                 |
 | **`nfs.server`**              | Exports `/mnt/storage` via NFS.                                                  |
 | **`nfs.client`**              | Mounts the shared NFS storage.                                                   |
-| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.
-| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).
+| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
+| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
 
 ## Development Workflow
 
