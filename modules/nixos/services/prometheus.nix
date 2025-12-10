@@ -2,46 +2,53 @@
   config,
   lib,
   ...
-}:
-lib.mkIf config.bigor.roles.homelab_master {
-  services = {
-    prometheus = {
-      enable = true;
-      port = 9090;
+}: {
+  # ============================================================================
+  # Prometheus Monitoring
+  # ============================================================================
+  # Collects metrics from configured targets (minipc, grospc).
+  # Exposed internally via Caddy at 'prometheus.bigor.lan'.
+  # ============================================================================
+  config = lib.mkIf config.bigor.roles.homelab_master {
+    services = {
+      prometheus = {
+        enable = true;
+        port = 9090;
 
-      scrapeConfigs = [
+        scrapeConfigs = [
+          {
+            job_name = "minipc";
+            static_configs = [
+              {
+                targets = ["127.0.0.1:9100"];
+              }
+            ];
+          }
+          {
+            job_name = "grospc";
+            static_configs = [
+              {
+                targets = ["${config.bigor.network.ips.grospc}:9100"];
+              }
+            ];
+          }
+        ];
+      };
+
+      caddy.virtualHosts."prometheus.bigor.lan" = {
+        extraConfig = ''
+          reverse_proxy :9090
+          tls internal
+        '';
+      };
+
+      adguardhome.settings.filtering.rewrites = [
         {
-          job_name = "minipc";
-          static_configs = [
-            {
-              targets = ["127.0.0.1:9100"];
-            }
-          ];
-        }
-        {
-          job_name = "grospc";
-          static_configs = [
-            {
-              targets = ["${config.bigor.network.ips.grospc}:9100"];
-            }
-          ];
+          domain = "prometheus.bigor.lan";
+          answer = config.bigor.network.ips.minipc;
+          enabled = true;
         }
       ];
     };
-
-    caddy.virtualHosts."prometheus.bigor.lan" = {
-      extraConfig = ''
-        reverse_proxy :9090
-        tls internal
-      '';
-    };
-
-    adguardhome.settings.filtering.rewrites = [
-      {
-        domain = "prometheus.bigor.lan";
-        answer = config.bigor.network.ips.minipc;
-        enabled = true;
-      }
-    ];
   };
 }

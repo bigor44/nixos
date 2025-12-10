@@ -1,4 +1,13 @@
 {
+  # ============================================================================
+  # Keybindings
+  # ============================================================================
+  # Defines custom key mappings for better navigation and editing workflow.
+  # - Window management (Ctrl+hjkl)
+  # - Buffer navigation (Shift+l/h)
+  # - Selection indentation (< >)
+  # - Plugin toggles (Explorer, Trouble, LazyGit)
+  # ============================================================================
   programs.nixvim.keymaps = [
     # Standard Operations
     {

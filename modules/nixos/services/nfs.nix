@@ -6,6 +6,12 @@
   cfg = config.bigor.nfs;
   inherit (config.bigor.network) ips;
 in {
+  # ============================================================================
+  # NFS File Sharing
+  # ============================================================================
+  # Configures NFS server (for hosting shares) and NFS client (for mounting shares).
+  # Controlled via 'bigor.nfs.server' and 'bigor.nfs.client' options.
+  # ============================================================================
   config = lib.mkMerge [
     # --------------------------------------------------------------------------
     # Server Configuration (minipc)

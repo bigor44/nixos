@@ -1,4 +1,10 @@
 {pkgs, ...}: {
+  # ============================================================================
+  # Locale & Regional Settings
+  # ============================================================================
+  # Configures time zone, system language (French default, English supported),
+  # and keyboard layout (French).
+  # ============================================================================
   time.timeZone = "Europe/Paris";
 
   # Set system-wide locale to French (France) but keep support for English.

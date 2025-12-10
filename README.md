@@ -103,6 +103,12 @@ A custom Fish shell function `gai` (Git AI) is available to generate conventiona
 
 Contributions are welcome! Please ensure your changes adhere to the existing code style and pass all quality checks.
 
+#### Code Style & Documentation
+- **Language:** Use English for all comments and documentation.
+- **Comments:** Focus on *why* a configuration exists, not just *what* it does.
+- **Nix Style:** Follow the formatting enforced by `treefmt` (Alejandra).
+
+#### Workflow
 1.  Fork the repository.
 2.  Create a new branch for your feature or bug fix.
 3.  Make your changes.

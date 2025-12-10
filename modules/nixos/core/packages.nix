@@ -1,4 +1,13 @@
 {pkgs, ...}: {
+  # ============================================================================
+  # System Packages
+  # ============================================================================
+  # Installs essential command-line tools and utilities available to all users.
+  # Includes:
+  # - Nix tooling (statix, deadnix, nh)
+  # - Network utilities (dig, wget, curl)
+  # - System monitoring (btop, htop, inxi)
+  # ============================================================================
   programs = {
     fish.enable = true;
     tmux.enable = true;

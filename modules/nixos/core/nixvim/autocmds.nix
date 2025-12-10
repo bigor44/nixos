@@ -1,4 +1,11 @@
 {
+  # ============================================================================
+  # Autocommands
+  # ============================================================================
+  # Automated actions based on editor events.
+  # - Highlight text on yank (copy).
+  # - Remove annoying format options (like auto-commenting next line) on Enter.
+  # ============================================================================
   programs.nixvim = {
     autoGroups = {
       gemini_highlight_yank = {clear = true;};

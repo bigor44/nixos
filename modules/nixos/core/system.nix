@@ -1,4 +1,13 @@
 {config, ...}: {
+  # ============================================================================
+  # System Configuration
+  # ============================================================================
+  # Defines core system settings:
+  # - Bootloader (systemd-boot)
+  # - Nix configuration (flakes, binary caches, garbage collection)
+  # - Basic networking (hosts, certificates)
+  # - Licensing (allowUnfree)
+  # ============================================================================
   # Bootloader Configuration
   # We use systemd-boot as it is simple, reliable, and well-integrated with UEFI.
   boot = {

@@ -1,4 +1,12 @@
 {lib, ...}: {
+  # ============================================================================
+  # Custom Options API
+  # ============================================================================
+  # This file defines the high-level feature flags (options) used to control
+  # the system configuration. These options abstract away complex module
+  # imports and settings, allowing for a cleaner host configuration.
+  # ============================================================================
+
   options.bigor = {
     roles = {
       desktop = lib.mkOption {

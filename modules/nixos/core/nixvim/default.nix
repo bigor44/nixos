@@ -1,4 +1,12 @@
 {pkgs, ...}: {
+  # ============================================================================
+  # NixVim Configuration (Neovim)
+  # ============================================================================
+  # Configures Neovim using the NixVim wrapper.
+  # - Sets it as the default system editor.
+  # - Installs necessary build tools and Language Servers (LSP).
+  # - Integrates Lua configuration for overrides.
+  # ============================================================================
   imports = [
     ./opts.nix
     ./keymaps.nix

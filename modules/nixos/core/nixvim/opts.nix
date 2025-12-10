@@ -1,4 +1,12 @@
 {
+  # ============================================================================
+  # Neovim Options & UI
+  # ============================================================================
+  # - Colorscheme: OneDark (Darker variant)
+  # - Leader key: Space
+  # - Clipboard: System clipboard integration (wl-copy)
+  # - Editor behavior: Line numbers, indentation, undo persistence, etc.
+  # ============================================================================
   programs.nixvim = {
     colorschemes.onedark = {
       enable = true;

@@ -1,4 +1,12 @@
 {pkgs, ...}: {
+  # ============================================================================
+  # User Management
+  # ============================================================================
+  # Defines the primary user 'bigor' and system-wide authentication settings.
+  # - Adds user to 'wheel' for sudo access (passwordless).
+  # - Sets Fish as the default shell.
+  # - Configures SSH authorized keys.
+  # ============================================================================
   users.users.bigor = {
     isNormalUser = true;
     extraGroups = ["wheel"];

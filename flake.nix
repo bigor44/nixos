@@ -45,7 +45,7 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux"];
-      # Importation des modules flake-parts pour treefmt et git-hooks
+      # Import flake-parts modules for treefmt and git-hooks
       imports = [
         treefmt-nix.flakeModule
         inputs.git-hooks-nix.flakeModule
@@ -101,7 +101,7 @@
         # --------------------------------------------------------------------
         # Git Hooks Checks (Pre-commit Module)
         # --------------------------------------------------------------------
-        # Configuration déclarative via le module git-hooks.nix
+        # Declarative configuration via git-hooks.nix module
         pre-commit = {
           check.enable = true;
           settings = {
@@ -125,7 +125,7 @@
         # --------------------------------------------------------------------
         checks = {
           formatting = config.treefmt.build.check self;
-          # Note: Le module pre-commit ajoute automatiquement son check ici
+          # Note: The pre-commit module automatically adds its check here
         };
 
         formatter = config.treefmt.build.wrapper;
