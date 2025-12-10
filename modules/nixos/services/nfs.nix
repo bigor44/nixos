@@ -3,14 +3,14 @@
   lib,
   ...
 }: let
-  cfg = config.bigor.nfs;
+  cfg = config.bigor.services.nfs;
   inherit (config.bigor.network) ips;
 in {
   # ============================================================================
   # NFS File Sharing
   # ============================================================================
   # Configures NFS server (for hosting shares) and NFS client (for mounting shares).
-  # Controlled via 'bigor.nfs.server' and 'bigor.nfs.client' options.
+  # Controlled via 'bigor.services.nfs.server' and 'bigor.services.nfs.client' options.
   # ============================================================================
   config = lib.mkMerge [
     # --------------------------------------------------------------------------

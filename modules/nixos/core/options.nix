@@ -20,23 +20,25 @@
         description = "Enables headless server services, container orchestration tools (Docker/Podman), and infrastructure management utilities.";
       };
     };
-    sshd.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enables the OpenSSH daemon with hardened security defaults (no root login, key-based auth only).";
-    };
-
-    # File Sharing
-    nfs = {
-      server = lib.mkOption {
+    services = {
+      ssh.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Configures the machine to act as an NFS host, exporting defined storage directories (e.g., /mnt/storage).";
+        description = "Enables the OpenSSH daemon with hardened security defaults (no root login, key-based auth only).";
       };
-      client = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Configures the machine to mount remote NFS shares defined in the configuration.";
+
+      # File Sharing
+      nfs = {
+        server = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Configures the machine to act as an NFS host, exporting defined storage directories (e.g., /mnt/storage).";
+        };
+        client = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Configures the machine to mount remote NFS shares defined in the configuration.";
+        };
       };
     };
 
@@ -44,7 +46,7 @@
     network = {
       mainInterface = lib.mkOption {
         type = lib.types.str;
-        default = "enp2s0";
+        default = null;
         description = "The name of the primary network interface to configure (e.g., for Wake-on-LAN or optimizations).";
       };
       ips = {

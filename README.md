@@ -9,11 +9,11 @@ This repository contains my personal NixOS flake configuration, designed to mana
   - **`x86_64-linux/`**:
     - **`grospc/`**: High-performance Desktop.
       - **Channel**: `nixos-25.11` (Stable)
-      - **Key Modules**: `bigor.roles.desktop` (COSMIC), `bigor.nfs.client`, `bigor.sshd.enable`.
+      - **Key Modules**: `bigor.roles.desktop` (COSMIC), `bigor.services.nfs.client`, `bigor.services.ssh.enable`.
       - **Hardware**: AMD CPU/GPU, Zen Kernel.
     - **`minipc/`**: Home Server / Lab.
       - **Channel**: `nixos-25.11` (Stable)
-      - **Key Modules**: `bigor.roles.homelab_master` (Headless), `bigor.nfs.server`, `bigor.sshd.enable`.
+      - **Key Modules**: `bigor.roles.homelab_master` (Headless), `bigor.services.nfs.server`, `bigor.services.ssh.enable`.
       - **Networking**: Tailscale optimization (UDP GRO enabled).
     - **`modules/`**: Reusable configuration logic.
       - **`nixos/`**: System-level modules (root).
@@ -38,13 +38,12 @@ This repository contains my personal NixOS flake configuration, designed to mana
     These options are defined in `modules/nixos/core/options.nix` and act as high-level feature flags to control the system configuration.
 
     | Option                            | Description                                                                      |
-    | :-------------------------------- | :------------------------------------------------------------------------------- |
+    | :-------------------------------- | :------------------------------------------------------------------------------- | --- | ----------------------- | --------------------------------------------- |
     | **`bigor.roles.desktop`**         | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
     | **`bigor.roles.homelab_master`**  | Enables headless server services, container orchestration, and monitoring.       |
-    | **`bigor.sshd.enable`**           | Enables hardened OpenSSH server (no root login, key-based auth).                 |
-    | **`bigor.nfs.server`**            | Exports `/mnt/storage` via NFS.                                                  |
-    | **`bigor.nfs.client`**            | Mounts the shared NFS storage.                                                   |
-    | **`bigor.network.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
+    | **`bigor.services.ssh.enable`**   | Enables hardened OpenSSH server (no root login, key-based auth).                 |
+    | **`bigor.services.nfs.server`**   | Exports `/mnt/storage` via NFS.                                                  |
+    | **`bigor.services.nfs.client`**   | Mounts the shared NFS storage.                                                   |     | **`bigor.network.ips`** | Defines static IPs for `grospc` and `minipc`. |
     | **`bigor.network.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
 
 ## Development Workflow

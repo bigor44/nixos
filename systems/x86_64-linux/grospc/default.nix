@@ -21,13 +21,11 @@
   # Custom Role & Feature Flags
   # ----------------------------------------------------------------------------
   # - Gaming & Development focus (bigor.roles.desktop)
-  # - Connects to NFS storage (bigor.nfs.client)
-  # - SSH enabled (bigor.sshd.enable)
+  # - Connects to NFS storage (bigor.services.nfs.client)
   # - Network Configuration (bigor.network.mainInterface)
   bigor = {
     roles.desktop = true;
-    nfs.client = true;
-    sshd.enable = true;
+    services.nfs.client = true;
     network.mainInterface = "enp14s0";
   };
 

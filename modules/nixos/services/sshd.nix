@@ -11,7 +11,7 @@
   # - No root login
   # - Key-based authentication only (no passwords)
   # ============================================================================
-  config = lib.mkIf config.bigor.sshd.enable {
+  config = lib.mkIf config.bigor.services.ssh.enable {
     services.openssh = {
       enable = true;
       openFirewall = true;
