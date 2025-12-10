@@ -7,7 +7,7 @@
 # - NFS Client for storage access
 # - Performance tuning (amd_pstate, cpuFreqGovernor)
 # ------------------------------------------------------------------------------
-{
+{pkgs, ...}: {
   imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
   system.stateVersion = "25.05";
@@ -29,6 +29,12 @@
     sshd.enable = true;
     network.mainInterface = "enp14s0";
   };
+
+  # Performance Tuning
+  # Use the 'performance' governor for maximum responsiveness.
+  powerManagement.cpuFreqGovernor = "performance";
+  # Zen kernel provides better desktop responsiveness and fsync patches.
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Secondary Storage for Games
   fileSystems."/steamlibrary" = {
