@@ -23,6 +23,7 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     # --- Utils ---
     flake-parts.url = "github:hercules-ci/flake-parts";
