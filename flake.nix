@@ -183,7 +183,7 @@
                       home-manager = mkHomeManagerConfig {inherit inputs config;};
                     }
                   )
-                  ./hosts/${hostname}
+                  ./systems/${system}/${hostname}
                 ];
             };
         in {

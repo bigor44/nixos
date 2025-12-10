@@ -5,15 +5,16 @@ This repository contains my personal NixOS flake configuration, designed to mana
 ## Project Structure
 
 - **`flake.nix`**: The entry point. Defines inputs (Nixpkgs, Home Manager) and outputs (System Configurations).
-- **`hosts/`**: Machine-specific configurations.
-  - **`grospc/`**: High-performance Desktop.
-    - **Channel**: `nixos-25.11` (Stable)
-    - **Key Modules**: `roles.desktop` (COSMIC), `nfs.client`, `sshd.enable`.
-    - **Hardware**: AMD CPU/GPU, Zen Kernel.
-  - **`minipc/`**: Home Server / Lab.
-    - **Channel**: `nixos-25.11` (Stable)
-    - **Key Modules**: `roles.homelab_master` (Headless), `nfs.server`, `sshd.enable`.
-    - **Networking**: Tailscale optimization (UDP GRO enabled).
+- **`systems/`**: Machine-specific configurations.
+  - **`x86_64-linux/`**:
+    - **`grospc/`**: High-performance Desktop.
+      - **Channel**: `nixos-25.11` (Stable)
+      - **Key Modules**: `roles.desktop` (COSMIC), `nfs.client`, `sshd.enable`.
+      - **Hardware**: AMD CPU/GPU, Zen Kernel.
+    - **`minipc/`**: Home Server / Lab.
+      - **Channel**: `nixos-25.11` (Stable)
+      - **Key Modules**: `roles.homelab_master` (Headless), `nfs.server`, `sshd.enable`.
+      - **Networking**: Tailscale optimization (UDP GRO enabled).
 - **`modules/`**: Reusable configuration logic.
   - **`nixos/`**: System-level modules (root).
     - **`core/`**: System defaults, locale, users, `options.nix` (feature flags).
