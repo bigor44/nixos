@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.homelab_master {
+lib.mkIf config.bigor.roles.homelab_master {
   services = {
     grafana = {
       enable = true;
@@ -32,7 +32,7 @@ lib.mkIf config.roles.homelab_master {
     adguardhome.settings.filtering.rewrites = [
       {
         domain = "grafana.bigor.lan";
-        answer = config.myNetwork.ips.minipc;
+        answer = config.bigor.network.ips.minipc;
         enabled = true;
       }
     ];

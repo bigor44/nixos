@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.desktop {
+lib.mkIf config.bigor.roles.desktop {
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono

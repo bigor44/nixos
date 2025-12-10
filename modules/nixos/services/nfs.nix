@@ -3,8 +3,8 @@
   lib,
   ...
 }: let
-  cfg = config.nfs;
-  inherit (config.myNetwork) ips;
+  cfg = config.bigor.nfs;
+  inherit (config.bigor.network) ips;
 in {
   config = lib.mkMerge [
     # --------------------------------------------------------------------------

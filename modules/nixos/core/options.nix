@@ -1,5 +1,5 @@
 {lib, ...}: {
-  options = {
+  options.bigor = {
     roles = {
       desktop = lib.mkOption {
         type = lib.types.bool;
@@ -23,7 +23,7 @@
       server = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Configures the machine as an NFS host, exporting defined storage directories (e.g., /mnt/storage).";
+        description = "Configures the machine to act as an NFS host, exporting defined storage directories (e.g., /mnt/storage).";
       };
       client = lib.mkOption {
         type = lib.types.bool;
@@ -33,7 +33,7 @@
     };
 
     # Network Configuration
-    myNetwork = {
+    network = {
       mainInterface = lib.mkOption {
         type = lib.types.str;
         default = "enp2s0";

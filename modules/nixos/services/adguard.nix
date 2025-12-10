@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.homelab_master {
+lib.mkIf config.bigor.roles.homelab_master {
   services.caddy.virtualHosts."adguard.bigor.lan" = {
     extraConfig = ''
       reverse_proxy 127.0.0.1:3003
@@ -65,22 +65,22 @@ lib.mkIf config.roles.homelab_master {
         rewrites = [
           {
             domain = "grospc.bigor.lan";
-            answer = config.myNetwork.ips.grospc;
+            answer = config.bigor.network.ips.grospc;
             enabled = true;
           }
           {
             domain = "minipc.bigor.lan";
-            answer = config.myNetwork.ips.minipc;
+            answer = config.bigor.network.ips.minipc;
             enabled = true;
           }
           {
             domain = "bigor.lan";
-            answer = config.myNetwork.ips.minipc;
+            answer = config.bigor.network.ips.minipc;
             enabled = true;
           }
           {
             domain = "adguard.bigor.lan";
-            answer = config.myNetwork.ips.minipc;
+            answer = config.bigor.network.ips.minipc;
             enabled = true;
           }
         ];

@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.desktop {
+lib.mkIf config.bigor.roles.desktop {
   programs = {
     gamemode.enable = true;
     steam.enable = true;

@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.desktop {
+lib.mkIf config.bigor.roles.desktop {
   # --- Audio (Pipewire & Realtime) ---
   services.pipewire = {
     enable = true;

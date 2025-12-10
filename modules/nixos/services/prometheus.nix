@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.homelab_master {
+lib.mkIf config.bigor.roles.homelab_master {
   services = {
     prometheus = {
       enable = true;
@@ -22,7 +22,7 @@ lib.mkIf config.roles.homelab_master {
           job_name = "grospc";
           static_configs = [
             {
-              targets = ["${config.myNetwork.ips.grospc}:9100"];
+              targets = ["${config.bigor.network.ips.grospc}:9100"];
             }
           ];
         }
@@ -39,7 +39,7 @@ lib.mkIf config.roles.homelab_master {
     adguardhome.settings.filtering.rewrites = [
       {
         domain = "prometheus.bigor.lan";
-        answer = config.myNetwork.ips.minipc;
+        answer = config.bigor.network.ips.minipc;
         enabled = true;
       }
     ];

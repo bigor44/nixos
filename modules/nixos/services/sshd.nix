@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.sshd.enable {
+lib.mkIf config.bigor.sshd.enable {
   services.openssh = {
     enable = true;
     openFirewall = true;

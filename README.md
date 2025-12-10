@@ -9,43 +9,43 @@ This repository contains my personal NixOS flake configuration, designed to mana
   - **`x86_64-linux/`**:
     - **`grospc/`**: High-performance Desktop.
       - **Channel**: `nixos-25.11` (Stable)
-      - **Key Modules**: `roles.desktop` (COSMIC), `nfs.client`, `sshd.enable`.
+      - **Key Modules**: `bigor.roles.desktop` (COSMIC), `bigor.nfs.client`, `bigor.sshd.enable`.
       - **Hardware**: AMD CPU/GPU, Zen Kernel.
     - **`minipc/`**: Home Server / Lab.
       - **Channel**: `nixos-25.11` (Stable)
-      - **Key Modules**: `roles.homelab_master` (Headless), `nfs.server`, `sshd.enable`.
+      - **Key Modules**: `bigor.roles.homelab_master` (Headless), `bigor.nfs.server`, `bigor.sshd.enable`.
       - **Networking**: Tailscale optimization (UDP GRO enabled).
-- **`modules/`**: Reusable configuration logic.
-  - **`nixos/`**: System-level modules (root).
-    - **`core/`**: System defaults, locale, users, `options.nix` (feature flags).
-    - **`desktop/`**: GUI environment (COSMIC), Audio (Pipewire), Fonts, Gaming.
-    - **`services/`**:
-      - **Infrastructure**: NFS, Tailscale, SSH.
-      - **Applications**: AdGuard, Caddy, Dashboard (Homepage), Glances (Monitoring).
-      - **Pattern**: Services are self-contained. They define their own Caddy `virtualHosts` and AdGuard `rewrites` within their own `.nix` file using `services.caddy.virtualHosts` and `services.adguardhome.settings.filtering.rewrites`.
-  - **`home/`**: User-level modules (Home Manager for user `bigor`).
-    - **`dotfiles.nix`**: Symlink management for files in `dotfiles/`.
-    - **`packages.nix`**: User CLI/GUI packages.
-    - **`shell.nix`**: Shell configuration (Fish, Starship, tools).
-    - **`git.nix`**: Git configuration.
-    - **`turtle-wow.nix`**: Turtle WoW game client wrapper (AppImage + Wayland fixes).
-- **`dotfiles/`**: Raw config files (symlinked).
-  - `cosmic/`, `autostart/`.
-- **`scripts/`**: Utility scripts (e.g., `concat_config.sh`).
+    - **`modules/`**: Reusable configuration logic.
+      - **`nixos/`**: System-level modules (root).
+        - **`core/`**: System defaults, locale, users, `options.nix` (feature flags).
+        - **`desktop/`**: GUI environment (COSMIC), Audio (Pipewire), Fonts, Gaming.
+        - **`services/`**:
+          - **Infrastructure**: NFS, Tailscale, SSH.
+          - **Applications**: AdGuard, Caddy, Dashboard (Homepage), Glances (Monitoring).
+          - **Pattern**: Services are self-contained. They define their own Caddy `virtualHosts` and AdGuard `rewrites` within their own `.nix` file using `services.caddy.virtualHosts` and `services.adguardhome.settings.filtering.rewrites`.
+      - **`home/`**: User-level modules (Home Manager for user `bigor`).
+        - **`dotfiles.nix`**: Symlink management for files in `dotfiles/`.
+        - **`packages.nix`**: User CLI/GUI packages.
+        - **`shell.nix`**: Shell configuration (Fish, Starship, tools).
+        - **`git.nix`**: Git configuration.
+        - **`turtle-wow.nix`**: Turtle WoW game client wrapper (AppImage + Wayland fixes).
+    - **`dotfiles/`**: Raw config files (symlinked).
+      - `cosmic/`, `autostart/`.
+    - **`scripts/`**: Utility scripts (e.g., `concat_config.sh`).
 
-## Custom Options API
+    ## Custom Options API
 
-These options are defined in `modules/nixos/core/options.nix` and act as high-level feature flags to control the system configuration.
+    These options are defined in `modules/nixos/core/options.nix` and act as high-level feature flags to control the system configuration.
 
-| Option                        | Description                                                                      |
-| :---------------------------- | :------------------------------------------------------------------------------- |
-| **`roles.desktop`**           | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
-| **`roles.homelab_master`**    | Enables headless server services, container orchestration, and monitoring.       |
-| **`sshd.enable`**             | Enables hardened OpenSSH server (no root login, key-based auth).                 |
-| **`nfs.server`**              | Exports `/mnt/storage` via NFS.                                                  |
-| **`nfs.client`**              | Mounts the shared NFS storage.                                                   |
-| **`myNetwork.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
-| **`myNetwork.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
+    | Option                            | Description                                                                      |
+    | :-------------------------------- | :------------------------------------------------------------------------------- |
+    | **`bigor.roles.desktop`**         | Enables full graphical environment (COSMIC), audio, fonts, and workstation apps. |
+    | **`bigor.roles.homelab_master`**  | Enables headless server services, container orchestration, and monitoring.       |
+    | **`bigor.sshd.enable`**           | Enables hardened OpenSSH server (no root login, key-based auth).                 |
+    | **`bigor.nfs.server`**            | Exports `/mnt/storage` via NFS.                                                  |
+    | **`bigor.nfs.client`**            | Mounts the shared NFS storage.                                                   |
+    | **`bigor.network.ips`**           | Defines static IPs for `grospc` and `minipc`.                                    |
+    | **`bigor.network.mainInterface`** | Defines the primary network interface (e.g., `enp2s0`).                          |
 
 ## Development Workflow
 

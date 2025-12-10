@@ -7,7 +7,7 @@
 # - NFS Client for storage access
 # - Performance tuning (amd_pstate, cpuFreqGovernor)
 # ------------------------------------------------------------------------------
-{pkgs, ...}: {
+{
   imports = [./hardware-configuration.nix];
   networking.hostName = "grospc";
   system.stateVersion = "25.05";
@@ -16,17 +16,19 @@
   # "active" enables the guided mode which allows the governor to work more effectively.
   boot.kernelParams = ["amd_pstate=active"];
 
-  roles.desktop = true;
-  nfs.client = true;
-  sshd.enable = true;
-
-  # Performance Tuning
-  # Use the 'performance' governor for maximum responsiveness.
-  powerManagement.cpuFreqGovernor = "performance";
-  # Zen kernel provides better desktop responsiveness and fsync patches.
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-
-  myNetwork.mainInterface = "enp14s0";
+  # ----------------------------------------------------------------------------
+  # Custom Role & Feature Flags
+  # ----------------------------------------------------------------------------
+  # - Gaming & Development focus (bigor.roles.desktop)
+  # - Connects to NFS storage (bigor.nfs.client)
+  # - SSH enabled (bigor.sshd.enable)
+  # - Network Configuration (bigor.network.mainInterface)
+  bigor = {
+    roles.desktop = true;
+    nfs.client = true;
+    sshd.enable = true;
+    network.mainInterface = "enp14s0";
+  };
 
   # Secondary Storage for Games
   fileSystems."/steamlibrary" = {

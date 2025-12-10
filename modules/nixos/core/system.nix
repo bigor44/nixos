@@ -15,8 +15,8 @@
   # Define static hostnames for local machines to ensure reliable resolution
   # without relying on external DNS.
   networking.extraHosts = ''
-    ${config.myNetwork.ips.minipc} minipc
-    ${config.myNetwork.ips.grospc} grospc
+    ${config.bigor.network.ips.minipc} minipc
+    ${config.bigor.network.ips.grospc} grospc
   '';
 
   # Certificates

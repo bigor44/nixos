@@ -16,9 +16,11 @@
   networking.hostName = "minipc";
   system.stateVersion = "25.05";
 
-  roles.homelab_master = true;
-  nfs.server = true;
-  sshd.enable = true;
+  bigor = {
+    roles.homelab_master = true;
+    nfs.server = true;
+    sshd.enable = true;
+  };
 
   # Kernel & Power Management
   # Use the standard kernel for stability.
@@ -41,7 +43,7 @@
     wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.ethtool}/bin/ethtool -K ${config.myNetwork.mainInterface} rx-udp-gro-forwarding on rx-gro-list on";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -K ${config.bigor.network.mainInterface} rx-udp-gro-forwarding on rx-gro-list on";
       SuccessExitStatus = "0 1";
     };
   };

@@ -27,7 +27,7 @@
     ]
     # Desktop-only Applications
     # Only install these if the system has a desktop environment enabled.
-    ++ lib.optionals osConfig.roles.desktop [
+    ++ lib.optionals osConfig.bigor.roles.desktop [
       discord
       onedrive
       youtube-music

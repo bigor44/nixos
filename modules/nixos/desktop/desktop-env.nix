@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.roles.desktop {
+lib.mkIf config.bigor.roles.desktop {
   # Boot Configuration
   boot = {
     # Reduce console log level to hide non-critical kernel messages during boot.
