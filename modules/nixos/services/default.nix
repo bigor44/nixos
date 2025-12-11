@@ -10,6 +10,5 @@
     ./nfs.nix
     ./caddy.nix
     ./tailscale.nix
-    ./netdata.nix
   ];
 }
