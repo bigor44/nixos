@@ -46,7 +46,7 @@ echo >&2
 # ------------------------------------------------------------------------------
 # Find relevant files, handle special characters in filenames with print0/read.
 find "$BASE_DIR" -type f \
-  \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
+  \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.sh' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
   -print0 | sort -z |
   while IFS= read -r -d '' file; do
 
