@@ -10,8 +10,6 @@
     ./nfs.nix
     ./caddy.nix
     ./tailscale.nix
-    ./prometheus.nix
-    ./grafana.nix
-    ./alert-manager.nix
+    ./netdata.nix
   ];
 }

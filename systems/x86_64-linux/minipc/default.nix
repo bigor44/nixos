@@ -28,8 +28,10 @@
 
   bigor = {
     roles.homelab_master = true;
-    services.nfs.server = true;
-    services.ssh.enable = true;
+    services = {
+      nfs.server = true;
+      ssh.enable = true;
+    };
     network.mainInterface = "enp2s0";
   };
 

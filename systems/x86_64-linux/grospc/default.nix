@@ -25,7 +25,9 @@
   # - Network Configuration (bigor.network.mainInterface)
   bigor = {
     roles.desktop = true;
-    services.nfs.client = true;
+    services = {
+      nfs.client = true;
+    };
     network.mainInterface = "enp14s0";
   };
 

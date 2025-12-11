@@ -11,7 +11,6 @@
     ./locale.nix
     ./users.nix
     ./packages.nix
-    ./node-exporter.nix
     ./nixvim
   ];
 }
