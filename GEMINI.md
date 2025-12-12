@@ -26,6 +26,7 @@ The codebase follows a modular structure:
 - **`modules/home/`**: Home Manager configuration for the user `bigor`.
   - `dotfiles.nix`: Manages dotfiles linking.
   - `packages.nix`: User-specific packages.
+  - `turtle-wow.nix`: Custom package for Turtle WoW with Wayland fixes.
 - **`dotfiles/`**: Raw configuration files (e.g., for COSMIC applications) symlinked by Home Manager.
 
 ## Key Systems
@@ -35,7 +36,7 @@ The codebase follows a modular structure:
 - **Role**: Gaming & Development.
 - **OS**: NixOS 25.11.
 - **Desktop**: COSMIC (System76).
-- **Features**: Steam, GameMode, Pipewire, AMD P-State optimizations.
+- **Features**: Steam, GameMode, Pipewire, AMD P-State optimizations, Turtle WoW.
 - **Network**: `192.168.1.11` (Static). NFS Client.
 
 ### minipc (Server)
@@ -46,18 +47,10 @@ The codebase follows a modular structure:
   - **NFS Server**: Exports `/mnt/storage`.
   - **AdGuard Home**: DNS & Ad blocking (`https://adguard.bigor.lan`).
   - **Caddy**: Reverse proxy with internal CA.
-  - **Tailscale**: VPN exit node.
+  - **Tailscale**: VPN exit node (optimized via `network-udp-gro`).
 - **Network**: `192.168.1.10` (Static).
 
 ## Development Workflow
-
-### Environment Setup
-
-Enter the development shell to get all necessary tools (formatters, LSP):
-
-```bash
-nix develop
-```
 
 ### Common Commands
 
@@ -69,11 +62,7 @@ nix develop
   ```bash
   sudo nixos-rebuild switch --flake .#<hostname>
   ```
-- **Format Code:**
-  ```bash
-  nix fmt
-  ```
-- **Run Checks (Lint/Format):**
+- **Check Flake:**
   ```bash
   nix flake check
   ```
@@ -105,6 +94,7 @@ nix develop
 | `systems/x86_64-linux/grospc/default.nix` | Main config for the desktop.           |
 | `modules/nixos/desktop/desktop-env.nix`   | COSMIC desktop configuration.          |
 | `modules/home/default.nix`                | Home Manager entry point.              |
+| `modules/home/turtle-wow.nix`             | Custom Turtle WoW game package.        |
 
 ## User Notes
 

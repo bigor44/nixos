@@ -59,11 +59,12 @@ A declarative, reproducible NixOS configuration managing two systems: a high-per
 │   │       ├── adguard.nix    # DNS & ad blocking
 │   │       ├── caddy.nix      # Reverse proxy
 │   │       └── tailscale.nix  # VPN mesh network
-│   └── home/                  # Home Manager configuration
-│       ├── packages.nix       # User applications
-│       ├── shell.nix          # Fish shell setup
-│       ├── git.nix            # Git configuration
-│       └── dotfiles.nix       # Symlink management
+    └── home/                  # Home Manager configuration
+        ├── packages.nix       # User applications
+        ├── shell.nix          # Fish shell setup
+        ├── git.nix            # Git configuration
+        ├── dotfiles.nix       # Symlink management
+        └── turtle-wow.nix     # Custom game client package
 ├── dotfiles/                  # Application configurations
 │   ├── cosmic/                # COSMIC desktop settings
 │   └── autostart/             # Autostart applications
@@ -89,7 +90,7 @@ A declarative, reproducible NixOS configuration managing two systems: a high-per
 - **COSMIC Desktop**: Modern, Rust-based desktop environment by System76
 - **Audio**: Pipewire with ALSA, PulseAudio, and Wireplumber support
 - **Fonts**: Comprehensive set including Nerd Fonts, Noto CJK, and emoji support
-- **Gaming**: Steam with GameMode optimizations
+- **Gaming**: Steam with GameMode optimizations, Turtle WoW custom client (Wayland fix)
 
 ### Server Infrastructure
 
@@ -149,27 +150,10 @@ nh os test    # Temporary activation (reverts on reboot)
 
 ## Development Workflow
 
-### Entering the Dev Shell
-
-```bash
-nix develop
-```
-
-This provides:
-
-- All formatters (alejandra, stylua, prettier, black, shfmt, taplo)
-- nixd language server for editor integration
-
-### Formatting Code
-
-```bash
-nix fmt  # Format all files according to treefmt.toml
-```
-
 ### Running Checks
 
 ```bash
-nix flake check  # Run all checks (formatting, linting, etc.)
+nix flake check  # Check flake validity
 ```
 
 ### Updating Dependencies
@@ -279,7 +263,7 @@ Features:
 
 ### Tailscale VPN
 
-minipc configured as exit node with UDP GRO optimization for maximum throughput.
+minipc configured as exit node with UDP GRO optimization for maximum throughput (via custom `network-udp-gro` service).
 
 ## Neovim Configuration
 
@@ -392,8 +376,6 @@ All code is automatically formatted via treefmt:
 - **Python**: black + isort
 - **Web formats**: prettier
 - **TOML**: taplo
-
-Run `nix fmt` before committing.
 
 ## License
 

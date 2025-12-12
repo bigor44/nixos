@@ -1,0 +1,64 @@
+# Treefmt configuration
+# Based on the tools defined in modules/nixos/core/nixvim/default.nix
+
+# Global options
+[global]
+on-error = "continue"
+
+# ------------------------------------------------------------------------------
+# Nix (alejandra)
+# ------------------------------------------------------------------------------
+[formatter.nix]
+command = "alejandra"
+includes = ["*.nix"]
+excludes = ["generated.nix"]
+
+# ------------------------------------------------------------------------------
+# Lua (stylua)
+# ------------------------------------------------------------------------------
+[formatter.lua]
+command = "stylua"
+includes = ["*.lua"]
+options = ["--indent-type", "Spaces", "--indent-width", "2"]
+
+# ------------------------------------------------------------------------------
+# Shell (shfmt)
+# ------------------------------------------------------------------------------
+[formatter.shell]
+command = "shfmt"
+includes = ["*.sh"]
+options = ["-i", "2", "-s", "-w"]
+
+# ------------------------------------------------------------------------------
+# Python (isort & black)
+# ------------------------------------------------------------------------------
+[formatter.python-isort]
+command = "isort"
+includes = ["*.py"]
+options = ["--profile", "black"]
+
+[formatter.python-black]
+command = "black"
+includes = ["*.py"]
+# Note: treefmt pipes content to stdin by default if no file args are passed,
+# but for some tools passing the file path is better.
+# However, for treefmt 2.0+ it usually handles files well.
+# black usually accepts file paths.
+# Let's rely on treefmt's default behavior of passing file paths unless 'stdin' is true.
+
+# ------------------------------------------------------------------------------
+# Web / Config (prettier)
+# ------------------------------------------------------------------------------
+[formatter.prettier]
+command = "prettier"
+options = ["--write"]
+includes = ["*.md", "*.json", "*.yaml", "*.yml", "*.html", "*.css", "*.scss"]
+# Prettier often respects .prettierrc if present.
+
+# ------------------------------------------------------------------------------
+# TOML (taplo)
+# ------------------------------------------------------------------------------
+[formatter.toml]
+command = "taplo"
+options = ["fmt"]
+includes = ["*.toml"]
