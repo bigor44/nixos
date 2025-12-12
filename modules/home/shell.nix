@@ -15,8 +15,8 @@
 
       plugins = [
         {
-          name = "bobthefisher";
-          inherit (pkgs.fishPlugins.bobthefisher) src;
+          name = "Tide";
+          inherit (pkgs.fishPlugins.tide) src;
         }
         {
           name = "autopair";
