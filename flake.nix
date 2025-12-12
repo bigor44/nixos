@@ -4,6 +4,11 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    snowfall-lib = {
+      url = "github:snowfallorg/lib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,56 +19,41 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+  outputs = inputs:
+    inputs.snowfall-lib.mkFlake {
+      inherit inputs;
+      src = ./.; # Dit à Snowfall de scanner le répertoire courant
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    nixvim,
-    ...
-  } @ inputs: let
-    # Shared settings
-    system = "x86_64-linux";
+      # Configuration globale pour Snowfall
+      snowfall = {
+        namespace = "bigor"; # Vos options deviendront bigor.<module>
 
-    # A simplified shared module list to avoid repeating common imports
-    sharedModules = [
-      ./modules/nixos # Your core system configuration
-      nixvim.nixosModules.nixvim # NixVim module
-      home-manager.nixosModules.home-manager # Home Manager module
-      {
-        # Shared Home Manager settings
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
-        home-manager.users.bigor = import ./modules/home;
-
-        # Pass inputs and osConfig to Home Manager modules
-        home-manager.extraSpecialArgs = {inherit inputs;};
-      }
-    ];
-  in {
-    nixosConfigurations = {
-      # --- GROSPC (Desktop) ---
-      grospc = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {inherit inputs;};
-        modules =
-          sharedModules
-          ++ [
-            ./systems/x86_64-linux/grospc # Host specific config
-          ];
+        # Configuration des métadonnées (optionnel mais recommandé)
+        meta = {
+          name = "bigor-nixos";
+          title = "Bigor's NixOS";
+        };
       };
 
-      # --- MINIPC (Server) ---
-      minipc = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {inherit inputs;};
-        modules =
-          sharedModules
-          ++ [
-            ./systems/x86_64-linux/minipc # Host specific config
-          ];
+      # Canaux (Channels) configurés
+      channels-config = {
+        allowUnfree = true;
       };
+
+      # Overlays globaux si vous en avez (sinon liste vide)
+      overlays = [];
+
+      # Modules partagés entre tous les systèmes
+      systems.modules.nixos = with inputs; [
+        nixvim.nixosModules.nixvim
+        # Votre configuration Home Manager actuelle intégrée au système
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
+          home-manager.users.bigor = import ./home; # Voir étape 4 pour améliorer ça
+          home-manager.extraSpecialArgs = {inherit inputs;};
+        }
+      ];
     };
-  };
 }
