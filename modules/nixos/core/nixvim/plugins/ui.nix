@@ -2,14 +2,13 @@
   programs.nixvim = {
     highlight = {
       MiniNotifyNormal = {
-        bg = "#1c1f24";
+        link = "NormalFloat";
       };
       MiniNotifyBorder = {
-        fg = "#e5c07b";
+        link = "FloatBorder";
       };
       MiniNotifyTitle = {
-        fg = "#e5c07b";
-        bold = true;
+        link = "FloatTitle";
       };
     };
 
@@ -65,7 +64,7 @@
         modules = {
           statusline = {};
           tabline = {};
-          icons = {};
+          # icons = {}; # Disabled to avoid conflict with web-devicons
           notify = {
             window = {
               config = {
