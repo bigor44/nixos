@@ -53,7 +53,7 @@ The codebase follows a modular structure:
 
 ### Environment Setup
 
-Enter the development shell to get all necessary tools (formatters, LSP, git hooks):
+Enter the development shell to get all necessary tools (formatters, LSP):
 
 ```bash
 nix develop

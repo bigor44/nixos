@@ -83,7 +83,6 @@ A declarative, reproducible NixOS configuration managing two systems: a high-per
 - **Neovim (NixVim)**: Fully configured with LSP, Treesitter, Telescope, and modern plugins
 - **Fish Shell**: Enhanced with Starship prompt, fzf, zoxide, and abbreviations
 - **Code Quality**: Integrated formatters (alejandra, stylua, prettier, black, shfmt)
-- **Git Hooks**: Pre-commit checks via `git-hooks.nix` (statix, deadnix, typos, shellcheck)
 
 ### Desktop Experience
 
@@ -102,7 +101,6 @@ A declarative, reproducible NixOS configuration managing two systems: a high-per
 ### Automation & Quality
 
 - **Treefmt**: Unified code formatting across all file types
-- **Pre-commit hooks**: Automated checks before every commit
 - **nh (Nix Helper)**: Simplified system rebuilds with automatic cleanup
 - **Reproducible builds**: Flake-based dependency management
 
@@ -160,7 +158,6 @@ nix develop
 This provides:
 
 - All formatters (alejandra, stylua, prettier, black, shfmt, taplo)
-- Pre-commit hooks automatically installed
 - nixd language server for editor integration
 
 ### Formatting Code
@@ -396,7 +393,7 @@ All code is automatically formatted via treefmt:
 - **Web formats**: prettier
 - **TOML**: taplo
 
-Run `nix fmt` before committing (or let pre-commit hooks handle it).
+Run `nix fmt` before committing.
 
 ## License
 
