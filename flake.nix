@@ -44,7 +44,7 @@
 
       # Snowfall Configuration
       snowfall = {
-        ystems = ["x86_64-linux"];
+        systems = ["x86_64-linux"];
         namespace = "bigor";
         meta = {
           name = "bigor-nixos";
