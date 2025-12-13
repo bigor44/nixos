@@ -29,7 +29,7 @@ in {
       statix
       deadnix
       treefmt
-      nodePackages.prettier
+      prettier
       alejandra
 
       stylua

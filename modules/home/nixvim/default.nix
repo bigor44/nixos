@@ -37,7 +37,7 @@ in {
         stylua
         selene
         shfmt
-        nodePackages.prettier
+        prettier
         isort
         black
         taplo

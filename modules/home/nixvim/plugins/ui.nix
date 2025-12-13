@@ -39,7 +39,7 @@
       noice = {
         enable = true;
         settings = {
-          notify.enabled = false;
+          notify.enabled = true;
           lsp.override = {
             "vim.lsp.util.convert_input_to_markdown_lines" = true;
             "vim.lsp.util.stylize_markdown" = true;
@@ -73,16 +73,6 @@
         modules = {
           statusline = {};
           tabline = {};
-          # icons = {}; # Disabled to avoid conflict with web-devicons
-          notify = {
-            window = {
-              config = {
-                border = "double";
-              };
-              winblend = 0;
-            };
-          };
-          # Hipatterns needs special handling for hex_color/custom patterns which are functions/tables
           hipatterns = {
             highlighters = {
               # Hex color is standard in hipatterns, we might need __raw if the module doesn't expose it easily
