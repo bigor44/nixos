@@ -9,3 +9,6 @@ result-*
 # --- Éditeurs (Comme vous utilisez Neovim/NixVim) ---
 *.swp
 *.swo
+
+
+.pre-commit-config.yaml
