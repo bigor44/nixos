@@ -21,7 +21,6 @@ in {
       onedrive
       youtube-music
       whatsapp-electron
-      antigravity-fhs
       brave
       pkgs.bigor.turtle-wow
     ];

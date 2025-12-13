@@ -37,13 +37,8 @@
             format.enable = false;
           };
         };
-        nixd = {
+        nil_ls = {
           enable = true;
-          settings.nixd = {
-            nixpkgs.expr = "import <nixpkgs> { }";
-            formatting.command = ["alejandra"];
-            options.nixos.expr = "(builtins.getFlake \"/home/bigor/nixos\").nixosConfigurations.grospc.options";
-          };
         };
       };
       keymaps = {

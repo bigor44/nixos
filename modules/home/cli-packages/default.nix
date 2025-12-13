@@ -24,9 +24,10 @@ in {
       ripgrep
       jq
       lazygit
-      gemini-cli
 
       # Code Quality Tools
+      statix
+      deadnix
       treefmt
       nodePackages.prettier
       alejandra
@@ -36,6 +37,18 @@ in {
       isort
       black
       taplo
+      # Network Utilities
+      dig
+
+      # Monitoring & Performance
+      btop
+      sysstat
+      inxi
+      pciutils
+      usbutils
+      mesa-demos
+      lm_sensors
+      fastfetch
     ];
   };
 }

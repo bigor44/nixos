@@ -23,30 +23,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # Nix Tooling
-    statix
-    deadnix
-
-    # Network Utilities
-    dig
     wget
     curl
-
-    # Monitoring & Performance
-    btop
     htop
-    sysstat
-    inxi
-    pciutils
-    usbutils
-    mesa-demos
-    lm_sensors
-
-    # Archiving
     zip
     unzip
-
-    # Miscellaneous
-    fastfetch
   ];
 }

@@ -42,7 +42,7 @@
       vscode-langservers-extracted # jsonls, cssls, html
       yaml-language-server
       lua-language-server
-      nixd
+      nil
 
       # Formatters & Linters
       alejandra
