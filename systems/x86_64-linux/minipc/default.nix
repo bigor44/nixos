@@ -22,6 +22,7 @@
     services = {
       nfs.server = true;
       ssh.enable = true;
+      ollama.enable = true;
     };
     network.mainInterface = "enp2s0";
   };
