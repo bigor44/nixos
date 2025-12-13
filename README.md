@@ -2,7 +2,7 @@
 
 Welcome to my personal **NixOS** configuration repository. This setup is fully declarative, managed with **Nix Flakes**, and structured using the opinionated [Snowfall Lib](https://github.com/snowfallorg/lib).
 
-It powers my personal infrastructure, ranging from a high-performance gaming desktop running the **COSMIC Desktop Environment** to a headless homelab server.
+It powers my personal infrastructure, ranging from a high-performance gaming desktop running the **COSMIC Desktop Environment** (Alpha) to a headless homelab server.
 
 ![NixOS](https://img.shields.io/badge/NixOS-25.11-blue.svg)
 ![Snowfall](https://img.shields.io/badge/Managed_with-Snowfall_Lib-89b4fa.svg)
@@ -12,15 +12,17 @@ It powers my personal infrastructure, ranging from a high-performance gaming des
 ## ✨ Key Features
 
 - **Structure:** Built with **Snowfall Lib** for automatic module discovery and a clean directory layout.
-- **Desktop Environment:** Early adopter of **COSMIC DE** (by System76) on the main workstation.
-- **Editor:** Fully configured **Neovim** setup using **Nixvim**, featuring LSP (Nix, Lua, Python), Treesitter, Telescope, and Neo-tree.
-- **Gaming:** Optimized for gaming with Steam, Gamemode, and custom packages like a Wayland-wrapped Turtle WoW client.
+- **Desktop Environment:** Early adopter of **COSMIC DE** (by System76) on the main workstation, with custom dotfiles management via symlinks.
+- **Editor:** Fully configured **Neovim** setup using **Nixvim**, featuring:
+  - **LSP:** Auto-configured for Nix, Lua, Python, etc.
+  - **Completion:** Powered by the blazing fast **blink-cmp**.
+  - **UI:** Enhanced with `noice`, `trouble`, and `neo-tree`.
+- **Gaming:** Optimized with `linuxPackages_zen`, Gamemode, and custom packages (like a Wayland-patched Turtle WoW client).
 - **Homelab Services:**
-  - **AdGuard Home:** Network-wide ad blocking and local DNS.
-  - **Tailscale:** VPN Mesh with Exit Node and UDP GRO optimizations.
-  - **NFS:** Centralized storage sharing between the server and desktop.
+  - **AdGuard Home:** Declarative configuration with local DNS rewrites managed via Nix.
+  - **Tailscale:** Configured as an **Exit Node** with **UDP GRO forwarding** enabled for maximum throughput.
+  - **NFS:** Centralized storage sharing (Server on `minipc`, Client on `grospc`).
   - **Caddy:** Reverse proxy with internal CA trust.
-- **Code Quality:** Automated formatting and linting via `treefmt` (Alejandra, Stylua, Shfmt, Prettier).
 
 ## 🏗️ Architecture
 
@@ -29,15 +31,16 @@ The repository follows the standard Snowfall Lib structure:
 ```text
 ├── certs/          # Local certificates (Internal CA)
 ├── checks/         # CI/CD checks (nix-lint via statix/deadnix)
-├── dotfiles/       # Raw configuration files (COSMIC applets, wallpapers, etc.)
+├── dotfiles/       # Mutable configuration files (COSMIC applets, wallpapers, autostart)
 ├── homes/          # Home Manager configurations (users)
 │   └── x86_64-linux/
 │       ├── bigor@grospc    # Desktop user config
 │       └── bigor@minipc    # Server user config
 ├── modules/        # Modular configuration blocks
 │   ├── home/       # Home Manager modules (shell, git, gui-packages)
-│   └── nixos/      # NixOS modules (api, desktop, services, nixvim, common, ...)
+│   └── nixos/      # NixOS modules (api, desktop, services, nixvim, gaming, ...)
 ├── packages/       # Custom packages (e.g., turtle-wow)
+├── scripts/        # Helper scripts (post-install, review)
 ├── systems/        # Host configurations
 │   └── x86_64-linux/
 │       ├── grospc  # Main Desktop
@@ -46,15 +49,15 @@ The repository follows the standard Snowfall Lib structure:
 
 ```
 
-| ##🖥️ Hosts | Hostname    | Role                                                                   | Description    | IP  |
-| ---------- | ----------- | ---------------------------------------------------------------------- | -------------- | --- |
-| **grospc** | Workstation | Gaming rig, COSMIC Desktop, NFS Client, High Performance (Zen Kernel). | `192.168.1.11` |
-| **minipc** | Server      | Headless Homelab, NFS Server, AdGuard Home, Tailscale Exit Node.       | `192.168.1.10` |
+| ##🖥️ Hosts | Hostname    | Role                                                                               | Description    | IP  |
+| ---------- | ----------- | ---------------------------------------------------------------------------------- | -------------- | --- |
+| **grospc** | Workstation | Gaming rig, COSMIC Desktop, NFS Client. Uses **Zen Kernel** & `amd_pstate`.        | `192.168.1.11` |
+| **minipc** | Server      | Headless Homelab, NFS Server, AdGuard Home, Tailscale Exit Node (UDP GRO enabled). | `192.168.1.10` |
 
 ##🛠️ Custom RolesI use a custom option system defined in `modules/nixos/api/default.nix` to easily assign roles to machines:
 
 - **`bigor.roles.desktop`**: Enables GUI, Pipewire, Fonts, and Gaming optimizations.
-- **`bigor.roles.homelab_master`**: Enables Server services, Docker/Podman, and network optimizations.
+- **`bigor.roles.homelab_master`**: Enables Server services, NFS Server, and network optimizations.
 
 ##🚀 Installation & Usage###1. Clone the repository```bash
 git clone [https://github.com/bigor44/nixos.git](https://github.com/bigor44/nixos.git) ~/nixos
@@ -62,7 +65,14 @@ cd ~/nixos
 
 ````
 
-###2. Update the systemTo apply the configuration for the current hostname:
+###2. Post-Install BootstrappingA helper script is available to quickly set up the hardware configuration and state version for a new machine:
+
+```bash
+./scripts/post_install.sh
+
+````
+
+###3. Update the systemTo apply the configuration for the current hostname:
 
 ```bash
 # Using 'nh' (recommended, included in the config)
@@ -71,18 +81,16 @@ nh os switch
 # Or using standard nix tools
 sudo nixos-rebuild switch --flake .
 
-````
+```
 
-###3. FormattingTo ensure code quality before pushing:
+###4. Code Review / SharingTo aggregate the entire configuration into a single Markdown file for review (or for LLM context):
 
 ```bash
-nix fmt
-# or
-treefmt
+./scripts/concat_config.sh output.md
 
 ```
 
-##📦 Custom Packages\* **Turtle WoW**: A custom AppImage wrapper for the Turtle WoW client, patched for Wayland compatibility.
+##📦 Custom Packages\* **Turtle WoW**: A custom AppImage wrapper for the Turtle WoW client, patched with `LD_PRELOAD` to inject `wayland-client` and `wayland-cursor` libraries for native Wayland compatibility.
 
 ##📄 LicenseThis project is licensed under the **MIT License** - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
 
