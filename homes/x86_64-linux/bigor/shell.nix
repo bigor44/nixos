@@ -1,14 +1,12 @@
 {pkgs, ...}: {
-  # ============================================================================
   # Shell Environment (Fish)
-  # ============================================================================
+  #
   # Configures Fish shell with plugins, aliases, and abbreviations.
   # Integrates:
-  # - Starship (prompt) - implicitly via bobthefisher or separate module?
+  # - Tide (prompt)
   # - fzf (fuzzy finder)
   # - zoxide (directory jumping)
   # - bat (enhanced cat)
-  # ============================================================================
   programs = {
     fish = {
       enable = true;

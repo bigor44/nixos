@@ -4,14 +4,12 @@
   lib,
   ...
 }: {
-  # ============================================================================
   # User Packages
-  # ============================================================================
+  #
   # Installs user-specific applications via Home Manager.
   # - CLI: Modern tools (eza, ripgrep, lazygit)
   # - GUI: Social, media, and gaming apps (conditioned on desktop role)
   # - Dev: Code quality tools and formatters
-  # ============================================================================
   home.packages = with pkgs;
     [
       # Modern CLI replacements

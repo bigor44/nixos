@@ -18,12 +18,10 @@
     waylandCursor
   ];
 in
-  # ============================================================================
   # Turtle WoW Client Wrapper
-  # ============================================================================
+  #
   # Wraps the official AppImage to inject Wayland compatibility libraries
   # (via LD_PRELOAD) and installs a desktop entry.
-  # ============================================================================
   pkgs.appimageTools.wrapType2 {
     inherit pname version src;
     name = pname;
