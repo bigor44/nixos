@@ -22,37 +22,23 @@
   outputs = inputs:
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
-      src = ./.; # Dit à Snowfall de scanner le répertoire courant
+      src = ./.;
 
-      # Configuration globale pour Snowfall
       snowfall = {
-        namespace = "bigor"; # Vos options deviendront bigor.<module>
-
-        # Configuration des métadonnées (optionnel mais recommandé)
+        namespace = "bigor";
         meta = {
           name = "bigor-nixos";
           title = "Bigor's NixOS";
         };
       };
 
-      # Canaux (Channels) configurés
       channels-config = {
         allowUnfree = true;
       };
-
-      # Overlays globaux si vous en avez (sinon liste vide)
       overlays = [];
 
-      # Modules partagés entre tous les systèmes
       systems.modules.nixos = with inputs; [
         nixvim.nixosModules.nixvim
-        # Votre configuration Home Manager actuelle intégrée au système
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.extraSpecialArgs = {inherit inputs;};
-        }
       ];
     };
 }
