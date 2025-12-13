@@ -1,11 +1,6 @@
 # Ignore build outputs from performing a nix-build or `nix build` command
 result
 result-*
-.pre-commit-config.yaml
-lazy-lock.json
-
-keys.txt
-age.agekey
 
 # Fichiers temporaires ou déchiffrés par erreur (ex: sops -d > clear.yaml)
 *.decrypted.*

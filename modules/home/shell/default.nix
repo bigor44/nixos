@@ -59,22 +59,6 @@ in {
           nfc = "nix flake check";
           nfu = "nix flake update";
 
-          # Git shortcuts
-          gaa = "git add -A";
-          gc = "git commit";
-          gcm = "git commit -m";
-          gca = "git commit --amend";
-          gd = "git diff";
-          gds = "git diff --staged";
-          gl = "git pull";
-          gp = "git push";
-          gpf = "git push --force-with-lease";
-          gst = "git status";
-          gco = "git checkout";
-          gcb = "git checkout -b";
-          gb = "git branch";
-          glog = "git log --oneline --graph --decorate";
-
           # System monitoring
           ports = "netstat -tulanp";
           meminfo = "free -h";
