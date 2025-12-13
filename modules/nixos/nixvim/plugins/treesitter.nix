@@ -1,4 +1,10 @@
 {
+  # ============================================================================
+  # Treesitter
+  # ============================================================================
+  # Advanced syntax highlighting and parsing.
+  # Includes 'treesitter-context' to show the current function/scope at the top.
+  # ============================================================================
   programs.nixvim.plugins = {
     treesitter = {
       enable = true;

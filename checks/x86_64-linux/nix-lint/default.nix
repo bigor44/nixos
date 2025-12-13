@@ -6,7 +6,7 @@
 pkgs.runCommand "nix-lint" {
   nativeBuildInputs = [pkgs.statix pkgs.deadnix];
 } ''
-  # On récupère le chemin propre des sources via l'input "self"
+  # Retrieve the source path via the "self" input
   src="${inputs.self}"
 
   echo "Running statix on $src..."

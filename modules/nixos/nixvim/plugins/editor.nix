@@ -1,4 +1,12 @@
 {
+  # ============================================================================
+  # Editor Plugins
+  # ============================================================================
+  # Plugins that enhance the core editing experience:
+  # - Telescope (Fuzzy finder)
+  # - Neo-tree (File explorer)
+  # - LazyGit (Git interface)
+  # ============================================================================
   programs.nixvim.plugins = {
     telescope = {
       enable = true;

@@ -1,4 +1,13 @@
 {
+  # ============================================================================
+  # UI Components
+  # ============================================================================
+  # Visual enhancements for Neovim:
+  # - Gitsigns (Git diff in gutter)
+  # - Noice (CMD line and notifications)
+  # - Dressing (Better UI for select/input)
+  # - Mini (Statusline, icons, colorizers)
+  # ============================================================================
   programs.nixvim = {
     highlight = {
       MiniNotifyNormal = {

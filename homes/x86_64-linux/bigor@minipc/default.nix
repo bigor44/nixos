@@ -1,4 +1,10 @@
 {
+  # ============================================================================
+  # Home Manager Configuration (bigor@minipc)
+  # ============================================================================
+  # Entry point for the 'bigor' user on the 'minipc' host.
+  # Enables only core shell and CLI tools (headless environment).
+  # ============================================================================
   home = {
     username = "bigor";
     homeDirectory = "/home/bigor";

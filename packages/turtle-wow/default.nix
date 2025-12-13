@@ -8,9 +8,12 @@
     hash = "sha256-/4qRkc6m+F0djc0YoIfMZxwHaZsrowkyc9O6jS5fUEk=";
   };
 
+  # ============================================================================
   # Wayland Compatibility
+  # ============================================================================
   # The game client requires specific Wayland libraries to be preloaded
   # to function correctly in a pure Wayland environment.
+  # ============================================================================
   waylandClient = "${lib.getLib pkgs.wayland}/lib/libwayland-client.so.0";
   waylandCursor = "${lib.getLib pkgs.wayland}/lib/libwayland-cursor.so.0";
   preload = lib.concatStringsSep ":" [
@@ -18,10 +21,12 @@
     waylandCursor
   ];
 in
+  # ============================================================================
   # Turtle WoW Client Wrapper
-  #
+  # ============================================================================
   # Wraps the official AppImage to inject Wayland compatibility libraries
   # (via LD_PRELOAD) and installs a desktop entry.
+  # ============================================================================
   pkgs.appimageTools.wrapType2 {
     inherit pname version src;
     name = pname;

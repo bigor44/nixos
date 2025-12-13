@@ -3,6 +3,12 @@
   lib,
   ...
 }:
+# ============================================================================
+# Git Configuration
+# ============================================================================
+# Configures Git with user details and a comprehensive set of Fish shell
+# abbreviations for common workflows.
+# ============================================================================
 with lib; let
   cfg = config.bigor.home.git;
 in {

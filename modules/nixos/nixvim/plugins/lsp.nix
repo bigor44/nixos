@@ -1,4 +1,13 @@
 {
+  # ============================================================================
+  # Language Server Protocol (LSP)
+  # ============================================================================
+  # Configures intelligent code features:
+  # - LSP Servers (Nix, Lua, Python, etc.)
+  # - Formatting (Conform)
+  # - Autocompletion (Blink-cmp)
+  # - Diagnostics (Trouble)
+  # ============================================================================
   programs.nixvim.plugins = {
     lsp = {
       enable = true;

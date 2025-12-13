@@ -11,16 +11,10 @@ in {
     enable = mkEnableOption "Enable user shell configuration";
   };
 
-  # 2. Configuration conditionnelle
+  # Conditional Configuration
   config = mkIf cfg.enable {
     # Shell Environment (Fish)
-    #
-    # Configures Fish shell with plugins, aliases, and abbreviations.
-    # Integrates:
-    # - Tide (prompt)
-    # - fzf (fuzzy finder)
-    # - zoxide (directory jumping)
-    # - bat (enhanced cat)
+    # Configures Fish shell with Tide (prompt), fzf, zoxide, and bat.
     programs = {
       fish = {
         enable = true;

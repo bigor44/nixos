@@ -1,4 +1,12 @@
 {
+  # ============================================================================
+  # Utility Plugins
+  # ============================================================================
+  # Miscellaneous utilities powered by 'mini.nvim':
+  # - Auto-pairs, Surround, Comments
+  # - Cursor word highlighting
+  # - Keybinding hints (Clue)
+  # ============================================================================
   programs.nixvim.plugins.mini = {
     enable = true;
     modules = {

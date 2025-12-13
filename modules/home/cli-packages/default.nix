@@ -4,6 +4,12 @@
   pkgs,
   ...
 }:
+# ============================================================================
+# CLI Tools & Packages
+# ============================================================================
+# Installs a suite of modern command-line utilities and code quality tools
+# (formatters, linters) for development.
+# ============================================================================
 with lib; let
   cfg = config.bigor.home.cli-packages;
 in {
