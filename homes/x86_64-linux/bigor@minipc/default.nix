@@ -14,5 +14,6 @@
     git.enable = true;
     shell.enable = true;
     cli-packages.enable = true;
+    nixvim.enable = true;
   };
 }

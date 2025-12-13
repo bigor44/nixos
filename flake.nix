@@ -38,9 +38,13 @@
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
+      homes.modules = [
+        inputs.nixvim.homeModules.nixvim
+      ];
 
       # Snowfall Configuration
       snowfall = {
+        ystems = ["x86_64-linux"];
         namespace = "bigor";
         meta = {
           name = "bigor-nixos";
@@ -53,10 +57,5 @@
         allowUnfree = true;
       };
       overlays = [];
-
-      # Shared System Modules
-      systems.modules.nixos = with inputs; [
-        nixvim.nixosModules.nixvim
-      ];
     };
 }
