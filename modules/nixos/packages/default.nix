@@ -14,6 +14,9 @@
     nh = {
       enable = true;
       clean.enable = true;
+      # Garbage collection policy:
+      # - Keep the last 3 generations
+      # - Keep any generation created in the last 4 days
       clean.extraArgs = "--keep-since 4d --keep 3";
       flake = "/home/bigor/nixos";
     };

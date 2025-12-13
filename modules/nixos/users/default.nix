@@ -19,6 +19,7 @@
   # Passwordless sudo for the 'wheel' group for convenience
   security.sudo.wheelNeedsPassword = false;
 
-  # Ensure Fish is listed as a valid login shell
+  # Ensure Fish is listed in /etc/shells.
+  # This is required for it to be a valid login shell for users (e.g. for SSH or display managers).
   environment.shells = with pkgs; [fish];
 }

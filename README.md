@@ -36,7 +36,7 @@ The repository follows the standard Snowfall Lib structure:
 │       └── bigor@minipc    # Server user config
 ├── modules/        # Modular configuration blocks
 │   ├── home/       # Home Manager modules (shell, git, gui-packages)
-│   └── nixos/      # NixOS modules (desktop, services, nixvim, common)
+│   └── nixos/      # NixOS modules (api, desktop, services, nixvim, common, ...)
 ├── packages/       # Custom packages (e.g., turtle-wow)
 ├── systems/        # Host configurations
 │   └── x86_64-linux/
@@ -51,7 +51,7 @@ The repository follows the standard Snowfall Lib structure:
 | **grospc** | Workstation | Gaming rig, COSMIC Desktop, NFS Client, High Performance (Zen Kernel). | `192.168.1.11` |
 | **minipc** | Server      | Headless Homelab, NFS Server, AdGuard Home, Tailscale Exit Node.       | `192.168.1.10` |
 
-##🛠️ Custom RolesI use a custom option system defined in `modules/nixos/common/options.nix` to easily assign roles to machines:
+##🛠️ Custom RolesI use a custom option system defined in `modules/nixos/api/default.nix` to easily assign roles to machines:
 
 - **`bigor.roles.desktop`**: Enables GUI, Pipewire, Fonts, and Gaming optimizations.
 - **`bigor.roles.homelab_master`**: Enables Server services, Docker/Podman, and network optimizations.
