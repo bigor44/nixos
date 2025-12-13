@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}: {
+{config, ...}: {
   # ============================================================================
   # Dotfiles Management
   # ============================================================================
@@ -11,6 +7,6 @@
   # ============================================================================
   xdg.configFile = {
     cosmic.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/dotfiles/cosmic";
-    autostart.source = lib.mkForce ../dotfiles/autostart;
+    autostart.source = ../../../dotfiles/autostart;
   };
 }

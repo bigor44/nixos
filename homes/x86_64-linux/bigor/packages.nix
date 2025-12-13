@@ -42,6 +42,6 @@
       whatsapp-electron
       antigravity-fhs
       brave
-      (callPackage ./turtle-wow.nix {})
+      pkgs.bigor.turtle-wow
     ];
 }

@@ -51,7 +51,6 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.bigor = import ./home; # Voir étape 4 pour améliorer ça
           home-manager.extraSpecialArgs = {inherit inputs;};
         }
       ];
