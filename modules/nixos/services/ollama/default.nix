@@ -23,24 +23,6 @@ in {
       };
 
       # ==========================================================================
-      # 2. Open WebUI (L'Interface)
-      # ==========================================================================
-      open-webui = {
-        enable = true;
-        port = 8080;
-        environment = {
-          # Désactive l'authentification (Accès libre sur le réseau local)
-          WEBUI_AUTH = "False";
-
-          # URL interne pour parler à Ollama
-          OLLAMA_BASE_URL = "http://127.0.0.1:11434";
-
-          # Nom de l'instance
-          WEBUI_NAME = "Bigor AI";
-        };
-      };
-
-      # ==========================================================================
       # 3. Reverse Proxy (Caddy)
       # ==========================================================================
       # Expose le service sur le port 443 avec un certificat interne
