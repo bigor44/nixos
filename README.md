@@ -1,99 +1,271 @@
-# ❄️ Bigor's NixOS Configuration
+# 🐧 Bigor's NixOS Configuration
 
-Welcome to my personal **NixOS** configuration repository. This setup is fully declarative, managed with **Nix Flakes**, and structured using the opinionated [Snowfall Lib](https://github.com/snowfallorg/lib).
+A declarative, modular NixOS configuration using flakes and [Snowfall Lib](https://github.com/snowfallorg/lib) for structure. This repository manages both a desktop workstation (`grospc`) and a headless home lab server (`minipc`).
 
-It powers my personal infrastructure, ranging from a high-performance gaming desktop running the **COSMIC Desktop Environment** (Alpha) to a headless homelab server.
+## 🌟 Features
 
-![NixOS](https://img.shields.io/badge/NixOS-25.11-blue.svg)
-![Snowfall](https://img.shields.io/badge/Managed_with-Snowfall_Lib-89b4fa.svg)
-![COSMIC](https://img.shields.io/badge/Desktop-COSMIC-d08770.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+### Desktop Environment (`grospc`)
 
-## ✨ Key Features
+- **DE**: COSMIC Desktop Environment
+- **Shell**: Fish with Tide prompt, fzf, zoxide
+- **Editor**: Neovim (via NixVim) with full LSP, Treesitter, and modern plugins
+- **Gaming**: Steam, GameMode optimizations
+- **Performance**: Zen kernel, AMD P-State active mode, performance governor
+- **Storage**: NFS client for accessing shared storage
 
-- **Structure:** Built with **Snowfall Lib** for automatic module discovery and a clean directory layout.
-- **Desktop Environment:** Early adopter of **COSMIC DE** (by System76) on the main workstation, with custom dotfiles management via symlinks.
-- **Editor:** Fully configured **Neovim** setup using **Nixvim**, featuring:
-  - **LSP:** Auto-configured for Nix, Lua, Python, etc.
-  - **Completion:** Powered by the blazing fast **blink-cmp**.
-  - **UI:** Enhanced with `noice`, `trouble`, and `neo-tree`.
-- **Gaming:** Optimized with `linuxPackages_zen`, Gamemode, and custom packages (like a Wayland-patched Turtle WoW client).
-- **Homelab Services:**
-  - **AdGuard Home:** Declarative configuration with local DNS rewrites managed via Nix.
-  - **Tailscale:** Configured as an **Exit Node** with **UDP GRO forwarding** enabled for maximum throughput.
-  - **NFS:** Centralized storage sharing (Server on `minipc`, Client on `grospc`).
-  - **Caddy:** Reverse proxy with internal CA trust.
+### Home Lab Server (`minipc`)
 
-## 🏗️ Architecture
+- **Services**:
+  - AdGuard Home (network-wide ad blocking + local DNS)
+  - NFS Server (centralized storage)
+  - Ollama (local AI models with Open WebUI)
+  - Tailscale VPN (mesh networking + exit node)
+  - Caddy (reverse proxy with automatic HTTPS)
+- **Optimization**: UDP GRO forwarding for Tailscale, schedutil CPU governor
+- **Security**: Hardened SSH (key-only auth, no root login)
 
-The repository follows the standard Snowfall Lib structure:
+### Development Tools
 
-```text
-├── certs/          # Local certificates (Internal CA)
-├── checks/         # CI/CD checks (nix-lint via statix/deadnix)
-├── dotfiles/       # Mutable configuration files (COSMIC applets, wallpapers, autostart)
-├── homes/          # Home Manager configurations (users)
-│   └── x86_64-linux/
-│       ├── bigor@grospc    # Desktop user config
-│       └── bigor@minipc    # Server user config
-├── modules/        # Modular configuration blocks
-│   ├── home/       # Home Manager modules (shell, git, gui-packages)
-│   └── nixos/      # NixOS modules (api, desktop, services, nixvim, gaming, ...)
-├── packages/       # Custom packages (e.g., turtle-wow)
-├── scripts/        # Helper scripts (post-install, review)
-├── systems/        # Host configurations
-│   └── x86_64-linux/
-│       ├── grospc  # Main Desktop
-│       └── minipc  # Homelab Server
-└── flake.nix       # Entry point
+- **LSP Support**: Nix, Lua, Python, Bash, YAML, JSON, Markdown
+- **Formatters**: alejandra, stylua, shfmt, prettier, black, isort, taplo
+- **Linters**: statix, deadnix, selene
+- **Git Integration**: Extensive Fish abbreviations, LazyGit in Neovim
+
+## 📁 Project Structure
 
 ```
+nixos/
+├── flake.nix                    # Main flake configuration
+├── flake.lock                   # Locked dependency versions
+├── treefmt.toml                 # Code formatting configuration
+├── systems/x86_64-linux/        # Host-specific configurations
+│   ├── grospc/                  # Desktop workstation
+│   └── minipc/                  # Home lab server
+├── modules/
+│   ├── nixos/                   # System-level modules
+│   │   ├── api/                 # Custom options API
+│   │   ├── common/              # Base system configuration
+│   │   ├── desktop/             # Desktop environment setup
+│   │   ├── fonts/               # Font configuration
+│   │   ├── gaming/              # Gaming optimizations
+│   │   ├── packages/            # System packages
+│   │   ├── services/            # Service configurations
+│   │   └── users/               # User management
+│   └── home/                    # Home Manager modules
+│       ├── cli-packages/        # CLI tools
+│       ├── git/                 # Git configuration
+│       ├── gui-packages/        # Desktop applications
+│       ├── nixvim/              # Neovim configuration
+│       └── shell/               # Shell environment
+├── homes/x86_64-linux/          # Home Manager configurations
+│   ├── bigor/                   # Base user configuration
+│   ├── bigor@grospc/            # Desktop user configuration
+│   └── bigor@minipc/            # Server user configuration
+├── packages/                    # Custom packages
+│   └── turtle-wow/              # Turtle WoW game client
+├── checks/                      # CI/CD checks
+│   └── x86_64-linux/nix-lint/   # Nix linting
+└── scripts/                     # Utility scripts
+    ├── concat_config.sh         # Configuration aggregation
+    └── post_install.sh          # Post-installation setup
+```
 
-| ##🖥️ Hosts | Hostname    | Role                                                                               | Description    | IP  |
-| ---------- | ----------- | ---------------------------------------------------------------------------------- | -------------- | --- |
-| **grospc** | Workstation | Gaming rig, COSMIC Desktop, NFS Client. Uses **Zen Kernel** & `amd_pstate`.        | `192.168.1.11` |
-| **minipc** | Server      | Headless Homelab, NFS Server, AdGuard Home, Tailscale Exit Node (UDP GRO enabled). | `192.168.1.10` |
+## 🚀 Quick Start
 
-##🛠️ Custom RolesI use a custom option system defined in `modules/nixos/api/default.nix` to easily assign roles to machines:
+### Initial Installation
 
-- **`bigor.roles.desktop`**: Enables GUI, Pipewire, Fonts, and Gaming optimizations.
-- **`bigor.roles.homelab_master`**: Enables Server services, NFS Server, and network optimizations.
+1. **Boot NixOS installer** and clone this repository:
 
-##🚀 Installation & Usage###1. Clone the repository```bash
-git clone [https://github.com/bigor44/nixos.git](https://github.com/bigor44/nixos.git) ~/nixos
-cd ~/nixos
+   ```bash
+   nix-shell -p git
+   git clone https://github.com/yourusername/nixos.git ~/nixos
+   cd ~/nixos
+   ```
 
-````
+2. **Create host configuration** (if not already present):
 
-###2. Post-Install BootstrappingA helper script is available to quickly set up the hardware configuration and state version for a new machine:
+   ```bash
+   mkdir -p systems/x86_64-linux/your-hostname
+   # Add your default.nix and run hardware scan
+   nixos-generate-config --show-hardware-config > systems/x86_64-linux/your-hostname/hardware-configuration.nix
+   ```
+
+3. **Install NixOS**:
+
+   ```bash
+   sudo nixos-install --flake .#your-hostname
+   ```
+
+4. **Run post-install script** (after reboot):
+   ```bash
+   cd ~/nixos
+   ./scripts/post_install.sh
+   ```
+
+### Daily Usage
+
+**Rebuild system** (with nh):
 
 ```bash
-./scripts/post_install.sh
-
-````
-
-###3. Update the systemTo apply the configuration for the current hostname:
-
-```bash
-# Using 'nh' (recommended, included in the config)
 nh os switch
-
-# Or using standard nix tools
-sudo nixos-rebuild switch --flake .
-
 ```
 
-###4. Code Review / SharingTo aggregate the entire configuration into a single Markdown file for review (or for LLM context):
+**Update flake inputs**:
 
 ```bash
-./scripts/concat_config.sh output.md
-
+nix flake update
 ```
 
-##📦 Custom Packages\* **Turtle WoW**: A custom AppImage wrapper for the Turtle WoW client, patched with `LD_PRELOAD` to inject `wayland-client` and `wayland-cursor` libraries for native Wayland compatibility.
+**Format code**:
 
-##📄 LicenseThis project is licensed under the **MIT License** - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
-
+```bash
+treefmt
 ```
 
+**Check configuration**:
+
+```bash
+nix flake check
 ```
+
+**Garbage collection** (automated via nh):
+
+```bash
+nh clean all --keep 3 --keep-since 4d
+```
+
+## 🔧 Configuration Options
+
+### Custom API Options (`bigor.*`)
+
+#### Roles
+
+```nix
+bigor.roles = {
+  desktop = true;           # Enable full desktop environment
+  homelab_master = true;    # Enable server services
+};
+```
+
+#### Services
+
+```nix
+bigor.services = {
+  ssh.enable = true;        # SSH daemon
+  nfs.server = true;        # NFS server
+  nfs.client = true;        # NFS client
+  ollama.enable = true;     # Ollama AI service
+};
+```
+
+#### Network
+
+```nix
+bigor.network = {
+  mainInterface = "enp2s0";           # Primary network interface
+  ips.grospc = "192.168.1.11";        # Desktop static IP
+  ips.minipc = "192.168.1.10";        # Server static IP
+};
+```
+
+### Home Manager Options (`bigor.home.*`)
+
+```nix
+bigor.home = {
+  git.enable = true;           # Git configuration + Fish abbrs
+  shell.enable = true;         # Fish + Tide + fzf + zoxide
+  cli-packages.enable = true;  # Modern CLI tools
+  gui-packages.enable = true;  # Desktop applications
+  nixvim.enable = true;        # Neovim configuration
+};
+```
+
+## 📦 Notable Packages
+
+### CLI Tools
+
+- **Modern replacements**: eza, fd, ripgrep, bat, btop
+- **Development**: lazygit, statix, deadnix, treefmt
+- **Network**: dig, tailscale
+- **System**: inxi, fastfetch, lm_sensors
+
+### Desktop Applications
+
+- **Communication**: Discord, WhatsApp
+- **Media**: YouTube Music, Brave browser
+- **Gaming**: Steam, Turtle WoW (custom package)
+- **Productivity**: OneDrive
+
+### Neovim Plugins
+
+- **Editor**: Telescope, Neo-tree, LazyGit
+- **LSP**: Native LSP with multiple language servers
+- **Completion**: Blink-cmp
+- **UI**: Noice, Gitsigns, Mini.nvim suite
+- **Formatting**: Conform.nvim with auto-format on save
+
+## 🌐 Service Access
+
+All services are accessible via local DNS (configured in AdGuard Home):
+
+- **AdGuard Home**: https://adguard.bigor.lan
+- **Ollama WebUI**: https://ai.bigor.lan
+- **Main server**: https://bigor.lan
+
+## 🔒 Security Features
+
+- Hardened SSH (key-only authentication)
+- No root login
+- Passwordless sudo for wheel group
+- Internal CA for local TLS certificates
+- AdGuard Home for DNS-level protection
+- Tailscale for secure remote access
+
+## 🎨 Customization
+
+### Adding a New Host
+
+1. Create directory: `systems/x86_64-linux/hostname/`
+2. Add `default.nix` with system configuration
+3. Generate hardware config: `nixos-generate-config`
+4. Run `./scripts/post_install.sh` to finalize
+5. Build: `nh os switch`
+
+### Adding a New Service
+
+1. Create module: `modules/nixos/services/service-name/default.nix`
+2. Add option to `modules/nixos/api/default.nix`
+3. Configure in host's `default.nix`
+4. Add DNS rewrite in AdGuard if needed
+
+### Customizing Neovim
+
+Edit files in `modules/home/nixvim/`:
+
+- `opts.nix` - Editor options and colorscheme
+- `keymaps.nix` - Key bindings
+- `plugins/` - Plugin configurations
+
+## 🤝 Contributing
+
+This is a personal configuration, but feel free to:
+
+- Open issues for questions
+- Submit PRs for improvements
+- Fork and adapt for your own use
+
+## 📝 License
+
+MIT License - Feel free to use and modify as needed.
+
+## 🙏 Acknowledgments
+
+- [NixOS](https://nixos.org/) - The foundation
+- [Snowfall Lib](https://github.com/snowfallorg/lib) - Flake structure
+- [NixVim](https://github.com/nix-community/nixvim) - Neovim configuration
+- [Home Manager](https://github.com/nix-community/home-manager) - User environment management
+- [COSMIC Desktop](https://github.com/pop-os/cosmic-epoch) - Modern desktop environment
+
+---
+
+**Built with ❤️ and Nix**
