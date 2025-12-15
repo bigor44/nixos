@@ -1,14 +1,17 @@
 {
   # ============================================================================
-  # Language Server Protocol (LSP)
+  # File: modules/home/nixvim/plugins/lsp.nix
+  # Description: Language Server Protocol (LSP) Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures intelligent code features including LSP servers,
+  #          formatting (Conform), autocompletion (Blink-cmp), and diagnostics.
   # ============================================================================
-  # Configures intelligent code features:
-  # - LSP Servers (Nix, Lua, Python, etc.)
-  # - Formatting (Conform)
-  # - Autocompletion (Blink-cmp)
-  # - Diagnostics (Trouble)
-  # ============================================================================
+
   programs.nixvim.plugins = {
+    # ==========================================================================
+    # LSP Servers
+    # ==========================================================================
     lsp = {
       enable = true;
       servers = {
@@ -18,7 +21,9 @@
         jsonls = {
           enable = true;
           settings.json = {
-            schemas = {__raw = "require('schemastore').json.schemas()";};
+            schemas = {
+              __raw = "require('schemastore').json.schemas()";
+            };
             validate.enable = true;
           };
         };
@@ -26,7 +31,9 @@
           enable = true;
           settings.yaml = {
             schemaStore.enable = false;
-            schemas = {__raw = "require('schemastore').yaml.schemas()";};
+            schemas = {
+              __raw = "require('schemastore').yaml.schemas()";
+            };
           };
         };
         lua_ls = {
@@ -37,7 +44,7 @@
             format.enable = false;
           };
         };
-        nil_ls = {
+        nixd = {
           enable = true;
         };
       };
@@ -58,12 +65,16 @@
       };
     };
 
+    # Support for JSON/YAML schemas
     schemastore = {
       enable = true;
       json.enable = true;
       yaml.enable = true;
     };
 
+    # ==========================================================================
+    # Formatting (Conform)
+    # ==========================================================================
     conform-nvim = {
       enable = true;
       settings = {
@@ -73,28 +84,38 @@
           lsp_fallback = true;
         };
         formatters_by_ft = {
-          nix = ["alejandra"];
-          lua = ["stylua"];
-          sh = ["shfmt"];
-          bash = ["shfmt"];
-          json = ["prettier"];
-          yaml = ["prettier"];
-          markdown = ["prettier"];
-          python = ["isort" "black"];
-          javascript = ["prettier"];
-          typescript = ["prettier"];
-          css = ["prettier"];
-          html = ["prettier"];
-          toml = ["taplo"];
+          nix = [ "nixfmt" ];
+          lua = [ "stylua" ];
+          sh = [ "shfmt" ];
+          bash = [ "shfmt" ];
+          json = [ "prettier" ];
+          yaml = [ "prettier" ];
+          markdown = [ "prettier" ];
+          python = [
+            "isort"
+            "black"
+          ];
+          javascript = [ "prettier" ];
+          typescript = [ "prettier" ];
+          css = [ "prettier" ];
+          html = [ "prettier" ];
+          toml = [ "taplo" ];
         };
         formatters = {
           shfmt = {
-            prepend_args = ["-i" "2" "-s"];
+            prepend_args = [
+              "-i"
+              "2"
+              "-s"
+            ];
           };
         };
       };
     };
 
+    # ==========================================================================
+    # Autocompletion (Blink-cmp)
+    # ==========================================================================
     blink-cmp = {
       enable = true;
       settings = {
@@ -103,7 +124,12 @@
           use_nvim_cmp_as_default = true;
           nerd_font_variant = "mono";
         };
-        sources.default = ["lsp" "path" "snippets" "buffer"];
+        sources.default = [
+          "lsp"
+          "path"
+          "snippets"
+          "buffer"
+        ];
         completion = {
           menu.border = "rounded";
           documentation.window.border = "rounded";
@@ -112,6 +138,9 @@
       };
     };
 
+    # ==========================================================================
+    # Diagnostics (Trouble)
+    # ==========================================================================
     trouble = {
       enable = true;
       settings = {

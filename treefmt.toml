@@ -1,15 +1,21 @@
-# Treefmt configuration
-# Based on the tools defined in modules/nixos/core/nixvim/default.nix
+# ============================================================================
+# File: treefmt.toml
+# Description: Treefmt Configuration
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Defines formatters for various file types (Nix, Lua, Shell, etc.)
+#          to ensure consistent code style across the project.
+# ============================================================================
 
 # Global options
 [global]
 on-error = "continue"
 
 # ------------------------------------------------------------------------------
-# Nix (alejandra)
+# Nix (nixfmt)
 # ------------------------------------------------------------------------------
 [formatter.nix]
-command = "alejandra"
+command = "nixfmt"
 includes = ["*.nix"]
 excludes = ["generated.nix"]
 
@@ -40,11 +46,6 @@ options = ["--profile", "black"]
 [formatter.python-black]
 command = "black"
 includes = ["*.py"]
-# Note: treefmt pipes content to stdin by default if no file args are passed,
-# but for some tools passing the file path is better.
-# However, for treefmt 2.0+ it usually handles files well.
-# black usually accepts file paths.
-# Let's rely on treefmt's default behavior of passing file paths unless 'stdin' is true.
 
 # ------------------------------------------------------------------------------
 # Web / Config (prettier)
@@ -53,7 +54,6 @@ includes = ["*.py"]
 command = "prettier"
 options = ["--write"]
 includes = ["*.md", "*.json", "*.yaml", "*.yml", "*.html", "*.css", "*.scss"]
-# Prettier often respects .prettierrc if present.
 
 # ------------------------------------------------------------------------------
 # TOML (taplo)

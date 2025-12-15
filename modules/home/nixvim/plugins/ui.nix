@@ -1,14 +1,15 @@
 {
   # ============================================================================
-  # UI Components
+  # File: modules/home/nixvim/plugins/ui.nix
+  # Description: UI Components Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures visual enhancements like Gitsigns, Noice, Dressing,
+  #          and the Mini suite (statusline, icons).
   # ============================================================================
-  # Visual enhancements for Neovim:
-  # - Gitsigns (Git diff in gutter)
-  # - Noice (CMD line and notifications)
-  # - Dressing (Better UI for select/input)
-  # - Mini (Statusline, icons, colorizers)
-  # ============================================================================
+
   programs.nixvim = {
+    # Highlights for Mini.notify
     highlight = {
       MiniNotifyNormal = {
         link = "NormalFloat";
@@ -24,6 +25,9 @@
     plugins = {
       web-devicons.enable = true;
 
+      # ========================================================================
+      # Git Signs
+      # ========================================================================
       gitsigns = {
         enable = true;
         settings = {
@@ -36,6 +40,9 @@
         };
       };
 
+      # ========================================================================
+      # Noice (CMD line & Notifications)
+      # ========================================================================
       noice = {
         enable = true;
         settings = {
@@ -54,6 +61,9 @@
         };
       };
 
+      # ========================================================================
+      # Dressing (UI Improvement)
+      # ========================================================================
       dressing = {
         enable = true;
         settings = {
@@ -68,15 +78,17 @@
         };
       };
 
+      # ========================================================================
+      # Mini Suite (Statusline, Tabline, Patterns)
+      # ========================================================================
       mini = {
         enable = true;
         modules = {
-          statusline = {};
-          tabline = {};
+          statusline = { };
+          tabline = { };
           hipatterns = {
             highlighters = {
-              # Hex color is standard in hipatterns, we might need __raw if the module doesn't expose it easily
-              # But NixVim's mini module often simplifies this. Let's check docs or use __raw for safety.
+              # Hex color is standard in hipatterns
               hex_color = {
                 __raw = "require('mini.hipatterns').gen_highlighter.hex_color()";
               };

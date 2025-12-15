@@ -1,15 +1,17 @@
 {
   # ============================================================================
-  # Keybindings
+  # File: modules/home/nixvim/keymaps.nix
+  # Description: Neovim Keybindings
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Defines custom key mappings for better navigation, editing, and
+  #          plugin interaction.
   # ============================================================================
-  # Defines custom key mappings for better navigation and editing workflow.
-  # - Window management (Ctrl+hjkl)
-  # - Buffer navigation (Shift+l/h)
-  # - Selection indentation (< >)
-  # - Plugin toggles (Explorer, Trouble, LazyGit)
-  # ============================================================================
+
   programs.nixvim.keymaps = [
+    # ==========================================================================
     # Standard Operations
+    # ==========================================================================
     {
       mode = "n";
       key = "<Esc>";
@@ -23,7 +25,9 @@
       options.desc = "Clear search highlights (Alternative)";
     }
 
-    # Window Navigation
+    # ==========================================================================
+    # Window Navigation (Ctrl + hjkl)
+    # ==========================================================================
     {
       mode = "n";
       key = "<C-h>";
@@ -49,7 +53,9 @@
       options.desc = "Focus right window";
     }
 
+    # ==========================================================================
     # Window Resize
+    # ==========================================================================
     {
       mode = "n";
       key = "<C-Up>";
@@ -75,7 +81,9 @@
       options.desc = "Increase window width";
     }
 
+    # ==========================================================================
     # Buffer Navigation
+    # ==========================================================================
     {
       mode = "n";
       key = "<S-l>";
@@ -89,7 +97,10 @@
       options.desc = "Previous buffer";
     }
 
+    # ==========================================================================
     # Editing Enhancements
+    # ==========================================================================
+    # Stay in visual mode after indenting
     {
       mode = "v";
       key = "<";
@@ -102,6 +113,7 @@
       action = ">gv";
       options.desc = "Indent selection right";
     }
+    # Move selected lines up/down
     {
       mode = "v";
       key = "J";
@@ -115,7 +127,10 @@
       options.desc = "Move selection up";
     }
 
-    # Plugin Specific (Trouble)
+    # ==========================================================================
+    # Plugin Specific
+    # ==========================================================================
+    # Trouble
     {
       mode = "n";
       key = "<leader>xx";
@@ -123,7 +138,7 @@
       options.desc = "Toggle Diagnostics (Trouble)";
     }
 
-    # Plugin Specific (Neo-tree)
+    # Neo-tree
     {
       mode = "n";
       key = "<leader>e";
@@ -131,7 +146,7 @@
       options.desc = "Toggle Explorer";
     }
 
-    # Plugin Specific (LazyGit)
+    # LazyGit
     {
       mode = "n";
       key = "<leader>gg";

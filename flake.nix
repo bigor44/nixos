@@ -1,4 +1,13 @@
 {
+  # ============================================================================
+  # File: flake.nix
+  # Description: Main entry point for the NixOS configuration using Flakes.
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Defines inputs (dependencies) and outputs (system configurations)
+  #          using Snowfall Lib for structure and modularity.
+  # ============================================================================
+
   description = "Bigor's Simplified NixOS Configuration";
 
   # ============================================================================
@@ -6,9 +15,9 @@
   # ============================================================================
   # Defines external dependencies:
   # - nixpkgs: Core system packages (Branch: 25.11)
-  # - snowfall-lib: Flake structure helper
-  # - home-manager: User environment manager
-  # - nixvim: Neovim configuration via Nix
+  # - snowfall-lib: Helper library for opinionated flake structure
+  # - home-manager: Manages user environments (dotfiles, etc.)
+  # - nixvim: Neovim configuration framework for Nix
   # ============================================================================
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
@@ -32,19 +41,26 @@
   # ============================================================================
   # Flake Outputs
   # ============================================================================
-  # Builds the system configurations using Snowfall Lib.
+  # Generates the system configurations based on the inputs.
+  # Utilizes Snowfall Lib's `mkFlake` to automatically traverse the directory
+  # structure (systems/, modules/, etc.) and build the NixOS configurations.
   # ============================================================================
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
+
+      # Inject Nixvim modules into Home Manager
       homes.modules = [
         inputs.nixvim.homeModules.nixvim
       ];
 
+      # ------------------------------------------------------------------------
       # Snowfall Configuration
+      # ------------------------------------------------------------------------
       snowfall = {
-        systems = ["x86_64-linux"];
+        systems = [ "x86_64-linux" ];
         namespace = "bigor";
         meta = {
           name = "bigor-nixos";
@@ -52,10 +68,12 @@
         };
       };
 
+      # ------------------------------------------------------------------------
       # Global Nixpkgs Configuration
+      # ------------------------------------------------------------------------
       channels-config = {
         allowUnfree = true;
       };
-      overlays = [];
+      overlays = [ ];
     };
 }

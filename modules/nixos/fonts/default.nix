@@ -3,13 +3,17 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # ============================================================================
-  # Typography & Fonts
+  # File: modules/nixos/fonts/default.nix
+  # Description: System Fonts Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Installs and configures system fonts, prioritizing Nerd Fonts and
+  #          providing CJK support.
   # ============================================================================
-  # Installs a comprehensive set of fonts for coding, general usage, and CJK support.
-  # Configures Fontconfig to prefer Nerd Fonts and modern sans-serifs.
-  # ============================================================================
+
   config = lib.mkIf config.bigor.roles.desktop {
     fonts = {
       packages = with pkgs; [
@@ -27,7 +31,9 @@
         noto-fonts-color-emoji
       ];
 
+      # ========================================================================
       # Fontconfig Fallback Strategy
+      # ========================================================================
       fontconfig = {
         defaultFonts = {
           # 1. Nerd Font first for Dev/System icons
@@ -49,7 +55,7 @@
             "Noto Sans Mono CJK JP"
             "Noto Color Emoji"
           ];
-          emoji = ["Noto Color Emoji"];
+          emoji = [ "Noto Color Emoji" ];
         };
       };
     };

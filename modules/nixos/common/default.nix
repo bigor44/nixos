@@ -2,21 +2,21 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # ============================================================================
-  # System Configuration
+  # File: modules/nixos/common/default.nix
+  # Description: Base System Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Defines core system settings applicable to all hosts, including
+  #          bootloader, basic networking, localization, and Nix configuration.
   # ============================================================================
-  # Defines core system settings:
-  # - Bootloader (systemd-boot)
-  # - Nix configuration (flakes, binary caches, garbage collection)
-  # - Basic networking (hosts, certificates)
-  # - Licensing (allowUnfree)
-  # ============================================================================
+
   # ============================================================================
   # Bootloader Configuration
   # ============================================================================
   # We use systemd-boot as it is simple, reliable, and well-integrated with UEFI.
-  # ============================================================================
   boot = {
     loader = {
       systemd-boot = {
@@ -32,7 +32,6 @@
   # ============================================================================
   # Define static hostnames for local machines to ensure reliable resolution
   # without relying on external DNS.
-  # ============================================================================
   networking.extraHosts = ''
     ${config.bigor.network.ips.minipc} minipc
     ${config.bigor.network.ips.grospc} grospc
@@ -42,8 +41,7 @@
   # Certificates
   # ============================================================================
   # Trust the internal CA to allow secure communication between local services.
-  # ============================================================================
-  security.pki.certificateFiles = [../../../certs/minipc-ca.pem];
+  security.pki.certificateFiles = [ ../../../certs/minipc-ca.pem ];
 
   # Allow proprietary software (drivers, codecs, etc.)
   nixpkgs.config.allowUnfree = true;
@@ -81,12 +79,12 @@
     # but saves significant disk space.
     optimise.automatic = true;
   };
+
   # ============================================================================
   # Locale & Regional Settings
   # ============================================================================
   # Configures time zone, system language (French default, English supported),
   # and keyboard layout (French).
-  # ============================================================================
   time.timeZone = "Europe/Paris";
 
   # Set system-wide locale to French (France) but keep support for English.

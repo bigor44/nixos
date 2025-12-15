@@ -10,5 +10,5 @@ result-*
 *.swp
 *.swo
 
-
+GEMINI.md
 .pre-commit-config.yaml

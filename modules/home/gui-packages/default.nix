@@ -5,25 +5,39 @@
   ...
 }:
 # ============================================================================
-# Desktop Applications (GUI)
+# File: modules/home/gui-packages/default.nix
+# Description: Desktop Applications (GUI)
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Installs graphical applications and manages dotfiles for desktop
+#          components (COSMIC, Autostart).
 # ============================================================================
-# Installs graphical applications and manages dotfiles for desktop components.
-# ============================================================================
-with lib; let
+
+with lib;
+let
   cfg = config.bigor.home.gui-packages;
-in {
+in
+{
   options.bigor.home.gui-packages = {
     enable = mkEnableOption "Enable user desktop apps";
   };
+
   config = mkIf cfg.enable {
+    # ==========================================================================
+    # Applications
+    # ==========================================================================
     home.packages = with pkgs; [
       discord
       onedrive
       youtube-music
       whatsapp-electron
       brave
-      pkgs.bigor.turtle-wow
+      pkgs.bigor.turtle-wow # Custom package
     ];
+
+    # ==========================================================================
+    # Configuration Files (Dotfiles)
+    # ==========================================================================
     xdg.configFile = {
       # Symlink mutable configuration files from the local repository.
       # mkOutOfStoreSymlink allows editing files in ~/nixos/dotfiles/ and

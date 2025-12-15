@@ -3,9 +3,20 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.bigor.home.nixvim;
-in {
+in
+{
+  # ============================================================================
+  # File: modules/home/nixvim/default.nix
+  # Description: Neovim Configuration (NixVim)
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Entry point for the modular Neovim configuration.
+  #          Imports sub-modules (opts, keymaps, plugins) and installs external tools.
+  # ============================================================================
+
   imports = [
     ./opts.nix
     ./keymaps.nix
@@ -23,24 +34,28 @@ in {
       extraPackages = with pkgs; [
         wl-clipboard
 
-        # LSP
+        # ======================================================================
+        # Language Servers (LSP)
+        # ======================================================================
         nodePackages.bash-language-server
-        marksman
-        pyright
-        vscode-langservers-extracted
+        marksman # Markdown
+        pyright # Python
+        vscode-langservers-extracted # HTML/CSS/JSON/ESLint
         yaml-language-server
         lua-language-server
-        nil
+        nixd # Nix
 
-        # Formatters / Linters
-        alejandra
-        stylua
-        selene
-        shfmt
-        prettier
-        isort
-        black
-        taplo
+        # ======================================================================
+        # Formatters & Linters
+        # ======================================================================
+        nixfmt-rfc-style # Nix
+        stylua # Lua
+        selene # Lua linter
+        shfmt # Shell
+        prettier # Web (JSON/YAML/Markdown/etc)
+        isort # Python imports
+        black # Python code
+        taplo # TOML
       ];
     };
   };

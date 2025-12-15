@@ -2,14 +2,22 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # ============================================================================
-  # AdGuard Home
+  # File: modules/nixos/services/adguard/default.nix
+  # Description: AdGuard Home Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Sets up AdGuard Home for network-wide ad blocking and local DNS
+  #          resolution when the homelab role is active.
   # ============================================================================
-  # Network-wide ad blocking and tracking protection.
-  # Also acts as the local DNS resolver, rewriting internal domains to local IPs.
-  # ============================================================================
+
   config = lib.mkIf config.bigor.roles.homelab_master {
+
+    # ==========================================================================
+    # Caddy Integration
+    # ==========================================================================
     services.caddy.virtualHosts."adguard.bigor.lan" = {
       extraConfig = ''
         reverse_proxy 127.0.0.1:3003
@@ -17,6 +25,9 @@
       '';
     };
 
+    # ==========================================================================
+    # AdGuard Home Service
+    # ==========================================================================
     services.adguardhome = {
       enable = true;
       port = 3003;
@@ -33,7 +44,7 @@
           enabled = true;
         };
         dns = {
-          bind_hosts = ["0.0.0.0"];
+          bind_hosts = [ "0.0.0.0" ];
           port = 53;
           # Upstream DNS providers (Privacy focused + Google as backup)
           upstream_dns = [
@@ -95,23 +106,23 @@
         # Blocklists
         filters =
           map
-          (url: {
-            enabled = true;
-            inherit url;
-          })
-          [
-            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-            "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # Malicious URL Blocklist (URLHaus)
-            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # Hagezi Multi Normal
-            "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
-          ];
+            (url: {
+              enabled = true;
+              inherit url;
+            })
+            [
+              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
+              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # Malicious URL Blocklist (URLHaus)
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # Hagezi Multi Normal
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
+            ];
       };
     };
 
     # Open DNS ports for local network clients
     networking.firewall = {
-      allowedTCPPorts = [53];
-      allowedUDPPorts = [53];
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 ];
     };
   };
 }

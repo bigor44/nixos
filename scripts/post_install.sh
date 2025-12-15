@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+# ============================================================================
+# File: scripts/post_install.sh
+# Description: Post-Installation Setup Script
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Automates the initial setup of a new host by copying the hardware
+#          configuration and updating the NixOS state version in the flake.
+# ============================================================================
+
 set -e
 
 # Ensure we are in the project root (simple check)
@@ -7,7 +16,9 @@ if [ ! -d "systems" ]; then
   exit 1
 fi
 
-# 1. Ask for hostname
+# ==============================================================================
+# 1. Hostname Selection
+# ==============================================================================
 read -rp "Enter target hostname: " HOSTNAME_VAR
 
 if [ -z "$HOSTNAME_VAR" ]; then
@@ -25,27 +36,31 @@ if [ ! -d "$TARGET_DIR" ]; then
   exit 1
 fi
 
-# 2. Copy hardware-configuration.nix
+# ==============================================================================
+# 2. Hardware Configuration
+# ==============================================================================
+# Copies the generated hardware-configuration.nix from /etc/nixos
 SOURCE_HW_CONFIG="/etc/nixos/hardware-configuration.nix"
 
 if [ -f "$SOURCE_HW_CONFIG" ]; then
-  echo "Copying $SOURCE_HW_CONFIG to $TARGET_DIR/..."
+  echo "Copying $SOURCE_HW_CONFIG to $TARGET_DIR/"
   cp "$SOURCE_HW_CONFIG" "$TARGET_DIR/hardware-configuration.nix"
-  # Ensure it's tracked by git if needed, or just let the user handle it.
-  # We won't git add automatically to avoid assuming too much.
 else
   echo "Warning: '$SOURCE_HW_CONFIG' not found. Skipping copy."
 fi
 
-# 3. Update stateVersion in host configuration
+# ==============================================================================
+# 3. State Version Update
+# ==============================================================================
+# Updates the system.stateVersion in default.nix to match the currently installed version.
 if [ -f "$TARGET_CONFIG" ]; then
   # Detect current NixOS version (Major.Minor)
   if command -v nixos-version &>/dev/null; then
     CURRENT_VERSION=$(nixos-version | cut -d. -f1,2)
     echo "Detected NixOS version: $CURRENT_VERSION"
 
-    echo "Updating system.stateVersion in $TARGET_CONFIG..."
-    # Using temp file for sed to ensure atomicity and compatibility (BSD/GNU sed differences mostly avoided this way but standard Linux sed -i is fine)
+    echo "Updating system.stateVersion in $TARGET_CONFIG"...
+    # Using temp file for sed to ensure atomicity and compatibility
     sed -i "s/system\.stateVersion[[:space:]]*=[[:space:]]*\".*\";/system.stateVersion = \"$CURRENT_VERSION\";/" "$TARGET_CONFIG"
 
     echo "Done."

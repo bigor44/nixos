@@ -1,13 +1,17 @@
 {
   # ============================================================================
-  # Neovim Options & UI
+  # File: modules/home/nixvim/opts.nix
+  # Description: Neovim Options & UI Settings
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures core editor options (line numbers, tabs, clipboard),
+  #          colorscheme, and global variables.
   # ============================================================================
-  # - Colorscheme: OneDark (Darker variant)
-  # - Leader key: Space
-  # - Clipboard: System clipboard integration (wl-copy)
-  # - Editor behavior: Line numbers, indentation, undo persistence, etc.
-  # ============================================================================
+
   programs.nixvim = {
+    # ==========================================================================
+    # Visuals & Colorscheme
+    # ==========================================================================
     colorschemes.onedark = {
       enable = true;
       settings = {
@@ -16,35 +20,56 @@
       };
     };
 
+    # ==========================================================================
+    # Global Variables
+    # ==========================================================================
     globals = {
       mapleader = " ";
       maplocalleader = "\\";
     };
 
+    # ==========================================================================
+    # Editor Options
+    # ==========================================================================
     opts = {
-      number = true;
-      relativenumber = true;
-      termguicolors = true;
-      signcolumn = "yes";
-      cursorline = true;
-      scrolloff = 8;
-      mouse = "a";
+      # UI
+      number = true; # Show line numbers
+      relativenumber = true; # Relative line numbers
+      termguicolors = true; # True color support
+      signcolumn = "yes"; # Always show sign column
+      cursorline = true; # Highlight current line
+      scrolloff = 8; # Keep 8 lines above/below cursor
+      mouse = "a"; # Enable mouse support
+
+      # Indentation
       tabstop = 2;
       shiftwidth = 2;
-      expandtab = true;
+      expandtab = true; # Use spaces instead of tabs
       smartindent = true;
-      ignorecase = true;
-      smartcase = true;
-      updatetime = 250;
-      timeoutlen = 300;
-      undofile = true;
+
+      # Search
+      ignorecase = true; # Ignore case in search patterns
+      smartcase = true; # ...unless uppercase letters are used
+
+      # Performance & Behavior
+      updatetime = 250; # Faster completion/updates
+      timeoutlen = 300; # Faster key sequence timeout
+      undofile = true; # Persistent undo
       completeopt = "menu,menuone,noselect";
-      spelllang = ["en" "fr"];
+
+      # Spell Checking
+      spelllang = [
+        "en"
+        "fr"
+      ];
     };
 
+    # ==========================================================================
+    # Clipboard
+    # ==========================================================================
     clipboard = {
       register = "unnamedplus";
-      providers.wl-copy.enable = true;
+      providers.wl-copy.enable = true; # Wayland clipboard support
     };
   };
 }

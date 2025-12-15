@@ -1,13 +1,17 @@
 {
   # ============================================================================
-  # Editor Plugins
+  # File: modules/home/nixvim/plugins/editor.nix
+  # Description: Editor Plugins Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures plugins that enhance the core editing experience, such as
+  #          file navigation (Telescope, Neo-tree) and Git integration (LazyGit).
   # ============================================================================
-  # Plugins that enhance the core editing experience:
-  # - Telescope (Fuzzy finder)
-  # - Neo-tree (File explorer)
-  # - LazyGit (Git interface)
-  # ============================================================================
+
   programs.nixvim.plugins = {
+    # ==========================================================================
+    # Telescope (Fuzzy Finder)
+    # ==========================================================================
     telescope = {
       enable = true;
       extensions = {
@@ -33,13 +37,19 @@
       };
       settings = {
         defaults = {
-          file_ignore_patterns = ["^.git/" "^node_modules/"];
+          file_ignore_patterns = [
+            "^.git/"
+            "^node_modules/"
+          ];
           layout_config.horizontal.prompt_position = "top";
           sorting_strategy = "ascending";
         };
       };
     };
 
+    # ==========================================================================
+    # Neo-tree (File Explorer)
+    # ==========================================================================
     neo-tree = {
       enable = true;
       settings = {
@@ -51,14 +61,17 @@
         source_selector = {
           winbar = true;
           sources = [
-            {source = "filesystem";}
-            {source = "buffers";}
-            {source = "git_status";}
+            { source = "filesystem"; }
+            { source = "buffers"; }
+            { source = "git_status"; }
           ];
         };
       };
     };
 
+    # ==========================================================================
+    # Git Integration
+    # ==========================================================================
     lazygit.enable = true;
   };
 }

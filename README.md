@@ -26,8 +26,8 @@ A declarative, modular NixOS configuration using flakes and [Snowfall Lib](https
 
 ### Development Tools
 
-- **LSP Support**: Nix, Lua, Python, Bash, YAML, JSON, Markdown
-- **Formatters**: alejandra, stylua, shfmt, prettier, black, isort, taplo
+- **LSP Support**: Nix (nixd), Lua, Python, Bash, YAML, JSON, Markdown
+- **Formatters**: nixfmt, stylua, shfmt, prettier, black, isort, taplo
 - **Linters**: statix, deadnix, selene
 - **Git Integration**: Extensive Fish abbreviations, LazyGit in Neovim
 
@@ -185,7 +185,7 @@ bigor.home = {
 ### CLI Tools
 
 - **Modern replacements**: eza, fd, ripgrep, bat, btop
-- **Development**: lazygit, statix, deadnix, treefmt
+- **Development**: lazygit, statix, deadnix, treefmt, nixd
 - **Network**: dig, tailscale
 - **System**: inxi, fastfetch, lm_sensors
 

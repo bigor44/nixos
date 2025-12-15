@@ -4,18 +4,32 @@
   pkgs,
   ...
 }:
-with lib; let
+# ============================================================================
+# File: modules/home/shell/default.nix
+# Description: User Shell Configuration
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Configures the Fish shell environment with Tide prompt, plugins,
+#          aliases, and integrations for fzf, zoxide, and bat.
+# ============================================================================
+
+with lib;
+let
   cfg = config.bigor.home.shell;
-in {
+in
+{
   options.bigor.home.shell = {
     enable = mkEnableOption "Enable user shell configuration";
   };
 
-  # Conditional Configuration
   config = mkIf cfg.enable {
-    # Shell Environment (Fish)
-    # Configures Fish shell with Tide (prompt), fzf, zoxide, and bat.
+    # ==========================================================================
+    # Programs Configuration
+    # ==========================================================================
     programs = {
+      # ========================================================================
+      # Fish Shell
+      # ========================================================================
       fish = {
         enable = true;
 
@@ -60,6 +74,11 @@ in {
         };
       };
 
+      # ========================================================================
+      # Interactive Tools
+      # ========================================================================
+
+      # Fuzzy Finder
       fzf = {
         enable = true;
         enableFishIntegration = true;
@@ -72,12 +91,14 @@ in {
         ];
       };
 
+      # Smarter `cd`
       zoxide = {
         enable = true;
         enableFishIntegration = true;
-        options = ["--cmd cd"];
+        options = [ "--cmd cd" ];
       };
 
+      # Better `cat`
       bat = {
         enable = true;
         config = {

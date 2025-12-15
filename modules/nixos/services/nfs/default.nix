@@ -2,20 +2,25 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.bigor.services.nfs;
   inherit (config.bigor.network) ips;
-in {
+in
+{
   # ============================================================================
-  # NFS File Sharing
+  # File: modules/nixos/services/nfs/default.nix
+  # Description: NFS File Sharing Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures NFS server (exporting shares) and NFS client (mounting
+  #          shares) based on enabled feature flags.
   # ============================================================================
-  # Configures NFS server (for hosting shares) and NFS client (for mounting shares).
-  # Controlled via 'bigor.services.nfs.server' and 'bigor.services.nfs.client' options.
-  # ============================================================================
+
   config = lib.mkMerge [
-    # --------------------------------------------------------------------------
+    # ==========================================================================
     # Server Configuration (minipc)
-    # --------------------------------------------------------------------------
+    # ==========================================================================
     # Exports the /mnt/storage directory to the local network.
     (lib.mkIf cfg.server {
       services.nfs.server = {
@@ -42,9 +47,9 @@ in {
       };
     })
 
-    # --------------------------------------------------------------------------
+    # ==========================================================================
     # Client Configuration (grospc)
-    # --------------------------------------------------------------------------
+    # ==========================================================================
     (lib.mkIf cfg.client {
       fileSystems."/mnt/storage" = {
         device = "${ips.minipc}:/mnt/storage";

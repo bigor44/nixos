@@ -1,16 +1,19 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # ============================================================================
-  # System Packages
+  # File: modules/nixos/packages/default.nix
+  # Description: Core System Packages
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Installs essential command-line tools, system monitoring utilities,
+  #          and Nix-related tools available to all users.
   # ============================================================================
-  # Installs essential command-line tools and utilities available to all users.
-  # Includes:
-  # - Nix tooling (statix, deadnix, nh)
-  # - Network utilities (dig, wget, curl)
-  # - System monitoring (btop, htop, inxi)
-  # ============================================================================
+
   programs = {
     fish.enable = true;
     tmux.enable = true;
+
+    # Nix Helper (nh) Configuration
     nh = {
       enable = true;
       clean.enable = true;

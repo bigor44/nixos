@@ -2,19 +2,30 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.bigor.services.ollama;
   serverIP = config.bigor.network.ips.minipc;
   domain = "ai.bigor.lan";
-in {
+in
+{
+  # ============================================================================
+  # File: modules/nixos/services/ollama/default.nix
+  # Description: Ollama AI Service Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Deploys the Ollama AI backend and exposes it via Caddy.
+  #          Includes DNS registration in AdGuard Home.
+  # ============================================================================
+
   options.bigor.services.ollama = {
-    enable = lib.mkEnableOption "Active la stack Ollama + Open WebUI (Sans Auth)";
+    enable = lib.mkEnableOption "Enable Ollama stack + Open WebUI (No Auth)";
   };
 
   config = lib.mkIf cfg.enable {
     services = {
       # ==========================================================================
-      # 1. Ollama Service (Le "Cerveau")
+      # 1. Ollama Service (The "Brain")
       # ==========================================================================
       ollama = {
         enable = true;
@@ -23,9 +34,9 @@ in {
       };
 
       # ==========================================================================
-      # 3. Reverse Proxy (Caddy)
+      # 2. Reverse Proxy (Caddy)
       # ==========================================================================
-      # Expose le service sur le port 443 avec un certificat interne
+      # Expose the service on port 443 with an internal TLS certificate.
       caddy.virtualHosts."${domain}" = {
         extraConfig = ''
           reverse_proxy 127.0.0.1:8080
@@ -34,10 +45,10 @@ in {
       };
 
       # ==========================================================================
-      # 4. Enregistrement DNS (AdGuard Home)
+      # 3. DNS Registration (AdGuard Home)
       # ==========================================================================
-      # Injecte la réécriture DNS directement dans la config AdGuard locale.
-      # NOTE : Cela ne fonctionne que si AdGuard tourne sur la MÊME machine.
+      # Inject the DNS rewrite directly into the local AdGuard configuration.
+      # NOTE: This only works if AdGuard is running on the SAME machine.
       adguardhome.settings.filtering.rewrites = [
         {
           inherit domain;

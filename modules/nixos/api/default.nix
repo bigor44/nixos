@@ -1,10 +1,12 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   # ============================================================================
-  # Custom Options API
-  # ============================================================================
-  # This file defines the high-level feature flags (options) used to control
-  # the system configuration. These options abstract away complex module
-  # imports and settings, allowing for a cleaner host configuration.
+  # File: modules/nixos/api/default.nix
+  # Description: Custom NixOS Options API
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Defines the high-level feature flags (options) under `bigor.*` to
+  #          control system configuration, abstracting complex module imports.
   # ============================================================================
 
   options.bigor = {

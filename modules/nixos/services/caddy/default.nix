@@ -2,14 +2,17 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # ============================================================================
-  # Caddy Web Server
+  # File: modules/nixos/services/caddy/default.nix
+  # Description: Caddy Web Server Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures Caddy as a reverse proxy for internal services.
+  #          Virtual hosts are defined dynamically in other service modules.
   # ============================================================================
-  # Configures Caddy as a reverse proxy for internal services.
-  # Note: Virtual hosts are defined within individual service modules
-  # using 'services.caddy.virtualHosts'.
-  # ============================================================================
+
   config = lib.mkIf config.bigor.roles.homelab_master {
     services.caddy = {
       enable = true;

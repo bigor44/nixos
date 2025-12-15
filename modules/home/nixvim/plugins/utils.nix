@@ -1,23 +1,27 @@
 {
   # ============================================================================
-  # Utility Plugins
+  # File: modules/home/nixvim/plugins/utils.nix
+  # Description: Utility Plugins Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Configures miscellaneous utilities powered by 'mini.nvim', including
+  #          auto-pairs, surroundings, comments, and keybinding hints.
   # ============================================================================
-  # Miscellaneous utilities powered by 'mini.nvim':
-  # - Auto-pairs, Surround, Comments
-  # - Cursor word highlighting
-  # - Keybinding hints (Clue)
-  # ============================================================================
+
   programs.nixvim.plugins.mini = {
     enable = true;
     modules = {
-      ai = {};
-      cursorword = {};
-      indentscope = {};
-      pairs = {};
-      surround = {};
-      comment = {};
-      trailspace = {};
-      # Clue needs complex config
+      ai = { };
+      cursorword = { };
+      indentscope = { };
+      pairs = { };
+      surround = { };
+      comment = { };
+      trailspace = { };
+
+      # ========================================================================
+      # Mini.clue (Keybinding Hints)
+      # ========================================================================
       clue = {
         triggers = [
           {
@@ -86,12 +90,12 @@
           }
         ];
         clues = [
-          {__raw = "require('mini.clue').gen_clues.builtin_completion()";}
-          {__raw = "require('mini.clue').gen_clues.g()";}
-          {__raw = "require('mini.clue').gen_clues.marks()";}
-          {__raw = "require('mini.clue').gen_clues.registers()";}
-          {__raw = "require('mini.clue').gen_clues.windows()";}
-          {__raw = "require('mini.clue').gen_clues.z()";}
+          { __raw = "require('mini.clue').gen_clues.builtin_completion()"; }
+          { __raw = "require('mini.clue').gen_clues.g()"; }
+          { __raw = "require('mini.clue').gen_clues.marks()"; }
+          { __raw = "require('mini.clue').gen_clues.registers()"; }
+          { __raw = "require('mini.clue').gen_clues.windows()"; }
+          { __raw = "require('mini.clue').gen_clues.z()"; }
         ];
       };
     };

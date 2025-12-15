@@ -2,17 +2,22 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # ============================================================================
-  # Desktop Base Configuration
+  # File: modules/nixos/desktop/default.nix
+  # Description: Desktop Environment Configuration
+  # Author: Bigor
+  # Date: 2025-12-15
+  # Purpose: Sets up the graphical environment (COSMIC), audio (Pipewire),
+  #          bluetooth, and essential desktop applications when the desktop role is enabled.
   # ============================================================================
-  # Foundation for the graphical environment.
-  # - Audio: Pipewire (ALSA/PulseAudio/Wireplumber)
-  # - Bluetooth: Enabled with high-quality settings
-  # - Browsers: Firefox
-  # ============================================================================
+
   config = lib.mkIf config.bigor.roles.desktop {
-    # --- Audio (Pipewire & Realtime) ---
+
+    # ==========================================================================
+    # Audio Subsystem (Pipewire)
+    # ==========================================================================
     services.pipewire = {
       enable = true;
       alsa.enable = true;
@@ -20,11 +25,14 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
+
     # RTKit is required for PipeWire to acquire realtime scheduling priority.
     # This helps reduce audio latency and prevents dropouts.
     security.rtkit.enable = true;
 
-    # --- Bluetooth ---
+    # ==========================================================================
+    # Bluetooth
+    # ==========================================================================
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -41,22 +49,29 @@
       };
     };
 
-    # --- Desktop Base Packages ---
+    # ==========================================================================
+    # Desktop Base Packages
+    # ==========================================================================
     programs = {
       firefox.enable = true;
     };
+
     boot = {
       # Reduce console log level to hide non-critical kernel messages during boot.
       consoleLogLevel = 3;
       # "quiet" parameter to suppress most boot messages for a cleaner boot experience.
-      kernelParams = ["quiet"];
+      kernelParams = [ "quiet" ];
     };
 
+    # ==========================================================================
     # Network Manager
+    # ==========================================================================
     # Enable NetworkManager for easier network configuration via GUI.
     networking.networkmanager.enable = true;
 
+    # ==========================================================================
     # Desktop Environment: COSMIC
+    # ==========================================================================
     services = {
       displayManager = {
         cosmic-greeter.enable = true;

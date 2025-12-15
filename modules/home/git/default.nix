@@ -4,17 +4,23 @@
   ...
 }:
 # ============================================================================
-# Git Configuration
+# File: modules/home/git/default.nix
+# Description: Git Configuration
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Configures Git with user identity and defines a comprehensive set
+#          of Fish shell abbreviations for common Git workflows.
 # ============================================================================
-# Configures Git with user details and a comprehensive set of Fish shell
-# abbreviations for common workflows.
-# ============================================================================
-with lib; let
+
+with lib;
+let
   cfg = config.bigor.home.git;
-in {
+in
+{
   options.bigor.home.git = {
     enable = mkEnableOption "Enable user git configuration";
   };
+
   config = mkIf cfg.enable {
     programs.git = {
       enable = true;
@@ -23,6 +29,10 @@ in {
         email = "bigor44@gmail.com";
       };
     };
+
+    # ==========================================================================
+    # Shell Abbreviations
+    # ==========================================================================
     programs.fish.shellAbbrs = {
       g = "git";
       gaa = "git add -A";
@@ -39,7 +49,6 @@ in {
       gcb = "git checkout -b";
       gb = "git branch";
       glog = "git log --oneline --graph --decorate";
-      defaultCommand = "fd --type f --hidden --exclude .git";
     };
   };
 }

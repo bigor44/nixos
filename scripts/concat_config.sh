@@ -1,29 +1,26 @@
 #!/usr/bin/env bash
+# ============================================================================
+# File: scripts/concat_config.sh
+# Description: Configuration Aggregation Script
+# Author: Bigor
+# Date: 2025-12-15
+# Purpose: Scans the project directory (default: ~/nixos/) and aggregates the
+#          content of specific configuration files (*.nix, *.lua, etc.) into a
+#          single Markdown document. Useful for sharing or reviewing context.
 #
-# Description:
-#   Scans the project directory (default: ~/nixos/) and aggregates the content
-#   of specific configuration files (*.nix, *.lua, *.md, etc.) into a single
-#   Markdown document. This is useful for sharing or reviewing the entire
-#   configuration in one place.
-#
-# Usage:
-#   ./concat_config.sh [output_file]
-#
-# Examples:
-#   ./concat_config.sh            # Prints to STDOUT
-#   ./concat_config.sh full.md    # Saves to full.md
-#
+# Usage: ./concat_config.sh [output_file]
+# ============================================================================
 
 set -euo pipefail
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # Configuration
-# ------------------------------------------------------------------------------
+# ==============================================================================
 BASE_DIR="$HOME/nixos"
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # Argument Parsing
-# ------------------------------------------------------------------------------
+# ==============================================================================
 OUT_FILE=${1:-}
 
 # If an output file is specified, prepare it and redirect stdout.
@@ -41,9 +38,9 @@ echo "Writing Markdown concatenation to: ${OUT_FILE:-STDOUT}" >&2
 echo "Searching for configuration files under: $BASE_DIR" >&2
 echo >&2
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # Main Processing Loop
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # Find relevant files, handle special characters in filenames with print0/read.
 find "$BASE_DIR" -type f \
   \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.sh' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
@@ -52,6 +49,11 @@ find "$BASE_DIR" -type f \
 
     # Prevent the script from including its own output file if it's in the path.
     if [[ -n $OUT_FILE && $file == "$OUT_FILE" ]]; then
+      continue
+    fi
+
+    # Exclude files ignored by git (respects .gitignore)
+    if git -C "$BASE_DIR" check-ignore -q "$file"; then
       continue
     fi
 
