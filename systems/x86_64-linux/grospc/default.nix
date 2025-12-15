@@ -21,9 +21,6 @@
   # "active" enables the guided mode for effective governor management.
   boot.kernelParams = [ "amd_pstate=active" ];
 
-  # Use the 'performance' governor for maximum responsiveness on the desktop.
-  powerManagement.cpuFreqGovernor = "performance";
-
   # Zen kernel provides better desktop responsiveness and fsync patches.
   boot.kernelPackages = pkgs.linuxPackages_zen;
 

@@ -3,6 +3,7 @@
   lib,
   ...
 }:
+with lib;
 let
   cfg = config.bigor.services.nfs;
   inherit (config.bigor.network) ips;
@@ -17,12 +18,17 @@ in
   #          shares) based on enabled feature flags.
   # ============================================================================
 
-  config = lib.mkMerge [
+  options.bigor.services.nfs = {
+    server = mkEnableOption "Configures the machine to act as an NFS host, exporting defined storage directories (e.g., /mnt/storage)";
+    client = mkEnableOption "Configures the machine to mount remote NFS shares defined in the configuration";
+  };
+
+  config = mkMerge [
     # ==========================================================================
     # Server Configuration (minipc)
     # ==========================================================================
     # Exports the /mnt/storage directory to the local network.
-    (lib.mkIf cfg.server {
+    (mkIf cfg.server {
       services.nfs.server = {
         enable = true;
         # Export options:
@@ -50,7 +56,7 @@ in
     # ==========================================================================
     # Client Configuration (grospc)
     # ==========================================================================
-    (lib.mkIf cfg.client {
+    (mkIf cfg.client {
       fileSystems."/mnt/storage" = {
         device = "${ips.minipc}:/mnt/storage";
         fsType = "nfs";

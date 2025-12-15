@@ -6,12 +6,12 @@
 }:
 {
   # ============================================================================
-  # File: modules/nixos/fonts/default.nix
+  # File: modules/nixos/desktop/fonts/default.nix
   # Description: System Fonts Configuration
   # Author: Bigor
   # Date: 2025-12-15
   # Purpose: Installs and configures system fonts, prioritizing Nerd Fonts and
-  #          providing CJK support.
+  #          providing CJK support when the desktop role is enabled.
   # ============================================================================
 
   config = lib.mkIf config.bigor.roles.desktop {

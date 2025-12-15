@@ -4,6 +4,10 @@
   lib,
   ...
 }:
+with lib;
+let
+  cfg = config.bigor.services.tailscale;
+in
 {
   # ============================================================================
   # File: modules/nixos/services/tailscale/default.nix
@@ -14,7 +18,11 @@
   #          Exit Node functionality on the homelab master.
   # ============================================================================
 
-  config = lib.mkIf config.bigor.roles.homelab_master {
+  options.bigor.services.tailscale = {
+    enable = mkEnableOption "Enable Tailscale VPN mesh networking";
+  };
+
+  config = mkIf cfg.enable {
     services.tailscale.enable = true;
 
     # ==========================================================================

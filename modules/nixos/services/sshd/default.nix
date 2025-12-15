@@ -3,6 +3,10 @@
   lib,
   ...
 }:
+with lib;
+let
+  cfg = config.bigor.services.ssh;
+in
 {
   # ============================================================================
   # File: modules/nixos/services/sshd/default.nix
@@ -13,7 +17,11 @@
   #          defaults (no root login, key-based auth only).
   # ============================================================================
 
-  config = lib.mkIf config.bigor.services.ssh.enable {
+  options.bigor.services.ssh = {
+    enable = mkEnableOption "Enables the OpenSSH daemon with hardened security defaults (no root login, key-based auth only)";
+  };
+
+  config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
       openFirewall = true;

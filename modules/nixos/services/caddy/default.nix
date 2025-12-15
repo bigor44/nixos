@@ -3,6 +3,10 @@
   lib,
   ...
 }:
+with lib;
+let
+  cfg = config.bigor.services.caddy;
+in
 {
   # ============================================================================
   # File: modules/nixos/services/caddy/default.nix
@@ -13,7 +17,11 @@
   #          Virtual hosts are defined dynamically in other service modules.
   # ============================================================================
 
-  config = lib.mkIf config.bigor.roles.homelab_master {
+  options.bigor.services.caddy = {
+    enable = mkEnableOption "Enable Caddy web server as a reverse proxy";
+  };
+
+  config = mkIf cfg.enable {
     services.caddy = {
       enable = true;
     };

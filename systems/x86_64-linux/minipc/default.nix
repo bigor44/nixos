@@ -27,11 +27,6 @@
   # - Ollama AI Service
   bigor = {
     roles.homelab_master = true;
-    services = {
-      nfs.server = true;
-      ssh.enable = true;
-      ollama.enable = true;
-    };
     network.mainInterface = "enp2s0";
   };
 
@@ -46,8 +41,6 @@
     ];
   };
 
-  # Balance between power and performance (ideal for always-on server)
-  powerManagement.cpuFreqGovernor = "schedutil";
   hardware.cpu.amd.updateMicrocode = true;
 
   # ============================================================================

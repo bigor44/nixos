@@ -3,17 +3,25 @@
   lib,
   ...
 }:
+with lib;
+let
+  cfg = config.bigor.desktop.cosmic;
+in
 {
   # ============================================================================
-  # File: modules/nixos/desktop/default.nix
+  # File: modules/nixos/desktop/cosmic/default.nix
   # Description: Desktop Environment Configuration
   # Author: Bigor
   # Date: 2025-12-15
   # Purpose: Sets up the graphical environment (COSMIC), audio (Pipewire),
-  #          bluetooth, and essential desktop applications when the desktop role is enabled.
+  #          bluetooth, and essential desktop applications.
   # ============================================================================
 
-  config = lib.mkIf config.bigor.roles.desktop {
+  options.bigor.desktop.cosmic = {
+    enable = mkEnableOption "Enable the Desktop Environment configuration (COSMIC, Pipewire, Bluetooth, etc.)";
+  };
+
+  config = mkIf cfg.enable {
 
     # ==========================================================================
     # Audio Subsystem (Pipewire)

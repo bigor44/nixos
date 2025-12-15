@@ -3,6 +3,7 @@
   lib,
   ...
 }:
+with lib;
 let
   cfg = config.bigor.services.ollama;
   serverIP = config.bigor.network.ips.minipc;
@@ -19,10 +20,10 @@ in
   # ============================================================================
 
   options.bigor.services.ollama = {
-    enable = lib.mkEnableOption "Enable Ollama stack + Open WebUI (No Auth)";
+    enable = mkEnableOption "Enable Ollama stack + Open WebUI (No Auth)";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services = {
       # ==========================================================================
       # 1. Ollama Service (The "Brain")

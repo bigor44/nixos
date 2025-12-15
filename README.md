@@ -43,12 +43,14 @@ nixos/
 │   └── minipc/                  # Home lab server
 ├── modules/
 │   ├── nixos/                   # System-level modules
-│   │   ├── api/                 # Custom options API
 │   │   ├── common/              # Base system configuration
 │   │   ├── desktop/             # Desktop environment setup
-│   │   ├── fonts/               # Font configuration
-│   │   ├── gaming/              # Gaming optimizations
+│   │   │   ├── cosmic/          # COSMIC DE
+│   │   │   ├── fonts/           # Font configuration
+│   │   │   └── gaming/          # Gaming optimizations
+│   │   ├── network/             # Network configuration
 │   │   ├── packages/            # System packages
+│   │   ├── roles/               # System roles
 │   │   ├── services/            # Service configurations
 │   │   └── users/               # User management
 │   └── home/                    # Home Manager modules
@@ -136,25 +138,32 @@ nh clean all --keep 3 --keep-since 4d
 
 ## 🔧 Configuration Options
 
-### Custom API Options (`bigor.*`)
+### Custom Options (`bigor.*`)
 
 #### Roles
 
+Defining a role automatically enables a set of default feature flags.
+
 ```nix
 bigor.roles = {
-  desktop = true;           # Enable full desktop environment
-  homelab_master = true;    # Enable server services
+  desktop = true;           # Enables COSMIC, Gaming, Fonts
+  homelab_master = true;    # Enables SSH, Tailscale, Caddy, AdGuard, Ollama, NFS Server
 };
 ```
 
 #### Services
 
+Services can be enabled individually or controlled by roles.
+
 ```nix
 bigor.services = {
-  ssh.enable = true;        # SSH daemon
-  nfs.server = true;        # NFS server
-  nfs.client = true;        # NFS client
-  ollama.enable = true;     # Ollama AI service
+  ssh.enable = true;
+  nfs.server = true;
+  nfs.client = true;
+  ollama.enable = true;
+  tailscale.enable = true;
+  adguard.enable = true;
+  caddy.enable = true;
 };
 ```
 
@@ -234,8 +243,8 @@ All services are accessible via local DNS (configured in AdGuard Home):
 ### Adding a New Service
 
 1. Create module: `modules/nixos/services/service-name/default.nix`
-2. Add option to `modules/nixos/api/default.nix`
-3. Configure in host's `default.nix`
+2. Define option `options.bigor.services.service-name.enable` in the module
+3. Configure in host's `default.nix` or add to a role in `modules/nixos/roles/default.nix`
 4. Add DNS rewrite in AdGuard if needed
 
 ### Customizing Neovim

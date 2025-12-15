@@ -3,6 +3,10 @@
   lib,
   ...
 }:
+with lib;
+let
+  cfg = config.bigor.services.adguard;
+in
 {
   # ============================================================================
   # File: modules/nixos/services/adguard/default.nix
@@ -13,7 +17,11 @@
   #          resolution when the homelab role is active.
   # ============================================================================
 
-  config = lib.mkIf config.bigor.roles.homelab_master {
+  options.bigor.services.adguard = {
+    enable = mkEnableOption "Enable AdGuard Home for network-wide ad blocking and local DNS resolution";
+  };
+
+  config = mkIf cfg.enable {
 
     # ==========================================================================
     # Caddy Integration
