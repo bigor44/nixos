@@ -9,6 +9,10 @@
     username = "bigor";
     homeDirectory = "/home/bigor";
     stateVersion = "25.05";
+    sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
   };
   bigor.home = {
     git.enable = true;
