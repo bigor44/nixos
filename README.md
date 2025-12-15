@@ -21,6 +21,7 @@ A declarative, modular NixOS configuration using flakes and [Snowfall Lib](https
   - Ollama (local AI models with Open WebUI)
   - Tailscale VPN (mesh networking + exit node)
   - Caddy (reverse proxy with automatic HTTPS)
+  - Monitoring Stack (Prometheus, Grafana, Alertmanager)
 - **Optimization**: UDP GRO forwarding for Tailscale, schedutil CPU governor
 - **Security**: Hardened SSH (key-only auth, no root login)
 
@@ -164,6 +165,12 @@ bigor.services = {
   tailscale.enable = true;
   adguard.enable = true;
   caddy.enable = true;
+  monitoring = {
+    prometheus.enable = true;
+    grafana.enable = true;
+    alertmanager.enable = true;
+    node-exporter.enable = true;
+  };
 };
 ```
 
@@ -219,6 +226,9 @@ All services are accessible via local DNS (configured in AdGuard Home):
 
 - **AdGuard Home**: https://adguard.bigor.lan
 - **Ollama WebUI**: https://ai.bigor.lan
+- **Grafana**: https://grafana.bigor.lan
+- **Prometheus**: https://prometheus.bigor.lan
+- **Alertmanager**: https://alertmanager.bigor.lan
 - **Main server**: https://bigor.lan
 
 ## 🔒 Security Features
