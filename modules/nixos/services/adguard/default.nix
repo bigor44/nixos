@@ -60,7 +60,6 @@ in
             "https://dns.quad9.net/dns-query"
             "https://ns0.fdn.fr/dns-query" # French non-profit ISP
             "https://ns1.fdn.fr/dns-query"
-            "https://dns.google/dns-query"
           ];
           bootstrap_dns = [
             "1.1.1.1"
