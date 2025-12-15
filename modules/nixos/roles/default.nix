@@ -29,6 +29,9 @@
           cosmic.enable = lib.mkDefault true;
           gaming.enable = lib.mkDefault true;
         };
+        services = {
+          monitoring.node-exporter.enable = lib.mkDefault true;
+        };
       };
     })
 
@@ -40,6 +43,13 @@
         adguard.enable = lib.mkDefault true;
         ollama.enable = lib.mkDefault true;
         nfs.server = lib.mkDefault true;
+
+        monitoring = {
+          prometheus.enable = lib.mkDefault true;
+          grafana.enable = lib.mkDefault true;
+          alertmanager.enable = lib.mkDefault true;
+          node-exporter.enable = lib.mkDefault true;
+        };
       };
     })
   ];

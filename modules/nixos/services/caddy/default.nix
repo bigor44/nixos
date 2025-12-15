@@ -26,9 +26,11 @@ in
       enable = true;
     };
 
-    networking.firewall.allowedTCPPorts = [
-      80
-      443
-    ];
+    networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
+      allowedTCPPorts = [
+        80
+        443
+      ];
+    };
   };
 }

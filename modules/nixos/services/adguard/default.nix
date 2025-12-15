@@ -128,7 +128,7 @@ in
     };
 
     # Open DNS ports for local network clients
-    networking.firewall = {
+    networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
       allowedTCPPorts = [ 53 ];
       allowedUDPPorts = [ 53 ];
     };
