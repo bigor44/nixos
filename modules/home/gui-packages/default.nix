@@ -28,7 +28,6 @@ in
     # ==========================================================================
     home.packages = with pkgs; [
       discord
-      onedrive
       youtube-music
       whatsapp-electron
       brave
