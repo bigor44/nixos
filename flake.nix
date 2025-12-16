@@ -36,6 +36,10 @@
       url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # ============================================================================
@@ -54,6 +58,10 @@
       # Inject Nixvim modules into Home Manager
       homes.modules = [
         inputs.nixvim.homeModules.nixvim
+      ];
+
+      systems.modules.nixos = [
+        inputs.sops-nix.nixosModules.sops
       ];
 
       # ------------------------------------------------------------------------

@@ -1,0 +1,27 @@
+# ============================================================================
+# SOPS Configuration File
+#
+# Defines the master encryption keys and rules for file encryption.
+#
+# Keys:
+#   - &host_grospc: Age key for the 'grospc' host.
+#   - &host_minipc: Age key for the 'minipc' host.
+#   - &user_bigor:  Age key for the 'bigor' user.
+#
+# Creation Rules:
+#   - Encrypts any file in the `secrets/` directory ending with .yaml.
+#   - The file will be encrypted for the user and all specified hosts,
+#     allowing them to decrypt it.
+# ============================================================================
+keys:
+  - &host_grospc age1eaks6fpy22ksjxx9h5thyt7h6sxu6ql64j4kvpylxdcp2twj5frqfcu3kh
+  - &host_minipc age19a9qc7lxl0wu6gslqh0y9ukhdn2fynlqgfayhrkk5l98xwpc93lqpspm6e
+  - &user_bigor age1sw035y28puee2xhm2rw6y6n5yh64hfupn3uhrs248ma4a333fgdsdm0snh
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *user_bigor
+          - *host_minipc
+          - *host_grospc

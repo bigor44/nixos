@@ -1,12 +1,26 @@
-# Ignore build outputs from performing a nix-build or `nix build` command
+# --- Nix Build Artifacts ---
 result
 result-*
+repl-result
 
-# Fichiers temporaires ou déchiffrés par erreur (ex: sops -d > clear.yaml)
+# --- Sops & Sécurité (CRITIQUE) ---
+# Clés privées (ne jamais commiter)
+keys.txt
+*.key
+*.pem
+# Fichiers déchiffrés temporaires
 *.decrypted.*
 *_decrypted.*
+*.clear
+.env
 
-# --- Éditeurs (Comme vous utilisez Neovim/NixVim) ---
+# --- Outils (Direnv) ---
+.direnv/
+
+# --- Éditeurs ---
 *.swp
 *.swo
-
+*~
+.vscode/
+.idea/
+.DS_Store

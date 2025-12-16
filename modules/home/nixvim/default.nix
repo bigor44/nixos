@@ -33,6 +33,7 @@ in
       enable = true;
       extraPackages = with pkgs; [
         wl-clipboard
+        gcc
 
         # ======================================================================
         # Language Servers (LSP)

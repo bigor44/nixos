@@ -32,6 +32,10 @@ A declarative, modular NixOS configuration using flakes and [Snowfall Lib](https
 - **Linters**: statix, deadnix, selene
 - **Git Integration**: Extensive Fish abbreviations, LazyGit in Neovim
 
+### Secrets Management
+
+- **[sops-nix](https://github.com/Mic92/sops-nix)**: Declarative management of secrets using age encryption, ensuring secrets are securely stored and deployed only where needed.
+
 ## 📁 Project Structure
 
 ```
@@ -231,6 +235,43 @@ All services are accessible via local DNS (configured in AdGuard Home):
 - **Alertmanager**: https://alertmanager.bigor.lan
 - **Main server**: https://bigor.lan
 
+## 🔒 Secrets Management
+
+This configuration uses [sops-nix](https://github.com/Mic92/sops-nix) for managing secrets. Secrets are encrypted with `age` and stored in `secrets/secrets.yaml`.
+
+Each host (`grospc`, `minipc`) and user (`bigor`) has a unique `age` key. This ensures that secrets are only decrypted on the target machine or by the authorized user.
+
+### Editing Secrets
+
+To edit secrets, use the `sops` CLI tool:
+
+```bash
+sops secrets/secrets.yaml
+```
+
+This command will decrypt the file in a temporary editor session. When you save and close the editor, `sops` will automatically re-encrypt it.
+
+**Important**: Never commit decrypted secrets. The `.gitignore` file is configured to prevent this, but always be cautious.
+
+### Adding a New Secret
+
+1. **Add the secret** to `secrets/secrets.yaml` using `sops secrets/secrets.yaml`.
+2. **Access the secret** in your NixOS or Home Manager configuration. For example, to use a secret in a NixOS module:
+
+   ```nix
+   { config, lib, ... }:
+   let
+     secretValue = config.sops.secrets.my_secret_key;
+   in
+   {
+     # Use secretValue here
+   }
+   ```
+
+   Refer to the `sops-nix` documentation for more advanced usage patterns.
+
+
+
 ## 🔒 Security Features
 
 - Hardened SSH (key-only authentication)
@@ -239,6 +280,8 @@ All services are accessible via local DNS (configured in AdGuard Home):
 - Internal CA for local TLS certificates
 - AdGuard Home for DNS-level protection
 - Tailscale for secure remote access
+- Declarative Secrets: Encrypted secret management with sops-nix.
+
 
 ## 🎨 Customization
 

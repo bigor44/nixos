@@ -66,5 +66,5 @@ nix flake check
 
 - **Namespace**: All custom options are under `bigor.*` (System) or `bigor.home.*` (Home Manager).
 - **Formatting**: `nixfmt` for Nix, `stylua` for Lua, `shfmt` for Shell. Run `treefmt`.
-- **Secrets**: Currently using basic file management (no `sops-nix` or `agenix` observed yet, handle secrets with care).
+- **Secrets**: Secrets are managed declaratively using [sops-nix](https://github.com/Mic92/sops-nix) with `age` encryption. The main configuration is in `.sops.yaml`, and encrypted files are stored in the `secrets/` directory.
 - **Editors**: Neovim configuration is in `modules/home/nixvim`.
