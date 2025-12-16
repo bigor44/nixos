@@ -17,7 +17,7 @@ The project follows the [Snowfall Lib](https://github.com/snowfallorg/lib) direc
 
 ### Key Files
 
-- `flake.nix`: The entry point. Defines inputs (nixpkgs, snowfall-lib, etc.) and outputs.
+- `flake.nix`: The entry point. Defines inputs (nixpkgs, snowfall-lib, etc.) and outputs. This project tracks `nixos-unstable`.
 - `modules/nixos/roles/default.nix`: Defines high-level `bigor.roles` and default configurations per role.
 - `treefmt.toml`: Configuration for the `treefmt` formatter (uses nixfmt, stylua, shfmt, etc.).
 

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -31,7 +32,7 @@ in
       ollama = {
         enable = true;
         host = "127.0.0.1";
-        acceleration = "rocm";
+        package = pkgs.ollama-rocm;
       };
 
       # ==========================================================================
