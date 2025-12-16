@@ -12,7 +12,7 @@
   imports = [ ./hardware-configuration.nix ];
 
   networking.hostName = "grospc";
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 
   # ============================================================================
   # Kernel & Power Management
