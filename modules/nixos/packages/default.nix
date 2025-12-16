@@ -31,5 +31,7 @@
     htop
     zip
     unzip
+    age
+    sops
   ];
 }
