@@ -270,8 +270,6 @@ This command will decrypt the file in a temporary editor session. When you save 
 
    Refer to the `sops-nix` documentation for more advanced usage patterns.
 
-
-
 ## 🔒 Security Features
 
 - Hardened SSH (key-only authentication)
@@ -281,7 +279,6 @@ This command will decrypt the file in a temporary editor session. When you save 
 - AdGuard Home for DNS-level protection
 - Tailscale for secure remote access
 - Declarative Secrets: Encrypted secret management with sops-nix.
-
 
 ## 🎨 Customization
 
