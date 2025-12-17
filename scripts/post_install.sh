@@ -70,3 +70,21 @@ if [ -f "$TARGET_CONFIG" ]; then
 else
   echo "Error: '$TARGET_CONFIG' not found. Cannot update stateVersion."
 fi
+
+# ==============================================================================
+# 4. Home Manager State Version Update
+# ==============================================================================
+# Updates the home.stateVersion in the corresponding home-manager configuration.
+TARGET_HOME_CONFIG="homes/x86_64-linux/bigor@$HOSTNAME_VAR/default.nix"
+
+if [ -f "$TARGET_HOME_CONFIG" ]; then
+  if [ -n "$CURRENT_VERSION" ]; then
+    echo "Updating home.stateVersion in $TARGET_HOME_CONFIG"...
+    sed -i "s/home\.stateVersion[[:space:]]*=[[:space:]]*\".*\";/home.stateVersion = \"$CURRENT_VERSION\";/" "$TARGET_HOME_CONFIG"
+    echo "Done."
+  else
+    echo "Warning: Cannot update home.stateVersion because system version was not determined."
+  fi
+else
+  echo "Warning: '$TARGET_HOME_CONFIG' not found. Skipping Home Manager stateVersion update."
+fi
