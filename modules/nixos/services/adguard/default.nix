@@ -24,13 +24,16 @@ in
   config = mkIf cfg.enable {
 
     # ==========================================================================
-    # Caddy Integration
+    # Exposed Service
     # ==========================================================================
-    services.caddy.virtualHosts."adguard.bigor.lan" = {
-      extraConfig = ''
-        reverse_proxy 127.0.0.1:3003
-        tls internal
-      '';
+    bigor.lib.exposedService.adguard = {
+      port = 3003;
+      domain = "adguard.bigor.lan";
+    };
+    bigor.lib.exposedService.adguard-dns = {
+      port = 53;
+      openFirewall = true;
+      openUDPFirewall = true;
     };
 
     # ==========================================================================
@@ -102,11 +105,6 @@ in
               answer = config.bigor.network.ips.minipc;
               enabled = true;
             }
-            {
-              domain = "adguard.bigor.lan";
-              answer = config.bigor.network.ips.minipc;
-              enabled = true;
-            }
           ];
         };
 
@@ -124,12 +122,6 @@ in
               "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
             ];
       };
-    };
-
-    # Open DNS ports for local network clients
-    networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
-      allowedTCPPorts = [ 53 ];
-      allowedUDPPorts = [ 53 ];
     };
   };
 }

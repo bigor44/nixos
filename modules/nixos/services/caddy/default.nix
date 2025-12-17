@@ -26,11 +26,14 @@ in
       enable = true;
     };
 
-    networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
-      allowedTCPPorts = [
-        80
-        443
-      ];
+    bigor.lib.exposedService.caddy-http = {
+      port = 80;
+      openFirewall = true;
+    };
+
+    bigor.lib.exposedService.caddy-https = {
+      port = 443;
+      openFirewall = true;
     };
   };
 }

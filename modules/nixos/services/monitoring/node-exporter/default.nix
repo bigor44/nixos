@@ -27,8 +27,9 @@ in
       enabledCollectors = [ "systemd" ];
     };
 
-    networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
-      allowedTCPPorts = [ 9100 ];
+    bigor.lib.exposedService.node-exporter = {
+      port = 9100;
+      openFirewall = true;
     };
   };
 }
