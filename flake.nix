@@ -3,7 +3,7 @@
   # File: flake.nix
   # Description: Main entry point for the NixOS configuration using Flakes.
   # Author: Bigor
-  # Date: 2025-12-15
+  # Date: 2025-12-17
   # Purpose: Defines inputs (dependencies) and outputs (system configurations)
   #          using Snowfall Lib for structure and modularity.
   # ============================================================================
@@ -63,6 +63,15 @@
       systems.modules.nixos = [
         inputs.sops-nix.nixosModules.sops
       ];
+
+      # ------------------------------------------------------------------------
+      # Outputs Builder
+      # ------------------------------------------------------------------------
+      # Defines the formatter for the flake.
+      # ------------------------------------------------------------------------
+      outputs-builder = channels: {
+        formatter = channels.nixpkgs.treefmt;
+      };
 
       # ------------------------------------------------------------------------
       # Snowfall Configuration

@@ -1,3 +1,14 @@
+<!--
+ ============================================================================
+ File: README.md
+ Description: Main documentation for the NixOS configuration.
+ Author: Bigor
+ Date: 2025-12-17
+ Purpose: Provides a high-level overview of the project, its structure,
+          and how to use it.
+ ============================================================================
+-->
+
 # Bigor NixOS Configuration
 
 A modular, opinionated, and production-ready **NixOS + Home Manager** configuration built with **Flakes** and **snowfall-lib**.
@@ -140,7 +151,9 @@ Run them with:
 nix flake check
 ```
 
-Formatting is handled via `treefmt`, `nixfmt-rfc-style`, `prettier`, `stylua`, etc.
+Formatting is handled by `treefmt` and can be applied by running `nix fmt`.
+
+It uses `nixfmt-rfc-style`, `prettier`, `stylua`, and other tools.
 
 ---
 
