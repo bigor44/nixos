@@ -36,6 +36,11 @@
       nfs.client = true;
     };
     network.mainInterface = "enp14s0";
+
+    lib.exposedService.grospc = {
+      domain = "grospc.bigor.lan";
+      port = 0; # Dummy port, as we only need the DNS entry
+    };
   };
 
   # ============================================================================

@@ -28,6 +28,17 @@
   bigor = {
     profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
+
+    lib.exposedService = {
+      minipc = {
+        domain = "minipc.bigor.lan";
+        port = 0; # Dummy port, as we only need the DNS entry
+      };
+      bigor = {
+        domain = "bigor.lan";
+        port = 0; # Dummy port, as we only need the DNS entry
+      };
+    };
   };
 
   # ============================================================================

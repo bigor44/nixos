@@ -86,26 +86,6 @@ in
           filtering_enabled = true;
           parental_enabled = false;
           safe_search.enabled = false;
-
-          # Local DNS rewrites
-          # Maps local domain names to static IPs of machines in the network.
-          rewrites = [
-            {
-              domain = "grospc.bigor.lan";
-              answer = config.bigor.network.ips.grospc;
-              enabled = true;
-            }
-            {
-              domain = "minipc.bigor.lan";
-              answer = config.bigor.network.ips.minipc;
-              enabled = true;
-            }
-            {
-              domain = "bigor.lan";
-              answer = config.bigor.network.ips.minipc;
-              enabled = true;
-            }
-          ];
         };
 
         # Blocklists

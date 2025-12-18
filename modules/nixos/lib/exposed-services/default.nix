@@ -3,22 +3,20 @@ let
   cfg = config.bigor.lib.exposedService;
   targetIP = config.bigor.network.ips.minipc;
 
-  # Create a set of caddy virtual hosts from the exposed services
-  caddyVirtualHosts = lib.foldr lib.recursiveUpdate { } (
-    map (
-      svc:
-      lib.optionalAttrs (svc.domain != null) {
-        "${svc.domain}" = {
-          extraConfig = ''
-            reverse_proxy ${svc.proxyProtocol}://127.0.0.1:${toString svc.port}
-            tls internal
-          '';
-        };
-      }
-    ) (lib.attrValues cfg)
-  );
+  # Utilisation de lib.mapAttrs' pour transformer les services en hôtes virtuels Caddy
+  caddyVirtualHosts = lib.mapAttrs' (
+    _name: svc:
+    lib.nameValuePair svc.domain {
+      extraConfig = ''
+        reverse_proxy ${svc.proxyProtocol}://127.0.0.1:${toString svc.port}
+        tls internal
+      '';
+    }
+  ) (lib.filterAttrs (_: svc: svc.domain != null) cfg);
 
-  # Create a list of adguard rewrites from the exposed services
+  # Simplification avec concatMap sur les valeurs directement
+  servicesList = lib.attrValues cfg;
+
   adguardRewrites = lib.concatMap (
     svc:
     lib.optional (config.services.adguardhome.enable && svc.domain != null) {
@@ -26,15 +24,11 @@ let
       answer = targetIP;
       enabled = true;
     }
-  ) (lib.attrValues cfg);
+  ) servicesList;
 
-  # Create a list of firewall TCP ports to open
-  firewallTCPPorts = lib.concatMap (svc: lib.optional svc.openFirewall svc.port) (lib.attrValues cfg);
+  firewallTCPPorts = lib.concatMap (svc: lib.optional svc.openFirewall svc.port) servicesList;
+  firewallUDPPorts = lib.concatMap (svc: lib.optional svc.openUDPFirewall svc.port) servicesList;
 
-  # Create a list of firewall UDP ports to open
-  firewallUDPPorts = lib.concatMap (svc: lib.optional svc.openUDPFirewall svc.port) (
-    lib.attrValues cfg
-  );
 in
 {
   options.bigor.lib.exposedService = lib.mkOption {
@@ -73,17 +67,13 @@ in
   };
 
   config = {
-    # 1. Configuration Caddy
     services.caddy.virtualHosts = caddyVirtualHosts;
 
-    # 2. Ouverture Firewall (Optionnel)
     networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
       allowedTCPPorts = firewallTCPPorts;
       allowedUDPPorts = firewallUDPPorts;
     };
 
-    # 3. DNS Rewrite (AdGuard)
-    # On n'applique ceci que si AdGuard est activé sur la machine pour éviter des erreurs
     services.adguardhome.settings.filtering.rewrites = adguardRewrites;
   };
 }

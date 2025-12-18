@@ -6,8 +6,6 @@
 with lib;
 let
   cfg = config.bigor.services.monitoring.prometheus;
-  serverIP = config.bigor.network.ips.minipc;
-  domain = "prometheus.bigor.lan";
 in
 {
   # ============================================================================
@@ -51,21 +49,11 @@ in
           }
         ];
       };
+    };
 
-      caddy.virtualHosts."${domain}" = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:9090
-          tls internal
-        '';
-      };
-
-      adguardhome.settings.filtering.rewrites = [
-        {
-          inherit domain;
-          answer = serverIP;
-          enabled = true;
-        }
-      ];
+    bigor.lib.exposedService.prometheus = {
+      port = 9090;
+      domain = "prometheus.bigor.lan";
     };
   };
 }

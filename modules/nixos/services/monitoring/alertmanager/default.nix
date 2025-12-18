@@ -6,8 +6,6 @@
 with lib;
 let
   cfg = config.bigor.services.monitoring.alertmanager;
-  serverIP = config.bigor.network.ips.minipc;
-  domain = "alertmanager.bigor.lan";
 in
 {
   # ============================================================================
@@ -45,21 +43,11 @@ in
           ];
         };
       };
+    };
 
-      caddy.virtualHosts."${domain}" = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:9093
-          tls internal
-        '';
-      };
-
-      adguardhome.settings.filtering.rewrites = [
-        {
-          inherit domain;
-          answer = serverIP;
-          enabled = true;
-        }
-      ];
+    bigor.lib.exposedService.alertmanager = {
+      port = 9093;
+      domain = "alertmanager.bigor.lan";
     };
   };
 }

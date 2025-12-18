@@ -6,8 +6,7 @@
 with lib;
 let
   cfg = config.bigor.services.monitoring.grafana;
-  serverIP = config.bigor.network.ips.minipc;
-  domain = "grafana.bigor.lan";
+  inherit (config.bigor.lib.exposedService.grafana) domain;
 in
 {
   # ============================================================================
@@ -46,21 +45,11 @@ in
           ];
         };
       };
+    };
 
-      caddy.virtualHosts."${domain}" = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:3000
-          tls internal
-        '';
-      };
-
-      adguardhome.settings.filtering.rewrites = [
-        {
-          inherit domain;
-          answer = serverIP;
-          enabled = true;
-        }
-      ];
+    bigor.lib.exposedService.grafana = {
+      port = 3000;
+      domain = "grafana.bigor.lan";
     };
   };
 }
