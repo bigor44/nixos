@@ -17,9 +17,14 @@ in
     bigor.features = {
       audio.enable = mkDefault true;
       bluetooth.enable = mkDefault true;
-      cosmic.enable = mkDefault true;
       fonts.enable = mkDefault true;
       gaming.enable = mkDefault true;
+      desktop = {
+        base.enable = mkDefault true;
+        cosmic.enable = mkDefault true;
+        apps.enable = mkDefault true;
+        tuning.enable = mkDefault true;
+      };
     };
 
     # Enable node-exporter for monitoring by default on workstations.

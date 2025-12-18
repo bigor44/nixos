@@ -54,7 +54,7 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 │   ├── home/              # Home Manager modules (shell, git, nixvim, GUI, CLI)
 │   └── nixos/             # NixOS modules
 │       ├── common/        # Base system settings
-│       ├── features/      # Desktop features (COSMIC, fonts, gaming)
+│       ├── features/      # Desktop features (desktop, fonts, gaming)
 │       ├── network/       # Network options & IPs
 │       ├── packages/      # System-wide packages
 │       ├── profiles/      # High-level profiles (workstation, homelab_master)
@@ -83,7 +83,7 @@ This keeps the flake concise while allowing deep modularity.
 High-level profiles toggle entire feature sets:
 
 - `bigor.profiles.workstation`
-  - COSMIC desktop
+  - A comprehensive desktop environment
   - PipeWire audio
   - Fonts and GUI apps
   - Gaming optimizations
