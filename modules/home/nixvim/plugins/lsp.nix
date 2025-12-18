@@ -1,133 +1,128 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/plugins/lsp.nix
-# Description: Configures LSP-related NixVim plugins.
+# File: lsp.nix
+# Description: NixVim LSP configuration.
 # Author: Bigor
 # Date: 2025-12-18
+# Purpose: Configures Language Server Protocol (LSP) for various languages in NixVim.
 # ============================================================================
+
 {
-  programs.nixvim.plugins = {
-    # ==========================================================================
-    # LSP Servers
-    # ==========================================================================
-    lsp = {
-      enable = true;
-      servers = {
-        bashls.enable = true;
-        marksman.enable = true;
-        jsonls = {
-          enable = true;
-          settings.json = {
-            schemas = {
-              __raw = "require('schemastore').json.schemas()";
+  programs.nixvim.plugins.lsp = {
+    enable = true;
+
+    servers = {
+      # ==========================================================================
+      # Bash
+      # ==========================================================================
+      bashls.enable = true;
+
+      # ==========================================================================
+      # Markdown
+      # ==========================================================================
+      marksman.enable = true;
+
+      # ==========================================================================
+      # JSON / Web
+      # ==========================================================================
+      jsonls = {
+        enable = true;
+        settings.json = {
+          validate.enable = true;
+          schemas = [
+            {
+              fileMatch = [ "*.json" ];
+              url = "https://json.schemastore.org/package.json";
+            }
+          ];
+        };
+      };
+
+      # ==========================================================================
+      # YAML
+      # ==========================================================================
+      yamlls = {
+        enable = true;
+        settings.yaml = {
+          keyOrdering = false;
+          validate = true;
+          schemaStore.enable = true;
+        };
+      };
+
+      # ==========================================================================
+      # Nix (nixd)
+      # ==========================================================================
+      nixd = {
+        enable = true;
+
+        settings = {
+          nixd = {
+            # ----------------------------------------------------------------------
+            # nixpkgs : base d’évaluation
+            # ----------------------------------------------------------------------
+            nixpkgs = {
+              expr = "import <nixpkgs> {}";
             };
-            validate.enable = true;
-          };
-        };
-        nixd = {
-          enable = true;
-        };
-        yamlls = {
-          enable = true;
-          settings.yaml = {
-            schemaStore.enable = false;
-            schemas = {
-              __raw = "require('schemastore').yaml.schemas()";
+
+            # ----------------------------------------------------------------------
+            # Formatter (doit matcher Conform / treefmt)
+            # ----------------------------------------------------------------------
+            formatting = {
+              command = [ "nixfmt" ];
+            };
+
+            # ----------------------------------------------------------------------
+            # Options : cœur de l’auto-complétion
+            # ----------------------------------------------------------------------
+            options = {
+              # Toutes les options NixOS de TOUS les hosts
+              nixos = {
+                expr = ''
+                  let
+                    flake = builtins.getFlake (toString ./../../../../..);
+                  in
+                    lib.mapAttrs (_: cfg: cfg.options) flake.nixosConfigurations
+                '';
+              };
+
+              # Toutes les options Home Manager
+              home-manager = {
+                expr = ''
+                  let
+                    flake = builtins.getFlake (toString ./../../../../..);
+                  in
+                    lib.mapAttrs (_: cfg: cfg.options) flake.homeConfigurations
+                '';
+              };
+            };
+
+            # ----------------------------------------------------------------------
+            # Diagnostics
+            # ----------------------------------------------------------------------
+            diagnostics = {
+              enable = true;
+              excluded = [
+                "unused-binding"
+              ];
             };
           };
         };
       };
-      keymaps = {
-        lspBuf = {
-          "gd" = "definition";
-          "gD" = "declaration";
-          "K" = "hover";
-          "gr" = "references";
-          "<leader>rn" = "rename";
-          "<leader>ca" = "code_action";
-        };
-        diagnostic = {
-          "<leader>d" = "open_float";
-          "[d" = "goto_prev";
-          " ]d" = "goto_next";
-        };
-      };
     };
 
-    # Support for JSON/YAML schemas
-    schemastore = {
-      enable = true;
-      json.enable = true;
-      yaml.enable = true;
-    };
-
-    # ==========================================================================
-    # Formatting (Conform)
-    # ==========================================================================
-    conform-nvim = {
-      enable = true;
-      settings = {
-        notify_on_error = true;
-        format_on_save = {
-          timeout_ms = 500;
-          lsp_fallback = true;
-        };
-        formatters_by_ft = {
-          nix = [ "nixfmt" ];
-          sh = [ "shfmt" ];
-          bash = [ "shfmt" ];
-          json = [ "prettier" ];
-          yaml = [ "prettier" ];
-          markdown = [ "prettier" ];
-          javascript = [ "prettier" ];
-          typescript = [ "prettier" ];
-          css = [ "prettier" ];
-          html = [ "prettier" ];
-          toml = [ "taplo" ];
-        };
-        formatters = {
-          shfmt = {
-            prepend_args = [
-              "-i"
-              "2"
-              "-s"
-            ];
-          };
-        };
-      };
-    };
-
-    # ==========================================================================
-    # Autocompletion (Blink-cmp)
-    # ==========================================================================
-    blink-cmp = {
-      enable = true;
-      settings = {
-        keymap.preset = "default";
-        appearance = {
-          use_nvim_cmp_as_default = true;
-          nerd_font_variant = "mono";
-        };
-        sources.default = [
-          "lsp"
-          "path"
-          "snippets"
-          "buffer"
-        ];
-        completion = {
-          menu.border = "rounded";
-          documentation.window.border = "rounded";
-        };
-        signature.enabled = true;
-      };
-    };
-
-    # ==========================================================================
-    # Diagnostics (Trouble)
-    # ==========================================================================
-    trouble = {
-      enable = true;
-      settings = {
-        focus = true;
+    # ============================================================================
+    # Keymaps
+    # ============================================================================
+    keymaps = {
+      lspBuf = {
+        gd = "definition";
+        gD = "declaration";
+        gr = "references";
+        gi = "implementation";
+        K = "hover";
+        "<leader>rn" = "rename";
+        "<leader>ca" = "code_action";
+        "<leader>f" = "format";
       };
     };
   };

@@ -11,5 +11,6 @@
     ./lsp.nix
     ./ui.nix
     ./utils.nix
+    ./cmp.nix
   ];
 }
