@@ -5,20 +5,20 @@
   ...
 }:
 # ============================================================================
-# File: modules/home/gui-packages/default.nix
+# File: modules/home/features/gui/default.nix
 # Description: Desktop Applications (GUI)
 # Author: Bigor
-# Date: 2025-12-15
+# Date: 2025-12-18
 # Purpose: Installs graphical applications and manages dotfiles for desktop
 #          components (COSMIC, Autostart).
 # ============================================================================
 
 with lib;
 let
-  cfg = config.bigor.home.gui-packages;
+  cfg = config.bigor.home.features.gui;
 in
 {
-  options.bigor.home.gui-packages = {
+  options.bigor.home.features.gui = {
     enable = mkEnableOption "Enable user desktop apps";
   };
 
@@ -42,7 +42,7 @@ in
       # mkOutOfStoreSymlink allows editing files in ~/nixos/dotfiles/ and
       # seeing changes immediately without rebuilding.
       cosmic.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/dotfiles/cosmic";
-      autostart.source = ../../../dotfiles/autostart;
+      autostart.source = ../../../../dotfiles/autostart;
     };
   };
 }

@@ -4,9 +4,9 @@
   # File: systems/x86_64-linux/grospc/default.nix
   # Description: Host-specific configuration for "grospc"
   # Author: Bigor
-  # Date: 2025-12-15
+  # Date: 2025-12-18
   # Purpose: Defines the main desktop workstation environment, including
-  #          hardware-specific settings, gaming optimizations, and desktop roles.
+  #          hardware-specific settings, gaming optimizations, and desktop profile.
   # ============================================================================
 
   imports = [ ./hardware-configuration.nix ];
@@ -25,13 +25,13 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # ============================================================================
-  # Custom Role & Feature Flags
+  # Custom Profile & Feature Flags
   # ============================================================================
-  # - Gaming & Development focus (bigor.roles.desktop)
+  # - Workstation profile for a full desktop experience.
   # - Connects to NFS storage (bigor.services.nfs.client)
   # - Network Configuration (bigor.network.mainInterface)
   bigor = {
-    roles.desktop = true;
+    profiles.workstation.enable = true;
     services = {
       nfs.client = true;
     };

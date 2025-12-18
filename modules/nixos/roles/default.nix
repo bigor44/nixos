@@ -4,17 +4,12 @@
   # File: modules/nixos/roles/default.nix
   # Description: System Roles Configuration
   # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Defines high-level system roles (Desktop, Homelab Master) and
-  #          applies default feature flags for each role.
+  # Date: 2025-12-18
+  # Purpose: Defines high-level system roles. The 'desktop' role has been
+  #          refactored into the 'workstation' profile.
   # ============================================================================
 
   options.bigor.roles = {
-    desktop = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enables the full graphical desktop environment (COSMIC), audio subsystem (Pipewire), fonts, and GUI applications suitable for a workstation.";
-    };
     homelab_master = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -23,18 +18,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.bigor.roles.desktop {
-      bigor = {
-        desktop = {
-          cosmic.enable = lib.mkDefault true;
-          gaming.enable = lib.mkDefault true;
-        };
-        services = {
-          monitoring.node-exporter.enable = lib.mkDefault true;
-        };
-      };
-    })
-
+    # Configuration for the 'homelab_master' role.
     (lib.mkIf config.bigor.roles.homelab_master {
       bigor.services = {
         ssh.enable = lib.mkDefault true;
@@ -44,6 +28,7 @@
         ollama.enable = lib.mkDefault true;
         nfs.server = lib.mkDefault true;
 
+        # Monitoring stack for the homelab master.
         monitoring = {
           prometheus.enable = lib.mkDefault true;
           grafana.enable = lib.mkDefault true;
