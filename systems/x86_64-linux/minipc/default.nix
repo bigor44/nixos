@@ -26,7 +26,7 @@
   # - Tailscale Exit Node/Relay with UDP GRO optimization
   # - Ollama AI Service
   bigor = {
-    roles.homelab_master = true;
+    profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
   };
 

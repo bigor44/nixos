@@ -8,23 +8,24 @@
 #          single, reusable configuration. It is intended for workstations
 #          that require a full graphical environment.
 # ============================================================================
+with lib;
 let
   cfg = config.bigor.profiles.workstation;
 in
 {
-  options.bigor.profiles.workstation.enable = lib.mkEnableOption "Desktop workstation profile";
+  options.bigor.profiles.workstation.enable = mkEnableOption "Desktop workstation profile";
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     # Enable all the necessary features for a complete desktop experience.
     bigor.features = {
-      audio.enable = true;
-      bluetooth.enable = true;
-      cosmic.enable = true;
-      fonts.enable = true;
-      gaming.enable = lib.mkDefault true;
+      audio.enable = mkDefault true;
+      bluetooth.enable = mkDefault true;
+      cosmic.enable = mkDefault true;
+      fonts.enable = mkDefault true;
+      gaming.enable = mkDefault true;
     };
 
     # Enable node-exporter for monitoring by default on workstations.
-    bigor.services.monitoring.node-exporter.enable = lib.mkDefault true;
+    bigor.services.monitoring.node-exporter.enable = mkDefault true;
   };
 }
