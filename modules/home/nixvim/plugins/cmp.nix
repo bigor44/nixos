@@ -28,6 +28,12 @@ in
               "<C-Space>" = "cmp.mapping.complete()";
               "<C-e>" = "cmp.mapping.abort()";
               "<CR>" = "cmp.mapping.confirm({ select = true })";
+              "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+              "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+              "<C-n>" = "cmp.mapping.select_next_item()";
+              "<C-p>" = "cmp.mapping.select_prev_item()";
+              "<Down>" = "cmp.mapping.select_next_item()";
+              "<Up>" = "cmp.mapping.select_prev_item()";
             };
 
             # CORRECTION ICI : sources doit être une liste de maps avec la clé 'name'
