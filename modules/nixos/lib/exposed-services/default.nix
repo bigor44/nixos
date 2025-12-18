@@ -1,6 +1,7 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/lib/exposed-services/default.nix
+# File: modules/nixos/lib/exposed-services/default.nix
 # Description: Manages exposed services through Caddy, AdGuard, and firewall.
+#              Includes safety checks for collisions and security risks.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
@@ -77,6 +78,43 @@ in
   };
 
   config = {
+    # ============================================================================
+    # Validations & Sécurité
+    # ============================================================================
+
+    # 1. Assertions : Bloquent la construction en cas d'erreur critique
+    assertions = [
+      {
+        # Vérification de l'unicité des ports (pour les ports non nuls)
+        assertion =
+          let
+            ports = map (s: toString s.port) (lib.filter (s: s.port != 0) servicesList);
+          in
+          ports == lib.unique ports;
+        message = "exposed-services: Collision détectée ! Plusieurs services tentent d'utiliser le même numéro de port.";
+      }
+      {
+        # Vérification de l'unicité des domaines
+        assertion =
+          let
+            domains = map (s: s.domain) (lib.filter (s: s.domain != null) servicesList);
+          in
+          domains == lib.unique domains;
+        message = "exposed-services: Collision détectée ! Plusieurs services tentent d'utiliser le même nom de domaine.";
+      }
+    ];
+
+    # 2. Warnings : Avertissent des configurations potentiellement dangereuses
+    warnings = lib.concatMap (
+      svc:
+      lib.optional (svc.domain != null && svc.openFirewall)
+        "exposed-services: SECURITE - Le service '${svc.domain}' est exposé via Caddy (Reverse Proxy) MAIS son port ${toString svc.port} est aussi ouvert directement sur le firewall (openFirewall = true). Cela permet de contourner le proxy et ses sécurités."
+    ) servicesList;
+
+    # ============================================================================
+    # Configuration Système
+    # ============================================================================
+
     # 1. Configuration Caddy
     services.caddy.virtualHosts = caddyVirtualHosts;
 

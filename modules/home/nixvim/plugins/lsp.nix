@@ -14,7 +14,6 @@
       servers = {
         bashls.enable = true;
         marksman.enable = true;
-        pyright.enable = true;
         jsonls = {
           enable = true;
           settings.json = {
@@ -24,6 +23,9 @@
             validate.enable = true;
           };
         };
+        nixd = {
+          enable = true;
+        };
         yamlls = {
           enable = true;
           settings.yaml = {
@@ -32,17 +34,6 @@
               __raw = "require('schemastore').yaml.schemas()";
             };
           };
-        };
-        lua_ls = {
-          enable = true;
-          settings.Lua = {
-            workspace.checkThirdParty = false;
-            telemetry.enable = false;
-            format.enable = false;
-          };
-        };
-        nixd = {
-          enable = true;
         };
       };
       keymaps = {
@@ -82,16 +73,11 @@
         };
         formatters_by_ft = {
           nix = [ "nixfmt" ];
-          lua = [ "stylua" ];
           sh = [ "shfmt" ];
           bash = [ "shfmt" ];
           json = [ "prettier" ];
           yaml = [ "prettier" ];
           markdown = [ "prettier" ];
-          python = [
-            "isort"
-            "black"
-          ];
           javascript = [ "prettier" ];
           typescript = [ "prettier" ];
           css = [ "prettier" ];

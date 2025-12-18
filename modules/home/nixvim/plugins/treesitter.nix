@@ -11,14 +11,12 @@
       nixGrammars = true;
       settings = {
         ensure_installed = [
-          "lua"
           "nix"
           "bash"
           "markdown"
           "markdown_inline"
           "json"
           "yaml"
-          "python"
         ];
         highlight.enable = true;
         indent.enable = true;

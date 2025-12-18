@@ -39,10 +39,7 @@ in
       prettier # Opinionated code formatter
       nixfmt-rfc-style # Official Nix formatter
 
-      stylua # An opinionated Lua code formatter
       shfmt # A shell parser, formatter, and interpreter
-      isort # Library to sort imports in Python files
-      black # The uncompromising Python code formatter
       taplo # A TOML toolkit
 
       # ========================================================================

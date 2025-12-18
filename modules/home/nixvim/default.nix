@@ -37,22 +37,16 @@ in
         # ======================================================================
         nodePackages.bash-language-server
         marksman # Markdown
-        pyright # Python
         vscode-langservers-extracted # HTML/CSS/JSON/ESLint
         yaml-language-server
-        lua-language-server
         nixd # Nix
 
         # ======================================================================
         # Formatters & Linters
         # ======================================================================
         nixfmt-rfc-style # Nix
-        stylua # Lua
-        selene # Lua linter
         shfmt # Shell
         prettier # Web (JSON/YAML/Markdown/etc)
-        isort # Python imports
-        black # Python code
         taplo # TOML
       ];
     };
