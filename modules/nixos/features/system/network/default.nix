@@ -1,12 +1,10 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   # ============================================================================
-  # File: modules/nixos/network/default.nix
-  # Description: Network Configuration Options
+  # File: modules/nixos/features/system/network/default.nix
+  # Description: Defines network-related options and static host entries.
   # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Defines network-related options such as interface names and
-  #          static IP reservations.
+  # Date: 2025-12-18
   # ============================================================================
 
   options.bigor.network = {
@@ -27,5 +25,13 @@
         description = "Static IP address reserved for the Server (minipc).";
       };
     };
+  };
+  # Define static hostnames for local machines to ensure reliable resolution
+  # without relying on external DNS.
+  config = {
+    networking.extraHosts = ''
+      ${config.bigor.network.ips.minipc} minipc
+      ${config.bigor.network.ips.grospc} grospc
+    '';
   };
 }

@@ -1,12 +1,10 @@
 { pkgs, ... }:
 {
   # ============================================================================
-  # File: modules/nixos/users/default.nix
-  # Description: User Account Management
+  # File: modules/nixos/features/system/users/default.nix
+  # Description: Configures the primary user 'bigor' and sudo access.
   # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Defines the primary user 'bigor' with sudo access, shell preferences,
-  #          and SSH authorized keys.
+  # Date: 2025-12-18
   # ============================================================================
 
   users.users.bigor = {

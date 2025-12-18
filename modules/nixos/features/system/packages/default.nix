@@ -1,12 +1,10 @@
 { pkgs, ... }:
 {
   # ============================================================================
-  # File: modules/nixos/packages/default.nix
-  # Description: Core System Packages
+  # File: modules/nixos/features/system/packages/default.nix
+  # Description: Installs essential command-line tools and system utilities.
   # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Installs essential command-line tools, system monitoring utilities,
-  #          and Nix-related tools available to all users.
+  # Date: 2025-12-18
   # ============================================================================
 
   programs = {
@@ -31,6 +29,7 @@
     htop
     zip
     unzip
+    ssh-to-age
     age
     sops
   ];

@@ -43,11 +43,19 @@ The primary goal is to maintain a reproducible and declarative environment for b
 - `homes/`: Contains the entry points for Home Manager configurations. These are structured as `user@host` or as a generic `user` profile that can be imported by host-specific ones.
 - `modules/`:
   - `nixos/`: Contains all NixOS modules, organized by function.
-    - `features`: Self-contained, reusable features. This now includes a modular `desktop` feature with the following components:
-      - `base`: Core components for a desktop environment.
-      - `cosmic`: The COSMIC desktop environment.
-      - `apps`: Common desktop applications.
-      - `tuning`: Performance and aesthetic tuning for the desktop.
+    - `features`: Self-contained, reusable features. This now includes a modular `desktop` feature and a `system` feature with the following components:
+      - `desktop`:
+        - `base`: Core components for a desktop environment.
+        - `cosmic`: The COSMIC desktop environment.
+        - `apps`: Common desktop applications.
+        - `tuning`: Performance and aesthetic tuning for the desktop.
+      - `system`:
+        - `base`: Base system configuration.
+        - `boot`: Bootloader configuration.
+        - `french-locale`: French locale and keyboard layout.
+        - `network`: Network configuration.
+        - `packages`: System-wide packages.
+        - `users`: User management.
     - `services`: Modules for specific services (e.g., `adguard`, `caddy`).
     - `profiles`: High-level profiles that compose features and services.
   - `home/`: Contains all Home Manager modules (e.g., `git`, `shell`, `nixvim`).

@@ -53,10 +53,7 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 ├── modules/
 │   ├── home/              # Home Manager modules (shell, git, nixvim, GUI, CLI)
 │   └── nixos/             # NixOS modules
-│       ├── common/        # Base system settings
-│       ├── features/      # Desktop features (desktop, fonts, gaming)
-│       ├── network/       # Network options & IPs
-│       ├── packages/      # System-wide packages
+│       ├── features/      # System and desktop features
 │       ├── profiles/      # High-level profiles (workstation, homelab_master)
 │       └── services/      # Declarative services (AdGuard, Caddy, Monitoring, etc.)
 │
