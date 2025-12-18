@@ -1,13 +1,10 @@
-{ lib, config, ... }:
 # ============================================================================
-# File: modules/nixos/profiles/workstation/default.nix
-# Description: Workstation profile for desktop systems.
+# File: /home/bigor/nixos/modules/nixos/profiles/workstation/default.nix
+# Description: Configures the workstation profile.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: This profile aggregates several desktop-oriented features into a
-#          single, reusable configuration. It is intended for workstations
-#          that require a full graphical environment.
 # ============================================================================
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.profiles.workstation;

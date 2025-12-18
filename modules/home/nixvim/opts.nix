@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/opts.nix
+# Description: Configures Neovim options.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/opts.nix
-  # Description: Neovim Options & UI Settings
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures core editor options (line numbers, tabs, clipboard),
-  #          colorscheme, and global variables.
-  # ============================================================================
-
   programs.nixvim = {
     # ==========================================================================
     # Visuals & Colorscheme

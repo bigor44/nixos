@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/ui.nix
+# Description: Configures UI-related NixVim plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/ui.nix
-  # Description: UI Components Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures visual enhancements like Gitsigns, Noice, Dressing,
-  #          and the Mini suite (statusline, icons).
-  # ============================================================================
-
   programs.nixvim = {
     # Highlights for Mini.notify
     highlight = {

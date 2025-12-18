@@ -1,18 +1,15 @@
+# ============================================================================
+# File: /home/bigor/nixos/systems/x86_64-linux/minipc/default.nix
+# Description: Host-specific configuration for the "minipc" server.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   pkgs,
   ...
 }:
 {
-  # ============================================================================
-  # File: systems/x86_64-linux/minipc/default.nix
-  # Description: Host-specific configuration for "minipc"
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Defines the home lab server environment, including headless services,
-  #          NFS storage hosting, and network optimizations.
-  # ============================================================================
-
   imports = [ ./hardware-configuration.nix ];
 
   networking.hostName = "minipc";

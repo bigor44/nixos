@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/lsp.nix
+# Description: Configures LSP-related NixVim plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/lsp.nix
-  # Description: Language Server Protocol (LSP) Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures intelligent code features including LSP servers,
-  #          formatting (Conform), autocompletion (Blink-cmp), and diagnostics.
-  # ============================================================================
-
   programs.nixvim.plugins = {
     # ==========================================================================
     # LSP Servers

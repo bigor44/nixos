@@ -1,17 +1,14 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/git/default.nix
+# Description: Configures Git for the user.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
   ...
 }:
-# ============================================================================
-# File: modules/home/git/default.nix
-# Description: Git Configuration
-# Author: Bigor
-# Date: 2025-12-15
-# Purpose: Configures Git with user identity and defines a comprehensive set
-#          of Fish shell abbreviations for common Git workflows.
-# ============================================================================
-
 with lib;
 let
   cfg = config.bigor.home.git;

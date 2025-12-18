@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/checks/x86_64-linux/nix-lint/default.nix
+# Description: Nix-lint check for the flake.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   pkgs,
   inputs,

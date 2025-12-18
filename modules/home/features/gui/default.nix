@@ -1,18 +1,15 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/features/gui/default.nix
+# Description: Configures GUI applications and related settings.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
   pkgs,
   ...
 }:
-# ============================================================================
-# File: modules/home/features/gui/default.nix
-# Description: Desktop Applications (GUI)
-# Author: Bigor
-# Date: 2025-12-18
-# Purpose: Installs graphical applications and manages dotfiles for desktop
-#          components (COSMIC, Autostart).
-# ============================================================================
-
 with lib;
 let
   cfg = config.bigor.home.features.gui;

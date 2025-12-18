@@ -1,12 +1,10 @@
-{ lib, config, ... }:
 # ============================================================================
-# File: modules/nixos/features/bluetooth/default.nix
-# Description: Manages Bluetooth support for NixOS.
+# File: /home/bigor/nixos/modules/nixos/features/bluetooth/default.nix
+# Description: Configures Bluetooth support.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: This module configures the system's Bluetooth hardware, enabling
-#          it on boot.
 # ============================================================================
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.features.bluetooth;

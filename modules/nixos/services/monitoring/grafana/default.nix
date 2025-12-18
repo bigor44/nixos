@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/monitoring/grafana/default.nix
+# Description: Configures the Grafana service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -9,14 +15,6 @@ let
   inherit (config.bigor.lib.exposedService.grafana) domain;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/monitoring/grafana/default.nix
-  # Description: Grafana Visualization Service
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Deploys Grafana for visualizing metrics.
-  # ============================================================================
-
   options.bigor.services.monitoring.grafana = {
     enable = mkEnableOption "Enable Grafana visualization service";
   };

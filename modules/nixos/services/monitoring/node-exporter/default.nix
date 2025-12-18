@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/monitoring/node-exporter/default.nix
+# Description: Configures the Node Exporter service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -8,14 +14,6 @@ let
   cfg = config.bigor.services.monitoring.node-exporter;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/monitoring/node-exporter/default.nix
-  # Description: Node Exporter Service
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Deploys Node Exporter to expose system metrics.
-  # ============================================================================
-
   options.bigor.services.monitoring.node-exporter = {
     enable = mkEnableOption "Enable Node Exporter";
   };

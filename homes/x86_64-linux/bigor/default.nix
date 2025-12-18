@@ -1,10 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/homes/x86_64-linux/bigor/default.nix
+# Description: Default Home Manager configuration for 'bigor'.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # Home Manager Configuration (bigor@minipc)
-  # ============================================================================
-  # Entry point for the 'bigor' user on the 'minipc' host.
-  # Enables only core shell and CLI tools (headless environment).
-  # ============================================================================
   home = {
     username = "bigor";
     homeDirectory = "/home/bigor";

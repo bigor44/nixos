@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/monitoring/prometheus/default.nix
+# Description: Configures the Prometheus monitoring service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -8,14 +14,6 @@ let
   cfg = config.bigor.services.monitoring.prometheus;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/monitoring/prometheus/default.nix
-  # Description: Prometheus Monitoring Service
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Deploys Prometheus for metrics collection.
-  # ============================================================================
-
   options.bigor.services.monitoring.prometheus = {
     enable = mkEnableOption "Enable Prometheus monitoring service";
   };

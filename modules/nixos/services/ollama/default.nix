@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/ollama/default.nix
+# Description: Configures the Ollama service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -9,15 +15,6 @@ let
   cfg = config.bigor.services.ollama;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/ollama/default.nix
-  # Description: Ollama AI Service Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Deploys the Ollama AI backend and exposes it via Caddy.
-  #          Includes DNS registration in AdGuard Home.
-  # ============================================================================
-
   options.bigor.services.ollama = {
     enable = mkEnableOption "Enable Ollama stack + Open WebUI (No Auth)";
   };

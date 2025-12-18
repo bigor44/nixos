@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/flake.nix
+# Description: Main flake entry point for the NixOS configuration.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: flake.nix
-  # Description: Main entry point for the NixOS configuration using Flakes.
-  # Author: Bigor
-  # Date: 2025-12-17
-  # Purpose: Defines inputs (dependencies) and outputs (system configurations)
-  #          using Snowfall Lib for structure and modularity.
-  # ============================================================================
-
   description = "Bigor's Simplified NixOS Configuration";
 
   # ============================================================================

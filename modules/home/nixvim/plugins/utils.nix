@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/utils.nix
+# Description: Configures utility-related NixVim plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/utils.nix
-  # Description: Utility Plugins Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures miscellaneous utilities powered by 'mini.nvim', including
-  #          auto-pairs, surroundings, comments, and keybinding hints.
-  # ============================================================================
-
   programs.nixvim.plugins.mini = {
     enable = true;
     modules = {

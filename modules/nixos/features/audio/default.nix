@@ -1,13 +1,10 @@
-{ lib, config, ... }:
 # ============================================================================
-# File: modules/nixos/features/audio/default.nix
-# Description: Manages the audio stack for NixOS.
+# File: /home/bigor/nixos/modules/nixos/features/audio/default.nix
+# Description: Configures the audio stack.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: This module configures the Pipewire audio server, along with ALSA
-#          and PulseAudio compatibility layers. It is designed to provide a
-#          modern, robust audio system.
 # ============================================================================
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.features.audio;

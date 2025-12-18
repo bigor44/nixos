@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/editor.nix
+# Description: Configures editor-related NixVim plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/editor.nix
-  # Description: Editor Plugins Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures plugins that enhance the core editing experience, such as
-  #          file navigation (Telescope, Neo-tree) and Git integration (LazyGit).
-  # ============================================================================
-
   programs.nixvim.plugins = {
     # ==========================================================================
     # Telescope (Fuzzy Finder)

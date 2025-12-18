@@ -1,12 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/autocmds.nix
+# Description: Configures Neovim autocommands.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/autocmds.nix
-  # Description: Neovim Autocommands
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Defines automated actions based on editor events (e.g., highlight on yank).
-  # ============================================================================
-
   programs.nixvim = {
     autoGroups = {
       gemini_highlight_yank = {

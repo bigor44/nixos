@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/monitoring/alertmanager/default.nix
+# Description: Configures the Alertmanager service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -8,14 +14,6 @@ let
   cfg = config.bigor.services.monitoring.alertmanager;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/monitoring/alertmanager/default.nix
-  # Description: Alertmanager Service
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Deploys Alertmanager for handling Prometheus alerts.
-  # ============================================================================
-
   options.bigor.services.monitoring.alertmanager = {
     enable = mkEnableOption "Enable Alertmanager service";
   };

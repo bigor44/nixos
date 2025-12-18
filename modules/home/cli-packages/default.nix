@@ -1,18 +1,15 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/cli-packages/default.nix
+# Description: Configures CLI packages for the user.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
   pkgs,
   ...
 }:
-# ============================================================================
-# File: modules/home/cli-packages/default.nix
-# Description: CLI Tools & Packages
-# Author: Bigor
-# Date: 2025-12-15
-# Purpose: Installs a suite of modern command-line utilities and code quality
-#          tools (formatters, linters) for development and system monitoring.
-# ============================================================================
-
 with lib;
 let
   cfg = config.bigor.home.cli-packages;

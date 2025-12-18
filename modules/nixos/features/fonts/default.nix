@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/features/fonts/default.nix
+# Description: Configures system fonts.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   pkgs,
   config,
@@ -9,14 +15,6 @@ let
   cfg = config.bigor.features.fonts;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/features/fonts/default.nix
-  # Description: System Fonts Configuration
-  # Author: Bigor
-  # Date: 2025-12-18
-  # Purpose: Installs and configures system fonts, prioritizing Nerd Fonts and
-  #          providing CJK support when the desktop role is enabled.
-  # ============================================================================
   options.bigor.features.fonts = {
     enable = mkEnableOption "Enable fonts";
   };

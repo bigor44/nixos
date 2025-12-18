@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/default.nix
+# Description: Main entry point for the NixVim configuration.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -8,15 +14,6 @@ let
   cfg = config.bigor.home.nixvim;
 in
 {
-  # ============================================================================
-  # File: modules/home/nixvim/default.nix
-  # Description: Neovim Configuration (NixVim)
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Entry point for the modular Neovim configuration.
-  #          Imports sub-modules (opts, keymaps, plugins) and installs external tools.
-  # ============================================================================
-
   imports = [
     ./opts.nix
     ./keymaps.nix

@@ -1,13 +1,10 @@
-{ lib, config, ... }:
 # ============================================================================
-# File: modules/nixos/profiles/homelab_master/default.nix
-# Description: Homelab Master server profile.
+# File: /home/bigor/nixos/modules/nixos/profiles/homelab_master/default.nix
+# Description: Configures the Homelab Master server profile.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: This profile aggregates several server-oriented services into a
-#          single, reusable configuration. It is intended for headless
-#          servers that host various services.
 # ============================================================================
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.profiles.homelab-master;

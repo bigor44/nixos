@@ -1,14 +1,11 @@
+# ============================================================================
+# File: /home/bigor/nixos/systems/x86_64-linux/grospc/default.nix
+# Description: Host-specific configuration for the "grospc" workstation.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 { pkgs, ... }:
 {
-  # ============================================================================
-  # File: systems/x86_64-linux/grospc/default.nix
-  # Description: Host-specific configuration for "grospc"
-  # Author: Bigor
-  # Date: 2025-12-18
-  # Purpose: Defines the main desktop workstation environment, including
-  #          hardware-specific settings, gaming optimizations, and desktop profile.
-  # ============================================================================
-
   imports = [ ./hardware-configuration.nix ];
 
   networking.hostName = "grospc";

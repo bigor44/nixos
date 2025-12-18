@@ -1,13 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/treesitter.nix
+# Description: Configures Treesitter and related plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/treesitter.nix
-  # Description: Treesitter Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures advanced syntax highlighting and parsing.
-  #          Includes 'treesitter-context' to show current scope context.
-  # ============================================================================
-
   programs.nixvim.plugins = {
     treesitter = {
       enable = true;

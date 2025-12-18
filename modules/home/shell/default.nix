@@ -1,18 +1,15 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/shell/default.nix
+# Description: Configures the user's shell environment.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
   pkgs,
   ...
 }:
-# ============================================================================
-# File: modules/home/shell/default.nix
-# Description: User Shell Configuration
-# Author: Bigor
-# Date: 2025-12-15
-# Purpose: Configures the Fish shell environment with Tide prompt, plugins,
-#          aliases, and integrations for fzf, zoxide, and bat.
-# ============================================================================
-
 with lib;
 let
   cfg = config.bigor.home.shell;

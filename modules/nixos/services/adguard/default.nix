@@ -1,3 +1,9 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/services/adguard/default.nix
+# Description: Configures the AdGuard Home service.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
   config,
   lib,
@@ -8,15 +14,6 @@ let
   cfg = config.bigor.services.adguard;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/adguard/default.nix
-  # Description: AdGuard Home Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Sets up AdGuard Home for network-wide ad blocking and local DNS
-  #          resolution when the homelab role is active.
-  # ============================================================================
-
   options.bigor.services.adguard = {
     enable = mkEnableOption "Enable AdGuard Home for network-wide ad blocking and local DNS resolution";
   };

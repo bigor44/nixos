@@ -1,9 +1,20 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/nixos/lib/exposed-services/default.nix
+# Description: Manages exposed services through Caddy, AdGuard, and firewall.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
+
 { lib, config, ... }:
 let
   cfg = config.bigor.lib.exposedService;
   targetIP = config.bigor.network.ips.minipc;
 
-  # Utilisation de lib.mapAttrs' pour transformer les services en hôtes virtuels Caddy
+  # Liste des services transformée en liste de valeurs pour réutilisation
+  servicesList = lib.attrValues cfg;
+
+  # Génération des hôtes virtuels Caddy
+  # On filtre les services qui n'ont pas de domaine OU qui ont un port à 0 (DNS pur)
   caddyVirtualHosts = lib.mapAttrs' (
     _name: svc:
     lib.nameValuePair svc.domain {
@@ -12,11 +23,9 @@ let
         tls internal
       '';
     }
-  ) (lib.filterAttrs (_: svc: svc.domain != null) cfg);
+  ) (lib.filterAttrs (_: svc: svc.domain != null && svc.port != 0) cfg);
 
-  # Simplification avec concatMap sur les valeurs directement
-  servicesList = lib.attrValues cfg;
-
+  # Génération des réécritures DNS AdGuard
   adguardRewrites = lib.concatMap (
     svc:
     lib.optional (config.services.adguardhome.enable && svc.domain != null) {
@@ -26,6 +35,7 @@ let
     }
   ) servicesList;
 
+  # Ouverture des ports du Firewall
   firewallTCPPorts = lib.concatMap (svc: lib.optional svc.openFirewall svc.port) servicesList;
   firewallUDPPorts = lib.concatMap (svc: lib.optional svc.openUDPFirewall svc.port) servicesList;
 
@@ -39,7 +49,7 @@ in
         options = {
           port = lib.mkOption {
             type = lib.types.int;
-            description = "Internal port of the service";
+            description = "Internal port of the service. Use 0 for DNS-only entries.";
           };
           domain = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
@@ -67,13 +77,16 @@ in
   };
 
   config = {
+    # 1. Configuration Caddy
     services.caddy.virtualHosts = caddyVirtualHosts;
 
+    # 2. Ouverture Firewall
     networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
       allowedTCPPorts = firewallTCPPorts;
       allowedUDPPorts = firewallUDPPorts;
     };
 
+    # 3. DNS Rewrite (AdGuard)
     services.adguardhome.settings.filtering.rewrites = adguardRewrites;
   };
 }

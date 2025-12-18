@@ -1,12 +1,10 @@
+# ============================================================================
+# File: /home/bigor/nixos/modules/home/nixvim/plugins/default.nix
+# Description: Main entry point for NixVim plugins.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 {
-  # ============================================================================
-  # File: modules/home/nixvim/plugins/default.nix
-  # Description: Neovim Plugins Import
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Aggregates all plugin configurations into a single module.
-  # ============================================================================
-
   imports = [
     ./editor.nix
     ./treesitter.nix

@@ -1,13 +1,10 @@
-{ lib, config, ... }:
 # ============================================================================
-# File: modules/nixos/features/cosmic/default.nix
+# File: /home/bigor/nixos/modules/nixos/features/cosmic/default.nix
 # Description: Configures the COSMIC desktop environment.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: This module enables the COSMIC desktop, including the greeter and
-#          the desktop session manager. It also enables some default
-#          applications and settings for a good desktop experience.
 # ============================================================================
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.features.cosmic;
