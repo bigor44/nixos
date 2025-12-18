@@ -3,7 +3,7 @@
  File: README.md
  Description: Main documentation for the NixOS configuration.
  Author: Bigor
- Date: 2025-12-17
+ Date: 2025-12-18
  Purpose: Provides a high-level overview of the project, its structure,
           and how to use it.
  ============================================================================
@@ -16,7 +16,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 This repository is designed to be:
 
 - **Reproducible**: fully declarative system and user environments
-- **Modular**: clean separation of concerns (roles, services, homes, modules)
+- **Modular**: clean separation of concerns (profiles, services, homes, modules)
 - **Scalable**: supports multiple hosts and profiles from a single codebase
 - **Open-source friendly**: readable structure, documented intent, and sane defaults
 
@@ -29,7 +29,7 @@ This flake manages:
 - Multiple NixOS hosts (desktop + homelab)
 - Per-host Home Manager configurations
 - A fully declarative Neovim setup via **nixvim**
-- Desktop (COSMIC) and headless server roles
+- Desktop (COSMIC) and headless server profiles
 - Homelab services (AdGuard, Caddy, Prometheus, Grafana, Ollama, NFS, etc.)
 
 The configuration heavily relies on **snowfall-lib** to enforce a consistent layout and naming scheme.
@@ -54,10 +54,10 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 │   ├── home/              # Home Manager modules (shell, git, nixvim, GUI, CLI)
 │   └── nixos/             # NixOS modules
 │       ├── common/        # Base system settings
-│       ├── desktop/       # Desktop features (COSMIC, fonts, gaming)
+│       ├── features/      # Desktop features (COSMIC, fonts, gaming)
 │       ├── network/       # Network options & IPs
 │       ├── packages/      # System-wide packages
-│       ├── roles/         # High-level roles (desktop, homelab)
+│       ├── profiles/      # High-level profiles (workstation, homelab_master)
 │       └── services/      # Declarative services (AdGuard, Caddy, Monitoring, etc.)
 │
 ├── dotfiles/              # Mutable desktop dotfiles (symlinked via Home Manager)
@@ -78,17 +78,17 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 
 This keeps the flake concise while allowing deep modularity.
 
-### 2. Role-based configuration
+### 2. Profile-based configuration
 
-High-level roles toggle entire feature sets:
+High-level profiles toggle entire feature sets:
 
-- `bigor.roles.desktop`
+- `bigor.profiles.workstation`
   - COSMIC desktop
   - PipeWire audio
   - Fonts and GUI apps
   - Gaming optimizations
 
-- `bigor.roles.homelab_master`
+- `bigor.profiles.homelab-master`
   - SSH, Tailscale
   - AdGuard Home
   - Caddy reverse proxy
@@ -96,7 +96,7 @@ High-level roles toggle entire feature sets:
   - Ollama AI backend
   - NFS server
 
-Roles only enable _defaults_; everything remains overridable per host.
+Profiles only enable _defaults_; everything remains overridable per host.
 
 ### 3. Home Manager as a first-class citizen
 

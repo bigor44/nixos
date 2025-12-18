@@ -3,7 +3,7 @@
  File: GEMINI.md
  Description: AI context for the NixOS configuration.
  Author: Bigor
- Date: 2025-12-17
+ Date: 2025-12-18
  Purpose: Provides a comprehensive overview of the NixOS configuration in this
           repository, intended to be used as a context for AI-driven
           development and analysis.
@@ -32,8 +32,8 @@ The primary goal is to maintain a reproducible and declarative environment for b
 ### Architectural Principles
 
 - **Modularity**: Configuration is broken down into small, reusable modules for NixOS and Home Manager.
-- **Role-Based Abstraction**: High-level roles (e.g., `desktop`, `homelab_master`) are used to compose systems by enabling collections of fine-grained modules.
-- **Host-Specific Overrides**: Each host (system) has its own entry point where it can enable roles and apply specific settings (e.g., hardware configuration, network interfaces).
+- **Profile-Based Abstraction**: High-level profiles (e.g., `workstation`, `homelab_master`) are used to compose systems by enabling collections of fine-grained modules.
+- **Host-Specific Overrides**: Each host (system) has its own entry point where it can enable profiles and apply specific settings (e.g., hardware configuration, network interfaces).
 - **User Profiles**: Home Manager configurations are also host-aware, allowing a user's environment to differ between machines (e.g., having GUI applications on a desktop but not on a server).
 
 ## Repository Structure
@@ -42,7 +42,7 @@ The primary goal is to maintain a reproducible and declarative environment for b
 - `systems/`: Contains the entry points for each NixOS system configuration, named by hostname (e.g., `grospc`, `minipc`). This is where roles are enabled and hardware is configured.
 - `homes/`: Contains the entry points for Home Manager configurations. These are structured as `user@host` or as a generic `user` profile that can be imported by host-specific ones.
 - `modules/`:
-  - `nixos/`: Contains all NixOS modules, organized by function (e.g., `services`, `desktop`, `roles`).
+  - `nixos/`: Contains all NixOS modules, organized by function (e.g., `services`, `features`, `profiles`).
   - `home/`: Contains all Home Manager modules (e.g., `git`, `shell`, `nixvim`).
 - `secrets/`: Contains sops-encrypted secret files.
 
@@ -74,6 +74,6 @@ nix flake check
 
 - **Modularity**: When adding new functionality, prefer creating a new module in the appropriate `modules/` subdirectory.
 - **Options**: Expose configuration through NixOS options within a `bigor` namespace (e.g., `bigor.services.my-service.enable`).
-- **Roles**: For larger features, consider adding them to one of the existing roles in `modules/nixos/roles/default.nix`.
+- **Profiles**: For larger features, consider adding them to one of the existing profiles in `modules/nixos/profiles/`.
 - **Secrets**: All secrets must be encrypted with `sops` and added to the `secrets/` directory. Never commit plaintext secrets.
 - **Formatting**: Code is automatically formatted using `treefmt`, which is configured in `treefmt.toml`. To apply formatting, run `nix fmt`.
