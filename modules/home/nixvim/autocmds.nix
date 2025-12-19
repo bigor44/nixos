@@ -7,7 +7,7 @@
 _: {
   programs.nixvim = {
     autoGroups = {
-      gemini_highlight_yank = {
+      bigor_highlight_yank = {
         clear = true;
       };
     };
@@ -16,7 +16,7 @@ _: {
       # Highlight text briefly when yanking (copying)
       {
         event = "TextYankPost";
-        group = "gemini_highlight_yank";
+        group = "bigor_highlight_yank";
         callback = {
           __raw = "function() vim.highlight.on_yank({ timeout = 250 }) end";
         };

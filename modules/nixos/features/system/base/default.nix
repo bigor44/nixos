@@ -1,12 +1,11 @@
+# ============================================================================
+# File: modules/nixos/features/system/base/default.nix
+# Description: Base system configuration for all NixOS hosts.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 { inputs, ... }:
 {
-  # ============================================================================
-  # File: modules/nixos/features/system/base/default.nix
-  # Description: Base system configuration for all NixOS hosts.
-  # Author: Bigor
-  # Date: 2025-12-18
-  # ============================================================================
-
   # ============================================================================
   # Certificates
   # ============================================================================

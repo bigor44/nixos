@@ -36,7 +36,6 @@ in
               "<Up>" = "cmp.mapping.select_prev_item()";
             };
 
-            # FIX: `sources` must be a list of maps, each with a 'name' key.
             sources = [
               { name = "nvim_lsp"; }
               { name = "vsnip"; }

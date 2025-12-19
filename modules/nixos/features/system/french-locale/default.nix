@@ -1,12 +1,11 @@
+# ============================================================================
+# File: modules/nixos/features/system/french-locale/default.nix
+# Description: Configures French locale, time zone, and keyboard layout.
+# Author: Bigor
+# Date: 2025-12-18
+# ============================================================================
 { pkgs, ... }:
 {
-  # ============================================================================
-  # File: modules/nixos/features/system/french-locale/default.nix
-  # Description: Configures French locale, time zone, and keyboard layout.
-  # Author: Bigor
-  # Date: 2025-12-18
-  # ============================================================================
-
   # ============================================================================
   # Locale & Regional Settings
   # ============================================================================
