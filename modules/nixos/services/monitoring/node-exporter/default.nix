@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/monitoring/node-exporter/default.nix
+# File: modules/nixos/services/monitoring/node-exporter/default.nix
 # Description: Configures the Node Exporter service.
 # Author: Bigor
 # Date: 2025-12-18

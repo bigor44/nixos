@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/monitoring/alertmanager/default.nix
+# File: modules/nixos/services/monitoring/alertmanager/default.nix
 # Description: Configures the Alertmanager service.
 # Author: Bigor
 # Date: 2025-12-18

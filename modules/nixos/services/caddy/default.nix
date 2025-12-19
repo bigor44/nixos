@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/caddy/default.nix
+# File: modules/nixos/services/caddy/default.nix
 # Description: Configures the Caddy web server.
 # Author: Bigor
 # Date: 2025-12-18

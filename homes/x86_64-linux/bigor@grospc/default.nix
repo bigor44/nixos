@@ -1,10 +1,10 @@
 # ============================================================================
-# File: /home/bigor/nixos/homes/x86_64-linux/bigor@grospc/default.nix
+# File: homes/x86_64-linux/bigor@grospc/default.nix
 # Description: Home Manager configuration for 'bigor' on 'grospc'.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
-{
+_: {
   # Set the Home Manager state version.
   home.stateVersion = "25.11";
 

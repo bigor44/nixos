@@ -1,6 +1,6 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/desktop/tuning/default.nix
-# Description: Configures the COSMIC desktop environment.
+# File: modules/nixos/features/desktop/tuning/default.nix
+# Description: Applies system tuning for a better desktop experience.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================

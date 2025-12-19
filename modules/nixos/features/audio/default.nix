@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/audio/default.nix
+# File: modules/nixos/features/audio/default.nix
 # Description: Configures the audio stack.
 # Author: Bigor
 # Date: 2025-12-18

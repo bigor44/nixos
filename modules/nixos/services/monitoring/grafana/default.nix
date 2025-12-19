@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/monitoring/grafana/default.nix
+# File: modules/nixos/services/monitoring/grafana/default.nix
 # Description: Configures the Grafana service.
 # Author: Bigor
 # Date: 2025-12-18

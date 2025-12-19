@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/systems/x86_64-linux/minipc/default.nix
+# File: systems/x86_64-linux/minipc/default.nix
 # Description: Host-specific configuration for the "minipc" server.
 # Author: Bigor
 # Date: 2025-12-18
@@ -18,7 +18,7 @@
   # ============================================================================
   # Custom Role & Feature Flags
   # ============================================================================
-  # - Headless Server (roles.homelab_master)
+  # - Headless Server (profiles.homelab_master)
   # - NFS Server for centralized storage
   # - Tailscale Exit Node/Relay with UDP GRO optimization
   # - Ollama AI Service

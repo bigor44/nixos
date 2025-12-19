@@ -1,6 +1,6 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/git/default.nix
-# Description: Configures Git for the user.
+# File: modules/home/git/default.nix
+# Description: Configures Git and sets up useful shell abbreviations.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================

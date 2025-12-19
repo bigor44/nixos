@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/cli-packages/default.nix
+# File: modules/home/cli-packages/default.nix
 # Description: Configures CLI packages for the user.
 # Author: Bigor
 # Date: 2025-12-18
@@ -59,7 +59,8 @@ in
       lm_sensors # Tools for reading hardware sensors
       fastfetch # Like neofetch, but faster because it's written in C
 
-      gemini-cli
+      claude-code
+
     ];
   };
 }

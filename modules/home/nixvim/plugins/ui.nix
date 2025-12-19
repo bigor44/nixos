@@ -1,10 +1,10 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/plugins/ui.nix
+# File: modules/home/nixvim/plugins/ui.nix
 # Description: Configures UI-related NixVim plugins.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
-{
+_: {
   programs.nixvim = {
     # Highlights for Mini.notify
     highlight = {

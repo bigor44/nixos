@@ -1,3 +1,10 @@
+# ============================================================================
+# File: modules/nixos/services/nfs/default.nix
+# Description: NFS File Sharing Configuration. Configures NFS server (exporting shares)
+#              and NFS client (mounting shares) based on enabled feature flags.
+# Author: Bigor
+# Date: 2025-12-15
+# ============================================================================
 {
   config,
   lib,
@@ -9,15 +16,6 @@ let
   inherit (config.bigor.network) ips;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/nfs/default.nix
-  # Description: NFS File Sharing Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures NFS server (exporting shares) and NFS client (mounting
-  #          shares) based on enabled feature flags.
-  # ============================================================================
-
   options.bigor.services.nfs = {
     server = mkEnableOption "Configures the machine to act as an NFS host, exporting defined storage directories (e.g., /mnt/storage)";
     client = mkEnableOption "Configures the machine to mount remote NFS shares defined in the configuration";

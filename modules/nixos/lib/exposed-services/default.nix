@@ -11,11 +11,11 @@ let
   cfg = config.bigor.lib.exposedService;
   targetIP = config.bigor.network.ips.minipc;
 
-  # Liste des services transformée en liste de valeurs pour réutilisation
+  # Transform the services attribute set into a list of values for reuse
   servicesList = lib.attrValues cfg;
 
-  # Génération des hôtes virtuels Caddy
-  # On filtre les services qui n'ont pas de domaine OU qui ont un port à 0 (DNS pur)
+  # Generate Caddy virtual hosts
+  # We filter out services that have no domain OR have a port of 0 (pure DNS)
   caddyVirtualHosts = lib.mapAttrs' (
     _name: svc:
     lib.nameValuePair svc.domain {
@@ -26,7 +26,7 @@ let
     }
   ) (lib.filterAttrs (_: svc: svc.domain != null && svc.port != 0) cfg);
 
-  # Génération des réécritures DNS AdGuard
+  # Generate AdGuard DNS rewrites
   adguardRewrites = lib.concatMap (
     svc:
     lib.optional (config.services.adguardhome.enable && svc.domain != null) {
@@ -36,7 +36,7 @@ let
     }
   ) servicesList;
 
-  # Ouverture des ports du Firewall
+  # Open Firewall Ports
   firewallTCPPorts = lib.concatMap (svc: lib.optional svc.openFirewall svc.port) servicesList;
   firewallUDPPorts = lib.concatMap (svc: lib.optional svc.openUDPFirewall svc.port) servicesList;
 
@@ -79,46 +79,46 @@ in
 
   config = {
     # ============================================================================
-    # Validations & Sécurité
+    # Validations & Security
     # ============================================================================
 
-    # 1. Assertions : Bloquent la construction en cas d'erreur critique
+    # 1. Assertions: Block the build in case of critical errors
     assertions = [
       {
-        # Vérification de l'unicité des ports (pour les ports non nuls)
+        # Check for unique ports (for non-zero ports)
         assertion =
           let
             ports = map (s: toString s.port) (lib.filter (s: s.port != 0) servicesList);
           in
           ports == lib.unique ports;
-        message = "exposed-services: Collision détectée ! Plusieurs services tentent d'utiliser le même numéro de port.";
+        message = "exposed-services: Collision detected! Multiple services are trying to use the same port number.";
       }
       {
-        # Vérification de l'unicité des domaines
+        # Check for unique domains
         assertion =
           let
             domains = map (s: s.domain) (lib.filter (s: s.domain != null) servicesList);
           in
           domains == lib.unique domains;
-        message = "exposed-services: Collision détectée ! Plusieurs services tentent d'utiliser le même nom de domaine.";
+        message = "exposed-services: Collision detected! Multiple services are trying to use the same domain name.";
       }
     ];
 
-    # 2. Warnings : Avertissent des configurations potentiellement dangereuses
+    # 2. Warnings: Warn about potentially dangerous configurations
     warnings = lib.concatMap (
       svc:
       lib.optional (svc.domain != null && svc.openFirewall)
-        "exposed-services: SECURITE - Le service '${svc.domain}' est exposé via Caddy (Reverse Proxy) MAIS son port ${toString svc.port} est aussi ouvert directement sur le firewall (openFirewall = true). Cela permet de contourner le proxy et ses sécurités."
+        "exposed-services: SECURITY - The service '${svc.domain}' is exposed via Caddy (Reverse Proxy) BUT its port ${toString svc.port} is also open directly on the firewall (openFirewall = true). This allows bypassing the proxy and its security features."
     ) servicesList;
 
     # ============================================================================
-    # Configuration Système
+    # System Configuration
     # ============================================================================
 
-    # 1. Configuration Caddy
+    # 1. Caddy Configuration
     services.caddy.virtualHosts = caddyVirtualHosts;
 
-    # 2. Ouverture Firewall
+    # 2. Firewall Opening
     networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
       allowedTCPPorts = firewallTCPPorts;
       allowedUDPPorts = firewallUDPPorts;

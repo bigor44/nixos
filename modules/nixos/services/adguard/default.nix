@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/adguard/default.nix
+# File: modules/nixos/services/adguard/default.nix
 # Description: Configures the AdGuard Home service.
 # Author: Bigor
 # Date: 2025-12-18
@@ -43,7 +43,7 @@ in
       mutableSettings = false; # Enforce declarative configuration via Nix
 
       settings = {
-        language = "fr";
+        language = "en";
         log = {
           enabled = true;
           compress = true; # Save disk space
@@ -84,6 +84,10 @@ in
           parental_enabled = false;
           safe_search.enabled = false;
         };
+
+        user_rules = [
+          "@@||anthropic.com^" # Whitelist *.anthropic.com
+        ];
 
         # Blocklists
         filters =

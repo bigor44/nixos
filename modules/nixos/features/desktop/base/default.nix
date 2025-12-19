@@ -1,6 +1,6 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/desktop/base/default.nix
-# Description: Configures the COSMIC desktop environment.
+# File: modules/nixos/features/desktop/base/default.nix
+# Description: Configures the base components for a desktop environment.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================

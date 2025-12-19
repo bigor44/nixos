@@ -1,10 +1,10 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/plugins/editor.nix
+# File: modules/home/nixvim/plugins/editor.nix
 # Description: Configures editor-related NixVim plugins.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
-{
+_: {
   programs.nixvim.plugins = {
     # ==========================================================================
     # Telescope (Fuzzy Finder)

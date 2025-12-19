@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/fonts/default.nix
+# File: modules/nixos/features/fonts/default.nix
 # Description: Configures system fonts.
 # Author: Bigor
 # Date: 2025-12-18

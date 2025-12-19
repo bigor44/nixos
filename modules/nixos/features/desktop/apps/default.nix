@@ -1,6 +1,6 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/desktop/apps/default.nix
-# Description: Configures the COSMIC desktop environment.
+# File: modules/nixos/features/desktop/apps/default.nix
+# Description: Configures default desktop applications.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================

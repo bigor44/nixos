@@ -1,10 +1,10 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/opts.nix
+# File: modules/home/nixvim/opts.nix
 # Description: Configures Neovim options.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
-{
+_: {
   programs.nixvim = {
     # ==========================================================================
     # Visuals & Colorscheme

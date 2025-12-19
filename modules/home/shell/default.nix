@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/shell/default.nix
+# File: modules/home/shell/default.nix
 # Description: Configures the user's shell environment.
 # Author: Bigor
 # Date: 2025-12-18

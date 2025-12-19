@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/flake.nix
+# File: flake.nix
 # Description: Main flake entry point for the NixOS configuration.
 # Author: Bigor
 # Date: 2025-12-18

@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/gaming/default.nix
+# File: modules/nixos/features/gaming/default.nix
 # Description: Configures gaming-related features.
 # Author: Bigor
 # Date: 2025-12-18

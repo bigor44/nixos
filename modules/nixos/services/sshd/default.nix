@@ -1,3 +1,11 @@
+# ============================================================================
+# File: modules/nixos/services/sshd/default.nix
+# Description: OpenSSH Server Configuration. Configures the SSH daemon for
+#              secure remote access with hardening defaults (no root login,
+#              key-based auth only).
+# Author: Bigor
+# Date: 2025-12-15
+# ============================================================================
 {
   config,
   lib,
@@ -8,15 +16,6 @@ let
   cfg = config.bigor.services.ssh;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/sshd/default.nix
-  # Description: OpenSSH Server Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures the SSH daemon for secure remote access with hardening
-  #          defaults (no root login, key-based auth only).
-  # ============================================================================
-
   options.bigor.services.ssh = {
     enable = mkEnableOption "Enables the OpenSSH daemon with hardened security defaults (no root login, key-based auth only)";
   };

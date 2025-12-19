@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/profiles/workstation/default.nix
+# File: modules/nixos/profiles/workstation/default.nix
 # Description: Configures the workstation profile.
 # Author: Bigor
 # Date: 2025-12-18

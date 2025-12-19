@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/ollama/default.nix
+# File: modules/nixos/services/ollama/default.nix
 # Description: Configures the Ollama service.
 # Author: Bigor
 # Date: 2025-12-18

@@ -1,11 +1,9 @@
 # ============================================================================
-# File: lsp.nix
-# Description: NixVim LSP configuration.
+# File: modules/home/nixvim/plugins/lsp.nix
+# Description: Configures Language Server Protocol (LSP) for various languages in NixVim.
 # Author: Bigor
 # Date: 2025-12-18
-# Purpose: Configures Language Server Protocol (LSP) for various languages in NixVim.
 # ============================================================================
-
 {
   programs.nixvim.plugins.lsp = {
     enable = true;
@@ -57,25 +55,19 @@
 
         settings = {
           nixd = {
-            # ----------------------------------------------------------------------
-            # nixpkgs : base d’évaluation
-            # ----------------------------------------------------------------------
+            # Evaluation base for nixpkgs
             nixpkgs = {
               expr = "import <nixpkgs> {}";
             };
 
-            # ----------------------------------------------------------------------
-            # Formatter (doit matcher Conform / treefmt)
-            # ----------------------------------------------------------------------
+            # Formatter (must match Conform / treefmt)
             formatting = {
               command = [ "nixfmt" ];
             };
 
-            # ----------------------------------------------------------------------
-            # Options : cœur de l’auto-complétion
-            # ----------------------------------------------------------------------
+            # Options: Core of autocompletion
             options = {
-              # Toutes les options NixOS de TOUS les hosts
+              # All NixOS options from ALL hosts
               nixos = {
                 expr = ''
                   let
@@ -85,7 +77,7 @@
                 '';
               };
 
-              # Toutes les options Home Manager
+              # All Home Manager options
               home-manager = {
                 expr = ''
                   let
@@ -96,9 +88,7 @@
               };
             };
 
-            # ----------------------------------------------------------------------
             # Diagnostics
-            # ----------------------------------------------------------------------
             diagnostics = {
               enable = true;
               excluded = [

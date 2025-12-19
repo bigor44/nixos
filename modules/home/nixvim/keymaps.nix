@@ -1,10 +1,10 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/keymaps.nix
+# File: modules/home/nixvim/keymaps.nix
 # Description: Configures Neovim keymaps.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
-{
+_: {
   programs.nixvim.keymaps = [
     # ==========================================================================
     # Standard Operations

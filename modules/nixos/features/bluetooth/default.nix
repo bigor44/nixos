@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/features/bluetooth/default.nix
+# File: modules/nixos/features/bluetooth/default.nix
 # Description: Configures Bluetooth support.
 # Author: Bigor
 # Date: 2025-12-18

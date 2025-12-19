@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/systems/x86_64-linux/grospc/default.nix
+# File: systems/x86_64-linux/grospc/default.nix
 # Description: Host-specific configuration for the "grospc" workstation.
 # Author: Bigor
 # Date: 2025-12-18

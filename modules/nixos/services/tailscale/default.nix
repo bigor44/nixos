@@ -1,3 +1,10 @@
+# ============================================================================
+# File: modules/nixos/services/tailscale/default.nix
+# Description: Configures Tailscale for secure mesh networking and optimizes
+#              Exit Node functionality on the homelab master.
+# Author: Bigor
+# Date: 2025-12-15
+# ============================================================================
 {
   config,
   pkgs,
@@ -9,15 +16,6 @@ let
   cfg = config.bigor.services.tailscale;
 in
 {
-  # ============================================================================
-  # File: modules/nixos/services/tailscale/default.nix
-  # Description: Tailscale VPN Configuration
-  # Author: Bigor
-  # Date: 2025-12-15
-  # Purpose: Configures Tailscale for secure mesh networking and optimizes
-  #          Exit Node functionality on the homelab master.
-  # ============================================================================
-
   options.bigor.services.tailscale = {
     enable = mkEnableOption "Enable Tailscale VPN mesh networking";
   };

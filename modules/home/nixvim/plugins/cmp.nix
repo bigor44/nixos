@@ -1,6 +1,6 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/plugins/cmp.nix
-# Description: Configuration for nvim-cmp.
+# File: modules/home/nixvim/plugins/cmp.nix
+# Description: Configuration for nvim-cmp, the completion plugin.
 # Author: Bigor
 # Date: 2025-12-18
 # ============================================================================
@@ -36,7 +36,7 @@ in
               "<Up>" = "cmp.mapping.select_prev_item()";
             };
 
-            # CORRECTION ICI : sources doit être une liste de maps avec la clé 'name'
+            # FIX: `sources` must be a list of maps, each with a 'name' key.
             sources = [
               { name = "nvim_lsp"; }
               { name = "vsnip"; }

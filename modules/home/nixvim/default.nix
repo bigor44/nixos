@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/nixvim/default.nix
+# File: modules/home/nixvim/default.nix
 # Description: Main entry point for the NixVim configuration.
 # Author: Bigor
 # Date: 2025-12-18

@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/home/features/gui/default.nix
+# File: modules/home/features/gui/default.nix
 # Description: Configures GUI applications and related settings.
 # Author: Bigor
 # Date: 2025-12-18

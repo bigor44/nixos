@@ -1,5 +1,5 @@
 # ============================================================================
-# File: /home/bigor/nixos/modules/nixos/services/monitoring/prometheus/default.nix
+# File: modules/nixos/services/monitoring/prometheus/default.nix
 # Description: Configures the Prometheus monitoring service.
 # Author: Bigor
 # Date: 2025-12-18
