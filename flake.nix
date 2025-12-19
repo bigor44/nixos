@@ -55,6 +55,7 @@
       # Inject Nixvim modules into Home Manager
       homes.modules = [
         inputs.nixvim.homeModules.nixvim
+        inputs.sops-nix.homeManagerModules.sops
       ];
 
       systems.modules.nixos = [
