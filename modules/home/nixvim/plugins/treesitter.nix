@@ -10,14 +10,6 @@ _: {
       enable = true;
       nixGrammars = true;
       settings = {
-        ensure_installed = [
-          "nix"
-          "bash"
-          "markdown"
-          "markdown_inline"
-          "json"
-          "yaml"
-        ];
         highlight.enable = true;
         indent.enable = true;
       };
