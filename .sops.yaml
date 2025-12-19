@@ -16,6 +16,7 @@
 keys:
   - &host_grospc age1eaks6fpy22ksjxx9h5thyt7h6sxu6ql64j4kvpylxdcp2twj5frqfcu3kh
   - &host_minipc age19a9qc7lxl0wu6gslqh0y9ukhdn2fynlqgfayhrkk5l98xwpc93lqpspm6e
+  - &host_minidesk age19a9qc7lxl0wu6gslqh0y9ukhdn2fynlqgfayhrkk5l98xwpc93lqpspm6e
   - &user_bigor age1sw035y28puee2xhm2rw6y6n5yh64hfupn3uhrs248ma4a333fgdsdm0snh
 
 creation_rules:
@@ -24,4 +25,5 @@ creation_rules:
       - age:
           - *user_bigor
           - *host_minipc
+          - *host_minidesk
           - *host_grospc
