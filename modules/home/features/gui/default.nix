@@ -24,6 +24,7 @@ in
     # Applications
     # ==========================================================================
     home.packages = with pkgs; [
+      prismlauncher
       discord
       youtube-music
       whatsapp-electron
