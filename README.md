@@ -42,7 +42,7 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 .
 ├── flake.nix              # Flake entry point
 ├── flake.lock             # Locked dependencies
-├── checks/                # CI-style checks (statix, deadnix)
+├── checks/                # CI-style checks (statix, deadnix, formatting)
 │
 ├── homes/                 # Home Manager entry points
 │   └── x86_64-linux/
@@ -141,6 +141,7 @@ The flake includes automated checks:
 
 - **statix** – Nix linting and best practices
 - **deadnix** – detection of unused code
+- **treefmt** – formatting verification (nixfmt, shfmt, prettier, taplo)
 
 Run them with:
 
@@ -148,9 +149,11 @@ Run them with:
 nix flake check
 ```
 
-Formatting is handled by `treefmt` and can be applied by running `nix fmt`.
+To apply formatting, run:
 
-It uses `nixfmt-rfc-style`, `prettier`, `stylua`, and other tools.
+```bash
+nix fmt
+```
 
 ---
 

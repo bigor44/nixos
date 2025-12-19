@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Build or switch a system configuration
 sudo nixos-rebuild switch --flake .#<hostname>   # e.g., .#grospc or .#minipc
 
-# Check the flake (runs statix + deadnix linters)
+# Check the flake (runs statix, deadnix, and formatting verification)
 nix flake check
 
 # Format all files
@@ -25,22 +25,24 @@ This is a NixOS + Home Manager configuration using **snowfall-lib** for an opini
 - `homes/x86_64-linux/<user>[@<host>]/` - Home Manager configurations (host-specific overrides use `user@host` format)
 - `modules/nixos/` - NixOS modules (features, profiles, services)
 - `modules/home/` - Home Manager modules (shell, git, nixvim, GUI, CLI)
-- `checks/` - CI-style checks (statix, deadnix)
+- `checks/` - CI-style checks (statix, deadnix, formatting)
 - `packages/` - Custom package definitions
 
 ### Configuration Hierarchy
 
 **Profiles** (`bigor.profiles.*`) are high-level toggles that enable sets of features:
+
 - `bigor.profiles.workstation` - Desktop: COSMIC DE, audio, fonts, gaming, node-exporter
 - `bigor.profiles.homelab-master` - Server: SSH, Tailscale, AdGuard, Caddy, monitoring stack (Prometheus/Grafana/Alertmanager), Ollama, NFS
 
 **Features** (`bigor.features.*`) are individual system capabilities toggled by profiles or directly.
 
-**Services** (`bigor.services.*`) are declarative service modules (adguard, caddy, monitoring/*, nfs, ollama, sshd, tailscale).
+**Services** (`bigor.services.*`) are declarative service modules (adguard, caddy, monitoring/\*, nfs, ollama, sshd, tailscale).
 
 ### Home Manager
 
 Home modules are enabled via `bigor.home.*`:
+
 - `bigor.home.shell` - Zsh, starship, aliases
 - `bigor.home.git` - Git configuration
 - `bigor.home.cli-packages` - CLI tools
