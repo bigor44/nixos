@@ -11,28 +11,62 @@
 
 # Bigor NixOS Configuration
 
+[![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
+[![Flakes](https://img.shields.io/badge/Nix-Flakes-informational?logo=nixos)](https://wiki.nixos.org/wiki/Flakes)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 A modular, opinionated, and production-ready **NixOS + Home Manager** configuration built with **Flakes** and **snowfall-lib**.
 
-This repository is designed to be:
-
-- **Reproducible**: fully declarative system and user environments
-- **Modular**: clean separation of concerns (profiles, services, homes, modules)
-- **Scalable**: supports multiple hosts and profiles from a single codebase
-- **Open-source friendly**: readable structure, documented intent, and sane defaults
+```
+                   +-----------------+
+                   |   flake.nix     |
+                   +--------+--------+
+                            |
+          +-----------------+-----------------+
+          |                 |                 |
+  +-------v-------+ +-------v-------+ +-------v-------+
+  |   systems/    | |   modules/    | |    homes/     |
+  | (Host configs)| | (NixOS + HM)  | | (User envs)   |
+  +---------------+ +-------+-------+ +---------------+
+                            |
+          +-----------------+-----------------+
+          |                 |                 |
+  +-------v-------+ +-------v-------+ +-------v-------+
+  |   profiles/   | |   features/   | |   services/   |
+  | (Presets)     | | (Capabilities)| | (Daemons)     |
+  +---------------+ +---------------+ +---------------+
+```
 
 ---
 
-## Overview
+## Table of Contents
 
-This flake manages:
+- [Features](#features)
+- [Repository Structure](#repository-structure)
+- [Hosts](#hosts)
+- [Key Design Principles](#key-design-principles)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Code Quality & Tooling](#code-quality--tooling)
+- [Secrets Management](#secrets-management)
+- [Dependencies](#dependencies)
+- [What This Is (and Is Not)](#what-this-is-and-is-not)
+- [License](#license)
 
-- Multiple NixOS hosts (desktop + homelab)
-- Per-host Home Manager configurations
-- A fully declarative Neovim setup via **nixvim**
-- Desktop (COSMIC) and headless server profiles
-- Homelab services (AdGuard, Caddy, Prometheus, Grafana, Ollama, NFS, etc.)
+---
 
-The configuration heavily relies on **snowfall-lib** to enforce a consistent layout and naming scheme.
+## Features
+
+| Category            | Description                                                    |
+| ------------------- | -------------------------------------------------------------- |
+| **Multi-host**      | Desktop workstation + homelab server from a single codebase    |
+| **Declarative**     | 100% reproducible system and user environments                 |
+| **Home Manager**    | Per-user, per-host configurations with host-specific overrides |
+| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting   |
+| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations         |
+| **Homelab**         | AdGuard, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
+| **Secrets**         | sops-nix with age encryption                                   |
+| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)      |
 
 ---
 
@@ -60,6 +94,15 @@ The configuration heavily relies on **snowfall-lib** to enforce a consistent lay
 ├── dotfiles/              # Mutable desktop dotfiles (symlinked via Home Manager)
 └── certs/                 # Local CA certificates (not meant for public reuse)
 ```
+
+---
+
+## Hosts
+
+| Host       | Type    | Profile          | Description                                                              |
+| ---------- | ------- | ---------------- | ------------------------------------------------------------------------ |
+| **grospc** | Desktop | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations     |
+| **minipc** | Server  | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI) |
 
 ---
 
@@ -110,28 +153,40 @@ The Neovim configuration is 100% Nix, powered by **nixvim**, and includes:
 
 ---
 
-## Supported Systems
+## Prerequisites
 
-- `x86_64-linux`
+- **NixOS** with flakes enabled
+- **Git** for cloning the repository
 
-The configuration currently targets NixOS unstable.
+To enable flakes, add to your `/etc/nixos/configuration.nix`:
+
+```nix
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
+```
 
 ---
 
-## Usage
-
-### Clone the repository
+## Quick Start
 
 ```bash
+# Clone the repository
 git clone https://github.com/bigor44/nixos.git
 cd nixos
-```
 
-### Build or switch a system
+# Preview the build (dry run)
+nixos-rebuild dry-build --flake .#<hostname>
 
-```bash
+# Apply the configuration
 sudo nixos-rebuild switch --flake .#<hostname>
+
+# Format all files
+nix fmt
+
+# Run all checks (lint, deadcode, formatting)
+nix flake check
 ```
+
+Replace `<hostname>` with `grospc` or `minipc`.
 
 ---
 
@@ -168,6 +223,20 @@ Secrets are expected to be:
 - Never committed in plaintext
 
 > Note: secret files and private keys are intentionally excluded from this repository.
+
+---
+
+## Dependencies
+
+This configuration is built on top of these excellent projects:
+
+| Project                                                       | Purpose                                     |
+| ------------------------------------------------------------- | ------------------------------------------- |
+| [nixpkgs](https://github.com/NixOS/nixpkgs)                   | Core NixOS packages (unstable branch)       |
+| [snowfall-lib](https://github.com/snowfallorg/lib)            | Opinionated flake structure and namespacing |
+| [home-manager](https://github.com/nix-community/home-manager) | Declarative user environment management     |
+| [nixvim](https://github.com/nix-community/nixvim)             | 100% Nix-based Neovim configuration         |
+| [sops-nix](https://github.com/Mic92/sops-nix)                 | Secrets management with age encryption      |
 
 ---
 
