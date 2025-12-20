@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/plugins/lsp.nix
-# Description: Configures Language Server Protocol (LSP) for various languages in NixVim.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
 {
   programs.nixvim.plugins.lsp = {
     enable = true;

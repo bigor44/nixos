@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/plugins/treesitter.nix
-# Description: Configures Treesitter and related plugins.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
 _: {
   programs.nixvim.plugins = {
     treesitter = {

@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/nixos/services/ollama/default.nix
-# Description: Configures the Ollama service.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: ollama
+# Purpose: Local LLM inference with ROCm GPU acceleration
 {
   config,
   lib,
@@ -15,20 +11,13 @@ let
   cfg = config.bigor.services.ollama;
 in
 {
-  options.bigor.services.ollama = {
-    enable = mkEnableOption "Enable Ollama stack + Open WebUI (No Auth)";
-  };
+  options.bigor.services.ollama.enable = mkEnableOption "Ollama LLM service";
 
   config = mkIf cfg.enable {
-    services = {
-      # ==========================================================================
-      # 1. Ollama Service (The "Brain")
-      # ==========================================================================
-      ollama = {
-        enable = true;
-        host = "127.0.0.1";
-        package = pkgs.ollama-rocm;
-      };
+    services.ollama = {
+      enable = true;
+      host = "127.0.0.1";
+      package = pkgs.ollama-rocm;
     };
 
     bigor.lib.exposedService.ollama = {

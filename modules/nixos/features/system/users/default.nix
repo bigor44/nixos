@@ -1,12 +1,7 @@
+# Feature: system.users
+# Purpose: Primary user configuration with Fish shell and passwordless sudo
 { pkgs, ... }:
 {
-  # ============================================================================
-  # File: modules/nixos/features/system/users/default.nix
-  # Description: Configures the primary user 'bigor' and sudo access.
-  # Author: Bigor
-  # Date: 2025-12-18
-  # ============================================================================
-
   users.users.bigor = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -16,10 +11,6 @@
     ];
   };
 
-  # Passwordless sudo for the 'wheel' group for convenience
   security.sudo.wheelNeedsPassword = false;
-
-  # Ensure Fish is listed in /etc/shells.
-  # This is required for it to be a valid login shell for users (e.g. for SSH or display managers).
   environment.shells = with pkgs; [ fish ];
 }

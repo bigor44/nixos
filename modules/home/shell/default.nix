@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/home/shell/default.nix
-# Description: Configures the user's shell environment.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: shell
+# Purpose: Fish shell with Tide prompt, fzf, zoxide, and bat
 {
   config,
   lib,
@@ -15,18 +11,10 @@ let
   cfg = config.bigor.home.shell;
 in
 {
-  options.bigor.home.shell = {
-    enable = mkEnableOption "Enable user shell configuration";
-  };
+  options.bigor.home.shell.enable = mkEnableOption "Shell configuration";
 
   config = mkIf cfg.enable {
-    # ==========================================================================
-    # Programs Configuration
-    # ==========================================================================
     programs = {
-      # ========================================================================
-      # Fish Shell
-      # ========================================================================
       fish = {
         enable = true;
 
@@ -49,33 +37,23 @@ in
           ll = "eza -l --icons --git";
           la = "eza -lah --icons --git";
           lt = "eza --tree --level=2 --icons";
-
           rm = "rm -i";
           cp = "cp -i";
           mv = "mv -i";
-
           ".." = "cd ..";
           "..." = "cd ../..";
           "...." = "cd ../../..";
         };
 
         shellAbbrs = {
-          # Nix flake operations
           nfc = "nix flake check";
           nfu = "nix flake update";
-
-          # System monitoring
           ports = "netstat -tulanp";
           meminfo = "free -h";
           diskinfo = "df -h";
         };
       };
 
-      # ========================================================================
-      # Interactive Tools
-      # ========================================================================
-
-      # Fuzzy Finder
       fzf = {
         enable = true;
         enableFishIntegration = true;
@@ -88,19 +66,15 @@ in
         ];
       };
 
-      # Smarter `cd`
       zoxide = {
         enable = true;
         enableFishIntegration = true;
         options = [ "--cmd cd" ];
       };
 
-      # Better `cat`
       bat = {
         enable = true;
-        config = {
-          pager = "less -FR";
-        };
+        config.pager = "less -FR";
       };
     };
   };

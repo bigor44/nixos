@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/home/nixvim/default.nix
-# Description: Main entry point for the NixVim configuration.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: nixvim
+# Purpose: Neovim configuration with LSP, treesitter, and completion
 {
   config,
   lib,
@@ -21,9 +17,7 @@ in
     ./plugins
   ];
 
-  options.bigor.home.nixvim = {
-    enable = lib.mkEnableOption "Enable NixVim configuration";
-  };
+  options.bigor.home.nixvim.enable = lib.mkEnableOption "NixVim configuration";
 
   config = lib.mkIf cfg.enable {
     programs.nixvim = {
@@ -32,22 +26,18 @@ in
         wl-clipboard
         gcc
 
-        # ======================================================================
-        # Language Servers (LSP)
-        # ======================================================================
+        # Language servers
         nodePackages.bash-language-server
-        marksman # Markdown
-        vscode-langservers-extracted # HTML/CSS/JSON/ESLint
+        marksman
+        vscode-langservers-extracted
         yaml-language-server
-        nixd # Nix
+        nixd
 
-        # ======================================================================
-        # Formatters & Linters
-        # ======================================================================
-        nixfmt-rfc-style # Nix
-        shfmt # Shell
-        prettier # Web (JSON/YAML/Markdown/etc)
-        taplo # TOML
+        # Formatters & linters
+        nixfmt-rfc-style
+        shfmt
+        prettier
+        taplo
       ];
     };
   };

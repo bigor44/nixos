@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/autocmds.nix
-# Description: Configures Neovim autocommands.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
 _: {
   programs.nixvim = {
     autoGroups = {

@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/home/git/default.nix
-# Description: Configures Git and sets up useful shell abbreviations.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: git
+# Purpose: Git configuration and Fish shell abbreviations
 {
   config,
   lib,
@@ -14,9 +10,7 @@ let
   cfg = config.bigor.home.git;
 in
 {
-  options.bigor.home.git = {
-    enable = mkEnableOption "Enable user git configuration";
-  };
+  options.bigor.home.git.enable = mkEnableOption "Git configuration";
 
   config = mkIf cfg.enable {
     programs.git = {
@@ -27,9 +21,6 @@ in
       };
     };
 
-    # ==========================================================================
-    # Shell Abbreviations
-    # ==========================================================================
     programs.fish.shellAbbrs = {
       g = "git";
       gaa = "git add -A";

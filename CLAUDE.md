@@ -5,14 +5,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build and Development Commands
 
 ```bash
-# Build or switch a system configuration
-sudo nixos-rebuild switch --flake .#<hostname>   # e.g., .#grospc or .#minipc
+# Build and switch system configuration (uses nh helper)
+nh os switch              # Automatically detects hostname
+
+# Build without switching
+nh os build
 
 # Check the flake (runs statix, deadnix, and formatting verification)
 nix flake check
 
 # Format all files
 nix fmt
+
+# Update flake inputs
+nix flake update
+
+# Clean old generations (keeps last 3 and anything from last 4 days)
+nh clean all
 ```
 
 ## Architecture Overview
@@ -43,7 +52,7 @@ This is a NixOS + Home Manager configuration using **snowfall-lib** for an opini
 
 Home modules are enabled via `bigor.home.*`:
 
-- `bigor.home.shell` - Zsh, starship, aliases
+- `bigor.home.shell` - Fish shell with Tide prompt, fzf, zoxide, bat
 - `bigor.home.git` - Git configuration
 - `bigor.home.cli-packages` - CLI tools
 - `bigor.home.nixvim` - Full Neovim configuration (LSP, treesitter, completion)
