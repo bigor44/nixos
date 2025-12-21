@@ -16,8 +16,6 @@ in
       age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
       defaultSopsFile = ../../../secrets/secrets.yaml;
       defaultSopsFormat = "yaml";
-
-      secrets.anthropic_api_key = { };
     };
   };
 }

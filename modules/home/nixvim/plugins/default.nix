@@ -1,6 +1,5 @@
 _: {
   imports = [
-    ./ai.nix
     ./editor.nix
     ./treesitter.nix
     ./lsp.nix
