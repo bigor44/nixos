@@ -62,10 +62,12 @@ in
         # noauto: Don't mount automatically at boot (handled by automount)
         options = [
           "x-systemd.automount"
-          "noauto"
-          "nfsvers=4.2"
-          "timeo=14"
-          "retrans=2"
+          "_netdev"
+          "nofail"
+          "noatime"
+          "soft"
+          "timeo=600"
+          "retrans=5"
         ];
       };
     })

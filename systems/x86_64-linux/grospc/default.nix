@@ -30,7 +30,7 @@
   bigor = {
     profiles.workstation.enable = true;
     services = {
-      nfs.client = true;
+      nfs.client = false;
     };
     network.mainInterface = "enp14s0";
 
