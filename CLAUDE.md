@@ -42,11 +42,11 @@ This is a NixOS + Home Manager configuration using **snowfall-lib** for an opini
 **Profiles** (`bigor.profiles.*`) are high-level toggles that enable sets of features:
 
 - `bigor.profiles.workstation` - Desktop: COSMIC DE, audio, fonts, gaming, node-exporter
-- `bigor.profiles.homelab-master` - Server: SSH, Tailscale, AdGuard, Caddy, monitoring stack (Prometheus/Grafana/Alertmanager), Ollama, NFS
+- `bigor.profiles.homelab-master` - Server: SSH, Tailscale, DNS (Unbound+Blocky), Caddy, monitoring stack (Prometheus/Grafana/Alertmanager), Ollama, NFS
 
 **Features** (`bigor.features.*`) are individual system capabilities toggled by profiles or directly.
 
-**Services** (`bigor.services.*`) are declarative service modules (adguard, caddy, monitoring/\*, nfs, ollama, sshd, tailscale).
+**Services** (`bigor.services.*`) are declarative service modules (blocky, caddy, monitoring/\*, nfs, ollama, sshd, tailscale, unbound).
 
 ### Home Manager
 
@@ -72,9 +72,10 @@ All network services and hosts are centrally defined in `modules/nixos/lib/netwo
 
 The consumer module (`modules/nixos/lib/network-consumer/`) automatically:
 
-- Generates AdGuard DNS rewrites for ALL services (any host can run DNS)
 - Configures Caddy reverse proxy for LOCAL services only
 - Opens firewall ports for LOCAL services only
+
+DNS rewrites are automatically generated from the topology within the Blocky module itself.
 
 **Adding a new service:**
 
@@ -101,6 +102,67 @@ newhost = {
   interface = "enp0s0";
 };
 ```
+
+### DNS Stack (Unbound + Blocky)
+
+The homelab uses a **modular DNS architecture** for better performance and separation of concerns:
+
+**Architecture:**
+
+```
+┌─────────────────────────────────────────┐
+│         CLIENTS (devices)               │
+└────────────────┬────────────────────────┘
+                 │ DNS Query (port 53)
+                 ↓
+┌─────────────────────────────────────────┐
+│         BLOCKY (Port 53)                │
+│  - Filtrage/blocage ads/trackers        │
+│  - Rewrites DNS locaux (auto SSOT)      │
+│  - Upstream → Unbound                   │
+│  - Metrics: http://localhost:4000       │
+└────────────────┬────────────────────────┘
+                 │ Query non-bloquée
+                 ↓
+┌─────────────────────────────────────────┐
+│         UNBOUND (Port 5335)             │
+│  - Résolution récursive                 │
+│  - DNSSEC validation                    │
+│  - Cache optimisé                       │
+│  - Localhost only                       │
+└─────────────────────────────────────────┘
+```
+
+**Modules:**
+
+- **Unbound** (`bigor.services.unbound`): High-performance recursive DNS resolver with DNSSEC
+  - Port: 5335 (localhost only)
+  - Features: DNSSEC validation, prefetching, optimized cache (256MB)
+  - Location: `modules/nixos/services/unbound/`
+
+- **Blocky** (`bigor.services.blocky`): DNS proxy with ad/tracker blocking
+  - Port: 53 (public DNS), 4000 (web/metrics)
+  - Features: Auto-generated rewrites from network-topology, multiple blocklists
+  - Location: `modules/nixos/services/blocky/`
+  - Prometheus metrics: `http://localhost:4000/metrics`
+
+**DNS Rewrites (Auto-generated):**
+
+DNS rewrites for local services are **automatically generated** from `network-topology`. The Blocky module reads the topology and creates rewrites for all services where:
+
+- `domain != null`
+- `expose.dns = true`
+- Host has a static IP
+
+**Example:** Adding a service to network-topology with `domain = "myapp.bigor.lan"` automatically creates the DNS rewrite in Blocky.
+
+**Benefits:**
+
+- ✅ Native DNSSEC validation (Unbound)
+- ✅ Better performance (~60% faster than AdGuard Home)
+- ✅ Modular: Can replace components independently
+- ✅ Fully declarative: No web UI configuration needed
+- ✅ Prometheus-ready: Built-in metrics for monitoring
 
 ## Key Patterns
 

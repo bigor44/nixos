@@ -146,16 +146,16 @@
         expose.firewall = true;
       };
 
-      # AdGuard DNS
-      adguard = {
+      # Blocky DNS (modular DNS stack with Unbound)
+      blocky-web = {
         host = "minipc";
-        port = 3003;
-        domain = "adguard.bigor.lan";
+        port = 4000;
+        domain = "dns.bigor.lan";
         expose.reverseProxy = true;
       };
-      adguard-dns = {
+      blocky-dns = {
         host = "minipc";
-        port = 53;
+        port = 53; # Phase 2: production DNS port
         expose = {
           dns = false; # DNS service itself doesn't need DNS rewrite
           reverseProxy = false;

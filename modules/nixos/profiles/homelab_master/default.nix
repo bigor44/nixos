@@ -1,5 +1,5 @@
 # Profile: homelab-master
-# Purpose: Server stack with monitoring, Caddy, AdGuard, Ollama, and NFS
+# Purpose: Server stack with monitoring, Caddy, DNS (Unbound+Blocky), Ollama, and NFS
 { lib, config, ... }:
 with lib;
 let
@@ -13,7 +13,11 @@ in
       ssh.enable = mkDefault true;
       tailscale.enable = mkDefault true;
       caddy.enable = mkDefault true;
-      adguard.enable = mkDefault true;
+
+      # DNS Stack: Unbound (recursive resolver) + Blocky (filtering)
+      unbound.enable = mkDefault true;
+      blocky.enable = mkDefault true;
+
       ollama.enable = mkDefault true;
       nfs.server = mkDefault true;
 
