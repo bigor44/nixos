@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/nixos/services/monitoring/node-exporter/default.nix
-# Description: Configures the Node Exporter service.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: node-exporter
+# Purpose: System metrics exporter for Prometheus
 {
   config,
   lib,
@@ -14,9 +10,7 @@ let
   cfg = config.bigor.services.monitoring.node-exporter;
 in
 {
-  options.bigor.services.monitoring.node-exporter = {
-    enable = mkEnableOption "Enable Node Exporter";
-  };
+  options.bigor.services.monitoring.node-exporter.enable = mkEnableOption "Node Exporter";
 
   config = mkIf cfg.enable {
     services.prometheus.exporters.node = {

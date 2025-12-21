@@ -1,21 +1,8 @@
-# ============================================================================
-# File: flake.nix
-# Description: Main flake entry point for the NixOS configuration.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Flake: bigor-nixos
+# Purpose: Main entry point for NixOS + Home Manager configuration
 {
   description = "Bigor's Simplified NixOS Configuration";
 
-  # ============================================================================
-  # Flake Inputs
-  # ============================================================================
-  # Defines external dependencies:
-  # - nixpkgs: Core system packages (Branch: unstable)
-  # - snowfall-lib: Helper library for opinionated flake structure
-  # - home-manager: Manages user environments (dotfiles, etc.)
-  # - nixvim: Neovim configuration framework for Nix
-  # ============================================================================
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -33,26 +20,19 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  # ============================================================================
-  # Flake Outputs
-  # ============================================================================
-  # Generates the system configurations based on the inputs.
-  # Utilizes Snowfall Lib's `mkFlake` to automatically traverse the directory
-  # structure (systems/, modules/, etc.) and build the NixOS configurations.
-  # ============================================================================
   outputs =
     inputs:
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
 
-      # Inject Nixvim modules into Home Manager
       homes.modules = [
         inputs.nixvim.homeModules.nixvim
         inputs.sops-nix.homeManagerModules.sops
@@ -62,18 +42,10 @@
         inputs.sops-nix.nixosModules.sops
       ];
 
-      # ------------------------------------------------------------------------
-      # Outputs Builder
-      # ------------------------------------------------------------------------
-      # Defines the formatter for the flake.
-      # ------------------------------------------------------------------------
       outputs-builder = channels: {
         formatter = channels.nixpkgs.treefmt;
       };
 
-      # ------------------------------------------------------------------------
-      # Snowfall Configuration
-      # ------------------------------------------------------------------------
       snowfall = {
         systems = [ "x86_64-linux" ];
         namespace = "bigor";
@@ -83,12 +55,7 @@
         };
       };
 
-      # ------------------------------------------------------------------------
-      # Global Nixpkgs Configuration
-      # ------------------------------------------------------------------------
-      channels-config = {
-        allowUnfree = true;
-      };
+      channels-config.allowUnfree = true;
       overlays = [ ];
     };
 }

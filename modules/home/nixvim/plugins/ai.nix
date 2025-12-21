@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/plugins/ai.nix
-# Description: Configures AI-related NixVim plugins (avante.nvim).
-# Author: Bigor
-# Date: 2025-12-19
-# ============================================================================
 { pkgs, ... }:
 {
   programs.nixvim = {

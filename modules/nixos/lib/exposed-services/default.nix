@@ -1,21 +1,12 @@
-# ============================================================================
-# File: modules/nixos/lib/exposed-services/default.nix
-# Description: Manages exposed services through Caddy, AdGuard, and firewall.
-#              Includes safety checks for collisions and security risks.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
-
+# Library: exposed-services
+# Purpose: Centralized service exposure via Caddy, AdGuard DNS, and firewall
 { lib, config, ... }:
 let
   cfg = config.bigor.lib.exposedService;
   targetIP = config.bigor.network.ips.minipc;
-
-  # Transform the services attribute set into a list of values for reuse
   servicesList = lib.attrValues cfg;
 
-  # Generate Caddy virtual hosts
-  # We filter out services that have no domain OR have a port of 0 (pure DNS)
+  # Filter out DNS-only entries (port = 0) and services without domains
   caddyVirtualHosts = lib.mapAttrs' (
     _name: svc:
     lib.nameValuePair svc.domain {
@@ -26,7 +17,6 @@ let
     }
   ) (lib.filterAttrs (_: svc: svc.domain != null && svc.port != 0) cfg);
 
-  # Generate AdGuard DNS rewrites
   adguardRewrites = lib.concatMap (
     svc:
     lib.optional (config.services.adguardhome.enable && svc.domain != null) {
@@ -36,7 +26,6 @@ let
     }
   ) servicesList;
 
-  # Open Firewall Ports
   firewallTCPPorts = lib.concatMap (svc: lib.optional svc.openFirewall svc.port) servicesList;
   firewallUDPPorts = lib.concatMap (svc: lib.optional svc.openUDPFirewall svc.port) servicesList;
 
@@ -78,53 +67,40 @@ in
   };
 
   config = {
-    # ============================================================================
-    # Validations & Security
-    # ============================================================================
-
-    # 1. Assertions: Block the build in case of critical errors
+    # Validation: Ensure no port/domain collisions
     assertions = [
       {
-        # Check for unique ports (for non-zero ports)
         assertion =
           let
             ports = map (s: toString s.port) (lib.filter (s: s.port != 0) servicesList);
           in
           ports == lib.unique ports;
-        message = "exposed-services: Collision detected! Multiple services are trying to use the same port number.";
+        message = "exposed-services: Port collision detected! Multiple services use the same port.";
       }
       {
-        # Check for unique domains
         assertion =
           let
             domains = map (s: s.domain) (lib.filter (s: s.domain != null) servicesList);
           in
           domains == lib.unique domains;
-        message = "exposed-services: Collision detected! Multiple services are trying to use the same domain name.";
+        message = "exposed-services: Domain collision detected! Multiple services use the same domain.";
       }
     ];
 
-    # 2. Warnings: Warn about potentially dangerous configurations
+    # Security warning: Services exposed via both Caddy and direct firewall
     warnings = lib.concatMap (
       svc:
       lib.optional (svc.domain != null && svc.openFirewall)
-        "exposed-services: SECURITY - The service '${svc.domain}' is exposed via Caddy (Reverse Proxy) BUT its port ${toString svc.port} is also open directly on the firewall (openFirewall = true). This allows bypassing the proxy and its security features."
+        "exposed-services: SECURITY - Service '${svc.domain}' is exposed via Caddy AND direct firewall (port ${toString svc.port}), allowing proxy bypass."
     ) servicesList;
 
-    # ============================================================================
-    # System Configuration
-    # ============================================================================
-
-    # 1. Caddy Configuration
     services.caddy.virtualHosts = caddyVirtualHosts;
 
-    # 2. Firewall Opening
     networking.firewall.interfaces.${config.bigor.network.mainInterface} = {
       allowedTCPPorts = firewallTCPPorts;
       allowedUDPPorts = firewallUDPPorts;
     };
 
-    # 3. DNS Rewrite (AdGuard)
     services.adguardhome.settings.filtering.rewrites = adguardRewrites;
   };
 }

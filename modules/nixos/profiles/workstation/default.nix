@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/nixos/profiles/workstation/default.nix
-# Description: Configures the workstation profile.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Profile: workstation
+# Purpose: Desktop environment with COSMIC DE, audio, gaming, and monitoring
 { lib, config, ... }:
 with lib;
 let
@@ -13,7 +9,6 @@ in
   options.bigor.profiles.workstation.enable = mkEnableOption "Desktop workstation profile";
 
   config = mkIf cfg.enable {
-    # Enable all the necessary features for a complete desktop experience.
     bigor.features = {
       audio.enable = mkDefault true;
       bluetooth.enable = mkDefault true;
@@ -27,7 +22,6 @@ in
       };
     };
 
-    # Enable node-exporter for monitoring by default on workstations.
     bigor.services.monitoring.node-exporter.enable = mkDefault true;
   };
 }

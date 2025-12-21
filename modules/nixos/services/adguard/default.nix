@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/nixos/services/adguard/default.nix
-# Description: Configures the AdGuard Home service.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: adguard
+# Purpose: Network-wide ad blocking and local DNS resolution
 {
   config,
   lib,
@@ -14,65 +10,55 @@ let
   cfg = config.bigor.services.adguard;
 in
 {
-  options.bigor.services.adguard = {
-    enable = mkEnableOption "Enable AdGuard Home for network-wide ad blocking and local DNS resolution";
-  };
+  options.bigor.services.adguard.enable = mkEnableOption "AdGuard Home DNS and ad blocker";
 
   config = mkIf cfg.enable {
-
-    # ==========================================================================
-    # Exposed Service
-    # ==========================================================================
-    bigor.lib.exposedService.adguard = {
-      port = 3003;
-      domain = "adguard.bigor.lan";
-    };
-    bigor.lib.exposedService.adguard-dns = {
-      port = 53;
-      openFirewall = true;
-      openUDPFirewall = true;
+    bigor.lib.exposedService = {
+      adguard = {
+        port = 3003;
+        domain = "adguard.bigor.lan";
+      };
+      adguard-dns = {
+        port = 53;
+        openFirewall = true;
+        openUDPFirewall = true;
+      };
     };
 
-    # ==========================================================================
-    # AdGuard Home Service
-    # ==========================================================================
     services.adguardhome = {
       enable = true;
       port = 3003;
       host = "127.0.0.1";
-      mutableSettings = false; # Enforce declarative configuration via Nix
+      mutableSettings = false;
 
       settings = {
         language = "en";
         log = {
           enabled = true;
-          compress = true; # Save disk space
+          compress = true;
         };
-        querylog = {
-          enabled = true;
-        };
+        querylog.enabled = true;
         dns = {
           bind_hosts = [ "0.0.0.0" ];
           port = 53;
-          # Upstream DNS providers (Privacy focused + Google as backup)
           upstream_dns = [
             "https://dns.cloudflare.com/dns-query"
             "https://dns.quad9.net/dns-query"
-            "https://ns0.fdn.fr/dns-query" # French non-profit ISP
+            "https://ns0.fdn.fr/dns-query"
             "https://ns1.fdn.fr/dns-query"
           ];
           bootstrap_dns = [
             "1.1.1.1"
             "8.8.8.8"
           ];
-          upstream_mode = "load_balance"; # Distribute queries for speed
+          upstream_mode = "load_balance";
           cache_enabled = true;
           cache_size = 4194304;
           cache_ttl_min = 60;
           cache_ttl_max = 86400;
-          anonymize_client_ip = false; # Useful for internal logging
-          use_http3_upstreams = true; # Modern protocol for better performance
-          use_private_ptr_resolvers = true; # Resolve local IP hostnames
+          anonymize_client_ip = false;
+          use_http3_upstreams = true;
+          use_private_ptr_resolvers = true;
           enable_dnssec = true;
           edns_client_subnet.enabled = false;
           local_domain_name = "lan";
@@ -85,11 +71,8 @@ in
           safe_search.enabled = false;
         };
 
-        user_rules = [
-          "@@||anthropic.com^" # Whitelist *.anthropic.com
-        ];
+        user_rules = [ "@@||anthropic.com^" ];
 
-        # Blocklists
         filters =
           map
             (url: {
@@ -97,10 +80,10 @@ in
               inherit url;
             })
             [
-              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # Malicious URL Blocklist (URLHaus)
-              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt" # Hagezi Multi Normal
-              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt" # Hagezi Threat Intelligence Feed
+              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"
+              "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt"
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt"
             ];
       };
     };

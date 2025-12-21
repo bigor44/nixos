@@ -1,19 +1,9 @@
-# ============================================================================
-# File: modules/nixos/features/system/french-locale/default.nix
-# Description: Configures French locale, time zone, and keyboard layout.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Feature: system.french-locale
+# Purpose: French locale, timezone, and keyboard layout (Paris)
 { pkgs, ... }:
 {
-  # ============================================================================
-  # Locale & Regional Settings
-  # ============================================================================
-  # Configures time zone, system language (French default, English supported),
-  # and keyboard layout (French).
   time.timeZone = "Europe/Paris";
 
-  # Set system-wide locale to French (France) but keep support for English.
   i18n = {
     defaultLocale = "fr_FR.UTF-8";
     supportedLocales = [
@@ -38,7 +28,6 @@
     variant = "";
   };
 
-  # Ensures the correct keymap is available before the graphical environment starts.
   console = {
     keyMap = "fr";
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132b.psf.gz";

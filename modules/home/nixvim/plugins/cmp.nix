@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/plugins/cmp.nix
-# Description: Configuration for nvim-cmp, the completion plugin.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
 {
   config,
   lib,

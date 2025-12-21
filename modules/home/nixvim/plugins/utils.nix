@@ -1,9 +1,3 @@
-# ============================================================================
-# File: modules/home/nixvim/plugins/utils.nix
-# Description: Configures utility-related NixVim plugins.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
 _: {
   programs.nixvim.plugins.mini = {
     enable = true;

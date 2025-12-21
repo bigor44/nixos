@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/home/features/gui/default.nix
-# Description: Configures GUI applications and related settings.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: features.gui
+# Purpose: Desktop applications and COSMIC DE dotfiles
 {
   config,
   lib,
@@ -15,29 +11,20 @@ let
   cfg = config.bigor.home.features.gui;
 in
 {
-  options.bigor.home.features.gui = {
-    enable = mkEnableOption "Enable user desktop apps";
-  };
+  options.bigor.home.features.gui.enable = mkEnableOption "Desktop applications";
 
   config = mkIf cfg.enable {
-    # ==========================================================================
-    # Applications
-    # ==========================================================================
     home.packages = with pkgs; [
+      prismlauncher
       discord
       youtube-music
       whatsapp-electron
       brave
-      pkgs.bigor.turtle-wow # Custom package
+      pkgs.bigor.turtle-wow
     ];
 
-    # ==========================================================================
-    # Configuration Files (Dotfiles)
-    # ==========================================================================
+    # Symlink dotfiles for live editing without rebuild
     xdg.configFile = {
-      # Symlink mutable configuration files from the local repository.
-      # mkOutOfStoreSymlink allows editing files in ~/nixos/dotfiles/ and
-      # seeing changes immediately without rebuilding.
       cosmic.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/dotfiles/cosmic";
       autostart.source = ../../../../dotfiles/autostart;
     };

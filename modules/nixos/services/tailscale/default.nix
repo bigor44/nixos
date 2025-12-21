@@ -1,10 +1,5 @@
-# ============================================================================
-# File: modules/nixos/services/tailscale/default.nix
-# Description: Configures Tailscale for secure mesh networking and optimizes
-#              Exit Node functionality on the homelab master.
-# Author: Bigor
-# Date: 2025-12-15
-# ============================================================================
+# Module: tailscale
+# Purpose: Mesh VPN with exit node and subnet routing
 {
   config,
   pkgs,
@@ -16,28 +11,21 @@ let
   cfg = config.bigor.services.tailscale;
 in
 {
-  options.bigor.services.tailscale = {
-    enable = mkEnableOption "Enable Tailscale VPN mesh networking";
-  };
+  options.bigor.services.tailscale.enable = mkEnableOption "Tailscale VPN mesh networking";
 
   config = mkIf cfg.enable {
     services.tailscale.enable = true;
 
-    # ==========================================================================
-    # Exit Node & Routing Configuration
-    # ==========================================================================
-    # Enable IP forwarding to allow this machine to route traffic for other devices
-    # (Exit Node functionality).
+    # Enable IP forwarding for exit node functionality
     boot.kernel.sysctl = {
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
     networking.firewall = {
-      # "loose" allows reverse path filtering to pass Tailscale traffic
-      checkReversePath = "loose";
+      checkReversePath = "loose"; # Required for Tailscale routing
       trustedInterfaces = [ "tailscale0" ];
-      allowedUDPPorts = [ 41641 ]; # Tailscale randomized port
+      allowedUDPPorts = [ 41641 ];
     };
 
     environment.systemPackages = [ pkgs.tailscale ];

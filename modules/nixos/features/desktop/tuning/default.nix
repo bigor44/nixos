@@ -1,21 +1,14 @@
-# ============================================================================
-# File: modules/nixos/features/desktop/tuning/default.nix
-# Description: Applies system tuning for a better desktop experience.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Feature: desktop.tuning
+# Purpose: Quiet boot with Plymouth splash screen
 { lib, config, ... }:
 with lib;
 let
   cfg = config.bigor.features.desktop.tuning;
 in
 {
-  options.bigor.features.desktop.tuning = {
-    enable = mkEnableOption "Enable Desktop tuning";
-  };
+  options.bigor.features.desktop.tuning.enable = mkEnableOption "Desktop tuning";
 
   config = mkIf cfg.enable {
-    # Kernel parameters to provide a quieter boot experience.
     boot = {
       kernelParams = [
         "quiet"

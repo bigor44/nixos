@@ -1,9 +1,5 @@
-# ============================================================================
-# File: modules/nixos/features/gaming/default.nix
-# Description: Configures gaming-related features.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Feature: gaming
+# Purpose: Gaming optimizations (Steam, GameMode)
 {
   config,
   lib,
@@ -14,9 +10,7 @@ let
   cfg = config.bigor.features.gaming;
 in
 {
-  options.bigor.features.gaming = {
-    enable = mkEnableOption "Enable gaming optimizations (Steam, GameMode)";
-  };
+  options.bigor.features.gaming.enable = mkEnableOption "Gaming optimizations";
 
   config = mkIf cfg.enable {
     programs = {
