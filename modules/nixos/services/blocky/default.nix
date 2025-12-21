@@ -69,28 +69,20 @@ in
 
         # Ad and tracker blocking
         blocking = {
-          # Blocklists by category
+          # Blocklists by category (hosts format only - Blocky doesn't support AdGuard format)
           denylists = {
-            # Ads blocking
+            # Ads and malware blocking
             ads = [
               # Steven Black's unified hosts (ads + malware)
               "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-              # AdGuard DNS filter
-              "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"
+              # Hagezi's Multi Normal (ads + tracking + malware) - hosts format
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/multi.txt"
             ];
 
-            # Tracking blocking
-            tracking = [
-              # EasyList
-              "https://easylist.to/easylist/easylist.txt"
-              # EasyPrivacy
-              "https://easylist.to/easylist/easyprivacy.txt"
-            ];
-
-            # Malware protection
-            malware = [
-              # Hagezi's Threat Intelligence Feeds
-              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt"
+            # Additional threat protection
+            threats = [
+              # Hagezi's Threat Intelligence Feeds - hosts format
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif.txt"
             ];
           };
 
@@ -106,8 +98,7 @@ in
           clientGroupsBlock = {
             default = [
               "ads"
-              "tracking"
-              "malware"
+              "threats"
             ];
           };
 
@@ -115,11 +106,15 @@ in
           blockType = "zeroIp"; # Return 0.0.0.0 for IPv4, :: for IPv6
           blockTTL = "1m";
 
-          # Download behavior
-          refreshPeriod = "4h"; # Update blocklists every 4 hours
-          downloadTimeout = "5m";
-          downloadAttempts = 3;
-          downloadCooldown = "10s";
+          # Loading behavior
+          loading = {
+            refreshPeriod = "4h"; # Update blocklists every 4 hours
+            downloads = {
+              timeout = "5m";
+              attempts = 3;
+              cooldown = "10s";
+            };
+          };
         };
 
         # Caching (in addition to Unbound's cache)
@@ -159,10 +154,14 @@ in
       };
     };
 
-    # Ensure Blocky starts after Unbound (dependency)
+    # Ensure Blocky starts after Unbound and network is fully online
     systemd.services.blocky = {
-      after = [ "unbound.service" ];
+      after = [
+        "unbound.service"
+        "network-online.target"
+      ];
       requires = [ "unbound.service" ];
+      wants = [ "network-online.target" ];
     };
   };
 }
