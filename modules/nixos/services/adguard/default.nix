@@ -13,17 +13,7 @@ in
   options.bigor.services.adguard.enable = mkEnableOption "AdGuard Home DNS and ad blocker";
 
   config = mkIf cfg.enable {
-    bigor.lib.exposedService = {
-      adguard = {
-        port = 3003;
-        domain = "adguard.bigor.lan";
-      };
-      adguard-dns = {
-        port = 53;
-        openFirewall = true;
-        openUDPFirewall = true;
-      };
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
 
     services.adguardhome = {
       enable = true;

@@ -1,6 +1,10 @@
 # Feature: system.network
 # Purpose: Network configuration options and static /etc/hosts entries
 { lib, config, ... }:
+let
+  inherit (config.bigor.network) topology;
+  hostsWithIPs = lib.filterAttrs (_: host: host.ip != null) topology.hosts;
+in
 {
   options.bigor.network = {
     mainInterface = lib.mkOption {
@@ -8,24 +12,21 @@
       default = null;
       description = "Primary network interface name";
     };
-    ips = {
-      grospc = lib.mkOption {
+    # Derive IPs from topology SSOT
+    ips = lib.mapAttrs (
+      name: _:
+      lib.mkOption {
         type = lib.types.str;
-        default = "192.168.1.11";
-        description = "Static IP for grospc desktop";
-      };
-      minipc = lib.mkOption {
-        type = lib.types.str;
-        default = "192.168.1.10";
-        description = "Static IP for minipc server";
-      };
-    };
+        default = topology.hosts.${name}.ip;
+        description = "Static IP for ${name}";
+      }
+    ) hostsWithIPs;
   };
 
   config = {
-    networking.extraHosts = ''
-      ${config.bigor.network.ips.minipc} minipc
-      ${config.bigor.network.ips.grospc} grospc
-    '';
+    # Generate /etc/hosts from topology
+    networking.extraHosts = lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: host: "${host.ip} ${name}") hostsWithIPs
+    );
   };
 }

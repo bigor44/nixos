@@ -37,9 +37,6 @@ in
       ];
     };
 
-    bigor.lib.exposedService.prometheus = {
-      port = 9090;
-      domain = "prometheus.bigor.lan";
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }

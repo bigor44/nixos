@@ -20,9 +20,6 @@ in
       package = pkgs.ollama-rocm;
     };
 
-    bigor.lib.exposedService.ollama = {
-      port = 8080;
-      domain = "ai.bigor.lan";
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }

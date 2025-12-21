@@ -14,16 +14,7 @@
   bigor = {
     profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
-    lib.exposedService = {
-      minipc = {
-        domain = "minipc.bigor.lan";
-        port = 0; # DNS-only entry
-      };
-      bigor = {
-        domain = "bigor.lan";
-        port = 0; # DNS-only entry
-      };
-    };
+    # Services now defined in modules/nixos/lib/network-topology (SSOT)
   };
 
   boot = {

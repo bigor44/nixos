@@ -8,7 +8,8 @@
 with lib;
 let
   cfg = config.bigor.services.monitoring.grafana;
-  inherit (config.bigor.lib.exposedService.grafana) domain;
+  # Domain from topology SSOT
+  inherit (config.bigor.network.topology.services.grafana) domain;
 in
 {
   options.bigor.services.monitoring.grafana.enable = mkEnableOption "Grafana visualization";
@@ -36,10 +37,6 @@ in
         ];
       };
     };
-
-    bigor.lib.exposedService.grafana = {
-      port = 3000;
-      domain = "grafana.bigor.lan";
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }

@@ -19,9 +19,6 @@ in
       enabledCollectors = [ "systemd" ];
     };
 
-    bigor.lib.exposedService.node-exporter = {
-      port = 9100;
-      openFirewall = true;
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }

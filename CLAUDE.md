@@ -63,6 +63,45 @@ Home modules are enabled via `bigor.home.*`:
 - **grospc** - Desktop workstation (Zen kernel, gaming-optimized)
 - **minipc** - Homelab server (standard kernel, runs all services)
 
+### Network Topology (SSOT)
+
+All network services and hosts are centrally defined in `modules/nixos/lib/network-topology/default.nix`. This is the Single Source of Truth for:
+
+- **Hosts**: IP addresses and interfaces for all machines
+- **Services**: All homelab services with their exposure settings (DNS, Caddy, firewall)
+
+The consumer module (`modules/nixos/lib/network-consumer/`) automatically:
+
+- Generates AdGuard DNS rewrites for ALL services (any host can run DNS)
+- Configures Caddy reverse proxy for LOCAL services only
+- Opens firewall ports for LOCAL services only
+
+**Adding a new service:**
+
+```nix
+# In modules/nixos/lib/network-topology/default.nix
+myservice = {
+  host = "minipc";           # Which host runs it
+  port = 8080;
+  domain = "myservice.bigor.lan";
+  expose = {
+    dns = true;              # Create DNS rewrite
+    reverseProxy = true;     # Expose via Caddy
+    firewall = false;        # Caddy handles access
+  };
+};
+```
+
+**Adding a new host:**
+
+```nix
+# In modules/nixos/lib/network-topology/default.nix
+newhost = {
+  ip = "192.168.1.30";       # null for DHCP
+  interface = "enp0s0";
+};
+```
+
 ## Key Patterns
 
 - All custom options use the `bigor.*` namespace
@@ -70,3 +109,4 @@ Home modules are enabled via `bigor.home.*`:
 - Profiles set defaults that can be overridden per-host
 - Home Manager configs support host-specific overrides via `user@host` directories
 - Secrets are managed with sops-nix (encrypted with age)
+- Network topology is defined once in SSOT, consumed by all hosts

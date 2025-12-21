@@ -14,16 +14,6 @@ in
 
   config = mkIf cfg.enable {
     services.caddy.enable = true;
-
-    bigor.lib.exposedService = {
-      caddy-http = {
-        port = 80;
-        openFirewall = true;
-      };
-      caddy-https = {
-        port = 443;
-        openFirewall = true;
-      };
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }

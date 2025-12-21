@@ -15,10 +15,7 @@
     profiles.workstation.enable = true;
     services.nfs.client = true;
     network.mainInterface = "enp14s0";
-    lib.exposedService.grospc = {
-      domain = "grospc.bigor.lan";
-      port = 0; # DNS-only entry
-    };
+    # Services now defined in modules/nixos/lib/network-topology (SSOT)
   };
 
   fileSystems."/steamlibrary" = {

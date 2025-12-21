@@ -29,9 +29,6 @@ in
       };
     };
 
-    bigor.lib.exposedService.alertmanager = {
-      port = 9093;
-      domain = "alertmanager.bigor.lan";
-    };
+    # Exposure configured in modules/nixos/lib/network-topology (SSOT)
   };
 }
