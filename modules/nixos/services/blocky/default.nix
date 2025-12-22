@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -162,6 +163,17 @@ in
       ];
       requires = [ "unbound.service" ];
       wants = [ "network-online.target" ];
+
+      # Wait for Unbound to be ready before starting Blocky
+      serviceConfig = {
+        ExecStartPre = pkgs.writeShellScript "wait-for-unbound" ''
+          # Simple delay to let Unbound finish initialization
+          # Unbound starts quickly (~1s) but needs a moment before accepting queries
+          echo "Waiting 3 seconds for Unbound to initialize..."
+          sleep 3
+          echo "Proceeding with Blocky startup"
+        '';
+      };
     };
   };
 }
