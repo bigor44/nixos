@@ -1,14 +1,3 @@
-<!--
- ============================================================================
- File: README.md
- Description: Main documentation for the NixOS configuration.
- Author: Bigor
- Date: 2025-12-18
- Purpose: Provides a high-level overview of the project, its structure,
-          and how to use it.
- ============================================================================
--->
-
 # Bigor NixOS Configuration
 
 [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
@@ -41,17 +30,27 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Features](#features)
 - [Repository Structure](#repository-structure)
 - [Hosts](#hosts)
 - [Key Design Principles](#key-design-principles)
+  - [1. Snowfall-driven architecture](#1-snowfall-driven-architecture)
+  - [2. Profile-based configuration](#2-profile-based-configuration)
+  - [3. Network Topology (SSOT)](#3-network-topology-ssot)
+  - [4. Modular DNS Stack (Blocky + Unbound)](#4-modular-dns-stack-blocky--unbound)
+    - [Pattern 1: Full Stack (minipc)](#pattern-1-full-stack-minipc)
+    - [Pattern 2: Remote Unbound (grospc)](#pattern-2-remote-unbound-grospc)
+    - [Pattern 3: Standalone (minidesk)](#pattern-3-standalone-minidesk)
+  - [5. Home Manager as a first-class citizen](#5-home-manager-as-a-first-class-citizen)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
-- [Code Quality & Tooling](#code-quality--tooling)
+- [Code Quality \& Tooling](#code-quality--tooling)
 - [Secrets Management](#secrets-management)
 - [Dependencies](#dependencies)
 - [What This Is (and Is Not)](#what-this-is-and-is-not)
 - [License](#license)
+- [Author](#author)
 
 ---
 
