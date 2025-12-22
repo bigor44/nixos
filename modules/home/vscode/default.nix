@@ -20,42 +20,33 @@ in
       package = pkgs.vscode;
 
       # Extensions from nixpkgs
-      extensions =
-        with pkgs.vscode-extensions;
-        [
-          # Nix language support
-          jnoortheen.nix-ide
+      extensions = with pkgs.vscode-extensions; [
+        # Nix language support
+        jnoortheen.nix-ide
 
-          # Python support
-          ms-python.python
-          ms-python.vscode-pylance
+        # Python support
+        ms-python.python
+        ms-python.vscode-pylance
 
-          # Bash/Shell support
-          mads-hartmann.bash-ide-vscode
+        # Bash/Shell support
+        mads-hartmann.bash-ide-vscode
 
-          # Markdown support
-          yzhang.markdown-all-in-one
+        # Markdown support
+        yzhang.markdown-all-in-one
 
-          # Git integration
-          eamodio.gitlens
-          mhutchie.git-graph
+        # Git integration
+        eamodio.gitlens
+        mhutchie.git-graph
 
-          # Code formatting & linting
-          esbenp.prettier-vscode
-          editorconfig.editorconfig
+        # Code formatting & linting
+        esbenp.prettier-vscode
+        editorconfig.editorconfig
 
-          # Utilities
-          usernamehw.errorlens
-          pkief.material-icon-theme
-          # Lua language support (using nix package if available, otherwise install manually)
-          # NOTE: If lua extension is not available in your nixpkgs version,
-          # install it manually from VSCode marketplace: sumneko.lua
-        ]
-        ++ (
-          # Try to add lua extension from marketplace if needed
-          # For now, we rely on nixpkgs extensions only to avoid hash issues
-          [ ]
-        );
+        # Utilities
+        usernamehw.errorlens
+        pkief.material-icon-theme
+        anthropic.claude-code
+      ];
 
       # VSCode settings
       userSettings = {
