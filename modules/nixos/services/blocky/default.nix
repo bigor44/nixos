@@ -9,24 +9,28 @@
 with lib;
 let
   cfg = config.bigor.services.blocky;
-  inherit (config.bigor.network) topology;
 
-  # Auto-generate DNS rewrites from network-topology (SSOT)
-  # Only include services with:
-  # - domain != null
-  # - expose.dns == true
-  # - host has a static IP (not DHCP)
+  # Auto-generate DNS rewrites from registry + dnsEntries
+  # Services from registry: filter by domain != null and static IP
+  serviceDomains = lib.filterAttrs (
+    _: svc: svc.domain != null && config.bigor.network.hosts.${svc.hostName}.ip != null
+  ) config.bigor.registry.services;
+
+  # DNS-only entries: filter by static IP
+  dnsEntryDomains = lib.filterAttrs (
+    _: entry: config.bigor.network.hosts.${entry.hostName}.ip != null
+  ) config.bigor.network.dnsEntries;
+
+  # Combine both sources into DNS mapping
   customDNSMapping = lib.listToAttrs (
-    lib.mapAttrsToList
-      (_: svc: {
-        name = svc.domain;
-        value = topology.hosts.${svc.host}.ip;
-      })
-      (
-        lib.filterAttrs (
-          _: s: s.domain != null && s.expose.dns && topology.hosts.${s.host}.ip != null
-        ) topology.services
-      )
+    (lib.mapAttrsToList (_: svc: {
+      name = svc.domain;
+      value = config.bigor.network.hosts.${svc.hostName}.ip;
+    }) serviceDomains)
+    ++ (lib.mapAttrsToList (_: entry: {
+      name = entry.domain;
+      value = config.bigor.network.hosts.${entry.hostName}.ip;
+    }) dnsEntryDomains)
   );
 in
 {
@@ -74,13 +78,22 @@ in
         else if cfg.upstreamMode == "unbound-lan" then
           (
             assert cfg.upstreamHost != null;
-            [ "${topology.hosts.${cfg.upstreamHost}.ip}:5335" ]
+            [ "${config.bigor.network.hosts.${cfg.upstreamHost}.ip}:5335" ]
           )
         else
           cfg.externalUpstreams;
     in
     {
-      # Exposure configured in modules/nixos/lib/network-topology (SSOT)
+      # Register Blocky's DNS service in registry
+      bigor.registry.services.blocky-dns = {
+        inherit (config.networking) hostName;
+        port = 53;
+        domain = null;
+        reverseProxy = false;
+        openFirewall = true;
+        openFirewallUDP = true;
+        proxyProtocol = "http";
+      };
 
       services.blocky = {
         enable = true;

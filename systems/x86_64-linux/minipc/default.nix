@@ -14,7 +14,6 @@
   bigor = {
     profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
-    # Services now defined in modules/nixos/lib/network-topology (SSOT)
   };
 
   boot = {

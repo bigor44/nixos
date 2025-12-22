@@ -19,18 +19,17 @@ in
       description = ''
         Listen on LAN interface in addition to localhost.
         Allows other machines to use this Unbound instance as upstream.
-        Requires network-topology configuration for firewall.
+        Firewall port automatically opened via registry.
       '';
     };
   };
 
   config = mkIf cfg.enable (
     let
-      inherit (config.bigor.network) topology;
       inherit (config.networking) hostName;
 
-      # Get this host's IP and interface from topology
-      hostConfig = topology.hosts.${hostName};
+      # Get this host's IP from hosts registry
+      hostConfig = config.bigor.network.hosts.${hostName};
       lanInterface = if cfg.listenOnLan then [ hostConfig.ip ] else [ ];
 
       # Build interface list (localhost + optional LAN)
@@ -50,6 +49,17 @@ in
       ]);
     in
     {
+      # Register Unbound in registry
+      bigor.registry.services.unbound-recursive = {
+        inherit (config.networking) hostName;
+        port = 5335;
+        domain = null;
+        reverseProxy = false;
+        openFirewall = cfg.listenOnLan;
+        openFirewallUDP = false;
+        proxyProtocol = "http";
+      };
+
       services.unbound = {
         enable = true;
 

@@ -15,7 +15,6 @@
     profiles.workstation.enable = true;
     services.nfs.client = true;
     network.mainInterface = "enp14s0";
-    # Services now defined in modules/nixos/lib/network-topology (SSOT)
   };
 
   fileSystems."/steamlibrary" = {
