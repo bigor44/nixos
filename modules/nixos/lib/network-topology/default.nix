@@ -1,6 +1,6 @@
 # Module: network-topology
 # Purpose: Single Source of Truth for all network services and hosts
-{ lib, ... }:
+{ lib, config, ... }:
 {
   options.bigor.network.topology = {
     hosts = lib.mkOption {
@@ -76,6 +76,32 @@
     };
   };
 
+  # Validation assertions for topology data integrity
+  config.assertions = [
+    {
+      assertion = lib.all (svc: config.bigor.network.topology.hosts ? ${svc.host}) (
+        lib.attrValues config.bigor.network.topology.services
+      );
+      message = "network-topology: A service references a host that doesn't exist in topology.hosts";
+    }
+    {
+      assertion = lib.all (svc: svc.port >= 0 && svc.port < 65536) (
+        lib.attrValues config.bigor.network.topology.services
+      );
+      message = "network-topology: Invalid port in a service (must be 0-65535)";
+    }
+    {
+      assertion =
+        let
+          domains = lib.filter (d: d != null) (
+            map (s: s.domain) (lib.attrValues config.bigor.network.topology.services)
+          );
+        in
+        domains == lib.unique domains;
+      message = "network-topology: Domain collision detected! Multiple services use the same domain.";
+    }
+  ];
+
   # Define the SSOT topology
   config.bigor.network.topology = {
     # All hosts in the network
@@ -146,7 +172,7 @@
         expose.firewall = true;
       };
 
-      # Blocky DNS (modular DNS stack with Unbound)
+      # DNS stack (Blocky + Unbound)
       blocky-web = {
         host = "minipc";
         port = 4000;
@@ -155,12 +181,21 @@
       };
       blocky-dns = {
         host = "minipc";
-        port = 53; # Phase 2: production DNS port
+        port = 53; # Standard DNS port
         expose = {
           dns = false; # DNS service itself doesn't need DNS rewrite
           reverseProxy = false;
           firewall = true;
           firewallUDP = true;
+        };
+      };
+      unbound-recursive = {
+        host = "minipc";
+        port = 5335; # Recursive DNS resolver
+        expose = {
+          dns = false;
+          reverseProxy = false;
+          firewall = true; # Allow LAN access when listenOnLan is enabled
         };
       };
 

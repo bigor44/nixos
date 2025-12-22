@@ -99,10 +99,11 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 
 ## Hosts
 
-| Host       | Type    | Profile          | Description                                                              |
-| ---------- | ------- | ---------------- | ------------------------------------------------------------------------ |
-| **grospc** | Desktop | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations     |
-| **minipc** | Server  | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI) |
+| Host         | Type     | Profile          | Description                                                              |
+| ------------ | -------- | ---------------- | ------------------------------------------------------------------------ |
+| **grospc**   | Desktop  | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations     |
+| **minipc**   | Server   | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI) |
+| **minidesk** | Portable | `workstation`    | Travel workstation with Zen kernel, COSMIC DE (no NFS mounts)            |
 
 ---
 
@@ -144,9 +145,17 @@ All network services and hosts are centrally defined in `modules/nixos/lib/netwo
 
 - Defines host IPs and interfaces once
 - Declares services with their exposure settings (DNS, Caddy, firewall)
-- Auto-generates Caddy reverse proxy configs for local services
-- Auto-generates DNS rewrites in Blocky for service discovery
-- Opens firewall ports only where needed
+- Each module (Caddy, Blocky, firewall) reads the topology directly and auto-configures itself
+
+**Architecture:**
+
+```
+network-topology (SSOT)
+        ↓
+   ├─→ Caddy (generates reverse proxy for local services)
+   ├─→ Firewall (opens ports for local services)
+   └─→ Blocky (generates DNS rewrites for all services)
+```
 
 Adding a new service is as simple as:
 
@@ -159,7 +168,61 @@ myservice = {
 };
 ```
 
-### 4. Home Manager as a first-class citizen
+**Benefits:**
+
+- No intermediate "consumer" layer - direct topology consumption
+- Configuration visible where it's applied
+- Easy to debug and customize per module
+
+### 4. Modular DNS Stack (Blocky + Unbound)
+
+The DNS infrastructure supports **3 independent deployment patterns**:
+
+#### Pattern 1: Full Stack (minipc)
+
+Blocky + Unbound running locally:
+
+```nix
+bigor.services.blocky.enable = true;  # upstreamMode = "unbound-local" (default)
+bigor.services.unbound = {
+  enable = true;
+  listenOnLan = true;  # Allow other hosts to use this Unbound
+};
+```
+
+#### Pattern 2: Remote Unbound (grospc)
+
+Blocky forwards to Unbound on another host:
+
+```nix
+bigor.services.blocky = {
+  enable = true;
+  upstreamMode = "unbound-lan";
+  upstreamHost = "minipc";  # Use minipc's Unbound instance
+};
+```
+
+#### Pattern 3: Standalone (minidesk)
+
+Blocky with external DNS upstreams (no Unbound):
+
+```nix
+bigor.services.blocky = {
+  enable = true;
+  upstreamMode = "external";
+  externalUpstreams = [ "1.1.1.1" "1.0.0.1" ];  # Cloudflare (default)
+};
+```
+
+**Features:**
+
+- Ad/tracker blocking via Blocky (multiple curated blocklists)
+- DNSSEC validation via Unbound
+- Auto-generated DNS rewrites from network topology
+- Prometheus metrics for monitoring
+- ~60% faster than AdGuard Home
+
+### 5. Home Manager as a first-class citizen
 
 User environments are:
 
@@ -194,20 +257,24 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 git clone https://github.com/bigor44/nixos.git
 cd nixos
 
-# Preview the build (dry run)
-nixos-rebuild dry-build --flake .#<hostname>
+# Build and switch (using nh helper - recommended)
+nh os switch  # Automatically detects hostname
 
-# Apply the configuration
+# Or using nixos-rebuild directly
 sudo nixos-rebuild switch --flake .#<hostname>
 
 # Format all files
 nix fmt
 
-# Run all checks (lint, deadcode, formatting)
+# Run quality checks (recommended before flake check)
+statix check  # Nix linting
+deadnix       # Dead code detection
+
+# Run all checks (includes formatting verification)
 nix flake check
 ```
 
-Replace `<hostname>` with `grospc` or `minipc`.
+Replace `<hostname>` with `grospc`, `minipc`, or `minidesk`.
 
 ---
 
@@ -216,20 +283,26 @@ Replace `<hostname>` with `grospc` or `minipc`.
 The flake includes automated checks:
 
 - **statix** – Nix linting and best practices
-- **deadnix** – detection of unused code
-- **treefmt** – formatting verification (nixfmt, shfmt, prettier, taplo)
+- **deadnix** – Detection of unused code
+- **treefmt** – Formatting verification (nixfmt, shfmt, prettier, taplo)
 
-Run them with:
+**Recommended workflow:**
 
 ```bash
+# 1. Format all files
+nix fmt
+
+# 2. Check for style issues
+statix check
+
+# 3. Check for dead code
+deadnix
+
+# 4. Run full validation (includes build checks)
 nix flake check
 ```
 
-To apply formatting, run:
-
-```bash
-nix fmt
-```
+This order ensures formatting and style issues are caught early, before the more expensive build validation.
 
 ---
 

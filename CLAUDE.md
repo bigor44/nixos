@@ -70,12 +70,11 @@ All network services and hosts are centrally defined in `modules/nixos/lib/netwo
 - **Hosts**: IP addresses and interfaces for all machines
 - **Services**: All homelab services with their exposure settings (DNS, Caddy, firewall)
 
-The consumer module (`modules/nixos/lib/network-consumer/`) automatically:
+**Architecture:** Each module reads the topology directly:
 
-- Configures Caddy reverse proxy for LOCAL services only
-- Opens firewall ports for LOCAL services only
-
-DNS rewrites are automatically generated from the topology within the Blocky module itself.
+- **Caddy** (`modules/nixos/services/caddy/`) - Generates reverse proxy config for LOCAL services only
+- **Firewall** (`modules/nixos/features/system/network/`) - Opens ports for LOCAL services only
+- **Blocky** (`modules/nixos/services/blocky/`) - Generates DNS rewrites for ALL services with domains
 
 **Adding a new service:**
 
@@ -105,9 +104,44 @@ newhost = {
 
 ### DNS Stack (Unbound + Blocky)
 
-The homelab uses a **modular DNS architecture** for better performance and separation of concerns:
+The homelab uses a **modular DNS architecture** for better performance and separation of concerns. Both Blocky and Unbound can be configured independently and support multiple deployment patterns.
 
-**Architecture:**
+#### **Deployment Patterns**
+
+**1. Full Stack (minipc)** - Blocky + Unbound local:
+
+```nix
+bigor.services.blocky = {
+  enable = true;
+  upstreamMode = "unbound-local";  # Default
+};
+bigor.services.unbound = {
+  enable = true;
+  listenOnLan = true;  # Allow other hosts to use this Unbound
+};
+```
+
+**2. Blocky with Remote Unbound (grospc)** - Blocky forwards to Unbound on LAN:
+
+```nix
+bigor.services.blocky = {
+  enable = true;
+  upstreamMode = "unbound-lan";
+  upstreamHost = "minipc";  # Use minipc's Unbound
+};
+```
+
+**3. Blocky Standalone (minidesk)** - Blocky with external upstreams:
+
+```nix
+bigor.services.blocky = {
+  enable = true;
+  upstreamMode = "external";
+  externalUpstreams = [ "1.1.1.1" "1.0.0.1" ];  # Cloudflare (default)
+};
+```
+
+#### **Architecture (Full Stack)**
 
 ```
 ┌─────────────────────────────────────────┐
@@ -119,7 +153,7 @@ The homelab uses a **modular DNS architecture** for better performance and separ
 │         BLOCKY (Port 53)                │
 │  - Filtrage/blocage ads/trackers        │
 │  - Rewrites DNS locaux (auto SSOT)      │
-│  - Upstream → Unbound                   │
+│  - Upstream → Unbound or external       │
 │  - Metrics: http://localhost:4000       │
 └────────────────┬────────────────────────┘
                  │ Query non-bloquée
@@ -129,19 +163,27 @@ The homelab uses a **modular DNS architecture** for better performance and separ
 │  - Résolution récursive                 │
 │  - DNSSEC validation                    │
 │  - Cache optimisé                       │
-│  - Localhost only                       │
+│  - Localhost + LAN (optional)           │
 └─────────────────────────────────────────┘
 ```
 
-**Modules:**
+#### **Modules**
 
 - **Unbound** (`bigor.services.unbound`): High-performance recursive DNS resolver with DNSSEC
-  - Port: 5335 (localhost only)
+  - Port: 5335
+  - Options:
+    - `enable`: Enable Unbound
+    - `listenOnLan`: Listen on LAN interface (firewall auto-configured via topology)
   - Features: DNSSEC validation, prefetching, optimized cache (256MB)
   - Location: `modules/nixos/services/unbound/`
 
 - **Blocky** (`bigor.services.blocky`): DNS proxy with ad/tracker blocking
   - Port: 53 (public DNS), 4000 (web/metrics)
+  - Options:
+    - `enable`: Enable Blocky
+    - `upstreamMode`: "unbound-local" | "unbound-lan" | "external"
+    - `upstreamHost`: Hostname for unbound-lan mode
+    - `externalUpstreams`: List of external DNS servers for external mode
   - Features: Auto-generated rewrites from network-topology, multiple blocklists
   - Location: `modules/nixos/services/blocky/`
   - Prometheus metrics: `http://localhost:4000/metrics`
