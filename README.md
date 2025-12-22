@@ -57,16 +57,16 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 
 ## Features
 
-| Category            | Description                                                    |
-| ------------------- | -------------------------------------------------------------- |
-| **Multi-host**      | Desktop workstation + homelab server from a single codebase    |
-| **Declarative**     | 100% reproducible system and user environments                 |
-| **Home Manager**    | Per-user, per-host configurations with host-specific overrides |
-| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting   |
-| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations         |
-| **Homelab**         | AdGuard, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
-| **Secrets**         | sops-nix with age encryption                                   |
-| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)      |
+| Category            | Description                                                               |
+| ------------------- | ------------------------------------------------------------------------- |
+| **Multi-host**      | Desktop workstation + homelab server from a single codebase               |
+| **Declarative**     | 100% reproducible system and user environments                            |
+| **Home Manager**    | Per-user, per-host configurations with host-specific overrides            |
+| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting              |
+| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                    |
+| **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
+| **Secrets**         | sops-nix with age encryption                                              |
+| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                 |
 
 ---
 
@@ -89,7 +89,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 │   └── nixos/             # NixOS modules
 │       ├── features/      # System and desktop features
 │       ├── profiles/      # High-level profiles (workstation, homelab_master)
-│       └── services/      # Declarative services (AdGuard, Caddy, Monitoring, etc.)
+│       └── services/      # Declarative services (Unbound, Blocky, Caddy, Monitoring, etc.)
 │
 ├── dotfiles/              # Mutable desktop dotfiles (symlinked via Home Manager)
 └── certs/                 # Local CA certificates (not meant for public reuse)
@@ -130,7 +130,7 @@ High-level profiles toggle entire feature sets:
 
 - `bigor.profiles.homelab-master`
   - SSH, Tailscale
-  - AdGuard Home
+  - Unbound+Blocky DNS stack (recursive resolver + ad blocking)
   - Caddy reverse proxy
   - Prometheus / Grafana / Alertmanager
   - Ollama AI backend
@@ -138,7 +138,28 @@ High-level profiles toggle entire feature sets:
 
 Profiles only enable _defaults_; everything remains overridable per host.
 
-### 3. Home Manager as a first-class citizen
+### 3. Network Topology (SSOT)
+
+All network services and hosts are centrally defined in `modules/nixos/lib/network-topology/`. This **Single Source of Truth** approach:
+
+- Defines host IPs and interfaces once
+- Declares services with their exposure settings (DNS, Caddy, firewall)
+- Auto-generates Caddy reverse proxy configs for local services
+- Auto-generates DNS rewrites in Blocky for service discovery
+- Opens firewall ports only where needed
+
+Adding a new service is as simple as:
+
+```nix
+myservice = {
+  host = "minipc";
+  port = 8080;
+  domain = "myservice.bigor.lan";
+  expose = { dns = true; reverseProxy = true; firewall = false; };
+};
+```
+
+### 4. Home Manager as a first-class citizen
 
 User environments are:
 

@@ -28,8 +28,8 @@ Every `.nix` file must start with a 2-line header:
 # System: grospc
 # Purpose: Desktop workstation with gaming optimizations
 
-# Module: adguard
-# Purpose: Network-wide ad blocking and local DNS resolution
+# Module: blocky
+# Purpose: DNS proxy with ad/tracker blocking and local rewrites
 
 # Feature: audio
 # Purpose: PipeWire audio stack with ALSA and PulseAudio compatibility
