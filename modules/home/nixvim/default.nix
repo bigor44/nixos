@@ -29,7 +29,6 @@ in
         # Language servers
         nodePackages.bash-language-server
         marksman
-        vscode-langservers-extracted
         yaml-language-server
         nixd
 

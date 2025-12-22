@@ -5,6 +5,5 @@ _: {
 
   bigor.home = {
     features.gui.enable = true;
-    vscode.enable = true;
   };
 }

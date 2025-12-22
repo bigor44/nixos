@@ -21,6 +21,5 @@ keys.txt
 *.swp
 *.swo
 *~
-.vscode/
 .idea/
 .DS_Store
