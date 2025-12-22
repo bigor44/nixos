@@ -3,5 +3,8 @@
 _: {
   home.stateVersion = "25.11";
 
-  bigor.home.features.gui.enable = true;
+  bigor.home = {
+    features.gui.enable = true;
+    vscode.enable = true;
+  };
 }
