@@ -6,24 +6,36 @@
 
 A modular, opinionated, and production-ready **NixOS + Home Manager** configuration built with **Flakes** and **snowfall-lib**.
 
-```
-                   +-----------------+
-                   |   flake.nix     |
-                   +--------+--------+
-                            |
-          +-----------------+-----------------+
-          |                 |                 |
-  +-------v-------+ +-------v-------+ +-------v-------+
-  |   systems/    | |   modules/    | |    homes/     |
-  | (Host configs)| | (NixOS + HM)  | | (User envs)   |
-  +---------------+ +-------+-------+ +---------------+
-                            |
-          +-----------------+-----------------+
-          |                 |                 |
-  +-------v-------+ +-------v-------+ +-------v-------+
-  |   profiles/   | |   features/   | |   services/   |
-  | (Presets)     | | (Capabilities)| | (Daemons)     |
-  +---------------+ +---------------+ +---------------+
+```mermaid
+graph TD
+    F[flake.nix] --> S[systems/]
+    F --> M[modules/]
+    F --> H[homes/]
+
+    subgraph "Host Configurations"
+        S --> S1[Host-specific NixOS configs]
+    end
+
+    subgraph "User Environments"
+        H --> H1[Per-user, per-host configs]
+    end
+
+    subgraph "Module Layers"
+        M --> P[profiles/]
+        M --> FT[features/]
+        M --> SV[services/]
+
+        P --> P1[Presets<br/>workstation, homelab-master]
+        FT --> FT1[Capabilities<br/>Individual toggles]
+        SV --> SV1[Daemons<br/>Self-registering services]
+    end
+
+    %% Styling
+    style F fill:#f96,stroke:#333,stroke-width:3px
+    style M fill:#bbf,stroke:#333,stroke-width:2px
+    style P fill:#dfd,stroke:#333
+    style FT fill:#dfd,stroke:#333
+    style SV fill:#dfd,stroke:#333
 ```
 
 ---
