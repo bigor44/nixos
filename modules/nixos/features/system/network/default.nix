@@ -49,21 +49,9 @@ in
               default = null;
               description = "Domain name (e.g., grafana.bigor.lan)";
             };
-            reverseProxy = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Expose via Caddy reverse proxy";
-            };
-            openFirewall = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Open TCP port in firewall";
-            };
-            openFirewallUDP = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Open UDP port in firewall";
-            };
+            reverseProxy = lib.mkEnableOption "exposing via Caddy reverse proxy";
+            openFirewall = lib.mkEnableOption "opening TCP port in firewall";
+            openFirewallUDP = lib.mkEnableOption "opening UDP port in firewall";
             proxyProtocol = lib.mkOption {
               type = lib.types.str;
               default = "http";
@@ -215,6 +203,15 @@ in
         allowedTCPPorts = firewallTCPPorts;
         allowedUDPPorts = firewallUDPPorts;
       };
+    })
+
+    # Configure localhost as DNS server when Blocky is enabled locally
+    (lib.mkIf config.bigor.services.blocky.enable {
+      # NetworkManager: prevent automatic DNS management
+      networking.networkmanager.dns = lib.mkDefault "none";
+
+      # Set localhost as primary nameserver (works for both NetworkManager and systemd-resolved)
+      networking.nameservers = lib.mkBefore [ "127.0.0.1" ];
     })
   ];
 }

@@ -13,15 +13,11 @@ in
   options.bigor.services.unbound = {
     enable = mkEnableOption "Unbound DNS resolver";
 
-    listenOnLan = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Listen on LAN interface in addition to localhost.
-        Allows other machines to use this Unbound instance as upstream.
-        Firewall port automatically opened via registry.
-      '';
-    };
+    listenOnLan = mkEnableOption ''
+      listening on LAN interface in addition to localhost.
+      Allows other machines to use this Unbound instance as upstream.
+      Firewall port automatically opened via registry
+    '';
   };
 
   config = mkIf cfg.enable (
