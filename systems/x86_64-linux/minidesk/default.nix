@@ -21,5 +21,11 @@
     profiles.workstation.enable = true;
     services.ssh.enable = true;
     network.mainInterface = "enp2s0";
+
+    # Use Blocky with external upstreams (travel mode)
+    services.blocky = {
+      enable = true;
+      upstreamMode = "external";
+    };
   };
 }

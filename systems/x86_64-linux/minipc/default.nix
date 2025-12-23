@@ -14,6 +14,9 @@
   bigor = {
     profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
+
+    # Open Unbound to LAN for other hosts
+    services.unbound.listenOnLan = true;
   };
 
   boot = {
