@@ -65,7 +65,6 @@ in
     network = {
       mainInterface = lib.mkOption {
         type = lib.types.str;
-        default = null;
         description = "Primary network interface name";
       };
 

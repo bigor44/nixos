@@ -130,7 +130,7 @@ in
 
           # Ad and tracker blocking
           blocking = {
-            # Blocklists by category (hosts format only - Blocky doesn't support AdGuard format)
+            # Blocklists by category (hosts format only)
             denylists = {
               # Ads and malware blocking
               ads = [

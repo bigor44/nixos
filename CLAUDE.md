@@ -232,7 +232,7 @@ DNS rewrites are automatically generated from two sources:
 **Benefits:**
 
 - ✅ Native DNSSEC validation (Unbound)
-- ✅ Better performance (~60% faster than AdGuard Home)
+- ✅ High performance with optimized caching
 - ✅ Modular: Can replace components independently
 - ✅ Fully declarative: No web UI configuration needed
 - ✅ Prometheus-ready: Built-in metrics for monitoring

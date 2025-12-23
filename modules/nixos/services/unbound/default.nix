@@ -52,7 +52,7 @@ in
         domain = null;
         reverseProxy = false;
         openFirewall = cfg.listenOnLan;
-        openFirewallUDP = false;
+        openFirewallUDP = cfg.listenOnLan;
         proxyProtocol = "http";
       };
 

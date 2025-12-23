@@ -219,7 +219,7 @@ bigor.services.blocky = {
 - DNSSEC validation via Unbound
 - Auto-generated DNS rewrites from network topology
 - Prometheus metrics for monitoring
-- ~60% faster than AdGuard Home
+- High performance with optimized caching
 
 ### 5. Home Manager as a first-class citizen
 
