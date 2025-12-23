@@ -20,7 +20,6 @@ in
       youtube-music
       whatsapp-electron
       brave
-      pkgs.bigor.turtle-wow
     ];
 
     # Symlink dotfiles for live editing without rebuild
