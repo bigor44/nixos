@@ -11,6 +11,10 @@ nh os switch              # Automatically detects hostname
 # Build without switching
 nh os build
 
+# Run linters before flake check
+statix check        # Check for anti-patterns
+deadnix            # Check for dead code
+
 # Check the flake (runs statix, deadnix, and formatting verification)
 nix flake check
 
