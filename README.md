@@ -37,7 +37,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 - [Key Design Principles](#key-design-principles)
   - [1. Snowfall-driven architecture](#1-snowfall-driven-architecture)
   - [2. Profile-based configuration](#2-profile-based-configuration)
-  - [3. Network Topology (SSOT)](#3-network-topology-ssot)
+  - [3. Service Registry Pattern](#3-service-registry-pattern)
   - [4. Modular DNS Stack (Blocky + Unbound)](#4-modular-dns-stack-blocky--unbound)
     - [Pattern 1: Full Stack (minipc)](#pattern-1-full-stack-minipc)
     - [Pattern 2: Remote Unbound (grospc)](#pattern-2-remote-unbound-grospc)
@@ -64,6 +64,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 | **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting              |
 | **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                    |
 | **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
+| **Networking**      | Service registry pattern, nftables firewall, auto DNS/proxy configuration |
 | **Secrets**         | sops-nix with age encryption                                              |
 | **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                 |
 
@@ -87,7 +88,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 │   ├── home/              # Home Manager modules (shell, git, nixvim, GUI, CLI)
 │   └── nixos/             # NixOS modules
 │       ├── features/      # System and desktop features
-│       ├── profiles/      # High-level profiles (workstation, homelab_master)
+│       ├── profiles/      # High-level profiles (workstation, homelab-master)
 │       └── services/      # Declarative services (Unbound, Blocky, Caddy, Monitoring, etc.)
 │
 ├── dotfiles/              # Mutable desktop dotfiles (symlinked via Home Manager)
@@ -102,7 +103,7 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 | ------------ | -------- | ---------------- | ------------------------------------------------------------------------ |
 | **grospc**   | Desktop  | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations     |
 | **minipc**   | Server   | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI) |
-| **minidesk** | Portable | `workstation`    | Travel workstation with Zen kernel, COSMIC DE (no NFS mounts)            |
+| **minidesk** | Portable | `workstation`    | Travel workstation with Zen kernel, COSMIC DE, Blocky standalone (no NFS mounts) |
 
 ---
 
@@ -138,40 +139,67 @@ High-level profiles toggle entire feature sets:
 
 Profiles only enable _defaults_; everything remains overridable per host.
 
-### 3. Network Topology (SSOT)
+### 3. Service Registry Pattern
 
-All network services and hosts are centrally defined in `modules/nixos/lib/network-topology/`. This **Single Source of Truth** approach:
-
-- Defines host IPs and interfaces once
-- Declares services with their exposure settings (DNS, Caddy, firewall)
-- Each module (Caddy, Blocky, firewall) reads the topology directly and auto-configures itself
+Services use a **distributed self-registration model** where each service registers itself when enabled:
 
 **Architecture:**
 
+- **Service Registry** (`bigor.registry.services.*`) - Services self-register when enabled
+- **Host Registry** (`bigor.network.hosts`) - Centrally defined in `modules/nixos/features/system/network/`
+- **Network Subnet** (`bigor.network.subnet`) - Network subnet in CIDR notation (default: "192.168.1.0/24")
+- **DNS-Only Entries** (`bigor.network.dnsEntries`) - For hosts without services (e.g., minipc.bigor.lan)
+
+**Consumers:**
+
 ```
-network-topology (SSOT)
+Service Registry
         ↓
-   ├─→ Caddy (generates reverse proxy for local services)
-   ├─→ Firewall (opens ports for local services)
-   └─→ Blocky (generates DNS rewrites for all services)
+   ├─→ Caddy (generates reverse proxy for LOCAL services with reverseProxy = true)
+   ├─→ Firewall (opens ports for LOCAL services with openFirewall = true, uses nftables)
+   └─→ Blocky (generates DNS rewrites for ALL services with domains + dnsEntries)
 ```
 
-Adding a new service is as simple as:
+**Adding a new service:**
+
+Services self-register in their module:
 
 ```nix
-myservice = {
-  host = "minipc";
-  port = 8080;
-  domain = "myservice.bigor.lan";
-  expose = { dns = true; reverseProxy = true; firewall = false; };
+# In the service module (e.g., modules/nixos/services/myservice/default.nix)
+config = mkIf cfg.enable {
+  # Register in registry
+  bigor.registry.services.myservice = {
+    hostName = config.networking.hostName;
+    port = 8080;
+    domain = "myservice.bigor.lan";
+    reverseProxy = true;              # Expose via Caddy
+    openFirewall = false;             # Direct firewall access
+    openFirewallUDP = false;          # UDP firewall access
+    proxyProtocol = "http";           # http or https
+  };
+
+  # Configure actual service
+  services.myservice = { ... };
 };
 ```
 
+Then enable it in profile or host config:
+
+```nix
+bigor.services.myservice.enable = true;
+```
+
+The service will automatically:
+- Get a DNS entry (via Blocky)
+- Get reverse proxy (via Caddy) if `reverseProxy = true`
+- Get firewall port opened if `openFirewall = true`
+
 **Benefits:**
 
-- No intermediate "consumer" layer - direct topology consumption
-- Configuration visible where it's applied
-- Easy to debug and customize per module
+- Distributed configuration - services self-describe
+- Automatic DNS, proxy, and firewall configuration
+- Build-time validation (domain uniqueness, port ranges, host existence)
+- Easy to add new services without touching central config
 
 ### 4. Modular DNS Stack (Blocky + Unbound)
 
@@ -217,9 +245,15 @@ bigor.services.blocky = {
 
 - Ad/tracker blocking via Blocky (multiple curated blocklists)
 - DNSSEC validation via Unbound
-- Auto-generated DNS rewrites from network topology
-- Prometheus metrics for monitoring
+- Auto-generated DNS rewrites from service registry + dnsEntries
+- Prometheus metrics for monitoring (Blocky: `http://localhost:4000/metrics`)
 - High performance with optimized caching
+
+**DNS Rewrites (Auto-generated):**
+
+DNS rewrites are automatically generated from two sources:
+1. Services in the registry with `domain != null` and host has static IP
+2. DNS-only entries in `bigor.network.dnsEntries`
 
 ### 5. Home Manager as a first-class citizen
 

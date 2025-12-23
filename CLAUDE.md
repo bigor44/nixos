@@ -62,6 +62,7 @@ Home modules are enabled via `bigor.home.*`:
 
 - **grospc** - Desktop workstation (Zen kernel, gaming-optimized)
 - **minipc** - Homelab server (standard kernel, runs all services)
+- **minidesk** - Portable workstation (Zen kernel, travel mode with Blocky standalone, no NFS mounts)
 
 ### Service Registry Pattern
 
