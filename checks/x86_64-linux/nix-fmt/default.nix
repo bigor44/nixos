@@ -1,9 +1,5 @@
-# ============================================================================
-# File: checks/x86_64-linux/nix-fmt/default.nix
-# Description: Formatting check for the flake.
-# Author: Bigor
-# Date: 2025-12-19
-# ============================================================================
+# Module: nix-fmt
+# Purpose: Formatting check verifying code style with treefmt
 {
   pkgs,
   inputs,

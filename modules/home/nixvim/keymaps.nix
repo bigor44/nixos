@@ -1,3 +1,5 @@
+# Home: nixvim-keymaps
+# Purpose: Keyboard mappings configuration for nixvim
 _: {
   programs.nixvim.keymaps = [
     # ==========================================================================

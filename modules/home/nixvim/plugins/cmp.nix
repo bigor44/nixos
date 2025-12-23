@@ -1,3 +1,5 @@
+# Home: nixvim-cmp
+# Purpose: Completion engine configuration for nixvim
 {
   config,
   lib,

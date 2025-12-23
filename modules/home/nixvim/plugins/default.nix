@@ -1,3 +1,5 @@
+# Home: nixvim-plugins
+# Purpose: Plugin imports aggregator for nixvim
 _: {
   imports = [
     ./editor.nix

@@ -1,9 +1,5 @@
-# ============================================================================
-# File: packages/turtle-wow/default.nix
-# Description: Nix package for the Turtle WoW client.
-# Author: Bigor
-# Date: 2025-12-18
-# ============================================================================
+# Module: turtle-wow
+# Purpose: Nix package for the Turtle WoW game client
 { pkgs, ... }:
 let
   inherit (pkgs) lib;

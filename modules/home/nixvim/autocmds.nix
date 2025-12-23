@@ -1,3 +1,5 @@
+# Home: nixvim-autocmds
+# Purpose: Autocommands configuration for nixvim
 _: {
   programs.nixvim = {
     autoGroups = {

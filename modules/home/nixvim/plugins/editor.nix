@@ -1,3 +1,5 @@
+# Home: nixvim-editor
+# Purpose: Editor enhancement plugins for nixvim
 _: {
   programs.nixvim.plugins = {
     # ==========================================================================

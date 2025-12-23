@@ -1,3 +1,5 @@
+# Home: nixvim-ui
+# Purpose: UI plugins and visual enhancements for nixvim
 _: {
   programs.nixvim = {
     # Highlights for Mini.notify

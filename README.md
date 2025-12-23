@@ -99,10 +99,10 @@ A modular, opinionated, and production-ready **NixOS + Home Manager** configurat
 
 ## Hosts
 
-| Host         | Type     | Profile          | Description                                                              |
-| ------------ | -------- | ---------------- | ------------------------------------------------------------------------ |
-| **grospc**   | Desktop  | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations     |
-| **minipc**   | Server   | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI) |
+| Host         | Type     | Profile          | Description                                                                      |
+| ------------ | -------- | ---------------- | -------------------------------------------------------------------------------- |
+| **grospc**   | Desktop  | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations             |
+| **minipc**   | Server   | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI)         |
 | **minidesk** | Portable | `workstation`    | Travel workstation with Zen kernel, COSMIC DE, Blocky standalone (no NFS mounts) |
 
 ---
@@ -213,6 +213,7 @@ bigor.services.myservice.enable = true;
 ```
 
 The service will automatically:
+
 - Get a DNS entry (via Blocky)
 - Get reverse proxy (via Caddy) if `reverseProxy = true`
 - Get firewall port opened if `openFirewall = true`
@@ -275,6 +276,7 @@ bigor.services.blocky = {
 **DNS Rewrites (Auto-generated):**
 
 DNS rewrites are automatically generated from two sources:
+
 1. Services in the registry with `domain != null` and host has static IP
 2. DNS-only entries in `bigor.network.dnsEntries`
 

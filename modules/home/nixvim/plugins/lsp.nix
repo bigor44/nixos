@@ -1,3 +1,5 @@
+# Home: nixvim-lsp
+# Purpose: Language Server Protocol configuration for nixvim
 {
   programs.nixvim.plugins.lsp = {
     enable = true;
