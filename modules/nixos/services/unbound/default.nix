@@ -41,7 +41,7 @@ in
         "::1 allow"
       ]
       ++ (lib.optionals cfg.listenOnLan [
-        "192.168.1.0/24 allow" # bigor.lan subnet
+        "${config.bigor.network.subnet} allow"
       ]);
     in
     {

@@ -63,6 +63,12 @@ in
     };
 
     network = {
+      subnet = lib.mkOption {
+        type = lib.types.strMatching "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$";
+        default = "192.168.1.0/24";
+        description = "Network subnet in CIDR notation (e.g., 192.168.1.0/24)";
+      };
+
       mainInterface = lib.mkOption {
         type = lib.types.str;
         description = "Primary network interface name";
@@ -195,6 +201,9 @@ in
         lib.mapAttrsToList (name: host: "${host.ip} ${name}") hostsWithIPs
       );
     }
+
+    # Enable nftables (modern firewall backend)
+    { networking.nftables.enable = true; }
 
     # Firewall configuration from service registry (only for local services)
     (lib.mkIf (mainInterface != null && (firewallTCPPorts != [ ] || firewallUDPPorts != [ ])) {

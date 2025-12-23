@@ -71,13 +71,14 @@ Services automatically register themselves when enabled, creating a distributed 
 
 - **Service Registry** (`bigor.registry.services.*`): Services self-register when enabled
 - **Host Registry** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/`
+- **Network Subnet** (`bigor.network.subnet`): Network subnet in CIDR notation (default: "192.168.1.0/24")
 - **DNS-Only Entries** (`bigor.network.dnsEntries`): For hosts without services (e.g., minipc.bigor.lan)
 
 **Consumers:**
 
 - **Caddy** (`modules/nixos/services/caddy/`) - Generates reverse proxy config from services with `reverseProxy = true` on LOCAL host
 - **Blocky** (`modules/nixos/services/blocky/`) - Generates DNS rewrites from ALL services with domains + dnsEntries
-- **Firewall** (`modules/nixos/features/system/network/`) - Opens ports for LOCAL services with `openFirewall = true` or `openFirewallUDP = true`
+- **Firewall** (`modules/nixos/features/system/network/`) - Opens ports for LOCAL services with `openFirewall = true` or `openFirewallUDP = true` on the main interface (uses nftables)
 
 **Adding a new service:**
 
@@ -247,3 +248,4 @@ DNS rewrites are automatically generated from two sources:
 - Secrets are managed with sops-nix (encrypted with age)
 - Network hosts centrally defined in `bigor.network.hosts`
 - Service exposure (Caddy, DNS, firewall) auto-configured from registry
+- Firewall uses nftables (modern successor to iptables) for better performance and IPv6 support
