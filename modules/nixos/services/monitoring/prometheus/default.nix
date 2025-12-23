@@ -9,19 +9,26 @@ with lib;
 let
   cfg = config.bigor.services.monitoring.prometheus;
 
-  # Find all node-exporter instances from registry
-  nodeExporters = lib.filterAttrs (
-    name: _: lib.hasPrefix "node-exporter-" name
-  ) config.bigor.registry.services;
+  # Find all hosts with node-exporter enabled from centralized host list
+  hostsWithNodeExporter = lib.filterAttrs (_: host: host.hasNodeExporter) config.bigor.network.hosts;
+
+  # Node exporter port (standard)
+  nodeExporterPort = 9100;
 
   # Build scrape targets for node exporters
-  nodeTargets = lib.mapAttrsToList (
-    _: svc:
-    if svc.hostName == config.networking.hostName then
-      "127.0.0.1:${toString svc.port}"
-    else
-      "${config.bigor.network.hosts.${svc.hostName}.ip}:${toString svc.port}"
-  ) nodeExporters;
+  nodeTargets = lib.filter (t: t != null) (
+    lib.mapAttrsToList (
+      hostName: host:
+      if hostName == config.networking.hostName then
+        "127.0.0.1:${toString nodeExporterPort}"
+      else if host.ip != null then
+        # Remote host with static IP
+        "${host.ip}:${toString nodeExporterPort}"
+      else
+        # Skip DHCP hosts (unreliable for scraping)
+        null
+    ) hostsWithNodeExporter
+  );
 
   # Blocky metrics on port 4000
   blockyMetricsPort = 4000;

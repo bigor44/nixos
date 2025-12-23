@@ -89,6 +89,7 @@ in
                 type = lib.types.str;
                 description = "Primary network interface";
               };
+              hasNodeExporter = lib.mkEnableOption "node-exporter for Prometheus monitoring";
             };
           }
         );
@@ -167,14 +168,17 @@ in
         minipc = {
           ip = "192.168.1.10";
           interface = "enp2s0";
+          hasNodeExporter = true; # homelab-master profile enables node-exporter
         };
         grospc = {
           ip = "192.168.1.11";
           interface = "enp14s0";
+          hasNodeExporter = true; # workstation profile enables node-exporter
         };
         minidesk = {
           ip = null; # DHCP
           interface = "enp2s0";
+          hasNodeExporter = true; # workstation profile enables node-exporter
         };
       };
 
