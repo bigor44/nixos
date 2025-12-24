@@ -2,6 +2,7 @@
 # Purpose: Homelab server with monitoring, NFS, and Tailscale exit node
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -34,7 +35,12 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.ethtool}/bin/ethtool -K ${config.bigor.network.mainInterface} rx-udp-gro-forwarding on rx-gro-list on";
+      ExecStart = lib.concatStringsSep " " [
+        "${pkgs.ethtool}/bin/ethtool"
+        "-K ${config.bigor.network.mainInterface}"
+        "rx-udp-gro-forwarding on"
+        "rx-gro-list on"
+      ];
       SuccessExitStatus = "0 1";
     };
   };

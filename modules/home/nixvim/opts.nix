@@ -26,28 +26,28 @@ _: {
     # ==========================================================================
     opts = {
       # UI
-      number = true; # Show line numbers
-      relativenumber = true; # Relative line numbers
-      termguicolors = true; # True color support
-      signcolumn = "yes"; # Always show sign column
-      cursorline = true; # Highlight current line
-      scrolloff = 8; # Keep 8 lines above/below cursor
-      mouse = "a"; # Enable mouse support
+      number = true;
+      relativenumber = true;
+      termguicolors = true;
+      signcolumn = "yes";
+      cursorline = true;
+      scrolloff = 8;
+      mouse = "a";
 
       # Indentation
       tabstop = 2;
       shiftwidth = 2;
-      expandtab = true; # Use spaces instead of tabs
+      expandtab = true;
       smartindent = true;
 
       # Search
-      ignorecase = true; # Ignore case in search patterns
-      smartcase = true; # ...unless uppercase letters are used
+      ignorecase = true;
+      smartcase = true;
 
       # Performance & Behavior
-      updatetime = 250; # Faster completion/updates
-      timeoutlen = 300; # Faster key sequence timeout
-      undofile = true; # Persistent undo
+      updatetime = 250;
+      timeoutlen = 300;
+      undofile = true;
       completeopt = "menu,menuone,noselect";
 
       # Spell Checking

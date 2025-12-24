@@ -81,8 +81,8 @@ in
         settings = {
           # Ports configuration
           ports = {
-            dns = 53; # Standard DNS port (Phase 2: production)
-            http = 4000; # Web interface and metrics
+            dns = 53;
+            http = 4000;
           };
 
           # Upstream DNS servers (dynamic based on upstreamMode)

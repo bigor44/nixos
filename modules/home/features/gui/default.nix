@@ -13,19 +13,23 @@ in
 {
   options.bigor.home.features.gui.enable = mkEnableOption "Desktop applications";
 
-  config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      prismlauncher
-      discord
-      youtube-music
-      whatsapp-electron
-      brave
-    ];
+  config =
+    let
+      dotfilesPath = "${config.home.homeDirectory}/nixos/dotfiles";
+    in
+    mkIf cfg.enable {
+      home.packages = with pkgs; [
+        prismlauncher
+        discord
+        youtube-music
+        whatsapp-electron
+        brave
+      ];
 
-    # Symlink dotfiles for live editing without rebuild
-    xdg.configFile = {
-      cosmic.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/dotfiles/cosmic";
-      autostart.source = ../../../../dotfiles/autostart;
+      # Symlink dotfiles for live editing without rebuild
+      xdg.configFile = {
+        cosmic.source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/cosmic";
+        autostart.source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/autostart";
+      };
     };
-  };
 }
