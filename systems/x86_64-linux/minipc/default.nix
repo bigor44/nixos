@@ -27,6 +27,15 @@
 
   hardware.cpu.amd.updateMicrocode = true;
 
+  # Swapfile configuration (16GB, encrypted)
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 16 * 1024; # 16GB in MB
+      randomEncryption = true; # Encrypted swap for security
+    }
+  ];
+
   # UDP GRO forwarding critical for Tailscale throughput
   systemd.services.network-udp-gro = {
     description = "Enable UDP GRO forwarding for Tailscale";
