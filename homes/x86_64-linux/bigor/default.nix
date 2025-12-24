@@ -15,6 +15,5 @@
     shell.enable = true;
     cli-packages.enable = true;
     nixvim.enable = true;
-    sops.enable = true;
   };
 }

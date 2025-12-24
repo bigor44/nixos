@@ -261,7 +261,6 @@ customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
 - Modules use `mkEnableOption` and `mkDefault` for composability
 - Profiles set defaults that can be overridden per-host
 - Home Manager configs support host-specific overrides via `user@host` directories
-- Secrets are managed with sops-nix (encrypted with age)
 - Network hosts centrally defined in `bigor.network.hosts`
 - Virtual hosts explicitly configured in Caddy module
 - DNS rewrites explicitly configured in Blocky module

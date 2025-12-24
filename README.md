@@ -58,7 +58,6 @@ graph TD
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Code Quality \& Tooling](#code-quality--tooling)
-- [Secrets Management](#secrets-management)
 - [Dependencies](#dependencies)
 - [What This Is (and Is Not)](#what-this-is-and-is-not)
 - [License](#license)
@@ -77,7 +76,6 @@ graph TD
 | **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                    |
 | **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
 | **Networking**      | Explicit service configuration, nftables firewall, modular DNS/proxy      |
-| **Secrets**         | sops-nix with age encryption                                              |
 | **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                 |
 
 ---
@@ -396,20 +394,6 @@ This order ensures formatting and style issues are caught early, before the more
 
 ---
 
-## Secrets Management
-
-This repository integrates **sops-nix**.
-
-Secrets are expected to be:
-
-- Encrypted with `age`
-- Decrypted at build time
-- Never committed in plaintext
-
-> Note: secret files and private keys are intentionally excluded from this repository.
-
----
-
 ## Dependencies
 
 This configuration is built on top of these excellent projects:
@@ -420,7 +404,6 @@ This configuration is built on top of these excellent projects:
 | [snowfall-lib](https://github.com/snowfallorg/lib)            | Opinionated flake structure and namespacing |
 | [home-manager](https://github.com/nix-community/home-manager) | Declarative user environment management     |
 | [nixvim](https://github.com/nix-community/nixvim)             | 100% Nix-based Neovim configuration         |
-| [sops-nix](https://github.com/Mic92/sops-nix)                 | Secrets management with age encryption      |
 
 ---
 

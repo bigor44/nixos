@@ -20,8 +20,5 @@
     htop
     zip
     unzip
-    ssh-to-age
-    age
-    sops
   ];
 }

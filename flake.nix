@@ -20,11 +20,6 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -35,12 +30,9 @@
 
       homes.modules = [
         inputs.nixvim.homeModules.nixvim
-        inputs.sops-nix.homeManagerModules.sops
       ];
 
-      systems.modules.nixos = [
-        inputs.sops-nix.nixosModules.sops
-      ];
+      systems.modules.nixos = [ ];
 
       outputs-builder = channels: {
         formatter = channels.nixpkgs.treefmt;

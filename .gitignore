@@ -3,15 +3,11 @@ result
 result-*
 repl-result
 
-# --- Sops & Sécurité (CRITIQUE) ---
+# --- Sécurité (CRITIQUE) ---
 # Clés privées (ne jamais commiter)
 keys.txt
 *.key
 *.pem
-# Fichiers déchiffrés temporaires
-*.decrypted.*
-*_decrypted.*
-*.clear
 .env
 
 # --- Outils (Direnv) ---
