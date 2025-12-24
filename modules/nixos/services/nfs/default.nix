@@ -8,7 +8,7 @@
 with lib;
 let
   cfg = config.bigor.services.nfs;
-  inherit (config.bigor.network) ips;
+  inherit (config.bigor.network) ips mainInterface;
 in
 {
   options.bigor.services.nfs = {
@@ -18,34 +18,24 @@ in
 
   config = mkMerge [
     (mkIf cfg.server {
-      # Register NFS services in registry
-      bigor.registry.services = {
-        nfs-rpc = {
-          inherit (config.networking) hostName;
-          port = 111;
-          domain = null;
-          reverseProxy = false;
-          openFirewall = true;
-          openFirewallUDP = true;
-          proxyProtocol = "http";
-        };
-        nfs-server = {
-          inherit (config.networking) hostName;
-          port = 2049;
-          domain = null;
-          reverseProxy = false;
-          openFirewall = true;
-          openFirewallUDP = true;
-          proxyProtocol = "http";
-        };
-      };
-
       services.nfs.server = {
         enable = true;
         # All requests mapped to bigor (1000:100) for security
         exports = ''
           /mnt/storage ${config.bigor.network.subnet}(rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100)
         '';
+      };
+
+      # Open NFS ports (RPC + NFS server)
+      networking.firewall.interfaces.${mainInterface} = {
+        allowedTCPPorts = [
+          111
+          2049
+        ];
+        allowedUDPPorts = [
+          111
+          2049
+        ];
       };
     })
 

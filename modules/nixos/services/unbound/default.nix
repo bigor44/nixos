@@ -16,13 +16,14 @@ in
     listenOnLan = mkEnableOption ''
       listening on LAN interface in addition to localhost.
       Allows other machines to use this Unbound instance as upstream.
-      Firewall port automatically opened via registry
+      Firewall port automatically opened when enabled
     '';
   };
 
   config = mkIf cfg.enable (
     let
       inherit (config.networking) hostName;
+      inherit (config.bigor.network) mainInterface;
 
       # Get this host's IP from hosts registry
       hostConfig = config.bigor.network.hosts.${hostName};
@@ -45,17 +46,6 @@ in
       ]);
     in
     {
-      # Register Unbound in registry
-      bigor.registry.services.unbound-recursive = {
-        inherit (config.networking) hostName;
-        port = 5335;
-        domain = null;
-        reverseProxy = false;
-        openFirewall = cfg.listenOnLan;
-        openFirewallUDP = cfg.listenOnLan;
-        proxyProtocol = "http";
-      };
-
       services.unbound = {
         enable = true;
 
@@ -122,6 +112,12 @@ in
           # Allow unbound to update DNSSEC root trust anchor
           ReadWritePaths = [ "/var/lib/unbound" ];
         };
+      };
+
+      # Open firewall port when listening on LAN
+      networking.firewall.interfaces.${mainInterface} = mkIf cfg.listenOnLan {
+        allowedTCPPorts = [ 5335 ];
+        allowedUDPPorts = [ 5335 ];
       };
     }
   );

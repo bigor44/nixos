@@ -33,24 +33,13 @@ let
   # Blocky metrics on port 4000
   blockyMetricsPort = 4000;
 
-  # Find Alertmanager port from registry
-  alertmanagerPort = config.bigor.registry.services.alertmanager.port or 9093;
+  # Alertmanager port (hardcoded)
+  alertmanagerPort = 9093;
 in
 {
   options.bigor.services.monitoring.prometheus.enable = mkEnableOption "Prometheus monitoring";
 
   config = mkIf cfg.enable {
-    # Register Prometheus in registry
-    bigor.registry.services.prometheus = {
-      inherit (config.networking) hostName;
-      port = 9090;
-      domain = "prometheus.bigor.lan";
-      reverseProxy = true;
-      openFirewall = false;
-      openFirewallUDP = false;
-      proxyProtocol = "http";
-    };
-
     services.prometheus = {
       enable = true;
       port = 9090;

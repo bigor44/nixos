@@ -13,17 +13,6 @@ in
   options.bigor.services.monitoring.alertmanager.enable = mkEnableOption "Alertmanager";
 
   config = mkIf cfg.enable {
-    # Register Alertmanager in registry
-    bigor.registry.services.alertmanager = {
-      inherit (config.networking) hostName;
-      port = 9093;
-      domain = "alertmanager.bigor.lan";
-      reverseProxy = true;
-      openFirewall = false;
-      openFirewallUDP = false;
-      proxyProtocol = "http";
-    };
-
     services.prometheus.alertmanager = {
       enable = true;
       port = 9093;

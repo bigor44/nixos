@@ -8,26 +8,21 @@
 with lib;
 let
   cfg = config.bigor.services.monitoring.node-exporter;
+  inherit (config.bigor.network) mainInterface;
 in
 {
   options.bigor.services.monitoring.node-exporter.enable = mkEnableOption "Node Exporter";
 
   config = mkIf cfg.enable {
-    # Register Node Exporter in registry (multi-host: use hostname suffix)
-    bigor.registry.services."node-exporter-${config.networking.hostName}" = {
-      inherit (config.networking) hostName;
-      port = 9100;
-      domain = null;
-      reverseProxy = false;
-      openFirewall = true;
-      openFirewallUDP = false;
-      proxyProtocol = "http";
-    };
-
     services.prometheus.exporters.node = {
       enable = true;
       port = 9100;
       enabledCollectors = [ "systemd" ];
+    };
+
+    # Open port for Prometheus scraping from other hosts
+    networking.firewall.interfaces.${mainInterface} = {
+      allowedTCPPorts = [ 9100 ];
     };
   };
 }

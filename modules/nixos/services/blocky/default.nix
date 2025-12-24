@@ -9,29 +9,20 @@
 with lib;
 let
   cfg = config.bigor.services.blocky;
+  inherit (config.bigor.network) mainInterface;
 
-  # Auto-generate DNS rewrites from registry + dnsEntries
-  # Services from registry: filter by domain != null and static IP
-  serviceDomains = lib.filterAttrs (
-    _: svc: svc.domain != null && config.bigor.network.hosts.${svc.hostName}.ip != null
-  ) config.bigor.registry.services;
+  # Explicit DNS rewrites - filter out null IPs (DHCP hosts like minidesk)
+  customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
+    # Service domains
+    "prometheus.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+    "grafana.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+    "alertmanager.bigor.lan" = config.bigor.network.hosts.minipc.ip;
 
-  # DNS-only entries: filter by static IP
-  dnsEntryDomains = lib.filterAttrs (
-    _: entry: config.bigor.network.hosts.${entry.hostName}.ip != null
-  ) config.bigor.network.dnsEntries;
-
-  # Combine both sources into DNS mapping
-  customDNSMapping = lib.listToAttrs (
-    (lib.mapAttrsToList (_: svc: {
-      name = svc.domain;
-      value = config.bigor.network.hosts.${svc.hostName}.ip;
-    }) serviceDomains)
-    ++ (lib.mapAttrsToList (_: entry: {
-      name = entry.domain;
-      value = config.bigor.network.hosts.${entry.hostName}.ip;
-    }) dnsEntryDomains)
-  );
+    # DNS-only entries (moved from bigor.network.dnsEntries)
+    "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+    "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
+    "bigor.lan" = config.bigor.network.hosts.minipc.ip;
+  };
 in
 {
   options.bigor.services.blocky = {
@@ -84,17 +75,6 @@ in
           cfg.externalUpstreams;
     in
     {
-      # Register Blocky's DNS service in registry
-      bigor.registry.services.blocky-dns = {
-        inherit (config.networking) hostName;
-        port = 53;
-        domain = null;
-        reverseProxy = false;
-        openFirewall = true;
-        openFirewallUDP = true;
-        proxyProtocol = "http";
-      };
-
       services.blocky = {
         enable = true;
 
@@ -213,6 +193,12 @@ in
             privacy = true; # Anonymize client IPs in logs
           };
         };
+      };
+
+      # Open Blocky ports
+      networking.firewall.interfaces.${mainInterface} = {
+        allowedTCPPorts = [ 53 ];
+        allowedUDPPorts = [ 53 ];
       };
 
       # Systemd dependencies (conditional based on upstreamMode)

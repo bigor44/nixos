@@ -15,11 +15,11 @@ nh os build
 statix check        # Check for anti-patterns
 deadnix            # Check for dead code
 
-# Check the flake (runs statix, deadnix, and formatting verification)
-nix flake check
-
 # Format all files
 nix fmt
+
+# Check the flake (runs statix, deadnix, and formatting verification)
+nix flake check
 
 # Update flake inputs
 nix flake update
@@ -68,57 +68,68 @@ Home modules are enabled via `bigor.home.*`:
 - **minipc** - Homelab server (standard kernel, runs all services)
 - **minidesk** - Portable workstation (Zen kernel, travel mode with Blocky standalone, no NFS mounts)
 
-### Service Registry Pattern
+### Service Configuration
 
-Services automatically register themselves when enabled, creating a distributed configuration model. The registry is consumed by Caddy, Blocky, and the firewall.
+Services are configured explicitly in their respective modules, with clear ownership of firewall rules and centralized DNS/reverse proxy configuration.
 
 **Architecture:**
 
-- **Service Registry** (`bigor.registry.services.*`): Services self-register when enabled
-- **Host Registry** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/`
+- **Network Hosts** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/` - defines all hosts with IPs, interfaces, and node-exporter tracking
 - **Network Subnet** (`bigor.network.subnet`): Network subnet in CIDR notation (default: "192.168.1.0/24")
-- **DNS-Only Entries** (`bigor.network.dnsEntries`): For hosts without services (e.g., minipc.bigor.lan)
-
-**Consumers:**
-
-- **Caddy** (`modules/nixos/services/caddy/`) - Generates reverse proxy config from services with `reverseProxy = true` on LOCAL host
-- **Blocky** (`modules/nixos/services/blocky/`) - Generates DNS rewrites from ALL services with domains + dnsEntries
-- **Firewall** (`modules/nixos/features/system/network/`) - Opens ports for LOCAL services with `openFirewall = true` or `openFirewallUDP = true` on the main interface (uses nftables)
+- **Caddy Virtual Hosts**: Explicitly defined in `modules/nixos/services/caddy/default.nix`
+- **Blocky DNS Rewrites**: Explicitly defined in `modules/nixos/services/blocky/default.nix`
+- **Firewall Rules**: Each service manages its own firewall configuration
 
 **Adding a new service:**
 
-Services self-register in their module:
+1. **Create the service module** in `modules/nixos/services/myservice/default.nix`:
 
 ```nix
-# In the service module (e.g., modules/nixos/services/myservice/default.nix)
-config = mkIf cfg.enable {
-  # Register in registry
-  bigor.registry.services.myservice = {
-    hostName = config.networking.hostName;
-    port = 8080;
-    domain = "myservice.bigor.lan";
-    reverseProxy = true;              # Expose via Caddy
-    openFirewall = false;             # Direct firewall access
-    openFirewallUDP = false;          # UDP firewall access
-    proxyProtocol = "http";           # http or https
-  };
+{ config, lib, ... }:
+with lib;
+let
+  cfg = config.bigor.services.myservice;
+  inherit (config.bigor.network) mainInterface;
+in
+{
+  options.bigor.services.myservice.enable = mkEnableOption "My Service";
 
-  # Configure actual service
-  services.myservice = { ... };
+  config = mkIf cfg.enable {
+    services.myservice = {
+      enable = true;
+      port = 8080;
+    };
+
+    # Self-managed firewall (if service needs external access)
+    networking.firewall.interfaces.${mainInterface} = {
+      allowedTCPPorts = [ 8080 ];
+    };
+  };
+}
+```
+
+2. **Add DNS rewrite** (if service has a domain) in `modules/nixos/services/blocky/default.nix`:
+
+```nix
+customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
+  # ... existing entries ...
+  "myservice.bigor.lan" = config.bigor.network.hosts.minipc.ip;
 };
 ```
 
-Then enable it in profile or host config:
+3. **Add virtual host** (if service needs reverse proxy) in `modules/nixos/services/caddy/default.nix`:
 
 ```nix
-bigor.services.myservice.enable = true;
+virtualHosts = {
+  # ... existing entries ...
+  "myservice.bigor.lan" = {
+    extraConfig = ''
+      reverse_proxy http://127.0.0.1:8080
+      tls internal
+    '';
+  };
+};
 ```
-
-The service will automatically:
-
-- Get a DNS entry (via Blocky)
-- Get reverse proxy (via Caddy) if `reverseProxy = true`
-- Get firewall port opened if `openFirewall = true`
 
 **Adding a new host:**
 
@@ -128,17 +139,10 @@ config.bigor.network.hosts = {
   newhost = {
     ip = "192.168.1.30";       # null for DHCP
     interface = "enp0s0";
+    hasNodeExporter = true;    # Enable for Prometheus monitoring
   };
 };
 ```
-
-**Validations:**
-
-The registry validates at build time:
-
-- Domain uniqueness across all services and DNS entries
-- Port range (0-65535)
-- Host existence in `bigor.network.hosts`
 
 ### DNS Stack (Unbound + Blocky)
 
@@ -211,7 +215,7 @@ bigor.services.blocky = {
   - Port: 5335
   - Options:
     - `enable`: Enable Unbound
-    - `listenOnLan`: Listen on LAN interface (firewall auto-configured via registry)
+    - `listenOnLan`: Listen on LAN interface (firewall automatically opened when enabled)
   - Features: DNSSEC validation, prefetching, optimized cache (256MB)
   - Location: `modules/nixos/services/unbound/`
 
@@ -222,18 +226,25 @@ bigor.services.blocky = {
     - `upstreamMode`: "unbound-local" | "unbound-lan" | "external"
     - `upstreamHost`: Hostname for unbound-lan mode
     - `externalUpstreams`: List of external DNS servers for external mode
-  - Features: Auto-generated rewrites from registry + dnsEntries, multiple blocklists
+  - Features: Explicit DNS rewrites, multiple blocklists
   - Location: `modules/nixos/services/blocky/`
   - Prometheus metrics: `http://localhost:4000/metrics`
 
-**DNS Rewrites (Auto-generated):**
+**DNS Rewrites (Explicit):**
 
-DNS rewrites are automatically generated from two sources:
+DNS rewrites are explicitly configured in `modules/nixos/services/blocky/default.nix`:
 
-1. **Services in the registry** with `domain != null` and host has static IP
-2. **DNS-only entries** in `bigor.network.dnsEntries`
-
-**Example:** Enabling a service with `domain = "myapp.bigor.lan"` automatically creates the DNS rewrite in Blocky.
+```nix
+customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
+  # Service domains
+  "prometheus.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+  "grafana.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+  # DNS-only entries
+  "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
+  "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
+  "bigor.lan" = config.bigor.network.hosts.minipc.ip;
+};
+```
 
 **Benefits:**
 
@@ -246,11 +257,12 @@ DNS rewrites are automatically generated from two sources:
 ## Key Patterns
 
 - All custom options use the `bigor.*` namespace
-- Services self-register in `bigor.registry.services` when enabled
+- Services self-manage their firewall rules
 - Modules use `mkEnableOption` and `mkDefault` for composability
 - Profiles set defaults that can be overridden per-host
 - Home Manager configs support host-specific overrides via `user@host` directories
 - Secrets are managed with sops-nix (encrypted with age)
 - Network hosts centrally defined in `bigor.network.hosts`
-- Service exposure (Caddy, DNS, firewall) auto-configured from registry
+- Virtual hosts explicitly configured in Caddy module
+- DNS rewrites explicitly configured in Blocky module
 - Firewall uses nftables (modern successor to iptables) for better performance and IPv6 support
