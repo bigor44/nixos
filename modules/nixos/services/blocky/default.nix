@@ -249,11 +249,11 @@ in
                     echo "Unbound is ready after ''${elapsed_s}.''${elapsed_decimal}s"
 
                     # Additional validation: try a DNS query
-                    if ${pkgs.drill}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" example.com A >/dev/null 2>&1; then
+                    if ${pkgs.ldns}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" example.com A >/dev/null 2>&1; then
                       echo "Unbound DNS resolution working"
 
                       # Verify DNSSEC validation is active
-                      if ${pkgs.drill}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" -D sigok.verteiltesysteme.net A 2>&1 | grep -q "SECURE"; then
+                      if ${pkgs.ldns}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" -D sigok.verteiltesysteme.net A 2>&1 | grep -q " ad "; then
                         echo "Unbound DNSSEC validation active"
                         echo "Unbound health check passed"
                         exit 0

@@ -32,7 +32,7 @@ nix run github:bigor44/nixos#dns-stack-validator
 ### Unbound DNS Resolution
 
 - ✅ External domain resolution (`example.com`)
-- ✅ DNSSEC validation with positive test (`sigok.verteiltesysteme.net` → SECURE)
+- ✅ DNSSEC validation with positive test (`sigok.verteiltesysteme.net` → ad flag)
 - ✅ DNSSEC validation with negative test (`sigfail.verteiltesysteme.net` → rejected)
 
 ### Blocky DNS Features

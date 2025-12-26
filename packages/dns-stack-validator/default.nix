@@ -41,17 +41,17 @@ pkgs.writeShellApplication {
 
     print_success() {
       echo -e "  ''${GREEN}[OK]''${NC} $1"
-      ((PASSED++))
+      PASSED=$((PASSED + 1))
     }
 
     print_error() {
       echo -e "  ''${RED}[FAIL]''${NC} $1"
-      ((FAILED++))
+      FAILED=$((FAILED + 1))
     }
 
     print_warning() {
       echo -e "  ''${YELLOW}[WARN]''${NC} $1"
-      ((WARNINGS++))
+      WARNINGS=$((WARNINGS + 1))
     }
 
     print_summary() {
@@ -136,10 +136,10 @@ pkgs.writeShellApplication {
     fi
 
     # Test DNSSEC with a known valid domain
-    if drill @127.0.0.1 -p 5335 -D sigok.verteiltesysteme.net A 2>&1 | grep -q "SECURE"; then
+    if drill @127.0.0.1 -p 5335 -D sigok.verteiltesysteme.net A 2>&1 | grep -q " ad "; then
       print_success "Unbound DNSSEC validates secure domains"
     else
-      print_error "Unbound DNSSEC validation not working (sigok.verteiltesysteme.net should be SECURE)"
+      print_error "Unbound DNSSEC validation not working (sigok.verteiltesysteme.net should have ad flag)"
     fi
 
     # Test that DNSSEC rejects invalid signatures
