@@ -1,5 +1,15 @@
 # Module: blocky
 # Purpose: DNS proxy with ad/tracker blocking and local DNS rewrites
+#
+# Features:
+# - Multiple deployment modes (unbound-local, unbound-lan, external)
+# - Robust health check for Unbound dependency with DNSSEC validation
+# - Explicit DNS rewrites from network topology
+# - Ad/tracker blocking with curated blocklists
+# - Prometheus metrics on port 4000
+#
+# Testing:
+#   nix run .#dns-stack-validator
 {
   config,
   lib,
@@ -218,11 +228,49 @@ in
             # Wait for Unbound to be ready before starting Blocky
             serviceConfig = {
               ExecStartPre = pkgs.writeShellScript "wait-for-unbound" ''
-                # Simple delay to let Unbound finish initialization
-                # Unbound starts quickly (~1s) but needs a moment before accepting queries
-                echo "Waiting 3 seconds for Unbound to initialize..."
-                sleep 3
-                echo "Proceeding with Blocky startup"
+                set -euo pipefail
+
+                UNBOUND_HOST="127.0.0.1"
+                UNBOUND_PORT="5335"
+                TIMEOUT_SECONDS=30
+                INTERVAL=0.5
+                MAX_ATTEMPTS=$((TIMEOUT_SECONDS * 2))  # 30s / 0.5s = 60 attempts
+
+                echo "Waiting for Unbound at $UNBOUND_HOST:$UNBOUND_PORT..."
+
+                attempt=0
+                while [ $attempt -lt $MAX_ATTEMPTS ]; do
+                  # Test if Unbound is accepting connections using nc (netcat)
+                  if ${pkgs.netcat}/bin/nc -z -w 1 "$UNBOUND_HOST" "$UNBOUND_PORT" 2>/dev/null; then
+                    # Calculate actual elapsed time (attempt * 0.5s)
+                    elapsed_ms=$((attempt * 500))
+                    elapsed_s=$((elapsed_ms / 1000))
+                    elapsed_decimal=$((elapsed_ms % 1000 / 100))
+                    echo "Unbound is ready after ''${elapsed_s}.''${elapsed_decimal}s"
+
+                    # Additional validation: try a DNS query
+                    if ${pkgs.drill}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" example.com A >/dev/null 2>&1; then
+                      echo "Unbound DNS resolution working"
+
+                      # Verify DNSSEC validation is active
+                      if ${pkgs.drill}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" -D sigok.verteiltesysteme.net A 2>&1 | grep -q "SECURE"; then
+                        echo "Unbound DNSSEC validation active"
+                        echo "Unbound health check passed"
+                        exit 0
+                      else
+                        echo "Warning: DNSSEC validation not confirmed, waiting..."
+                      fi
+                    else
+                      echo "Warning: Unbound port open but not responding to queries, waiting..."
+                    fi
+                  fi
+
+                  sleep "$INTERVAL"
+                  attempt=$((attempt + 1))
+                done
+
+                echo "ERROR: Unbound did not become ready within ''${TIMEOUT_SECONDS}s"
+                exit 1
               '';
             };
           }

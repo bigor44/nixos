@@ -1,5 +1,16 @@
 # Module: unbound
 # Purpose: High-performance recursive DNS resolver with DNSSEC validation
+#
+# Features:
+# - Recursive DNS resolution with DNSSEC validation
+# - Optimized cache (256MB) with prefetching
+# - Optional LAN listening mode for centralized DNS
+# - Port 5335 (non-standard to avoid conflicts)
+#
+# Testing:
+#   drill @127.0.0.1 -p 5335 -D sigok.verteiltesysteme.net A  # Should show SECURE
+#   drill @127.0.0.1 -p 5335 sigfail.verteiltesysteme.net A   # Should fail (DNSSEC invalid)
+#   nix run .#dns-stack-validator  # Comprehensive validation
 {
   config,
   lib,

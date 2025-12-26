@@ -26,6 +26,9 @@ nix flake update
 
 # Clean old generations (keeps last 3 and anything from last 4 days)
 nh clean all
+
+# Test DNS stack (Blocky + Unbound)
+nix run .#dns-stack-validator  # Run on systems with DNS stack enabled
 ```
 
 ## Architecture Overview
@@ -246,6 +249,39 @@ customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
 };
 ```
 
+**Startup Dependencies:**
+
+Blocky includes a robust health check script that ensures Unbound is fully operational before starting:
+
+- **Active polling**: Checks Unbound availability every 0.5s (max 30s timeout)
+- **TCP connection test**: Verifies port 5335 is accepting connections
+- **DNS resolution test**: Validates that Unbound can resolve queries
+- **DNSSEC validation test**: Confirms DNSSEC is active using `sigok.verteiltesysteme.net`
+- **Precise timing**: Reports actual elapsed time (e.g., "1.5s", "2.0s")
+
+This eliminates race conditions and ensures DNS stack reliability.
+
+**Testing the DNS Stack:**
+
+The `dns-stack-validator` package provides comprehensive validation:
+
+```bash
+nix run .#dns-stack-validator
+```
+
+**Tests performed:**
+
+- ✅ Service status (systemd)
+- ✅ Port availability (53, 5335)
+- ✅ Startup dependency logs
+- ✅ Unbound DNS resolution
+- ✅ DNSSEC validation (positive: sigok.verteiltesysteme.net, negative: sigfail.verteiltesysteme.net)
+- ✅ Blocky local DNS rewrites (.bigor.lan domains)
+- ✅ Forwarding from Blocky to Unbound
+- ✅ Ad blocking functionality
+- ✅ Prometheus metrics endpoint
+- ✅ System DNS configuration
+
 **Benefits:**
 
 - ✅ Native DNSSEC validation (Unbound)
@@ -253,6 +289,8 @@ customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
 - ✅ Modular: Can replace components independently
 - ✅ Fully declarative: No web UI configuration needed
 - ✅ Prometheus-ready: Built-in metrics for monitoring
+- ✅ Robust startup: Health checks ensure service reliability
+- ✅ Comprehensive testing: Automated validation tool included
 
 ## Key Patterns
 

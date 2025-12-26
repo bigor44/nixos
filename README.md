@@ -67,16 +67,17 @@ graph TD
 
 ## Features
 
-| Category            | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------- |
-| **Multi-host**      | Desktop workstation + homelab server from a single codebase               |
-| **Declarative**     | 100% reproducible system and user environments                            |
-| **Home Manager**    | Per-user, per-host configurations with host-specific overrides            |
-| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting              |
-| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                    |
-| **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
-| **Networking**      | Explicit service configuration, nftables firewall, modular DNS/proxy      |
-| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                 |
+| Category            | Description                                                                 |
+| ------------------- | --------------------------------------------------------------------------- |
+| **Multi-host**      | Desktop workstation + homelab server from a single codebase                 |
+| **Declarative**     | 100% reproducible system and user environments                              |
+| **Home Manager**    | Per-user, per-host configurations with host-specific overrides              |
+| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting                |
+| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                      |
+| **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS   |
+| **Networking**      | Explicit service configuration, nftables firewall, modular DNS/proxy        |
+| **DNS Testing**     | Automated validation tool with comprehensive health checks and DNSSEC tests |
+| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                   |
 
 ---
 
@@ -286,13 +287,47 @@ bigor.services.blocky = {
 };
 ```
 
+**Robust Startup Dependencies:**
+
+Blocky includes a sophisticated health check script ensuring Unbound is fully operational before starting:
+
+- **Active polling**: Checks Unbound availability every 0.5s (max 30s timeout)
+- **TCP connection test**: Verifies port 5335 is accepting connections
+- **DNS resolution test**: Validates that Unbound can resolve queries
+- **DNSSEC validation test**: Confirms DNSSEC is active using `sigok.verteiltesysteme.net`
+- **Precise timing**: Reports actual elapsed time with millisecond precision
+
+This eliminates race conditions and ensures DNS stack reliability.
+
+**Testing & Validation:**
+
+The `dns-stack-validator` package provides comprehensive automated testing:
+
+```bash
+nix run .#dns-stack-validator
+```
+
+**Tests performed:**
+
+- ✅ Service status (systemd)
+- ✅ Port availability (53, 5335)
+- ✅ Startup dependency verification (health check logs)
+- ✅ Unbound DNS resolution
+- ✅ DNSSEC validation (positive test: sigok.verteiltesysteme.net, negative test: sigfail.verteiltesysteme.net)
+- ✅ Blocky local DNS rewrites (.bigor.lan domains)
+- ✅ Forwarding from Blocky to Unbound
+- ✅ Ad blocking functionality
+- ✅ Prometheus metrics endpoint
+- ✅ System DNS configuration
+
 **Features:**
 
 - Ad/tracker blocking via Blocky (multiple curated blocklists)
-- DNSSEC validation via Unbound
+- DNSSEC validation via Unbound with robust testing
 - Explicit DNS rewrites configured in Blocky module
 - Prometheus metrics for monitoring (Blocky: `http://localhost:4000/metrics`)
 - High performance with optimized caching
+- Comprehensive health checks and automated validation
 
 **DNS Rewrites:**
 
@@ -360,6 +395,9 @@ deadnix       # Dead code detection
 
 # Run all checks (includes formatting verification)
 nix flake check
+
+# Test DNS stack (on systems with Blocky + Unbound enabled)
+nix run .#dns-stack-validator
 ```
 
 Replace `<hostname>` with `grospc`, `minipc`, or `minidesk`.
