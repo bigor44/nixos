@@ -140,7 +140,7 @@ High-level profiles toggle entire feature sets:
   - Gaming optimizations
 
 - `bigor.profiles.homelab-master`
-  - SSH, Tailscale
+  - SSH
   - Unbound+Blocky DNS stack (recursive resolver + ad blocking)
   - Caddy reverse proxy
   - NFS server

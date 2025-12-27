@@ -46,11 +46,11 @@ This is a NixOS + Home Manager configuration using **snowfall-lib** for an opini
 **Profiles** (`bigor.profiles.*`) are high-level toggles that enable sets of features:
 
 - `bigor.profiles.workstation` - Desktop: COSMIC DE, audio, fonts, gaming
-- `bigor.profiles.homelab-master` - Server: SSH, Tailscale, DNS (Unbound+Blocky), Caddy, NFS
+- `bigor.profiles.homelab-master` - Server: SSH, DNS (Unbound+Blocky), Caddy, NFS
 
 **Features** (`bigor.features.*`) are individual system capabilities toggled by profiles or directly.
 
-**Services** (`bigor.services.*`) are declarative service modules (blocky, caddy, nfs, sshd, tailscale, unbound).
+**Services** (`bigor.services.*`) are declarative service modules (blocky, caddy, nfs, sshd, unbound).
 
 ### Home Manager
 

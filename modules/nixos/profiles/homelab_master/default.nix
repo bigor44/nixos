@@ -11,7 +11,6 @@ in
   config = mkIf cfg.enable {
     bigor.services = {
       ssh.enable = mkDefault true;
-      tailscale.enable = mkDefault true;
       caddy.enable = mkDefault true;
 
       # DNS Stack: Unbound (recursive resolver) + Blocky (filtering)

@@ -42,7 +42,7 @@ Every `.nix` file must start with a 2-line header:
 - Non-obvious logic or workarounds
 - Security implications or warnings
 - Complex algorithms
-- Technical requirements (e.g., "UDP GRO forwarding critical for Tailscale throughput")
+- Technical requirements (e.g., "checkReversePath = loose required for subnet routing")
 
 **❌ DON'T comment:**
 
