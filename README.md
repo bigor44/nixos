@@ -67,16 +67,16 @@ graph TD
 
 ## Features
 
-| Category            | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------- |
-| **Multi-host**      | Desktop workstation + homelab server from a single codebase               |
-| **Declarative**     | 100% reproducible system and user environments                            |
-| **Home Manager**    | Per-user, per-host configurations with host-specific overrides            |
-| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting              |
-| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations                    |
-| **Homelab**         | Unbound+Blocky DNS, Caddy, Prometheus, Grafana, Alertmanager, Ollama, NFS |
-| **Networking**      | Explicit service configuration, nftables firewall, modular DNS/proxy      |
-| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)                 |
+| Category            | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| **Multi-host**      | Desktop workstation + homelab server from a single codebase          |
+| **Declarative**     | 100% reproducible system and user environments                       |
+| **Home Manager**    | Per-user, per-host configurations with host-specific overrides       |
+| **Neovim (nixvim)** | Full IDE experience: LSP, Treesitter, completion, formatting         |
+| **Desktop**         | COSMIC DE, PipeWire audio, fonts, gaming optimizations               |
+| **Homelab**         | Unbound+Blocky DNS, Caddy, NFS                                       |
+| **Networking**      | Explicit service configuration, nftables firewall, modular DNS/proxy |
+| **CI Checks**       | statix, deadnix, treefmt (nixfmt, shfmt, prettier, taplo)            |
 
 ---
 
@@ -99,7 +99,7 @@ graph TD
 │   └── nixos/             # NixOS modules
 │       ├── features/      # System and desktop features
 │       ├── profiles/      # High-level profiles (workstation, homelab-master)
-│       └── services/      # Declarative services (Unbound, Blocky, Caddy, Monitoring, etc.)
+│       └── services/      # Declarative services (Unbound, Blocky, Caddy, etc.)
 │
 ├── dotfiles/              # Mutable desktop dotfiles (symlinked via Home Manager)
 └── certs/                 # Local CA certificates (not meant for public reuse)
@@ -112,7 +112,7 @@ graph TD
 | Host         | Type     | Profile          | Description                                                                      |
 | ------------ | -------- | ---------------- | -------------------------------------------------------------------------------- |
 | **grospc**   | Desktop  | `workstation`    | Primary workstation with Zen kernel, COSMIC DE, gaming optimizations             |
-| **minipc**   | Server   | `homelab-master` | Homelab server running all services (monitoring, DNS, reverse proxy, AI)         |
+| **minipc**   | Server   | `homelab-master` | Homelab server running all services (DNS, reverse proxy, NFS)                    |
 | **minidesk** | Portable | `workstation`    | Travel workstation with Zen kernel, COSMIC DE, Blocky standalone (no NFS mounts) |
 
 ---
@@ -143,8 +143,6 @@ High-level profiles toggle entire feature sets:
   - SSH, Tailscale
   - Unbound+Blocky DNS stack (recursive resolver + ad blocking)
   - Caddy reverse proxy
-  - Prometheus / Grafana / Alertmanager
-  - Ollama AI backend
   - NFS server
 
 Profiles only enable _defaults_; everything remains overridable per host.
@@ -303,7 +301,6 @@ This eliminates race conditions and ensures DNS stack reliability.
 - Ad/tracker blocking via Blocky (multiple curated blocklists)
 - DNSSEC validation via Unbound
 - Explicit DNS rewrites configured in Blocky module
-- Prometheus metrics for monitoring (Blocky: `http://localhost:4000/metrics`)
 - High performance with optimized caching
 - Comprehensive health checks for service reliability
 
@@ -313,9 +310,6 @@ DNS rewrites are explicitly configured in `modules/nixos/services/blocky/default
 
 ```nix
 customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-  # Service domains
-  "prometheus.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-  "grafana.bigor.lan" = config.bigor.network.hosts.minipc.ip;
   # DNS-only entries
   "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
   "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;

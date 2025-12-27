@@ -21,7 +21,5 @@ in
         tuning.enable = mkDefault true;
       };
     };
-
-    bigor.services.monitoring.node-exporter.enable = mkDefault true;
   };
 }

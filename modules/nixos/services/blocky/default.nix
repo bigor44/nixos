@@ -6,7 +6,6 @@
 # - Robust health check for Unbound dependency with DNSSEC validation
 # - Explicit DNS rewrites from network topology
 # - Ad/tracker blocking with curated blocklists
-# - Prometheus metrics on port 4000
 {
   config,
   lib,
@@ -20,11 +19,6 @@ let
 
   # Explicit DNS rewrites - filter out null IPs (DHCP hosts like minidesk)
   customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-    # Service domains
-    "prometheus.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-    "grafana.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-    "alertmanager.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-
     # DNS-only entries (moved from bigor.network.dnsEntries)
     "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
     "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
@@ -179,12 +173,6 @@ in
             # mapping = {
             #   "other.local" = "192.168.1.1";
             # };
-          };
-
-          # Prometheus metrics
-          prometheus = {
-            enable = true;
-            path = "/metrics";
           };
 
           # Query logging (disabled for privacy and performance)

@@ -16,26 +16,6 @@ in
   config = mkIf cfg.enable {
     services.caddy = {
       enable = true;
-      virtualHosts = {
-        "prometheus.bigor.lan" = {
-          extraConfig = ''
-            reverse_proxy http://127.0.0.1:9090
-            tls internal
-          '';
-        };
-        "grafana.bigor.lan" = {
-          extraConfig = ''
-            reverse_proxy http://127.0.0.1:3000
-            tls internal
-          '';
-        };
-        "alertmanager.bigor.lan" = {
-          extraConfig = ''
-            reverse_proxy http://127.0.0.1:9093
-            tls internal
-          '';
-        };
-      };
     };
 
     # Open Caddy ports

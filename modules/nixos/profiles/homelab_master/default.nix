@@ -1,5 +1,5 @@
 # Profile: homelab-master
-# Purpose: Server stack with monitoring, Caddy, DNS (Unbound+Blocky), Ollama, and NFS
+# Purpose: Server stack with monitoring, Caddy, DNS (Unbound+Blocky), and NFS
 { lib, config, ... }:
 with lib;
 let
@@ -18,15 +18,7 @@ in
       unbound.enable = mkDefault true;
       blocky.enable = mkDefault true;
 
-      ollama.enable = mkDefault true;
       nfs.server = mkDefault true;
-
-      monitoring = {
-        prometheus.enable = mkDefault true;
-        grafana.enable = mkDefault true;
-        alertmanager.enable = mkDefault true;
-        node-exporter.enable = mkDefault true;
-      };
     };
   };
 }

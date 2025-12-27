@@ -45,12 +45,12 @@ This is a NixOS + Home Manager configuration using **snowfall-lib** for an opini
 
 **Profiles** (`bigor.profiles.*`) are high-level toggles that enable sets of features:
 
-- `bigor.profiles.workstation` - Desktop: COSMIC DE, audio, fonts, gaming, node-exporter
-- `bigor.profiles.homelab-master` - Server: SSH, Tailscale, DNS (Unbound+Blocky), Caddy, monitoring stack (Prometheus/Grafana/Alertmanager), Ollama, NFS
+- `bigor.profiles.workstation` - Desktop: COSMIC DE, audio, fonts, gaming
+- `bigor.profiles.homelab-master` - Server: SSH, Tailscale, DNS (Unbound+Blocky), Caddy, NFS
 
 **Features** (`bigor.features.*`) are individual system capabilities toggled by profiles or directly.
 
-**Services** (`bigor.services.*`) are declarative service modules (blocky, caddy, monitoring/\*, nfs, ollama, sshd, tailscale, unbound).
+**Services** (`bigor.services.*`) are declarative service modules (blocky, caddy, nfs, sshd, tailscale, unbound).
 
 ### Home Manager
 
@@ -74,7 +74,7 @@ Services are configured explicitly in their respective modules, with clear owner
 
 **Architecture:**
 
-- **Network Hosts** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/` - defines all hosts with IPs, interfaces, and node-exporter tracking
+- **Network Hosts** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/` - defines all hosts with IPs and interfaces
 - **Network Subnet** (`bigor.network.subnet`): Network subnet in CIDR notation (default: "192.168.1.0/24")
 - **Caddy Virtual Hosts**: Explicitly defined in `modules/nixos/services/caddy/default.nix`
 - **Blocky DNS Rewrites**: Explicitly defined in `modules/nixos/services/blocky/default.nix`
@@ -139,7 +139,6 @@ config.bigor.network.hosts = {
   newhost = {
     ip = "192.168.1.30";       # null for DHCP
     interface = "enp0s0";
-    hasNodeExporter = true;    # Enable for Prometheus monitoring
   };
 };
 ```
@@ -220,7 +219,7 @@ bigor.services.blocky = {
   - Location: `modules/nixos/services/unbound/`
 
 - **Blocky** (`bigor.services.blocky`): DNS proxy with ad/tracker blocking
-  - Port: 53 (DNS), 4000 (metrics)
+  - Port: 53 (DNS)
   - Options:
     - `enable`: Enable Blocky
     - `upstreamMode`: "unbound-local" | "unbound-lan" | "external"
@@ -228,7 +227,6 @@ bigor.services.blocky = {
     - `externalUpstreams`: List of external DNS servers for external mode
   - Features: Explicit DNS rewrites, multiple blocklists
   - Location: `modules/nixos/services/blocky/`
-  - Prometheus metrics: `http://localhost:4000/metrics`
 
 **DNS Rewrites (Explicit):**
 
@@ -236,9 +234,6 @@ DNS rewrites are explicitly configured in `modules/nixos/services/blocky/default
 
 ```nix
 customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-  # Service domains
-  "prometheus.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-  "grafana.bigor.lan" = config.bigor.network.hosts.minipc.ip;
   # DNS-only entries
   "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
   "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
@@ -264,7 +259,6 @@ This eliminates race conditions and ensures DNS stack reliability.
 - ✅ High performance with optimized caching
 - ✅ Modular: Can replace components independently
 - ✅ Fully declarative: No web UI configuration needed
-- ✅ Prometheus-ready: Built-in metrics for monitoring
 - ✅ Robust startup: Health checks ensure service reliability
 
 ## Key Patterns
