@@ -1,5 +1,5 @@
 # System: minipc
-# Purpose: Homelab server with monitoring and NFS
+# Purpose: Homelab server with DNS, Caddy, and NFS
 {
   config,
   lib,
