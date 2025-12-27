@@ -29,8 +29,13 @@ EXPECTED_MINIPC="$(dig_test minipc.bigor.lan)"
 ok "Local rewrite minipc.bigor.lan → $EXPECTED_MINIPC"
 
 # 3. External resolution
+<<<<<<< HEAD
 dig_test google.com | grep -E '^[0-9.]+' >/dev/null ||
   fail "External resolution failed"
+=======
+dig_test google.com | grep -E '^[0-9.]+' >/dev/null \
+  || fail "External resolution failed"
+>>>>>>> 49c25a4489a25acc054807c5378f4c398a672ca6
 ok "External resolution works"
 
 # 4. Ad blocking
@@ -39,8 +44,17 @@ BLOCKED="$(dig_test ads.youtube.com || true)"
 ok "Ad blocking works"
 
 # 5. DNSSEC validation
+<<<<<<< HEAD
 dig @"$DNS_SERVER" sigok.verteiltesysteme.net +dnssec +short >/dev/null ||
   fail "DNSSEC validation failed"
 ok "DNSSEC validation works"
 
 echo "🎉 DNS stack OK"
+=======
+dig @"$DNS_SERVER" sigok.verteiltesysteme.net +dnssec +short >/dev/null \
+  || fail "DNSSEC validation failed"
+ok "DNSSEC validation works"
+
+echo "🎉 DNS stack OK"
+
+>>>>>>> 49c25a4489a25acc054807c5378f4c398a672ca6
