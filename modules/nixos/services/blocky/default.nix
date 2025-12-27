@@ -7,9 +7,6 @@
 # - Explicit DNS rewrites from network topology
 # - Ad/tracker blocking with curated blocklists
 # - Prometheus metrics on port 4000
-#
-# Testing:
-#   nix run .#dns-stack-validator
 {
   config,
   lib,

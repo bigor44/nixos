@@ -10,7 +10,6 @@
 # Testing:
 #   drill @127.0.0.1 -p 5335 -D sigok.verteiltesysteme.net A  # Should show 'ad' flag in response
 #   drill @127.0.0.1 -p 5335 sigfail.verteiltesysteme.net A   # Should fail (DNSSEC invalid)
-#   nix run .#dns-stack-validator  # Comprehensive validation
 {
   config,
   lib,
