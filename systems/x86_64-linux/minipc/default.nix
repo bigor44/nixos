@@ -1,11 +1,6 @@
 # System: minipc
 # Purpose: Homelab server with DNS, Caddy, and NFS
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -16,8 +11,13 @@
     profiles.homelab-master.enable = true;
     network.mainInterface = "enp2s0";
 
-    # Open Unbound to LAN for other hosts
-    services.unbound.listenOnLan = true;
+    # DNS Stack: Unbound + Blocky
+    services = {
+      # Open Unbound to LAN for other hosts
+      unbound.listenOnLan = true;
+      # Blocky uses local Unbound (no failover needed)
+      blocky.useLocalUnbound = true;
+    };
   };
 
   boot = {

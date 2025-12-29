@@ -1,270 +1,197 @@
 # Module: blocky
-# Purpose: DNS proxy with ad/tracker blocking and local DNS rewrites
-#
-# Features:
-# - Multiple deployment modes (unbound-local, unbound-lan, external)
-# - Robust health check for Unbound dependency with DNSSEC validation
-# - Explicit DNS rewrites from network topology
-# - Ad/tracker blocking with curated blocklists
+# Purpose: DNS proxy with ad/tracker blocking and automatic failover
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
 let
   cfg = config.bigor.services.blocky;
   inherit (config.bigor.network) mainInterface;
+  minipcIp = config.bigor.network.hosts.minipc.ip;
 
-  # Explicit DNS rewrites - filter out null IPs (DHCP hosts like minidesk)
-  customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-    # DNS-only entries (moved from bigor.network.dnsEntries)
-    "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-    "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
-    "bigor.lan" = config.bigor.network.hosts.minipc.ip;
-  };
+  # Auto-generate DNS rewrites from bigor.network.hosts
+  customDNSMapping = filterAttrs (_: ip: ip != null) (
+    mapAttrs' (name: host: nameValuePair "${name}.bigor.lan" host.ip) config.bigor.network.hosts
+    // {
+      # Alias for main domain
+      "bigor.lan" = minipcIp;
+    }
+  );
 in
 {
   options.bigor.services.blocky = {
     enable = mkEnableOption "Blocky DNS proxy with ad blocking";
 
-    upstreamMode = mkOption {
-      type = types.enum [
-        "unbound-local"
-        "unbound-lan"
-        "external"
-      ];
-      default = "unbound-local";
-      description = ''
-        DNS upstream resolver mode:
-        - unbound-local: Forward to local Unbound (127.0.0.1:5335)
-        - unbound-lan: Forward to Unbound on LAN (requires upstreamHost)
-        - external: Forward to external DNS (Cloudflare, Quad9, etc.)
-      '';
-    };
+    useLocalUnbound = mkEnableOption ''
+      Use local Unbound (127.0.0.1:5335) instead of remote minipc.
+      Enable this on the DNS server (minipc) itself.
+    '';
 
-    upstreamHost = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Hostname of Unbound server (only used with upstreamMode = unbound-lan)";
-      example = "minipc";
-    };
-
-    externalUpstreams = mkOption {
+    fallbackUpstreams = mkOption {
       type = types.listOf types.str;
       default = [
         "1.1.1.1"
         "1.0.0.1"
       ];
-      description = "External DNS servers (only used with upstreamMode = external)";
+      description = "Fallback DNS servers when primary (minipc) is unreachable";
+      example = [
+        "9.9.9.9"
+        "149.112.112.112"
+      ];
+    };
+
+    upstreamTimeout = mkOption {
+      type = types.str;
+      default = "2s";
+      description = "Timeout before falling back to next upstream";
     };
   };
 
-  config = mkIf cfg.enable (
-    let
-      # Determine upstream DNS servers based on mode
-      upstreamServers =
-        if cfg.upstreamMode == "unbound-local" then
-          [ "127.0.0.1:5335" ]
-        else if cfg.upstreamMode == "unbound-lan" then
-          (
-            assert cfg.upstreamHost != null;
-            [ "${config.bigor.network.hosts.${cfg.upstreamHost}.ip}:5335" ]
-          )
-        else
-          cfg.externalUpstreams;
-    in
-    {
-      services.blocky = {
-        enable = true;
+  config = mkIf cfg.enable {
+    services.blocky = {
+      enable = true;
 
-        settings = {
-          # Ports configuration
-          ports = {
-            dns = 53;
-            http = 4000;
-          };
+      settings = {
+        # =======================================================================
+        # Ports
+        # =======================================================================
+        ports = {
+          dns = 53;
+          http = 4000; # Metrics endpoint
+        };
 
-          # Upstream DNS servers (dynamic based on upstreamMode)
-          upstreams = {
-            groups = {
-              default = upstreamServers;
-            };
-          };
+        # =======================================================================
+        # Upstream DNS with automatic failover
+        # =======================================================================
+        upstreams = {
+          groups.default =
+            if cfg.useLocalUnbound then
+              # DNS server (minipc): local Unbound only
+              [ "127.0.0.1:5335" ]
+            else
+              # Other hosts: minipc first, then failover to external
+              [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
 
-          # Bootstrap DNS (used to resolve upstream DoH/DoT hostnames if needed)
-          bootstrapDns = {
-            upstream = "1.1.1.1";
-            ips = [
-              "1.1.1.1"
-              "1.0.0.1"
+          # Strict: try upstreams in order, failover on timeout/error
+          strategy = "strict";
+          timeout = cfg.upstreamTimeout;
+        };
+
+        # Bootstrap DNS (for resolving DoH/DoT hostnames if ever needed)
+        bootstrapDns = {
+          upstream = "1.1.1.1";
+          ips = [
+            "1.1.1.1"
+            "1.0.0.1"
+          ];
+        };
+
+        # =======================================================================
+        # Custom DNS (auto-generated from network topology)
+        # =======================================================================
+        customDNS = {
+          customTTL = "1h";
+          filterUnmappedTypes = true;
+          mapping = customDNSMapping;
+        };
+
+        # =======================================================================
+        # Ad/Tracker Blocking
+        # =======================================================================
+        blocking = {
+          denylists = {
+            ads = [
+              # Steven Black's unified hosts (ads + malware)
+              "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+              # Hagezi's Multi Normal (ads + tracking + malware)
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/multi.txt"
+            ];
+            threats = [
+              # Hagezi's Threat Intelligence Feeds
+              "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif.txt"
             ];
           };
 
-          # Custom DNS mappings (auto-generated from network-topology SSOT)
-          customDNS = {
-            customTTL = "1h";
-            filterUnmappedTypes = true;
-            mapping = customDNSMapping;
+          allowlists = {
+            # Add domains that should never be blocked
+            essential = [ ];
           };
 
-          # Ad and tracker blocking
-          blocking = {
-            # Blocklists by category (hosts format only)
-            denylists = {
-              # Ads and malware blocking
-              ads = [
-                # Steven Black's unified hosts (ads + malware)
-                "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-                # Hagezi's Multi Normal (ads + tracking + malware) - hosts format
-                "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/multi.txt"
-              ];
+          clientGroupsBlock = {
+            default = [
+              "ads"
+              "threats"
+            ];
+          };
 
-              # Additional threat protection
-              threats = [
-                # Hagezi's Threat Intelligence Feeds - hosts format
-                "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif.txt"
-              ];
+          blockType = "zeroIp";
+          blockTTL = "1m";
+
+          loading = {
+            refreshPeriod = "4h";
+            downloads = {
+              timeout = "5m";
+              attempts = 3;
+              cooldown = "10s";
             };
-
-            # Allowlist for false positives (can be customized)
-            allowlists = {
-              essential = [
-                # Add domains that should never be blocked
-                # Example: "/path/to/allowlist.txt"
-              ];
-            };
-
-            # Client groups (which blocklists to apply to which clients)
-            clientGroupsBlock = {
-              default = [
-                "ads"
-                "threats"
-              ];
-            };
-
-            # Block type (what to return for blocked domains)
-            blockType = "zeroIp"; # Return 0.0.0.0 for IPv4, :: for IPv6
-            blockTTL = "1m";
-
-            # Loading behavior
-            loading = {
-              refreshPeriod = "4h"; # Update blocklists every 4 hours
-              downloads = {
-                timeout = "5m";
-                attempts = 3;
-                cooldown = "10s";
-              };
-            };
-          };
-
-          # Caching (in addition to Unbound's cache)
-          caching = {
-            minTime = "5m"; # Minimum cache time
-            maxTime = "24h"; # Maximum cache time
-            prefetching = true; # Prefetch before expiration
-            prefetchExpires = "2h";
-            prefetchThreshold = 5; # Prefetch if accessed 5+ times
-          };
-
-          # Conditional forwarding (for future use with other local domains)
-          conditional = {
-            # mapping = {
-            #   "other.local" = "192.168.1.1";
-            # };
-          };
-
-          # Query logging (disabled for privacy and performance)
-          queryLog = {
-            type = "none"; # Can be "console" or "mysql" for debugging
-          };
-
-          # Logging configuration
-          log = {
-            level = "info";
-            format = "text";
-            timestamp = true;
-            privacy = true; # Anonymize client IPs in logs
           };
         };
-      };
 
-      # Open Blocky ports
-      networking.firewall.interfaces.${mainInterface} = {
-        allowedTCPPorts = [ 53 ];
-        allowedUDPPorts = [ 53 ];
-      };
+        # =======================================================================
+        # Caching
+        # =======================================================================
+        caching = {
+          minTime = "5m";
+          maxTime = "24h";
+          prefetching = true;
+          prefetchExpires = "2h";
+          prefetchThreshold = 5;
+        };
 
-      # Systemd dependencies (conditional based on upstreamMode)
-      systemd.services.blocky = {
+        # =======================================================================
+        # Logging
+        # =======================================================================
+        queryLog.type = "none"; # Disable for privacy
+
+        log = {
+          level = "info";
+          format = "text";
+          timestamp = true;
+          privacy = true;
+        };
+      };
+    };
+
+    # ===========================================================================
+    # Firewall
+    # ===========================================================================
+    networking.firewall.interfaces.${mainInterface} = {
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 ];
+    };
+
+    # ===========================================================================
+    # Systemd dependencies
+    # ===========================================================================
+    systemd.services.blocky = mkMerge [
+      {
         wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
       }
-      // (
-        if cfg.upstreamMode == "unbound-local" then
-          {
-            # Only depend on local Unbound service
-            after = [
-              "unbound.service"
-              "network-online.target"
-            ];
-            requires = [ "unbound.service" ];
-
-            # Wait for Unbound to be ready before starting Blocky
-            serviceConfig = {
-              ExecStartPre = pkgs.writeShellScript "wait-for-unbound" ''
-                set -euo pipefail
-
-                UNBOUND_HOST="127.0.0.1"
-                UNBOUND_PORT="5335"
-                TIMEOUT_SECONDS=30
-                INTERVAL=0.5
-                MAX_ATTEMPTS=$((TIMEOUT_SECONDS * 2))  # 30s / 0.5s = 60 attempts
-
-                echo "Waiting for Unbound at $UNBOUND_HOST:$UNBOUND_PORT..."
-
-                attempt=0
-                while [ $attempt -lt $MAX_ATTEMPTS ]; do
-                  # Test if Unbound is accepting connections using nc (netcat)
-                  if ${pkgs.netcat}/bin/nc -z -w 1 "$UNBOUND_HOST" "$UNBOUND_PORT" 2>/dev/null; then
-                    # Calculate actual elapsed time (attempt * 0.5s)
-                    elapsed_ms=$((attempt * 500))
-                    elapsed_s=$((elapsed_ms / 1000))
-                    elapsed_decimal=$((elapsed_ms % 1000 / 100))
-                    echo "Unbound is ready after ''${elapsed_s}.''${elapsed_decimal}s"
-
-                    # Additional validation: try a DNS query
-                    if ${pkgs.ldns}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" example.com A >/dev/null 2>&1; then
-                      echo "Unbound DNS resolution working"
-
-                      # Verify DNSSEC validation is active
-                      if ${pkgs.ldns}/bin/drill @"$UNBOUND_HOST" -p "$UNBOUND_PORT" -D sigok.verteiltesysteme.net A 2>&1 | grep -q " ad "; then
-                        echo "Unbound DNSSEC validation active"
-                        echo "Unbound health check passed"
-                        exit 0
-                      else
-                        echo "Warning: DNSSEC validation not confirmed, waiting..."
-                      fi
-                    else
-                      echo "Warning: Unbound port open but not responding to queries, waiting..."
-                    fi
-                  fi
-
-                  sleep "$INTERVAL"
-                  attempt=$((attempt + 1))
-                done
-
-                echo "ERROR: Unbound did not become ready within ''${TIMEOUT_SECONDS}s"
-                exit 1
-              '';
-            };
-          }
-        else
-          {
-            # No Unbound dependency for LAN or external modes
-            after = [ "network-online.target" ];
-          }
-      );
-    }
-  );
+      (mkIf cfg.useLocalUnbound {
+        after = [
+          "unbound.service"
+          "network-online.target"
+        ];
+        requires = [ "unbound.service" ];
+        serviceConfig = {
+          # Restart on failure (simpler than health check script)
+          Restart = "on-failure";
+          RestartSec = "2s";
+        };
+      })
+    ];
+  };
 }

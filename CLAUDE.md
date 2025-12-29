@@ -64,9 +64,9 @@ Home modules are enabled via `bigor.home.*`:
 
 ### Hosts
 
-- **grospc** - Desktop workstation (Zen kernel, gaming-optimized)
-- **minipc** - Homelab server (standard kernel, runs all services)
-- **minidesk** - Portable workstation (Zen kernel, travel mode with Blocky standalone, no NFS mounts)
+- **grospc** - Desktop workstation (Zen kernel, gaming-optimized, uses Blocky with automatic failover)
+- **minipc** - Homelab server (standard kernel, runs Unbound + Blocky for the network)
+- **minidesk** - Portable workstation (Zen kernel, uses Blocky with automatic failover, no NFS mounts)
 
 ### Service Configuration
 
@@ -77,7 +77,7 @@ Services are configured explicitly in their respective modules, with clear owner
 - **Network Hosts** (`bigor.network.hosts`): Centrally defined in `modules/nixos/features/system/network/` - defines all hosts with IPs and interfaces
 - **Network Subnet** (`bigor.network.subnet`): Network subnet in CIDR notation (default: "192.168.1.0/24")
 - **Caddy Virtual Hosts**: Explicitly defined in `modules/nixos/services/caddy/default.nix`
-- **Blocky DNS Rewrites**: Explicitly defined in `modules/nixos/services/blocky/default.nix`
+- **Blocky DNS Rewrites**: Auto-generated from `bigor.network.hosts` (all hosts get `<hostname>.bigor.lan`)
 - **Firewall Rules**: Each service manages its own firewall configuration
 
 **Adding a new service:**
@@ -108,16 +108,7 @@ in
 }
 ```
 
-2. **Add DNS rewrite** (if service has a domain) in `modules/nixos/services/blocky/default.nix`:
-
-```nix
-customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-  # ... existing entries ...
-  "myservice.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-};
-```
-
-3. **Add virtual host** (if service needs reverse proxy) in `modules/nixos/services/caddy/default.nix`:
+2. **Add virtual host** (if service needs reverse proxy) in `modules/nixos/services/caddy/default.nix`:
 
 ```nix
 virtualHosts = {
@@ -137,7 +128,7 @@ virtualHosts = {
 # In modules/nixos/features/system/network/default.nix
 config.bigor.network.hosts = {
   newhost = {
-    ip = "192.168.1.30";       # null for DHCP
+    ip = "192.168.1.50";       # null for DHCP
     interface = "enp0s0";
   };
 };
@@ -145,67 +136,62 @@ config.bigor.network.hosts = {
 
 ### DNS Stack (Unbound + Blocky)
 
-The homelab uses a **modular DNS architecture** for better performance and separation of concerns. Both Blocky and Unbound can be configured independently and support multiple deployment patterns.
+The homelab uses a **resilient DNS architecture** with automatic failover:
 
-#### **Deployment Patterns**
+- **All hosts** run Blocky locally for ad blocking and caching
+- **minipc** runs Unbound (DNSSEC resolver) and serves it to the network
+- **Other hosts** use minipc's Unbound with automatic fallback to Cloudflare
 
-**1. Full Stack (minipc)** - Blocky + Unbound local:
+#### **Architecture**
+
+```
+┌─────────────────────────────────────────┐
+│     CLIENT HOSTS (grospc, minidesk)     │
+│           BLOCKY (Port 53)              │
+│   - Ad/tracker blocking                 │
+│   - Local DNS cache                     │
+│   - Auto-generated DNS rewrites         │
+└────────────────┬────────────────────────┘
+                 │
+                 ├─ Primary: minipc:5335 (Unbound w/ DNSSEC)
+                 └─ Fallback: 1.1.1.1, 1.0.0.1 (Cloudflare)
+
+┌─────────────────────────────────────────┐
+│           minipc (DNS Server)           │
+│           BLOCKY (Port 53)              │
+│   - Ad/tracker blocking                 │
+│   - Local DNS cache                     │
+└────────────────┬────────────────────────┘
+                 │
+                 ▼
+         UNBOUND (Port 5335)
+         - DNSSEC validation
+         - Recursive resolution
+         - Optimized cache (256MB)
+         - Accessible from LAN
+```
+
+#### **Configuration**
+
+**DNS Server (minipc):**
 
 ```nix
-bigor.services.blocky = {
-  enable = true;
-  upstreamMode = "unbound-local";  # Default
-};
+# In homelab-master profile (automatic)
 bigor.services.unbound = {
   enable = true;
-  listenOnLan = true;  # Allow other hosts to use this Unbound
+  listenOnLan = true;  # Serve Unbound to LAN
 };
-```
-
-**2. Blocky with Remote Unbound (grospc)** - Blocky forwards to Unbound on LAN:
-
-```nix
 bigor.services.blocky = {
   enable = true;
-  upstreamMode = "unbound-lan";
-  upstreamHost = "minipc";  # Use minipc's Unbound
+  useLocalUnbound = true;  # Use local Unbound
 };
 ```
 
-**3. Blocky Standalone (minidesk)** - Blocky with external upstreams:
+**Client Hosts (grospc, minidesk):**
 
 ```nix
-bigor.services.blocky = {
-  enable = true;
-  upstreamMode = "external";
-  externalUpstreams = [ "1.1.1.1" "1.0.0.1" ];  # Cloudflare (default)
-};
-```
-
-#### **Architecture (Full Stack)**
-
-```
-┌─────────────────────────────────────────┐
-│         CLIENTS (devices)               │
-└────────────────┬────────────────────────┘
-                 │ DNS Query (port 53)
-                 ↓
-┌─────────────────────────────────────────┐
-│         BLOCKY (Port 53)                │
-│  - Filtrage/blocage ads/trackers        │
-│  - Rewrites DNS locaux (auto registry)  │
-│  - Upstream → Unbound or external       │
-│  - Metrics: http://localhost:4000       │
-└────────────────┬────────────────────────┘
-                 │ Query non-bloquée
-                 ↓
-┌─────────────────────────────────────────┐
-│         UNBOUND (Port 5335)             │
-│  - Résolution récursive                 │
-│  - DNSSEC validation                    │
-│  - Cache optimisé                       │
-│  - Localhost + LAN (optional)           │
-└─────────────────────────────────────────┘
+# Blocky automatically uses minipc:5335 with Cloudflare fallback
+bigor.services.blocky.enable = true;
 ```
 
 #### **Modules**
@@ -214,52 +200,46 @@ bigor.services.blocky = {
   - Port: 5335
   - Options:
     - `enable`: Enable Unbound
-    - `listenOnLan`: Listen on LAN interface (firewall automatically opened when enabled)
+    - `listenOnLan`: Listen on LAN interface (firewall auto-opened)
   - Features: DNSSEC validation, prefetching, optimized cache (256MB)
   - Location: `modules/nixos/services/unbound/`
 
-- **Blocky** (`bigor.services.blocky`): DNS proxy with ad/tracker blocking
-  - Port: 53 (DNS)
+- **Blocky** (`bigor.services.blocky`): DNS proxy with ad/tracker blocking and automatic failover
+  - Port: 53 (DNS), 4000 (metrics)
   - Options:
     - `enable`: Enable Blocky
-    - `upstreamMode`: "unbound-local" | "unbound-lan" | "external"
-    - `upstreamHost`: Hostname for unbound-lan mode
-    - `externalUpstreams`: List of external DNS servers for external mode
-  - Features: Explicit DNS rewrites, multiple blocklists
+    - `useLocalUnbound`: Use local Unbound (127.0.0.1:5335) instead of minipc
+    - `fallbackUpstreams`: Fallback DNS servers (default: `["1.1.1.1" "1.0.0.1"]`)
+    - `upstreamTimeout`: Timeout before failover (default: `"2s"`)
+  - Features: Auto-generated DNS rewrites from `bigor.network.hosts`, automatic failover
   - Location: `modules/nixos/services/blocky/`
 
-**DNS Rewrites (Explicit):**
+**DNS Rewrites (Auto-generated):**
 
-DNS rewrites are explicitly configured in `modules/nixos/services/blocky/default.nix`:
+DNS rewrites are automatically generated from `bigor.network.hosts`:
 
 ```nix
-customDNSMapping = lib.filterAttrs (_: ip: ip != null) {
-  # DNS-only entries
-  "minipc.bigor.lan" = config.bigor.network.hosts.minipc.ip;
-  "grospc.bigor.lan" = config.bigor.network.hosts.grospc.ip;
-  "bigor.lan" = config.bigor.network.hosts.minipc.ip;
-};
+# Automatically creates:
+# minipc.bigor.lan → 192.168.1.10
+# grospc.bigor.lan → 192.168.1.11
+# minidesk.bigor.lan → <DHCP, filtered>
+# bigor.lan → 192.168.1.10 (alias to minipc)
 ```
 
-**Startup Dependencies:**
+**Failover Behavior:**
 
-Blocky includes a robust health check script that ensures Unbound is fully operational before starting:
-
-- **Active polling**: Checks Unbound availability every 0.5s (max 30s timeout)
-- **TCP connection test**: Verifies port 5335 is accepting connections
-- **DNS resolution test**: Validates that Unbound can resolve queries
-- **DNSSEC validation test**: Confirms DNSSEC is active using `sigok.verteiltesysteme.net`
-- **Precise timing**: Reports actual elapsed time (e.g., "1.5s", "2.0s")
-
-This eliminates race conditions and ensures DNS stack reliability.
+- **Strategy**: Strict (try in order with 2s timeout)
+- **Primary**: minipc Unbound (DNSSEC + privacy)
+- **Fallback**: Cloudflare (1.1.1.1, 1.0.0.1) if minipc unreachable
+- **Use case**: Travel mode (minidesk) or minipc offline
 
 **Benefits:**
 
 - ✅ Native DNSSEC validation (Unbound)
-- ✅ High performance with optimized caching
-- ✅ Modular: Can replace components independently
-- ✅ Fully declarative: No web UI configuration needed
-- ✅ Robust startup: Health checks ensure service reliability
+- ✅ Automatic failover for resilience
+- ✅ Ad blocking on every host (works offline)
+- ✅ Zero-configuration DNS rewrites
+- ✅ Fully declarative configuration
 
 ## Key Patterns
 

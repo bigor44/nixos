@@ -13,15 +13,9 @@
 
   bigor = {
     profiles.workstation.enable = true;
-    services.nfs.client = true;
     network.mainInterface = "enp14s0";
 
-    # Use Blocky with Unbound on minipc as upstream
-    services.blocky = {
-      enable = true;
-      upstreamMode = "unbound-lan";
-      upstreamHost = "minipc";
-    };
+    services.nfs.client = true;
   };
 
   fileSystems."/steamlibrary" = {

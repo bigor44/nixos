@@ -21,5 +21,9 @@ in
         tuning.enable = mkDefault true;
       };
     };
+
+    bigor.services = {
+      blocky.enable = mkDefault true;
+    };
   };
 }
