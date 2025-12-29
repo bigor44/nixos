@@ -21,7 +21,6 @@ in
       home.packages = with pkgs; [
         prismlauncher
         discord
-        youtube-music
         whatsapp-electron
         brave
       ];
