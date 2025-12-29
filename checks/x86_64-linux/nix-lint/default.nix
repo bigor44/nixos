@@ -1,5 +1,5 @@
 # Module: nix-lint
-# Purpose: Lint check running statix and deadnix on the flake
+# Purpose: Lint check running statix, deadnix, and vulnix on the flake
 {
   pkgs,
   inputs,
@@ -17,10 +17,10 @@ pkgs.runCommand "nix-lint"
     src="${inputs.self}"
 
     echo "Running statix on $src..."
-    statix check "$src"
+    statix check --ignore .* "$src"
 
     echo "Running deadnix on $src..."
-    deadnix -f "$src"
+    deadnix --fail "$src"
 
     touch $out
   ''

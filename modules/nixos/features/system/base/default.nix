@@ -14,6 +14,10 @@
         "nix-command"
         "flakes"
       ];
+      trusted-users = [
+        "root"
+        "bigor"
+      ];
       max-jobs = "auto";
 
       substituters = [
