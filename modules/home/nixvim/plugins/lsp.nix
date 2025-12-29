@@ -1,5 +1,6 @@
 # Home: nixvim-lsp
 # Purpose: Language Server Protocol configuration for nixvim
+{ inputs, ... }:
 {
   programs.nixvim.plugins.lsp = {
     enable = true;
@@ -53,7 +54,7 @@
           nixd = {
             # Evaluation base for nixpkgs
             nixpkgs = {
-              expr = "import <nixpkgs> {}";
+              expr = "import ${inputs.nixpkgs} {}";
             };
 
             # Formatter (must match Conform / treefmt)

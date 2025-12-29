@@ -50,6 +50,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.useLocalUnbound -> config.bigor.services.unbound.enable;
+        message = "blocky.useLocalUnbound requires unbound.enable";
+      }
+    ];
+
     services.blocky = {
       enable = true;
 
