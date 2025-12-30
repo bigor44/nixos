@@ -1,5 +1,5 @@
 # Module: nix-lint
-# Purpose: Lint check running statix, deadnix, and vulnix on the flake
+# Purpose: Lint check running statix and deadnix on the flake
 {
   pkgs,
   inputs,

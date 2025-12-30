@@ -25,7 +25,6 @@ in
 
       # Code quality & development
       nix-health
-      vulnix
       statix
       deadnix
       treefmt
