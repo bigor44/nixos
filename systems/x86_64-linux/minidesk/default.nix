@@ -12,7 +12,7 @@
   };
 
   networking.hostName = "minidesk";
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 
   boot.kernelParams = [ "amd_pstate=active" ];
   boot.kernelPackages = pkgs.linuxPackages_zen;

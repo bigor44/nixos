@@ -4,8 +4,14 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  # Mount external storage
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
+    fsType = "ext4";
+  };
+
   networking.hostName = "minipc";
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 
   bigor = {
     profiles.homelab-master.enable = true;
@@ -26,13 +32,4 @@
   };
 
   hardware.cpu.amd.updateMicrocode = true;
-
-  # Swapfile configuration (16GB, encrypted)
-  swapDevices = [
-    {
-      device = "/swapfile";
-      size = 16 * 1024; # 16GB in MB
-      randomEncryption = true; # Encrypted swap for security
-    }
-  ];
 }
