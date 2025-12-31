@@ -1,6 +1,6 @@
 # Home: bigor@minidesk
 # Purpose: Portable desktop overrides (GUI applications)
 _: {
-  home.stateVersion = "26.05";
+  home.stateVersion = "25.11";
   bigor.home.features.gui.enable = true;
 }

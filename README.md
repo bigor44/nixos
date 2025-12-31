@@ -91,8 +91,9 @@ graph TD
 ├── homes/                 # Home Manager entry points
 │   └── x86_64-linux/
 │       ├── bigor/         # Generic user profile
-│       ├── bigor@minipc/  # Host-specific overrides
-│       └── bigor@grospc/
+│       ├── bigor@grospc/  # Host-specific overrides
+│       ├── bigor@minipc/
+│       └── bigor@minidesk/
 │
 ├── modules/
 │   ├── home/              # Home Manager modules (shell, git, nixvim, GUI, CLI)
