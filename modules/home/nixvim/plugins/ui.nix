@@ -2,21 +2,23 @@
 # Purpose: UI plugins and visual enhancements for nixvim
 _: {
   programs.nixvim = {
-    # Highlights for Mini.notify
-    highlight = {
-      MiniNotifyNormal = {
-        link = "NormalFloat";
-      };
-      MiniNotifyBorder = {
-        link = "FloatBorder";
-      };
-      MiniNotifyTitle = {
-        link = "FloatTitle";
-      };
-    };
-
     plugins = {
       web-devicons.enable = true;
+
+      # ========================================================================
+      # Notifications (required by Noice)
+      # ========================================================================
+      notify = {
+        enable = true;
+        settings = {
+          stages = "fade_in_slide_out";
+          timeout = 3000;
+          render = "default";
+          max_width = 80;
+          max_height = 10;
+          top_down = true;
+        };
+      };
 
       # ========================================================================
       # Git Signs
