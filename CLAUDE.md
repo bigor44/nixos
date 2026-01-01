@@ -106,7 +106,7 @@ deadnix --fail .
 The repository follows Snowfall Lib's opinionated directory layout:
 
 - **flake.nix**: Main entry point defining inputs and snowfall-lib configuration
-- **modules/nixos/**: System-level NixOS modules (namespace: `bigor.nixos.*`)
+- **modules/nixos/**: System-level NixOS modules (namespace: `bigor.features.*`, `bigor.profiles.*`, `bigor.services.*`, `bigor.network.*`)
 - **modules/home/**: Home Manager modules (namespace: `bigor.home.*`)
 - **systems/x86_64-linux/**: Host-specific NixOS configurations
 - **homes/x86_64-linux/**: Host-specific Home Manager configurations
@@ -178,7 +178,7 @@ in
 Enable modules in host configs:
 
 ```nix
-bigor.nixos.features.audio.enable = true;
+bigor.features.audio.enable = true;
 bigor.home.shell.enable = true;
 ```
 
@@ -221,7 +221,7 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 
 4. Enable in host config:
    ```nix
-   bigor.nixos.features.<category>.<name>.enable = true;
+   bigor.features.<category>.<name>.enable = true;
    ```
 
 ### Adding a New Host
@@ -257,8 +257,8 @@ COSMIC configs in `dotfiles/cosmic/` are symlinked:
 Modules use enable options for composability:
 
 ```nix
-bigor.nixos.features.audio.enable = true;
-bigor.nixos.features.gaming.enable = true;
+bigor.features.audio.enable = true;
+bigor.features.gaming.enable = true;
 ```
 
 Profiles compose multiple features:
