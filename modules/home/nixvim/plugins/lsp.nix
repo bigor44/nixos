@@ -1,7 +1,6 @@
 # Home: nixvim-lsp
 # Purpose: Language Server Protocol configuration for nixvim
-{ inputs, ... }:
-{
+_: {
   programs.nixvim.plugins.lsp = {
     enable = true;
 
@@ -52,9 +51,14 @@
 
         settings = {
           nixd = {
-            # Evaluation base for nixpkgs
+            # Evaluation base for nixpkgs (uses flake.lock for consistency)
             nixpkgs = {
-              expr = "import ${inputs.nixpkgs} {}";
+              expr = ''
+                let
+                  flake = builtins.getFlake (toString ./../../../../..);
+                in
+                  import flake.inputs.nixpkgs { system = "x86_64-linux"; }
+              '';
             };
 
             # Formatter (must match Conform / treefmt)

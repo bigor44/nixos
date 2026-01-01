@@ -126,6 +126,9 @@ Neovim is configured declaratively using **nixvim**, with:
 - Mini.nvim ecosystem
 - Clean, documented keymaps
 
+**nixd** is configured to use the flake's locked nixpkgs for consistent
+autocompletion and diagnostics.
+
 The configuration is modular and split by responsibility:
 
 ```
@@ -154,6 +157,7 @@ A central part of the repository is a **production‑grade DNS stack**:
 - DNSSEC validation
 - Local domain rewrites (`*.bigor.lan`)
 - Privacy‑friendly logging
+- **SPOF mitigation**: Fallback to external DNS (1.1.1.1) if Blocky is down
 
 ### Network Topology
 
@@ -173,6 +177,12 @@ This registry is used to generate:
 - DNS rewrites
 - Firewall rules
 - Service bindings
+
+**Validation**: Assertions ensure configuration consistency:
+
+- Hostname must exist in the hosts registry
+- `mainInterface` must match the interface defined for the current host
+- Prevents typos and misconfigurations at build time
 
 ---
 

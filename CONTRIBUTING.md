@@ -31,7 +31,9 @@ ll      # eza -l --icons --git
 ### 1. Making Changes
 
 #### Before You Start
+
 1. Create a new branch for your changes:
+
    ```bash
    git checkout -b feature/my-feature
    ```
@@ -61,6 +63,7 @@ in
 ```
 
 **Key Points**:
+
 - Use the `bigor` namespace for all custom options
 - System modules: `bigor.nixos.*`
 - Home modules: `bigor.home.*`
@@ -88,6 +91,7 @@ nix flake check
 ```
 
 **Why this order matters**:
+
 - `nix fmt` fixes formatting issues automatically
 - `deadnix` detects unused code that should be removed
 - `statix` catches common Nix anti-patterns
@@ -112,6 +116,7 @@ nix flake check
 ### 3. Testing Changes
 
 #### Local Testing
+
 ```bash
 # Build without switching (safe way to test)
 nh os build
@@ -124,6 +129,7 @@ nh os switch
 ```
 
 #### Test Specific Hosts
+
 ```bash
 # Build configuration for a specific host
 nh os build --hostname minipc
@@ -145,6 +151,7 @@ Use clear, descriptive commit messages:
 ```
 
 **Types**:
+
 - `feat`: New feature or module
 - `fix`: Bug fix
 - `refactor`: Code restructuring without behavior change
@@ -153,6 +160,7 @@ Use clear, descriptive commit messages:
 - `style`: Formatting, whitespace (should be rare with auto-formatting)
 
 **Examples**:
+
 ```
 feat: add bluetooth module for desktop systems
 
@@ -181,11 +189,13 @@ git push origin feature/my-feature
 ### 5. Pull Requests
 
 1. **Ensure all checks pass** before creating a PR:
+
    ```bash
    nix fmt && deadnix --fail . && statix check --ignore .* . && nix flake check
    ```
 
 2. **Test on a real system** - build and test your changes:
+
    ```bash
    nh os test
    ```
@@ -206,6 +216,7 @@ git push origin feature/my-feature
 ### Adding a New Module
 
 1. **Create the module file**:
+
    ```bash
    # System module
    mkdir -p modules/nixos/features/<category>/<name>
@@ -221,6 +232,7 @@ git push origin feature/my-feature
 3. **Snowfall Lib auto-discovers modules** - no manual imports needed!
 
 4. **Enable in a host configuration**:
+
    ```nix
    bigor.nixos.features.<category>.<name>.enable = true;
    ```
@@ -237,11 +249,13 @@ git push origin feature/my-feature
 ### Adding a New Host
 
 1. **Create system configuration**:
+
    ```bash
    mkdir -p systems/x86_64-linux/<hostname>
    ```
 
 2. **Create `systems/x86_64-linux/<hostname>/default.nix`**:
+
    ```nix
    { lib, ... }:
    {
@@ -256,11 +270,13 @@ git push origin feature/my-feature
    ```
 
 3. **Create home configuration**:
+
    ```bash
    mkdir -p homes/x86_64-linux/bigor@<hostname>
    ```
 
 4. **Create `homes/x86_64-linux/bigor@<hostname>/default.nix`**:
+
    ```nix
    { ... }:
    {
@@ -270,6 +286,7 @@ git push origin feature/my-feature
    ```
 
 5. **Add to network topology** in `modules/nixos/features/system/network/default.nix`:
+
    ```nix
    bigor.network.hosts.<hostname> = {
      ip = "192.168.1.XX";  # or null for DHCP
@@ -278,6 +295,7 @@ git push origin feature/my-feature
    ```
 
 6. **Generate hardware configuration**:
+
    ```bash
    nixos-generate-config --show-hardware-config > /tmp/hardware-configuration.nix
    bash scripts/post_install.sh <hostname>
@@ -295,6 +313,7 @@ git push origin feature/my-feature
 2. **Follow the module pattern** with service-specific options
 
 3. **Reference network topology** when needed:
+
    ```nix
    config.bigor.network.hosts.minipc.ip
    config.bigor.network.subnet
@@ -307,21 +326,25 @@ git push origin feature/my-feature
 ### Adding a New Secret
 
 1. **Ensure you have the age key**:
+
    ```bash
    ls ~/.config/sops/age/keys.txt
    ```
 
 2. **Edit secrets file**:
+
    ```bash
    sops secrets/secrets.yaml
    ```
 
 3. **Add your secret** in the YAML file:
+
    ```yaml
    my_secret_key: "secret_value"
    ```
 
 4. **Reference in configuration**:
+
    ```nix
    sops.secrets.my_secret_key = { };
 

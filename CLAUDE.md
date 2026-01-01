@@ -5,11 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository Overview
 
 This is a NixOS Flake configuration repository using Snowfall Lib for organizing system and user configurations across multiple hosts. The configuration manages 3 hosts:
+
 - **grospc**: Desktop workstation with COSMIC DE, gaming optimizations
 - **minipc**: DNS/network server (homelab-master profile)
 - **minidesk**: Portable workstation (workstation profile, no NFS mount)
 
 Key technologies:
+
 - **Snowfall Lib**: Modular flake organization framework
 - **Home Manager**: User environment management
 - **Sops-Nix**: Secrets management with age encryption
@@ -18,6 +20,7 @@ Key technologies:
 ## Common Commands
 
 ### System Management
+
 ```bash
 # Rebuild and switch to new configuration using nh
 nh os switch
@@ -33,6 +36,7 @@ nh os switch --hostname minipc
 ```
 
 ### Development Workflow
+
 ```bash
 # IMPORTANT: Always run these checks before 'nix flake check'
 # 1. Format code with treefmt
@@ -58,6 +62,7 @@ nix flake show
 ```
 
 ### Fish Shell Abbreviations (defined in modules/home/shell/default.nix and modules/home/git/default.nix)
+
 - `nfc` → `nix flake check`
 - `nfu` → `nix flake update`
 - `g` → `git`
@@ -69,6 +74,7 @@ nix flake show
 - `la` → `eza -lah --icons --git`
 
 ### Secrets Management (Sops-Nix)
+
 ```bash
 # Edit secrets (requires age key in ~/.config/sops/age/keys.txt)
 sops secrets/secrets.yaml
@@ -78,6 +84,7 @@ sops -d secrets/secrets.yaml
 ```
 
 ### Linting and Formatting
+
 ```bash
 # Check Nix formatting with treefmt
 treefmt --check
@@ -108,6 +115,7 @@ The repository follows Snowfall Lib's opinionated directory layout:
 ### Module Organization
 
 **System Modules** (`modules/nixos/`):
+
 - **features/system/**: Core system features (base, boot, users, network, packages, sops, locale)
 - **features/audio/**: PipeWire/ALSA audio stack
 - **features/bluetooth/**: Bluetooth configuration
@@ -120,6 +128,7 @@ The repository follows Snowfall Lib's opinionated directory layout:
 - **services/**: Network services (Blocky DNS, Caddy reverse proxy, NFS, SSH, Unbound)
 
 **Home Modules** (`modules/home/`):
+
 - **cli-packages/**: Modern CLI tools (eza, fd, ripgrep, btop, lazygit, etc.)
 - **git/**: Git config and shell abbreviations
 - **shell/**: Fish shell with Tide prompt, fzf, zoxide, bat
@@ -139,6 +148,7 @@ bigor.network.hosts = {
 ```
 
 This topology is used throughout the configuration:
+
 - Generates `/etc/hosts` entries automatically
 - Referenced by services (Blocky, Caddy, NFS)
 - Provides consistent IP addressing via `config.bigor.network.hosts.<hostname>.ip`
@@ -166,6 +176,7 @@ in
 ```
 
 Enable modules in host configs:
+
 ```nix
 bigor.nixos.features.audio.enable = true;
 bigor.home.shell.enable = true;
@@ -174,6 +185,7 @@ bigor.home.shell.enable = true;
 ### Secrets Architecture
 
 Secrets are encrypted using Sops-Nix with age encryption:
+
 - Age keys defined in `.sops.yaml` for user + all hosts
 - Encrypted secrets stored in `secrets/secrets.yaml`
 - Decrypted at runtime by sops-nix module
@@ -182,6 +194,7 @@ Secrets are encrypted using Sops-Nix with age encryption:
 ### Desktop Environment
 
 The configuration uses COSMIC DE (System76's Rust-based desktop):
+
 - Configuration files in `dotfiles/cosmic/` (symlinked, not copied)
 - Can be edited live without rebuild
 - COSMIC Greeter for display manager
@@ -222,6 +235,7 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 ### Modifying COSMIC Configuration
 
 COSMIC configs in `dotfiles/cosmic/` are symlinked:
+
 - Edit files directly in `dotfiles/cosmic/`
 - Changes apply immediately (no rebuild needed)
 - Commit changes to track in git
@@ -241,12 +255,14 @@ COSMIC configs in `dotfiles/cosmic/` are symlinked:
 ### Feature Toggle Pattern
 
 Modules use enable options for composability:
+
 ```nix
 bigor.nixos.features.audio.enable = true;
 bigor.nixos.features.gaming.enable = true;
 ```
 
 Profiles compose multiple features:
+
 ```nix
 # profiles/workstation/default.nix enables:
 # - desktop.base, desktop.cosmic, desktop.apps
@@ -256,6 +272,7 @@ Profiles compose multiple features:
 ### Accessing Network Topology
 
 Services can reference the network topology:
+
 ```nix
 config.bigor.network.hosts.minipc.ip  # "192.168.1.10"
 config.bigor.network.subnet           # "192.168.1.0/24"
@@ -264,6 +281,7 @@ config.bigor.network.subnet           # "192.168.1.0/24"
 ### NixVim Configuration
 
 Located in `modules/home/nixvim/`:
+
 - `default.nix`: Main config and plugin imports
 - `keymaps.nix`: Key bindings
 - `opts.nix`: Vim options

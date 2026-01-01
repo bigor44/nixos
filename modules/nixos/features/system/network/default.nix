@@ -1,8 +1,15 @@
 # Feature: system.network
 # Purpose: Network configuration, static /etc/hosts entries, and network topology
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 let
-  hostsWithIPs = lib.filterAttrs (_: host: host.ip != null) config.bigor.network.hosts;
+  cfg = config.bigor.network;
+  hostname = config.networking.hostName;
+  hostsWithIPs = lib.filterAttrs (_: host: host.ip != null) cfg.hosts;
+  knownInterfaces = lib.unique (lib.mapAttrsToList (_: host: host.interface) cfg.hosts);
 in
 {
   options.bigor.network = {
@@ -67,6 +74,27 @@ in
       };
     }
 
+    # Assertions to validate network configuration
+    {
+      assertions = [
+        {
+          assertion = hostname != "" -> cfg.hosts ? ${hostname};
+          message = "Host '${hostname}' is not defined in bigor.network.hosts. Add it to the network topology.";
+        }
+        {
+          assertion = cfg.mainInterface != "" -> lib.elem cfg.mainInterface knownInterfaces;
+          message = "Interface '${cfg.mainInterface}' is not defined in any bigor.network.hosts entry. Known interfaces: ${lib.concatStringsSep ", " knownInterfaces}";
+        }
+        {
+          assertion =
+            (hostname != "" && cfg.hosts ? ${hostname}) -> cfg.mainInterface == cfg.hosts.${hostname}.interface;
+          message = "mainInterface '${cfg.mainInterface}' does not match the interface defined for '${hostname}' in bigor.network.hosts (expected: '${
+            cfg.hosts.${hostname}.interface or "undefined"
+          }')";
+        }
+      ];
+    }
+
     # Generate /etc/hosts from hosts registry
     {
       networking.extraHosts = lib.concatStringsSep "\n" (
@@ -82,8 +110,11 @@ in
       # NetworkManager: prevent automatic DNS management
       networking.networkmanager.dns = lib.mkDefault "none";
 
-      # Set localhost as primary nameserver (works for both NetworkManager and systemd-resolved)
-      networking.nameservers = lib.mkBefore [ "127.0.0.1" ];
+      # Set localhost as primary nameserver with external fallback (SPOF mitigation)
+      networking.nameservers = lib.mkBefore [
+        "127.0.0.1" # Blocky (primary)
+        "1.1.1.1" # Cloudflare (fallback si Blocky down)
+      ];
     })
   ];
 }
