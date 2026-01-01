@@ -3,7 +3,10 @@
 { pkgs, ... }:
 {
   programs = {
-    fish.enable = true;
+    fish = {
+      enable = true;
+      useBabelfish = true; # Avoid fenv timing issues at startup
+    };
     tmux.enable = true;
 
     nh = {
