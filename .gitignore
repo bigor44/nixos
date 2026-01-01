@@ -19,3 +19,7 @@ keys.txt
 *~
 .idea/
 .DS_Store
+
+# sops-nix local age keys (never commit private keys)
+*.age.txt
+keys.txt

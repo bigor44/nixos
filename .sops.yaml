@@ -1,0 +1,15 @@
+keys:
+  - &user_bigor age1sw035y28puee2xhm2rw6y6n5yh64hfupn3uhrs248ma4a333fgdsdm0snh
+  - &host_grospc age1ndlfsxx9gsfpchjwrmfgjft8tpe992jl58q4jtl6jd3ksdr6vvaqc8qmr9
+  - &host_minipc age1ns0c58jr74sqlxfapz308p2wqwuj99gan6f3y7m9sytdxxpgr3rqf2cs9x
+  - &host_minidesk age1ns0c58jr74sqlxfapz308p2wqwuj99gan6f3y7m9sytdxxpgr3rqf2cs9x
+
+creation_rules:
+  # Secrets partagés par tous les hosts
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age:
+          - *user_bigor
+          - *host_grospc
+          - *host_minipc
+          - *host_minidesk
