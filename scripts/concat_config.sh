@@ -39,10 +39,19 @@ echo "Searching for configuration files under: $BASE_DIR" >&2
 echo >&2
 
 # ==============================================================================
+# Directory Tree Overview
+# ==============================================================================
+printf '# NixOS Configuration\n\n'
+printf '## Directory Structure\n\n```\n'
+eza --tree --git-ignore --ignore-glob 'dotfiles' "$BASE_DIR"
+printf '\n```\n\n'
+
+# ==============================================================================
 # Main Processing Loop
 # ==============================================================================
 # Find relevant files, handle special characters in filenames with print0/read.
 find "$BASE_DIR" -type f \
+  -not -path '*/dotfiles/*' \
   \( -name '*.nix' -o -name '*.lock' -o -name '*.lua' -o -name '*.sh' -o -name '*.md' -o -name '*.toml' -o -name '*.yml' -o -name '*.yaml' \) \
   -print0 | sort -z |
   while IFS= read -r -d '' file; do
@@ -64,7 +73,7 @@ find "$BASE_DIR" -type f \
     ext="${file##*.}"
 
     # Generate Markdown Section
-    printf '## %s\n\n```%s\n' "$rel_path" "$ext"
+    printf '### FILE: %s\n\n```%s\n' "$rel_path" "$ext"
     cat -- "$file"
     printf '\n```\n\n'
 
