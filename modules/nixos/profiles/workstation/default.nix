@@ -12,6 +12,7 @@ in
     bigor.features = {
       audio.enable = mkDefault true;
       bluetooth.enable = mkDefault true;
+      flatpak.enable = mkDefault true;
       fonts.enable = mkDefault true;
       gaming.enable = mkDefault true;
       desktop = {
