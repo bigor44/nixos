@@ -11,8 +11,8 @@
 set -e
 
 # Ensure we are in the project root (simple check)
-if [ ! -d "systems" ]; then
-  echo "Error: 'systems' directory not found. Please run this script from the root of the flake repository."
+if [ ! -d "hosts" ]; then
+  echo "Error: 'hosts' directory not found. Please run this script from the root of the flake repository."
   exit 1
 fi
 
@@ -26,7 +26,7 @@ if [ -z "$HOSTNAME_VAR" ]; then
   exit 1
 fi
 
-TARGET_DIR="systems/x86_64-linux/$HOSTNAME_VAR"
+TARGET_DIR="hosts/$HOSTNAME_VAR"
 TARGET_CONFIG="$TARGET_DIR/default.nix"
 
 # Check if target directory exists
@@ -75,7 +75,7 @@ fi
 # 4. Home Manager State Version Update
 # ==============================================================================
 # Updates the home.stateVersion in the corresponding home-manager configuration.
-TARGET_HOME_CONFIG="homes/x86_64-linux/bigor@$HOSTNAME_VAR/default.nix"
+TARGET_HOME_CONFIG="hosts/$HOSTNAME_VAR/home.nix"
 
 if [ -f "$TARGET_HOME_CONFIG" ]; then
   if [ -n "$CURRENT_VERSION" ]; then
