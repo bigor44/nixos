@@ -80,7 +80,12 @@
                   src="${self}"
 
                   echo "Running statix on $src..."
-                  statix check --ignore .* "$src"
+                  statix_output=$(statix check --ignore .* "$src" 2>&1) || true
+                  echo "$statix_output"
+                  if echo "$statix_output" | grep -qE "Warning:|Error:"; then
+                    echo "statix found issues"
+                    exit 1
+                  fi
 
                   echo "Running deadnix on $src..."
                   deadnix --fail "$src"

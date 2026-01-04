@@ -1,6 +1,10 @@
 # Home: nixvim-lsp
 # Purpose: Language Server Protocol configuration for nixvim
-_: {
+{ inputs, ... }:
+let
+  flakePath = inputs.self.outPath;
+in
+{
   programs.nixvim.plugins.lsp = {
     enable = true;
 
@@ -55,7 +59,7 @@ _: {
             nixpkgs = {
               expr = ''
                 let
-                  flake = builtins.getFlake (toString ./../../../../..);
+                  flake = builtins.getFlake "${flakePath}";
                 in
                   import flake.inputs.nixpkgs { system = "x86_64-linux"; }
               '';
@@ -72,19 +76,21 @@ _: {
               nixos = {
                 expr = ''
                   let
-                    flake = builtins.getFlake (toString ./../../../../..);
+                    flake = builtins.getFlake "${flakePath}";
                   in
                     lib.mapAttrs (_: cfg: cfg.options) flake.nixosConfigurations
                 '';
               };
 
-              # All Home Manager options
+              # Home Manager options (extracted from NixOS module integration)
               home-manager = {
                 expr = ''
                   let
-                    flake = builtins.getFlake (toString ./../../../../..);
+                    flake = builtins.getFlake "${flakePath}";
+                    # Get HM options from any host (schema is identical across hosts)
+                    hostConfig = builtins.head (builtins.attrValues flake.nixosConfigurations);
                   in
-                    lib.mapAttrs (_: cfg: cfg.options) flake.homeConfigurations
+                    hostConfig.options.home-manager.users.type.getSubOptions []
                 '';
               };
             };
