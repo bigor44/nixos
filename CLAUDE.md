@@ -61,7 +61,7 @@ nix flake lock --update-input nixpkgs
 nix flake show
 ```
 
-### Fish Shell Abbreviations (defined in modules/home/shell/default.nix and modules/home/git/default.nix)
+### Fish Shell Abbreviations (defined in modules/home/shell.nix and modules/home/git.nix)
 
 - `nfc` → `nix flake check`
 - `nfu` → `nix flake update`
@@ -146,28 +146,26 @@ The repository uses Flake-parts with explicit module imports:
 
 **System Modules** (`modules/nixos/`):
 
-- **features/system/**: Core system features (base, boot, users, network, packages, sops, locale)
-- **features/audio/**: PipeWire/ALSA audio stack
-- **features/bluetooth/**: Bluetooth configuration
-- **features/desktop/**: COSMIC DE, desktop apps, tuning
-- **features/gaming/**: Steam, GameMode optimizations
-- **features/fonts/**: Font configuration
-- **profiles/**: Composite configurations
-  - `workstation/`: Full desktop with COSMIC, audio, gaming
-  - `homelab_master/`: DNS/network services
-- **services/**: Network services (Blocky DNS, Caddy reverse proxy, NFS, SSH, Unbound)
+- **features/system/**: Core system features (`base.nix`, `boot.nix`, `users.nix`, `network.nix`, `packages.nix`, `sops.nix`, `french-locale.nix`)
+- **features/audio.nix**: PipeWire/ALSA audio stack
+- **features/bluetooth.nix**: Bluetooth configuration
+- **features/desktop/**: COSMIC DE (`base.nix`, `cosmic.nix`, `apps.nix`, `tuning.nix`)
+- **features/gaming.nix**: Steam, GameMode optimizations
+- **features/fonts.nix**: Font configuration
+- **profiles/**: Composite configurations (`workstation.nix`, `homelab_master.nix`)
+- **services/**: Network services (`blocky.nix`, `caddy.nix`, `nfs.nix`, `sshd.nix`, `unbound.nix`)
 
 **Home Modules** (`modules/home/`):
 
-- **cli-packages/**: Modern CLI tools (eza, fd, ripgrep, btop, lazygit, etc.)
-- **git/**: Git config and shell abbreviations
-- **shell/**: Fish shell with Tide prompt, fzf, zoxide, bat
-- **nixvim/**: Neovim with LSP, treesitter, completion, UI plugins
-- **features/gui/**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
+- **cli-packages.nix**: Modern CLI tools (eza, fd, ripgrep, btop, lazygit, etc.)
+- **git.nix**: Git config and shell abbreviations
+- **shell.nix**: Fish shell with Tide prompt, fzf, zoxide, bat
+- **nixvim/**: Neovim with LSP, treesitter, completion, UI plugins (multi-file module)
+- **features/gui.nix**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
 
 ### Network Topology
 
-Network configuration is centralized in `modules/nixos/features/system/network/default.nix`:
+Network configuration is centralized in `modules/nixos/features/system/network.nix`:
 
 ```nix
 bigor.network.hosts = {
@@ -242,8 +240,8 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 ### Adding a New Module
 
 1. Create module file in appropriate directory:
-   - System module: `modules/nixos/features/<category>/<name>/default.nix`
-   - Home module: `modules/home/<name>/default.nix`
+   - System module: `modules/nixos/features/<category>/<name>.nix` or `modules/nixos/services/<name>.nix`
+   - Home module: `modules/home/<name>.nix`
 
 2. Use the standard module pattern (see Architecture section)
 
@@ -252,7 +250,7 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
    ```nix
    nixosModules = [
      # ... existing modules
-     ../modules/nixos/features/<category>/<name>
+     ../modules/nixos/features/<category>/<name>.nix
    ];
    ```
 
@@ -274,7 +272,7 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
      <hostname> = mkHost "<hostname>";
    };
    ```
-6. Add host to network topology in `modules/nixos/features/system/network/default.nix`
+6. Add host to network topology in `modules/nixos/features/system/network.nix`
 
 ### Modifying COSMIC Configuration
 
@@ -308,7 +306,7 @@ bigor.features.gaming.enable = true;
 Profiles compose multiple features:
 
 ```nix
-# profiles/workstation/default.nix enables:
+# profiles/workstation.nix enables:
 # - desktop.base, desktop.cosmic, desktop.apps
 # - audio, bluetooth, gaming, fonts
 ```

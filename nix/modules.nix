@@ -4,45 +4,45 @@
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
     # Features - System
-    ../modules/nixos/features/system/base
-    ../modules/nixos/features/system/boot
-    ../modules/nixos/features/system/french-locale
-    ../modules/nixos/features/system/network
-    ../modules/nixos/features/system/packages
-    ../modules/nixos/features/system/sops
-    ../modules/nixos/features/system/users
+    ../modules/nixos/features/system/base.nix
+    ../modules/nixos/features/system/boot.nix
+    ../modules/nixos/features/system/french-locale.nix
+    ../modules/nixos/features/system/network.nix
+    ../modules/nixos/features/system/packages.nix
+    ../modules/nixos/features/system/sops.nix
+    ../modules/nixos/features/system/users.nix
 
     # Features - Desktop
-    ../modules/nixos/features/desktop/base
-    ../modules/nixos/features/desktop/cosmic
-    ../modules/nixos/features/desktop/apps
-    ../modules/nixos/features/desktop/tuning
+    ../modules/nixos/features/desktop/base.nix
+    ../modules/nixos/features/desktop/cosmic.nix
+    ../modules/nixos/features/desktop/apps.nix
+    ../modules/nixos/features/desktop/tuning.nix
 
     # Features - Hardware/Peripherals
-    ../modules/nixos/features/audio
-    ../modules/nixos/features/bluetooth
-    ../modules/nixos/features/fonts
-    ../modules/nixos/features/gaming
-    ../modules/nixos/features/flatpak
+    ../modules/nixos/features/audio.nix
+    ../modules/nixos/features/bluetooth.nix
+    ../modules/nixos/features/fonts.nix
+    ../modules/nixos/features/gaming.nix
+    ../modules/nixos/features/flatpak.nix
 
     # Services
-    ../modules/nixos/services/blocky
-    ../modules/nixos/services/caddy
-    ../modules/nixos/services/nfs
-    ../modules/nixos/services/sshd
-    ../modules/nixos/services/unbound
+    ../modules/nixos/services/blocky.nix
+    ../modules/nixos/services/caddy.nix
+    ../modules/nixos/services/nfs.nix
+    ../modules/nixos/services/sshd.nix
+    ../modules/nixos/services/unbound.nix
 
     # Profiles (composite configurations)
-    ../modules/nixos/profiles/workstation
-    ../modules/nixos/profiles/homelab_master
+    ../modules/nixos/profiles/workstation.nix
+    ../modules/nixos/profiles/homelab_master.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace
   homeModules = [
-    ../modules/home/cli-packages
-    ../modules/home/git
-    ../modules/home/shell
+    ../modules/home/cli-packages.nix
+    ../modules/home/git.nix
+    ../modules/home/shell.nix
     ../modules/home/nixvim
-    ../modules/home/features/gui
+    ../modules/home/features/gui.nix
   ];
 }

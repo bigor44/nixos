@@ -219,12 +219,10 @@ git push origin feature/my-feature
 
    ```bash
    # System module
-   mkdir -p modules/nixos/features/<category>/<name>
-   touch modules/nixos/features/<category>/<name>/default.nix
+   touch modules/nixos/features/<category>/<name>.nix
 
    # Home module
-   mkdir -p modules/home/<name>
-   touch modules/home/<name>/default.nix
+   touch modules/home/<name>.nix
    ```
 
 2. **Implement using the module pattern** (see above)
@@ -234,13 +232,13 @@ git push origin feature/my-feature
    ```nix
    nixosModules = [
      # ... existing modules
-     ../modules/nixos/features/<category>/<name>
+     ../modules/nixos/features/<category>/<name>.nix
    ];
 
    # or for home modules:
    homeModules = [
      # ... existing modules
-     ../modules/home/<name>
+     ../modules/home/<name>.nix
    ];
    ```
 
@@ -314,7 +312,7 @@ git push origin feature/my-feature
    };
    ```
 
-6. **Add to network topology** in `modules/nixos/features/system/network/default.nix`:
+6. **Add to network topology** in `modules/nixos/features/system/network.nix`:
 
    ```nix
    bigor.network.hosts.<hostname> = {
@@ -330,15 +328,16 @@ git push origin feature/my-feature
 
 ### Adding a New Service
 
-1. **Create service module** in `modules/nixos/services/<name>/default.nix`
+1. **Create service module** in `modules/nixos/services/<name>.nix`
 
 2. **Follow the module pattern** with service-specific options
 
 3. **Add to `nix/modules.nix`**:
+
    ```nix
    nixosModules = [
      # ... existing modules
-     ../modules/nixos/services/<name>
+     ../modules/nixos/services/<name>.nix
    ];
    ```
 
@@ -412,10 +411,11 @@ COSMIC DE configuration files in `dotfiles/cosmic/` are **symlinked** (not copie
 
 ### File Organization
 
-- **One module per directory** with `default.nix`
+- **One module per file** (`<name>.nix` format)
 - **Group related modules** under feature categories
 - **Keep host configs minimal** - use modules for reusability
 - **Separate concerns** - system vs. home modules
+- **Use directories only for multi-file modules** (like `nixvim/` with plugins)
 
 ### Module Options
 
