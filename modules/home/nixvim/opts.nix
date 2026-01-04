@@ -5,10 +5,10 @@ _: {
     # ==========================================================================
     # Visuals & Colorscheme
     # ==========================================================================
-    colorschemes.onedark = {
+    colorschemes.tokyonight = {
       enable = true;
       settings = {
-        style = "darker";
+        style = "night";
         transparent = false;
       };
     };
