@@ -1,15 +1,12 @@
 # Flake: bigor-nixos
-# Purpose: Main entry point for NixOS + Home Manager configuration
+# Purpose: Main entry point for NixOS + Home Manager configuration (flake-parts)
 {
-  description = "Bigor's Simplified NixOS Configuration";
+  description = "Bigor's NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -24,37 +21,73 @@
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
   };
 
   outputs =
-    inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
-      src = ./.;
+    inputs@{ flake-parts, self, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
 
-      homes.modules = [
-        inputs.nixvim.homeModules.nixvim
+      imports = [
+        ./nix/hosts.nix
       ];
 
-      systems.modules.nixos = [
-        inputs.sops-nix.nixosModules.sops
-      ];
+      perSystem =
+        { pkgs, ... }:
+        {
+          # Formatter for nix fmt
+          formatter = pkgs.treefmt;
 
-      outputs-builder = channels: {
-        formatter = channels.nixpkgs.treefmt;
-      };
+          # Flake checks (nix flake check)
+          checks = {
+            # Formatting check with treefmt
+            nix-fmt =
+              pkgs.runCommand "nix-fmt"
+                {
+                  nativeBuildInputs = with pkgs; [
+                    treefmt
+                    nixfmt-rfc-style
+                    shfmt
+                    nodePackages.prettier
+                    taplo
+                  ];
+                }
+                ''
+                  src="${self}"
 
-      snowfall = {
-        systems = [ "x86_64-linux" ];
-        namespace = "bigor";
-        meta = {
-          name = "bigor-nixos";
-          title = "Bigor's NixOS";
+                  # Copy source to a writable location
+                  cp -r "$src" ./source
+                  chmod -R u+w ./source
+
+                  echo "Checking formatting with treefmt..."
+                  treefmt --no-cache --fail-on-change -C ./source
+
+                  touch $out
+                '';
+
+            # Linting check with statix and deadnix
+            nix-lint =
+              pkgs.runCommand "nix-lint"
+                {
+                  nativeBuildInputs = with pkgs; [
+                    statix
+                    deadnix
+                  ];
+                }
+                ''
+                  src="${self}"
+
+                  echo "Running statix on $src..."
+                  statix check --ignore .* "$src"
+
+                  echo "Running deadnix on $src..."
+                  deadnix --fail "$src"
+
+                  touch $out
+                '';
+          };
         };
-      };
-
-      channels-config.allowUnfree = true;
-      overlays = [ ];
     };
 }

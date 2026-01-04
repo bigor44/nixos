@@ -65,7 +65,7 @@ in
 **Key Points**:
 
 - Use the `bigor` namespace for all custom options
-- System modules: `bigor.nixos.*`
+- System modules: `bigor.features.*`, `bigor.services.*`, `bigor.profiles.*`
 - Home modules: `bigor.home.*`
 - Always provide an `enable` option
 - Use descriptive option names
@@ -229,12 +229,25 @@ git push origin feature/my-feature
 
 2. **Implement using the module pattern** (see above)
 
-3. **Snowfall Lib auto-discovers modules** - no manual imports needed!
+3. **Add the module to `nix/modules.nix`**:
+
+   ```nix
+   nixosModules = [
+     # ... existing modules
+     ../modules/nixos/features/<category>/<name>
+   ];
+
+   # or for home modules:
+   homeModules = [
+     # ... existing modules
+     ../modules/home/<name>
+   ];
+   ```
 
 4. **Enable in a host configuration**:
 
    ```nix
-   bigor.nixos.features.<category>.<name>.enable = true;
+   bigor.features.<category>.<name>.enable = true;
    ```
 
 5. **Test and commit**:
@@ -248,57 +261,66 @@ git push origin feature/my-feature
 
 ### Adding a New Host
 
-1. **Create system configuration**:
+1. **Create host directory**:
 
    ```bash
-   mkdir -p systems/x86_64-linux/<hostname>
+   mkdir -p hosts/<hostname>
    ```
 
-2. **Create `systems/x86_64-linux/<hostname>/default.nix`**:
+2. **Create `hosts/<hostname>/default.nix`** (NixOS config):
 
    ```nix
-   { lib, ... }:
+   { pkgs, ... }:
    {
-     networking.hostName = "<hostname>";
+     imports = [ ./hardware-configuration.nix ];
 
-     bigor.nixos.profiles.<profile>.enable = true;
+     networking.hostName = "<hostname>";
+     system.stateVersion = "25.11";
+
+     bigor.profiles.<profile>.enable = true;
      # or enable individual features:
-     # bigor.nixos.features.audio.enable = true;
+     # bigor.features.audio.enable = true;
 
      # Host-specific configuration...
    }
    ```
 
-3. **Create home configuration**:
-
-   ```bash
-   mkdir -p homes/x86_64-linux/bigor@<hostname>
-   ```
-
-4. **Create `homes/x86_64-linux/bigor@<hostname>/default.nix`**:
+3. **Create `hosts/<hostname>/home.nix`** (Home Manager config):
 
    ```nix
    { ... }:
    {
-     bigor.home.shell.enable = true;
-     # Additional home configuration...
+     imports = [ ../../users/bigor ];
+
+     home.stateVersion = "25.11";
+
+     # Host-specific home configuration...
+     # bigor.home.features.gui.enable = true;
    }
    ```
 
-5. **Add to network topology** in `modules/nixos/features/system/network/default.nix`:
+4. **Generate hardware configuration**:
+
+   ```bash
+   nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware-configuration.nix
+   ```
+
+5. **Add to `nix/hosts.nix`**:
+
+   ```nix
+   flake.nixosConfigurations = {
+     # ... existing hosts
+     <hostname> = mkHost "<hostname>";
+   };
+   ```
+
+6. **Add to network topology** in `modules/nixos/features/system/network/default.nix`:
 
    ```nix
    bigor.network.hosts.<hostname> = {
      ip = "192.168.1.XX";  # or null for DHCP
      interface = "enp0s0";
    };
-   ```
-
-6. **Generate hardware configuration**:
-
-   ```bash
-   nixos-generate-config --show-hardware-config > /tmp/hardware-configuration.nix
-   bash scripts/post_install.sh <hostname>
    ```
 
 7. **Test the new host**:
@@ -312,14 +334,22 @@ git push origin feature/my-feature
 
 2. **Follow the module pattern** with service-specific options
 
-3. **Reference network topology** when needed:
+3. **Add to `nix/modules.nix`**:
+   ```nix
+   nixosModules = [
+     # ... existing modules
+     ../modules/nixos/services/<name>
+   ];
+   ```
+
+4. **Reference network topology** when needed:
 
    ```nix
    config.bigor.network.hosts.minipc.ip
    config.bigor.network.subnet
    ```
 
-4. **Test service functionality** after deployment
+5. **Test service functionality** after deployment
 
 ## Working with Secrets
 
@@ -398,13 +428,13 @@ COSMIC DE configuration files in `dotfiles/cosmic/` are **symlinked** (not copie
 
 All contributions must:
 
-1. ✅ Pass `nix fmt` (automatic formatting)
-2. ✅ Pass `deadnix --fail .` (no dead code)
-3. ✅ Pass `statix check --ignore .* .` (no lint errors)
-4. ✅ Pass `nix flake check` (all automated checks)
-5. ✅ Build successfully (`nh os build`)
-6. ✅ Follow the module pattern
-7. ✅ Include clear commit messages
+1. Pass `nix fmt` (automatic formatting)
+2. Pass `deadnix --fail .` (no dead code)
+3. Pass `statix check --ignore .* .` (no lint errors)
+4. Pass `nix flake check` (all automated checks)
+5. Build successfully (`nh os build`)
+6. Follow the module pattern
+7. Include clear commit messages
 
 ## Getting Help
 

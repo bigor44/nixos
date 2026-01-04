@@ -2,18 +2,18 @@
 
 ## Overview
 
-This repository contains my personal **NixOS + Home Manager** configuration, designed as a **single, structured, reproducible mono‑repo** for:
+This repository contains my personal **NixOS + Home Manager** configuration, designed as a **single, structured, reproducible mono-repo** for:
 
 - Desktop workstations
 - Portable machines
 - Homelab / server infrastructure
 
-The configuration is built around **flakes**, **snowfall-lib**, and **Home Manager**, with a strong emphasis on:
+The configuration is built around **flakes**, **flake-parts**, and **Home Manager**, with a strong emphasis on:
 
 - Modularity and clear separation of concerns
 - Reusability across multiple hosts
 - Declarative system and user environments
-- A production‑grade homelab DNS stack
+- A production-grade homelab DNS stack
 
 This repository is intended to be **shared, audited, and reused as inspiration** rather than copied blindly.
 
@@ -32,10 +32,10 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 ## Key Design Principles
 
 - **Single source of truth** for systems and users
-- **Feature‑based composition** instead of host‑specific snowflakes
+- **Feature-based composition** instead of host-specific snowflakes
 - **Profiles** to express machine roles (workstation, server, etc.)
 - **Strict formatting and linting** enforced via flake checks
-- **Minimal runtime magic** — behavior is explicit and traceable
+- **Minimal runtime magic** - behavior is explicit and traceable
 
 ---
 
@@ -43,16 +43,25 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 
 ```
 .
-├── flake.nix               # Flake entry point
+├── flake.nix               # Flake-parts entry point
 ├── flake.lock              # Dependency lockfile
 ├── treefmt.toml            # Formatting configuration
-├── checks/                 # Flake checks (formatting, linting)
-├── dotfiles/               # COSMIC DE and autostart configs
-├── homes/                  # Home Manager configurations
+├── nix/
+│   ├── modules.nix         # Explicit module import list
+│   └── hosts.nix           # NixOS configuration definitions
+├── hosts/                  # Host-specific configurations
+│   ├── grospc/
+│   │   ├── default.nix     # NixOS config
+│   │   ├── hardware-configuration.nix
+│   │   └── home.nix        # Home Manager config
+│   ├── minipc/
+│   └── minidesk/
+├── users/                  # Base user configurations
+│   └── bigor/
 ├── modules/
 │   ├── home/               # Home Manager modules
 │   └── nixos/              # NixOS modules
-├── systems/                # Host-specific NixOS configurations
+├── dotfiles/               # COSMIC DE and autostart configs
 ├── scripts/                # Utility & automation scripts
 ├── secrets/                # SOPS-encrypted secrets (not public)
 └── certs/                  # Internal CA certificates
@@ -62,16 +71,18 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 
 ## Architecture
 
-### 1. Flakes & Snowfall
+### 1. Flakes & Flake-parts
 
-The repository uses **snowfall-lib** to enforce a clean architecture:
+The repository uses **flake-parts** to organize the configuration:
 
-- `features` → atomic, reusable building blocks
-- `services` → system services (DNS, SSH, NFS, Caddy, etc.)
-- `profiles` → machine roles composed of features and services
+- `features` - atomic, reusable building blocks
+- `services` - system services (DNS, SSH, NFS, Caddy, etc.)
+- `profiles` - machine roles composed of features and services
 
 All configuration lives under the `bigor.*` namespace to avoid collisions
 with upstream NixOS or Home Manager options.
+
+Module imports are explicit in `nix/modules.nix` for clarity and maintainability.
 
 ---
 
@@ -95,7 +106,7 @@ bigor.profiles.homelab-master.enable = true;
 
 ### 3. Home Manager
 
-Home Manager is fully integrated into the flake and used for:
+Home Manager is integrated via the NixOS module and used for:
 
 - Shell (Fish + Tide)
 - CLI tooling
@@ -103,15 +114,20 @@ Home Manager is fully integrated into the flake and used for:
 - Neovim (via nixvim)
 - GUI applications (per host)
 
-Homes are defined per user and optionally per host:
+Configuration is organized per host with a shared base:
 
 ```
-homes/
-└── x86_64-linux/
-    ├── bigor/
-    ├── bigor@grospc/
-    ├── bigor@minidesk/
-    └── bigor@minipc/
+hosts/
+├── grospc/
+│   └── home.nix    # Imports users/bigor + host-specific overrides
+├── minipc/
+│   └── home.nix
+└── minidesk/
+    └── home.nix
+
+users/
+└── bigor/
+    └── default.nix # Base user configuration
 ```
 
 ---
@@ -143,12 +159,12 @@ modules/home/nixvim/
 
 ## DNS Stack (Homelab)
 
-A central part of the repository is a **production‑grade DNS stack**:
+A central part of the repository is a **production-grade DNS stack**:
 
 ### Components
 
-- **Unbound** – recursive DNS resolver with DNSSEC validation
-- **Blocky** – DNS proxy with ad/tracker blocking and failover
+- **Unbound** - recursive DNS resolver with DNSSEC validation
+- **Blocky** - DNS proxy with ad/tracker blocking and failover
 
 ### Features
 
@@ -156,7 +172,7 @@ A central part of the repository is a **production‑grade DNS stack**:
 - Automatic failover to external resolvers
 - DNSSEC validation
 - Local domain rewrites (`*.bigor.lan`)
-- Privacy‑friendly logging
+- Privacy-friendly logging
 - **SPOF mitigation**: Fallback to external DNS (1.1.1.1) if Blocky is down
 
 ### Network Topology
@@ -202,11 +218,11 @@ Secrets are managed using **sops-nix** with **age**:
 
 ### Flake Checks
 
-The repository enforces quality through flake checks:
+The repository enforces quality through flake checks (defined in `flake.nix` perSystem):
 
-- **treefmt** – formatting enforcement
-- **statix** – Nix linting
-- **deadnix** – unused code detection
+- **treefmt** - formatting enforcement
+- **statix** - Nix linting
+- **deadnix** - unused code detection
 
 Run all checks:
 
@@ -216,9 +232,9 @@ nix flake check
 
 ---
 
-### DNS Post‑Switch Test
+### DNS Post-Switch Test
 
-A post‑deployment DNS test script is provided:
+A post-deployment DNS test script is provided:
 
 ```bash
 scripts/dns-test.sh
@@ -243,7 +259,7 @@ Currently supported:
 
 - `x86_64-linux`
 
-Multi‑architecture support can be added easily via snowfall.
+Multi-architecture support can be added by extending the `systems` list in `flake.nix`.
 
 ---
 
@@ -278,12 +294,6 @@ nh os switch --hostname minipc
 sudo nixos-rebuild switch --flake .#<hostname>
 ```
 
-### Home Manager Only
-
-```bash
-home-manager switch --flake .#bigor@<hostname>
-```
-
 ---
 
 ## Disclaimer
@@ -292,11 +302,11 @@ This repository reflects **personal infrastructure choices**.
 
 While the configuration is designed to be robust and reusable, you should:
 
-- Review all security‑related settings
+- Review all security-related settings
 - Adapt network assumptions
 - Adjust secrets handling
 
-Use this repository as a **reference implementation**, not a drop‑in solution.
+Use this repository as a **reference implementation**, not a drop-in solution.
 
 ---
 

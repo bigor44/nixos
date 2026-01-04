@@ -1,4 +1,4 @@
-# System: grospc
+# Host: grospc
 # Purpose: Desktop workstation with gaming optimizations
 { pkgs, ... }:
 {

@@ -1,7 +1,8 @@
-# System: minidesk
+# Host: minidesk
 # Purpose: Portable workstation (travel mode, no NFS mount)
 { lib, pkgs, ... }:
 {
+  # Reuse minipc hardware config (same hardware base)
   imports = [ ../minipc/hardware-configuration.nix ];
 
   # Disable NFS mount in travel mode (disk not present)

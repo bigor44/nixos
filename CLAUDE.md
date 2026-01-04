@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a NixOS Flake configuration repository using Snowfall Lib for organizing system and user configurations across multiple hosts. The configuration manages 3 hosts:
+This is a NixOS Flake configuration repository using Flake-parts for organizing system and user configurations across multiple hosts. The configuration manages 3 hosts:
 
 - **grospc**: Desktop workstation with COSMIC DE, gaming optimizations
 - **minipc**: DNS/network server (homelab-master profile)
@@ -12,8 +12,8 @@ This is a NixOS Flake configuration repository using Snowfall Lib for organizing
 
 Key technologies:
 
-- **Snowfall Lib**: Modular flake organization framework
-- **Home Manager**: User environment management
+- **Flake-parts**: Modular flake organization framework
+- **Home Manager**: User environment management (integrated via NixOS module)
 - **Sops-Nix**: Secrets management with age encryption
 - **NixVim**: Declarative Neovim configuration
 
@@ -101,16 +101,46 @@ deadnix --fail .
 
 ## Architecture
 
-### Snowfall Lib Structure
+### Flake-parts Structure
 
-The repository follows Snowfall Lib's opinionated directory layout:
+The repository uses Flake-parts with explicit module imports:
 
-- **flake.nix**: Main entry point defining inputs and snowfall-lib configuration
+- **flake.nix**: Main entry point with flake-parts configuration
+- **nix/modules.nix**: Explicit list of all NixOS and Home Manager modules
+- **nix/hosts.nix**: NixOS configuration definitions for all hosts
 - **modules/nixos/**: System-level NixOS modules (namespace: `bigor.features.*`, `bigor.profiles.*`, `bigor.services.*`, `bigor.network.*`)
 - **modules/home/**: Home Manager modules (namespace: `bigor.home.*`)
-- **systems/x86_64-linux/**: Host-specific NixOS configurations
-- **homes/x86_64-linux/**: Host-specific Home Manager configurations
-- **checks/x86_64-linux/**: Automated flake checks (formatting, linting)
+- **hosts/**: Host-specific NixOS and Home Manager configurations
+- **users/**: Base user configurations
+
+### Directory Layout
+
+```
+/home/bigor/nixos/
+├── flake.nix                    # Flake-parts entry point
+├── nix/
+│   ├── modules.nix              # Explicit module import list
+│   └── hosts.nix                # NixOS configuration definitions
+├── modules/
+│   ├── nixos/                   # System modules
+│   │   ├── features/            # Feature modules
+│   │   ├── services/            # Service modules
+│   │   └── profiles/            # Composite profiles
+│   └── home/                    # Home Manager modules
+├── hosts/
+│   ├── grospc/
+│   │   ├── default.nix          # NixOS config
+│   │   ├── hardware-configuration.nix
+│   │   └── home.nix             # Home Manager config
+│   ├── minipc/
+│   └── minidesk/
+├── users/
+│   └── bigor/
+│       └── default.nix          # Base user config
+├── secrets/
+├── certs/
+└── dotfiles/
+```
 
 ### Module Organization
 
@@ -124,7 +154,7 @@ The repository follows Snowfall Lib's opinionated directory layout:
 - **features/fonts/**: Font configuration
 - **profiles/**: Composite configurations
   - `workstation/`: Full desktop with COSMIC, audio, gaming
-  - `homelab-master/`: DNS/network services
+  - `homelab_master/`: DNS/network services
 - **services/**: Network services (Blocky DNS, Caddy reverse proxy, NFS, SSH, Unbound)
 
 **Home Modules** (`modules/home/`):
@@ -217,7 +247,14 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 
 2. Use the standard module pattern (see Architecture section)
 
-3. Snowfall Lib auto-discovers modules (no manual imports needed)
+3. Add the module path to `nix/modules.nix`:
+
+   ```nix
+   nixosModules = [
+     # ... existing modules
+     ../modules/nixos/features/<category>/<name>
+   ];
+   ```
 
 4. Enable in host config:
    ```nix
@@ -226,11 +263,18 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 
 ### Adding a New Host
 
-1. Create system config: `systems/x86_64-linux/<hostname>/default.nix`
-2. Create home config: `homes/x86_64-linux/bigor@<hostname>/default.nix`
-3. Add host to network topology in `modules/nixos/features/system/network/default.nix`
-4. Generate hardware config: `nixos-generate-config --show-hardware-config`
-5. Run post-install script: `bash scripts/post_install.sh <hostname>`
+1. Create host directory: `hosts/<hostname>/`
+2. Create NixOS config: `hosts/<hostname>/default.nix`
+3. Create Home Manager config: `hosts/<hostname>/home.nix` (imports `users/bigor`)
+4. Generate hardware config: `nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware-configuration.nix`
+5. Add host to `nix/hosts.nix`:
+   ```nix
+   flake.nixosConfigurations = {
+     # ... existing hosts
+     <hostname> = mkHost "<hostname>";
+   };
+   ```
+6. Add host to network topology in `modules/nixos/features/system/network/default.nix`
 
 ### Modifying COSMIC Configuration
 
@@ -292,7 +336,7 @@ LSP servers configured: bashls, marksman, yaml-language-server, nixd
 
 ## Quality Assurance
 
-Two automated checks run during `nix flake check`:
+Two automated checks run during `nix flake check` (defined in `flake.nix` perSystem):
 
 1. **nix-fmt**: Verifies formatting with treefmt (nixfmt, shfmt, prettier, taplo)
 2. **nix-lint**: Runs statix (linting) and deadnix (dead code detection)
@@ -304,5 +348,5 @@ Both checks must pass before committing.
 - This configuration uses `nixos-unstable` channel
 - Namespace is `bigor` (enables `bigor.*` module options)
 - Unfree packages are allowed globally
-- Hardware configs are git-ignored (per-host specific)
-- The formatter is `treefmt` (defined in flake outputs-builder)
+- Hardware configs are per-host in `hosts/<hostname>/hardware-configuration.nix`
+- The formatter is `treefmt` (defined in perSystem)

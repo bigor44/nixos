@@ -1,5 +1,6 @@
-# Home: bigor
+# User: bigor
 # Purpose: Base user configuration (shell, git, nvim, CLI tools)
+{ ... }:
 {
   home = {
     username = "bigor";

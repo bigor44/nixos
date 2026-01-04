@@ -1,4 +1,4 @@
-# System: minipc
+# Host: minipc
 # Purpose: Homelab server with DNS, Caddy, and NFS
 { pkgs, ... }:
 {
