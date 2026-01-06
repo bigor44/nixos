@@ -22,6 +22,9 @@
     profiles.workstation.enable = true;
     network.mainInterface = "enp2s0";
 
-    services.ssh.enable = true;
+    services = {
+      ssh.enable = true;
+      blocky.portableMode = true; # Skip minipc, use Cloudflare directly
+    };
   };
 }

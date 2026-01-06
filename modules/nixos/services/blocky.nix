@@ -29,6 +29,11 @@ in
       Enable this on the DNS server (minipc) itself.
     '';
 
+    portableMode = mkEnableOption ''
+      Portable mode: skip minipc upstream, use fallback DNS directly.
+      Enable this on portable hosts that are often outside the local network.
+    '';
+
     fallbackUpstreams = mkOption {
       type = types.listOf types.str;
       default = [
@@ -77,6 +82,9 @@ in
             if cfg.useLocalUnbound then
               # DNS server (minipc): local Unbound only
               [ "127.0.0.1:5335" ]
+            else if cfg.portableMode then
+              # Portable mode: external DNS only (no minipc dependency)
+              cfg.fallbackUpstreams
             else
               # Other hosts: minipc first, then failover to external
               [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
