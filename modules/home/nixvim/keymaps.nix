@@ -1,6 +1,6 @@
 # Home: nixvim-keymaps
 # Purpose: Keyboard mappings configuration for nixvim
-_: {
+{
   programs.nixvim.keymaps = [
     # ==========================================================================
     # Standard Operations
@@ -123,6 +123,14 @@ _: {
     # ==========================================================================
     # Plugin Specific
     # ==========================================================================
+    # Undotree
+    {
+      mode = "n";
+      key = "<leader>u";
+      action = "<cmd>UndotreeToggle<cr>";
+      options.desc = "Toggle Undotree";
+    }
+
     # Trouble
     {
       mode = "n";

@@ -1,6 +1,6 @@
 # User: bigor
 # Purpose: Base user configuration (shell, git, nvim, CLI tools)
-_: {
+{
   home = {
     username = "bigor";
     homeDirectory = "/home/bigor";

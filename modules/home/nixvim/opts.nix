@@ -1,6 +1,6 @@
 # Home: nixvim-opts
 # Purpose: Editor options and visual settings for nixvim
-_: {
+{
   programs.nixvim = {
     # ==========================================================================
     # Visuals & Colorscheme

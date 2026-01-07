@@ -1,6 +1,6 @@
 # Home: nixvim-ui
 # Purpose: UI plugins and visual enhancements for nixvim
-_: {
+{
   programs.nixvim = {
     plugins = {
       web-devicons.enable = true;

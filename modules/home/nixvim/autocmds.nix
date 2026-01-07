@@ -1,6 +1,6 @@
 # Home: nixvim-autocmds
 # Purpose: Autocommands configuration for nixvim
-_: {
+{
   programs.nixvim = {
     autoGroups = {
       bigor_highlight_yank = {

@@ -1,6 +1,6 @@
 # Home: nixvim-utils
 # Purpose: Utility plugins for nixvim (mini.nvim modules)
-_: {
+{
   programs.nixvim.plugins.mini = {
     enable = true;
     modules = {
