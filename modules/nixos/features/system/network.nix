@@ -109,16 +109,21 @@ in
     # Enable nftables (modern firewall backend)
     { networking.nftables.enable = true; }
 
-    # Configure localhost as DNS server when Blocky is enabled locally
-    (lib.mkIf config.bigor.services.blocky.enable {
-      # NetworkManager: prevent automatic DNS management
-      networking.networkmanager.dns = lib.mkDefault "none";
-
-      # Set localhost as primary nameserver with external fallback (SPOF mitigation)
-      networking.nameservers = lib.mkBefore [
-        "127.0.0.1" # Blocky (primary)
-        "1.1.1.1" # Cloudflare (fallback si Blocky down)
-      ];
-    })
+    # Configure DNS servers when Blocky is enabled locally
+    (lib.mkIf config.bigor.services.blocky.enable (
+      let
+        fallbackDNS = [
+          "127.0.0.1" # Blocky (primary)
+          "1.1.1.1" # Cloudflare (fallback)
+          "9.9.9.9" # Quad9 (fallback)
+        ];
+      in
+      {
+        # For non-NetworkManager hosts (minipc)
+        networking.nameservers = fallbackDNS;
+        # For NetworkManager hosts (grospc, minidesk) - overrides nameservers
+        networking.networkmanager.insertNameservers = fallbackDNS;
+      }
+    ))
   ];
 }

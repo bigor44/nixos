@@ -194,6 +194,11 @@ in
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        serviceConfig = {
+          # Auto-restart on failure (all hosts)
+          Restart = "on-failure";
+          RestartSec = "1s";
+        };
       }
       (mkIf cfg.useLocalUnbound {
         after = [
@@ -201,11 +206,6 @@ in
           "network-online.target"
         ];
         requires = [ "unbound.service" ];
-        serviceConfig = {
-          # Restart on failure (simpler than health check script)
-          Restart = "on-failure";
-          RestartSec = "2s";
-        };
       })
     ];
   };
