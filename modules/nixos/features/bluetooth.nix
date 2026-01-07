@@ -1,6 +1,10 @@
 # Feature: bluetooth
 # Purpose: Bluetooth hardware support with auto power-on
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.bluetooth;

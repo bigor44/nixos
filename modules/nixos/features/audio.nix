@@ -1,6 +1,10 @@
 # Feature: audio
 # Purpose: PipeWire audio stack with ALSA and PulseAudio compatibility
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.audio;

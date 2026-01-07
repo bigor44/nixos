@@ -1,6 +1,10 @@
 # Profile: workstation
 # Purpose: Desktop environment with COSMIC DE, audio, gaming, and monitoring
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.profiles.workstation;

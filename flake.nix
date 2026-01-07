@@ -26,7 +26,11 @@
   };
 
   outputs =
-    inputs@{ flake-parts, self, ... }:
+    inputs@{
+      flake-parts,
+      self,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 

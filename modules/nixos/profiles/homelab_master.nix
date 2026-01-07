@@ -1,6 +1,10 @@
 # Profile: homelab-master
 # Purpose: Server stack with monitoring, Caddy, DNS (Unbound+Blocky), and NFS
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.profiles.homelab-master;

@@ -1,6 +1,10 @@
 # Feature: desktop.cosmic
 # Purpose: COSMIC desktop environment (System76)
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.desktop.cosmic;

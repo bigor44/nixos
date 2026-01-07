@@ -1,6 +1,10 @@
 # Feature: desktop.apps
 # Purpose: System-wide desktop applications (Firefox)
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.desktop.apps;

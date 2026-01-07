@@ -1,6 +1,10 @@
 # Feature: desktop.base
 # Purpose: Core desktop components (NetworkManager)
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.desktop.base;

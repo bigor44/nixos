@@ -1,6 +1,10 @@
 # Feature: flatpak
 # Purpose: Flatpak support with Flathub repository
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.bigor.features.flatpak;
