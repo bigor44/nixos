@@ -92,7 +92,11 @@ in
             cfg.hosts.${hostname}.interface or "undefined"
           }')";
         }
-      ];
+      ]
+      ++ lib.mapAttrsToList (name: host: {
+        assertion = host.ip != null -> host.interface != null;
+        message = "Host '${name}' has a static IP but no interface defined. Static IP requires an interface.";
+      }) cfg.hosts;
     }
 
     # Generate /etc/hosts from hosts registry

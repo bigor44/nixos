@@ -8,7 +8,7 @@ This is a NixOS Flake configuration repository using Flake-parts for organizing 
 
 - **grospc**: Desktop workstation with COSMIC DE, gaming optimizations
 - **minipc**: DNS/network server (homelab-master profile)
-- **minidesk**: Portable workstation (workstation profile, no NFS mount, portable DNS mode)
+- **minidesk**: Portable workstation (same hardware as minipc, workstation profile, portable DNS mode)
 
 Key technologies:
 
@@ -234,7 +234,11 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
   - `useLocalUnbound`: Use local Unbound (minipc only)
   - `portableMode`: Skip minipc upstream, use Cloudflare directly (for portable hosts)
 - **HTTPS**: Caddy reverse proxy with automatic TLS
-- **File Sharing**: NFS server/client
+- **File Sharing**: NFS (`modules/nixos/services/nfs.nix`)
+  - `nfs.server`: Export `/mnt/storage` via NFS (requires local storage)
+  - `nfs.client`: Mount `/mnt/storage` from minipc via NFS (requires static IP)
+  - `nfs.localStorage`: Mount a local disk at `/mnt/storage`
+  - Assertions ensure coherence (no client without static IP, no server without disk)
 - **SSH**: OpenSSH server
 
 ## Making Changes

@@ -21,11 +21,11 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 
 ## Hosts
 
-| Host         | Role                 | Description                                 |
-| ------------ | -------------------- | ------------------------------------------- |
-| **grospc**   | Desktop workstation  | COSMIC DE, gaming optimizations             |
-| **minipc**   | Server               | DNS/network server (homelab-master profile) |
-| **minidesk** | Portable workstation | Workstation profile, DHCP, no NFS mount     |
+| Host         | Role                 | Description                                  |
+| ------------ | -------------------- | -------------------------------------------- |
+| **grospc**   | Desktop workstation  | COSMIC DE, gaming optimizations, NFS client  |
+| **minipc**   | Server               | DNS/network server, NFS server               |
+| **minidesk** | Portable workstation | Same hardware as minipc, DHCP, local storage |
 
 ---
 
@@ -198,6 +198,9 @@ This registry is used to generate:
 
 - Hostname must exist in the hosts registry
 - `mainInterface` must match the interface defined for the current host
+- Static IP requires an interface
+- NFS client requires a static IP
+- NFS server requires local storage mounted
 - Prevents typos and misconfigurations at build time
 
 ---
