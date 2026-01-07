@@ -61,7 +61,7 @@ nix flake lock --update-input nixpkgs
 nix flake show
 ```
 
-### Fish Shell Abbreviations (defined in modules/home/shell.nix and modules/home/git.nix)
+### Fish Shell Abbreviations (defined in modules/home/features/shell.nix and modules/home/features/git.nix)
 
 - `nfc` → `nix flake check`
 - `nfu` → `nix flake update`
@@ -127,6 +127,7 @@ The repository uses Flake-parts with explicit module imports:
 │   │   ├── services/            # Service modules
 │   │   └── profiles/            # Composite profiles
 │   └── home/                    # Home Manager modules
+│       └── features/            # Feature modules
 ├── hosts/
 │   ├── grospc/
 │   │   ├── default.nix          # NixOS config
@@ -155,13 +156,13 @@ The repository uses Flake-parts with explicit module imports:
 - **profiles/**: Composite configurations (`workstation.nix`, `homelab_master.nix`)
 - **services/**: Network services (`blocky.nix`, `caddy.nix`, `nfs.nix`, `sshd.nix`, `unbound.nix`)
 
-**Home Modules** (`modules/home/`):
+**Home Modules** (`modules/home/features/`):
 
 - **cli-packages.nix**: Modern CLI tools (eza, fd, ripgrep, btop, lazygit, etc.)
 - **git.nix**: Git config and shell abbreviations
 - **shell.nix**: Fish shell with Tide prompt, fzf, zoxide, bat
 - **nixvim/**: Neovim with LSP, treesitter, completion, UI plugins (multi-file module)
-- **features/gui.nix**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
+- **gui.nix**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
 
 ### Network Topology
 
@@ -207,7 +208,7 @@ Enable modules in host configs:
 
 ```nix
 bigor.features.audio.enable = true;
-bigor.home.shell.enable = true;
+bigor.home.features.shell.enable = true;
 ```
 
 ### Secrets Architecture
@@ -247,7 +248,7 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
 
 1. Create module file in appropriate directory:
    - System module: `modules/nixos/features/<category>/<name>.nix` or `modules/nixos/services/<name>.nix`
-   - Home module: `modules/home/<name>.nix`
+   - Home module: `modules/home/features/<name>.nix`
 
 2. Use the standard module pattern (see Architecture section)
 
@@ -328,7 +329,7 @@ config.bigor.network.subnet           # "192.168.1.0/24"
 
 ### NixVim Configuration
 
-Located in `modules/home/nixvim/`:
+Located in `modules/home/features/nixvim/`:
 
 - `default.nix`: Main config and plugin imports
 - `keymaps.nix`: Key bindings

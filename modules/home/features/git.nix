@@ -1,4 +1,4 @@
-# Module: git
+# Module: features.git
 # Purpose: Git configuration and Fish shell abbreviations
 {
   config,
@@ -7,10 +7,10 @@
 }:
 with lib;
 let
-  cfg = config.bigor.home.git;
+  cfg = config.bigor.home.features.git;
 in
 {
-  options.bigor.home.git.enable = mkEnableOption "Git configuration";
+  options.bigor.home.features.git.enable = mkEnableOption "Git configuration";
 
   config = mkIf cfg.enable {
     programs.git = {

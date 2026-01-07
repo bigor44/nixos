@@ -59,8 +59,12 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 ├── users/                  # Base user configurations
 │   └── bigor/
 ├── modules/
-│   ├── home/               # Home Manager modules
-│   └── nixos/              # NixOS modules
+│   ├── home/
+│   │   └── features/       # Home Manager feature modules
+│   └── nixos/
+│       ├── features/       # NixOS feature modules
+│       ├── services/       # NixOS service modules
+│       └── profiles/       # Composite profiles
 ├── dotfiles/               # COSMIC DE and autostart configs
 ├── scripts/                # Utility & automation scripts
 ├── secrets/                # SOPS-encrypted secrets (not public)
@@ -114,6 +118,14 @@ Home Manager is integrated via the NixOS module and used for:
 - Neovim (via nixvim)
 - GUI applications (per host)
 
+All Home Manager modules use the `bigor.home.features.*` namespace:
+
+```nix
+bigor.home.features.shell.enable = true;
+bigor.home.features.nixvim.enable = true;
+bigor.home.features.gui.enable = true;
+```
+
 Configuration is organized per host with a shared base:
 
 ```
@@ -148,7 +160,8 @@ autocompletion and diagnostics.
 The configuration is modular and split by responsibility:
 
 ```
-modules/home/nixvim/
+modules/home/features/nixvim/
+├── default.nix
 ├── opts.nix
 ├── keymaps.nix
 ├── autocmds.nix

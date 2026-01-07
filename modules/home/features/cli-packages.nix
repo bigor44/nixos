@@ -1,4 +1,4 @@
-# Module: cli-packages
+# Module: features.cli-packages
 # Purpose: Essential CLI tools for development and system monitoring
 {
   config,
@@ -8,10 +8,10 @@
 }:
 with lib;
 let
-  cfg = config.bigor.home.cli-packages;
+  cfg = config.bigor.home.features.cli-packages;
 in
 {
-  options.bigor.home.cli-packages.enable = mkEnableOption "CLI packages";
+  options.bigor.home.features.cli-packages.enable = mkEnableOption "CLI packages";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

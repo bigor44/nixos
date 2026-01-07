@@ -1,4 +1,4 @@
-# Module: shell
+# Module: features.shell
 # Purpose: Fish shell with Tide prompt, fzf, zoxide, and bat
 {
   config,
@@ -8,10 +8,10 @@
 }:
 with lib;
 let
-  cfg = config.bigor.home.shell;
+  cfg = config.bigor.home.features.shell;
 in
 {
-  options.bigor.home.shell.enable = mkEnableOption "Shell configuration";
+  options.bigor.home.features.shell.enable = mkEnableOption "Shell configuration";
 
   config = mkIf cfg.enable {
     programs = {
@@ -112,6 +112,7 @@ in
           ll = "eza -l --icons --git";
           la = "eza -lah --icons --git";
           lt = "eza --tree --level=2 --icons";
+          tree = "eza --tree";
           rm = "rm -i";
           cp = "cp -i";
           mv = "mv -i";

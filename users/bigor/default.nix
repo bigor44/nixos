@@ -10,7 +10,7 @@
     };
   };
 
-  bigor.home = {
+  bigor.home.features = {
     git.enable = true;
     shell.enable = true;
     cli-packages.enable = true;

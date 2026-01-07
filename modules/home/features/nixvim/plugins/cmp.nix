@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.bigor.home.nixvim;
+  cfg = config.bigor.home.features.nixvim;
 in
 {
   config = lib.mkIf cfg.enable {

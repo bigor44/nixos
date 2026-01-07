@@ -39,10 +39,10 @@
 
   # All Home Manager modules under the bigor.home.* namespace
   homeModules = [
-    ../modules/home/cli-packages.nix
-    ../modules/home/git.nix
-    ../modules/home/shell.nix
-    ../modules/home/nixvim
+    ../modules/home/features/cli-packages.nix
+    ../modules/home/features/git.nix
+    ../modules/home/features/shell.nix
+    ../modules/home/features/nixvim
     ../modules/home/features/gui.nix
   ];
 }
