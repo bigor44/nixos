@@ -16,7 +16,6 @@
     ../modules/nixos/features/desktop/base.nix
     ../modules/nixos/features/desktop/cosmic.nix
     ../modules/nixos/features/desktop/apps.nix
-    ../modules/nixos/features/desktop/tuning.nix
 
     # Features - Hardware/Peripherals
     ../modules/nixos/features/audio.nix

@@ -5,11 +5,11 @@
     # ==========================================================================
     # Visuals & Colorscheme
     # ==========================================================================
-    colorschemes.tokyonight = {
+    colorschemes.catppuccin = {
       enable = true;
       settings = {
-        style = "night";
-        transparent = false;
+        flavour = "mocha";
+        transparent_background = false;
       };
     };
 

@@ -95,7 +95,7 @@ Module imports are explicit in `nix/modules.nix` for clarity and maintainability
 NixOS modules are organized by concern:
 
 - **System features**: boot, locale, fonts, networking, users
-- **Desktop features**: COSMIC desktop, audio, gaming, tuning
+- **Desktop features**: COSMIC desktop, audio, gaming
 - **Services**: Blocky, Unbound, SSH, Caddy, NFS
 - **Profiles**: workstation, homelab server
 

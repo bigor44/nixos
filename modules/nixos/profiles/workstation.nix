@@ -19,7 +19,6 @@ in
         base.enable = mkDefault true;
         cosmic.enable = mkDefault true;
         apps.enable = mkDefault true;
-        tuning.enable = mkDefault true;
       };
     };
 

@@ -150,7 +150,7 @@ The repository uses Flake-parts with explicit module imports:
 - **features/system/**: Core system features (`base.nix`, `boot.nix`, `users.nix`, `network.nix`, `packages.nix`, `sops.nix`, `french-locale.nix`)
 - **features/audio.nix**: PipeWire/ALSA audio stack
 - **features/bluetooth.nix**: Bluetooth configuration
-- **features/desktop/**: COSMIC DE (`base.nix`, `cosmic.nix`, `apps.nix`, `tuning.nix`)
+- **features/desktop/**: COSMIC DE (`base.nix`, `cosmic.nix`, `apps.nix`)
 - **features/gaming.nix**: Steam, GameMode optimizations
 - **features/fonts.nix**: Font configuration
 - **profiles/**: Composite configurations (`workstation.nix`, `homelab_master.nix`)
