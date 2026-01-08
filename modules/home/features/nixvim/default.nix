@@ -33,7 +33,7 @@ in
         nixd
 
         # Formatters & linters
-        nixfmt-rfc-style
+        nixfmt
         shfmt
         prettier
         taplo

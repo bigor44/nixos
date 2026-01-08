@@ -52,7 +52,7 @@
                 {
                   nativeBuildInputs = with pkgs; [
                     treefmt
-                    nixfmt-rfc-style
+                    nixfmt
                     shfmt
                     nodePackages.prettier
                     taplo

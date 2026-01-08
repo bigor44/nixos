@@ -29,7 +29,7 @@ in
       deadnix
       treefmt
       prettier
-      nixfmt-rfc-style
+      nixfmt
       shfmt
       taplo
 
