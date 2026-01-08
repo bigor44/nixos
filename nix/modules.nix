@@ -41,7 +41,7 @@
   homeModules = [
     ../modules/home/features/cli-packages.nix
     ../modules/home/features/git.nix
-    ../modules/home/features/shell.nix
+    ../modules/home/features/shell
     ../modules/home/features/nixvim
     ../modules/home/features/gui.nix
   ];
