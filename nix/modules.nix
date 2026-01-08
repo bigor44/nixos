@@ -23,6 +23,7 @@
     ../modules/nixos/features/fonts.nix
     ../modules/nixos/features/gaming.nix
     ../modules/nixos/features/flatpak.nix
+    ../modules/nixos/features/via.nix
 
     # Services
     ../modules/nixos/services/blocky.nix

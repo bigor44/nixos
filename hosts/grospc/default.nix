@@ -13,6 +13,7 @@
 
   bigor = {
     profiles.workstation.enable = true;
+    features.via.enable = true;
     services.nfs.client = true;
   };
 
