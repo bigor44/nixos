@@ -38,7 +38,7 @@ in
       type = types.listOf types.str;
       default = [
         "1.1.1.1"
-        "1.0.0.1"
+        "9.9.9.9"
       ];
       description = "Fallback DNS servers when primary (minipc) is unreachable";
       example = [
@@ -80,8 +80,8 @@ in
         upstreams = {
           groups.default =
             if cfg.useLocalUnbound then
-              # DNS server (minipc): local Unbound only
-              [ "127.0.0.1:5335" ]
+              # DNS server (minipc): local Unbound first, then external fallback
+              [ "127.0.0.1:5335" ] ++ cfg.fallbackUpstreams
             else if cfg.portableMode then
               # Portable mode: external DNS only (no minipc dependency)
               cfg.fallbackUpstreams
@@ -90,7 +90,7 @@ in
               [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
 
           # Strict: try upstreams in order, failover on timeout/error
-          strategy = "strict";
+          strategy = "parallel_best";
           timeout = cfg.upstreamTimeout;
         };
 
@@ -205,7 +205,7 @@ in
           "unbound.service"
           "network-online.target"
         ];
-        requires = [ "unbound.service" ];
+        wants = [ "unbound.service" ];
       })
     ];
   };
