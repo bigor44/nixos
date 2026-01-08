@@ -15,9 +15,17 @@ in
   config = mkIf cfg.enable {
     services.flatpak.enable = true;
 
-    # Add Flathub repository on system activation
-    system.activationScripts.flatpak-repo = ''
-      ${lib.getExe config.services.flatpak.package} remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    '';
+    # Add Flathub repository via systemd service (after network is online)
+    systemd.services.flatpak-add-flathub = {
+      description = "Add Flathub repository to Flatpak";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${lib.getExe config.services.flatpak.package} remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo";
+      };
+    };
   };
 }
