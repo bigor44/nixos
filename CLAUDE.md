@@ -108,6 +108,7 @@ The repository uses Flake-parts with explicit module imports:
 - **flake.nix**: Main entry point with flake-parts configuration
 - **nix/modules.nix**: Explicit list of all NixOS and Home Manager modules
 - **nix/hosts.nix**: NixOS configuration definitions for all hosts
+- **nix/checks.nix**: Flake checks for formatting and linting
 - **modules/nixos/**: System-level NixOS modules (namespace: `bigor.features.*`, `bigor.profiles.*`, `bigor.services.*`, `bigor.network.*`)
 - **modules/home/**: Home Manager modules (namespace: `bigor.home.*`)
 - **hosts/**: Host-specific NixOS and Home Manager configurations
@@ -120,7 +121,8 @@ The repository uses Flake-parts with explicit module imports:
 ├── flake.nix                    # Flake-parts entry point
 ├── nix/
 │   ├── modules.nix              # Explicit module import list
-│   └── hosts.nix                # NixOS configuration definitions
+│   ├── hosts.nix                # NixOS configuration definitions
+│   └── checks.nix               # Flake checks (formatting, linting)
 ├── modules/
 │   ├── nixos/                   # System modules
 │   │   ├── features/            # Feature modules
@@ -341,7 +343,7 @@ LSP servers configured: bashls, marksman, yaml-language-server, nixd
 
 ## Quality Assurance
 
-Two automated checks run during `nix flake check` (defined in `flake.nix` perSystem):
+Two automated checks run during `nix flake check` (defined in `nix/checks.nix`):
 
 1. **nix-fmt**: Verifies formatting with treefmt (nixfmt, shfmt, prettier, taplo)
 2. **nix-lint**: Runs statix (linting) and deadnix (dead code detection)
