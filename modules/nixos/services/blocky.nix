@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -198,6 +199,8 @@ in
           # Auto-restart on failure (all hosts)
           Restart = "on-failure";
           RestartSec = "1s";
+          # Wait for network to be truly ready (dhcpcd race condition)
+          ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
         };
       }
       (mkIf cfg.useLocalUnbound {
