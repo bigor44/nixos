@@ -9,7 +9,6 @@ let
   cfg = config.bigor.network;
   hostname = config.networking.hostName;
   hostsWithIPs = lib.filterAttrs (_: host: host.ip != null) cfg.hosts;
-  knownInterfaces = lib.unique (lib.mapAttrsToList (_: host: host.interface) cfg.hosts);
 in
 {
   options.bigor.network = {
@@ -21,7 +20,9 @@ in
 
     mainInterface = lib.mkOption {
       type = lib.types.str;
-      description = "Primary network interface name";
+      description = "Primary network interface name (derived from hosts topology)";
+      default = cfg.hosts.${hostname}.interface or "";
+      readOnly = true;
     };
 
     hosts = lib.mkOption {
@@ -80,17 +81,6 @@ in
         {
           assertion = hostname != "" -> cfg.hosts ? ${hostname};
           message = "Host '${hostname}' is not defined in bigor.network.hosts. Add it to the network topology.";
-        }
-        {
-          assertion = cfg.mainInterface != "" -> lib.elem cfg.mainInterface knownInterfaces;
-          message = "Interface '${cfg.mainInterface}' is not defined in any bigor.network.hosts entry. Known interfaces: ${lib.concatStringsSep ", " knownInterfaces}";
-        }
-        {
-          assertion =
-            (hostname != "" && cfg.hosts ? ${hostname}) -> cfg.mainInterface == cfg.hosts.${hostname}.interface;
-          message = "mainInterface '${cfg.mainInterface}' does not match the interface defined for '${hostname}' in bigor.network.hosts (expected: '${
-            cfg.hosts.${hostname}.interface or "undefined"
-          }')";
         }
       ]
       ++ lib.mapAttrsToList (name: host: {

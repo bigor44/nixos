@@ -9,7 +9,6 @@
 
   bigor = {
     profiles.homelab-master.enable = true;
-    network.mainInterface = "enp2s0";
 
     services = {
       # DNS Stack: Unbound + Blocky

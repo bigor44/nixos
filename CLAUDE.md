@@ -61,7 +61,7 @@ nix flake lock --update-input nixpkgs
 nix flake show
 ```
 
-### Fish Shell Abbreviations (defined in modules/home/features/shell.nix and modules/home/features/git.nix)
+### Zsh Shell Aliases (defined in modules/home/features/shell.nix and modules/home/features/git.nix)
 
 - `nfc` → `nix flake check`
 - `nfu` → `nix flake update`
@@ -161,8 +161,8 @@ The repository uses Flake-parts with explicit module imports:
 **Home Modules** (`modules/home/features/`):
 
 - **cli-packages.nix**: Modern CLI tools (eza, fd, ripgrep, btop, lazygit, etc.)
-- **git.nix**: Git config and shell abbreviations
-- **shell.nix**: Fish shell with Tide prompt, fzf, zoxide, bat
+- **git.nix**: Git config and shell aliases
+- **shell.nix**: Zsh shell with Starship prompt, fzf, zoxide, bat
 - **nixvim/**: Neovim with LSP, treesitter, completion, UI plugins (multi-file module)
 - **gui.nix**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
 

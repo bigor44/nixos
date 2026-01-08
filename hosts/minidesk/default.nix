@@ -13,7 +13,6 @@
 
   bigor = {
     profiles.workstation.enable = true;
-    network.mainInterface = "enp2s0";
 
     services = {
       ssh.enable = true;

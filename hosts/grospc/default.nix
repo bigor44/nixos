@@ -13,8 +13,6 @@
 
   bigor = {
     profiles.workstation.enable = true;
-    network.mainInterface = "enp14s0";
-
     services.nfs.client = true;
   };
 

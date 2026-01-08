@@ -11,9 +11,9 @@ Thank you for your interest in contributing! This document outlines the developm
 - [nh](https://github.com/viperML/nh) - Nix Helper (recommended for rebuilds)
 - Age key in `~/.config/sops/age/keys.txt` (for secrets management)
 
-### Shell Abbreviations
+### Shell Aliases
 
-The Fish shell configuration includes helpful abbreviations:
+The Zsh shell configuration includes helpful aliases:
 
 ```bash
 nfc     # nix flake check

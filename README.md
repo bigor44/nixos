@@ -112,7 +112,7 @@ bigor.profiles.homelab-master.enable = true;
 
 Home Manager is integrated via the NixOS module and used for:
 
-- Shell (Fish + Tide)
+- Shell (Zsh + Starship)
 - CLI tooling
 - Git configuration
 - Neovim (via nixvim)
@@ -207,10 +207,11 @@ This registry is used to generate:
 - Firewall rules
 - Service bindings
 
+**Single Source of Truth**: `mainInterface` is automatically derived from the hosts topology - no manual configuration needed.
+
 **Validation**: Assertions ensure configuration consistency:
 
 - Hostname must exist in the hosts registry
-- `mainInterface` must match the interface defined for the current host
 - Static IP requires an interface
 - NFS client requires a static IP
 - NFS server requires local storage mounted
