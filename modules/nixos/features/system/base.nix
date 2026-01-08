@@ -2,8 +2,6 @@
 # Purpose: Core Nix configuration, caches, and internal CA trust
 { inputs, ... }:
 {
-  # Back up existing files that conflict with Home Manager
-  home-manager.backupFileExtension = "backup";
   # Trust internal CA for local services (HTTPS via Caddy)
   security.pki.certificateFiles = [ "${inputs.self}/certs/minipc-ca.pem" ];
 
