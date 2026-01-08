@@ -1,5 +1,5 @@
 # Module: features.git
-# Purpose: Git configuration and Fish shell abbreviations
+# Purpose: Git configuration and Zsh shell aliases
 {
   config,
   lib,
@@ -21,7 +21,7 @@ in
       };
     };
 
-    programs.fish.shellAbbrs = {
+    programs.zsh.shellAliases = {
       g = "git";
       gaa = "git add -A";
       gc = "git commit";

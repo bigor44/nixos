@@ -1,9 +1,8 @@
 # Module: features.shell
-# Purpose: Fish shell with Tide prompt, fzf, zoxide, and bat
+# Purpose: Zsh shell with Starship prompt, fzf, zoxide, and bat
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -15,124 +14,139 @@ in
 
   config = mkIf cfg.enable {
     programs = {
-      fish = {
+      zsh = {
         enable = true;
+        enableCompletion = true;
+        autosuggestion.enable = true;
+        syntaxHighlighting.enable = true;
 
-        plugins = [
-          {
-            name = "Tide";
-            inherit (pkgs.fishPlugins.tide) src;
-          }
-          {
-            name = "autopair";
-            inherit (pkgs.fishPlugins.autopair) src;
-          }
-          {
-            name = "colored-man-pages";
-            inherit (pkgs.fishPlugins.colored-man-pages) src;
-          }
-        ];
-
-        # Tide prompt configuration (declarative equivalent of `tide configure`)
-        interactiveShellInit = ''
-          # Tide configuration - Classic style with True color
-          set -g tide_character_color brgreen
-          set -g tide_character_color_failure brred
-
-          # Prompt style and colors
-          set -g tide_prompt_add_newline_before true
-          set -g tide_prompt_color_frame_and_connection brblack
-          set -g tide_prompt_color_separator_same_color brblack
-          set -g tide_prompt_icon_connection ' '
-          set -g tide_prompt_min_cols 34
-          set -g tide_prompt_pad_items true
-
-          # Left prompt items
-          set -g tide_left_prompt_items pwd git
-          set -g tide_left_prompt_prefix ""
-          set -g tide_left_prompt_separator_diff_color ""
-          set -g tide_left_prompt_separator_same_color ""
-          set -g tide_left_prompt_suffix ""
-
-          # Right prompt items
-          set -g tide_right_prompt_items status cmd_duration context jobs time
-          set -g tide_right_prompt_prefix ""
-          set -g tide_right_prompt_separator_diff_color ""
-          set -g tide_right_prompt_separator_same_color ""
-          set -g tide_right_prompt_suffix ""
-
-          # Time format (24-hour)
-          set -g tide_time_color brblack
-          set -g tide_time_format %H:%M
-
-          # PWD
-          set -g tide_pwd_color_anchors brcyan
-          set -g tide_pwd_color_dirs cyan
-          set -g tide_pwd_color_truncated_dirs magenta
-          set -g tide_pwd_icon ""
-          set -g tide_pwd_icon_home ""
-          set -g tide_pwd_icon_unwritable ""
-          set -g tide_pwd_markers .git
-
-          # Git
-          set -g tide_git_color_branch brgreen
-          set -g tide_git_color_conflicted brred
-          set -g tide_git_color_dirty bryellow
-          set -g tide_git_color_operation brred
-          set -g tide_git_color_staged bryellow
-          set -g tide_git_color_stash brgreen
-          set -g tide_git_color_untracked brblue
-          set -g tide_git_color_upstream brgreen
-          set -g tide_git_icon ""
-          set -g tide_git_truncation_length 24
-
-          # Status
-          set -g tide_status_color brgreen
-          set -g tide_status_color_failure brred
-          set -g tide_status_icon ✔
-          set -g tide_status_icon_failure ✘
-
-          # Command duration
-          set -g tide_cmd_duration_color brblack
-          set -g tide_cmd_duration_decimals 0
-          set -g tide_cmd_duration_threshold 3000
-
-          # Context (user@host)
-          set -g tide_context_always_display false
-          set -g tide_context_color_default bryellow
-          set -g tide_context_color_root brred
-          set -g tide_context_color_ssh bryellow
-
-          # Jobs
-          set -g tide_jobs_color brgreen
-          set -g tide_jobs_icon ""
+        initContent = ''
+          # Colored man pages
+          export LESS_TERMCAP_mb=$'\e[1;32m'
+          export LESS_TERMCAP_md=$'\e[1;32m'
+          export LESS_TERMCAP_me=$'\e[0m'
+          export LESS_TERMCAP_se=$'\e[0m'
+          export LESS_TERMCAP_so=$'\e[01;33m'
+          export LESS_TERMCAP_ue=$'\e[0m'
+          export LESS_TERMCAP_us=$'\e[1;4;31m'
         '';
 
         shellAliases = {
+          # Navigation
           ll = "eza -l --icons --git";
           la = "eza -lah --icons --git";
           lt = "eza --tree --level=2 --icons";
           tree = "eza --tree";
+
+          # Safety
           rm = "rm -i";
           cp = "cp -i";
           mv = "mv -i";
+
+          # Directory shortcuts
           ".." = "cd ..";
           "..." = "cd ../..";
           "...." = "cd ../../..";
-        };
 
-        shellAbbrs = {
+          # Nix
           nfc = "nix flake check";
           nfu = "nix flake update";
+
+          # System info
           ports = "netstat -tulanp";
           meminfo = "free -h";
           diskinfo = "df -h";
         };
       };
 
+      starship = {
+        enable = true;
+        enableZshIntegration = true;
+        settings = {
+          add_newline = false;
+
+          # Catppuccin Mocha palette
+          palette = "catppuccin_mocha";
+          palettes.catppuccin_mocha = {
+            rosewater = "#f5e0dc";
+            flamingo = "#f2cdcd";
+            pink = "#f5c2e7";
+            mauve = "#cba6f7";
+            red = "#f38ba8";
+            maroon = "#eba0ac";
+            peach = "#fab387";
+            yellow = "#f9e2af";
+            green = "#a6e3a1";
+            teal = "#94e2d5";
+            sky = "#89dceb";
+            sapphire = "#74c7ec";
+            blue = "#89b4fa";
+            lavender = "#b4befe";
+            text = "#cdd6f4";
+            subtext1 = "#bac2de";
+            subtext0 = "#a6adc8";
+            overlay2 = "#9399b2";
+            overlay1 = "#7f849c";
+            overlay0 = "#6c7086";
+            surface2 = "#585b70";
+            surface1 = "#45475a";
+            surface0 = "#313244";
+            base = "#1e1e2e";
+            mantle = "#181825";
+            crust = "#11111b";
+          };
+
+          character = {
+            success_symbol = "[❯](green)";
+            error_symbol = "[❯](red)";
+          };
+
+          directory = {
+            style = "sapphire";
+            truncation_length = 3;
+            truncate_to_repo = true;
+          };
+
+          git_branch = {
+            style = "mauve";
+          };
+
+          git_status = {
+            style = "maroon";
+            conflicted = "[≠](red)";
+            ahead = "[⇡](green)";
+            behind = "[⇣](peach)";
+            diverged = "[⇕](red)";
+            untracked = "[?](teal)";
+            stashed = "[$](lavender)";
+            modified = "[!](yellow)";
+            staged = "[+](green)";
+          };
+
+          cmd_duration = {
+            min_time = 3000;
+            style = "overlay1";
+          };
+
+          time = {
+            disabled = false;
+            format = "[$time]($style) ";
+            style = "subtext0";
+            time_format = "%H:%M";
+          };
+
+          status = {
+            disabled = false;
+            symbol = "✘ ";
+            success_symbol = "";
+            style = "red";
+          };
+        };
+      };
+
       fzf = {
         enable = true;
-        enableFishIntegration = true;
+        enableZshIntegration = true;
         defaultCommand = "fd --type f --hidden --exclude .git";
         defaultOptions = [
           "--height 40%"
@@ -144,7 +158,7 @@ in
 
       zoxide = {
         enable = true;
-        enableFishIntegration = true;
+        enableZshIntegration = true;
         options = [ "--cmd cd" ];
       };
 
