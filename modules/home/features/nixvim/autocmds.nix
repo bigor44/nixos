@@ -25,17 +25,6 @@
           __raw = "function() vim.opt_local.formatoptions:remove({ 'r', 'o' }) end";
         };
       }
-      # Format on save using LSP
-      {
-        event = "BufWritePre";
-        callback = {
-          __raw = ''
-            function()
-              vim.lsp.buf.format({ async = false })
-            end
-          '';
-        };
-      }
     ];
   };
 }

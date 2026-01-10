@@ -250,6 +250,16 @@ The configuration uses COSMIC DE (System76's Rust-based desktop):
   - Assertions ensure coherence (no client without static IP, no server without disk)
 - **SSH**: OpenSSH server
 
+### Kernel Selection
+
+The configuration uses different Linux kernels optimized for each host's role:
+
+- **minipc**: Linux LTS kernel (`linuxPackages`) for maximum stability and reliability. As a homelab server running critical network services (DNS, NFS, Caddy), stability and long-term support are prioritized over cutting-edge performance features.
+
+- **minidesk** and **grospc**: Linux Zen kernel (`linuxPackages_zen`) for enhanced desktop performance and responsiveness. The Zen kernel includes patches optimized for desktop workloads, interactive applications, and gaming, providing better latency and throughput for workstation use cases.
+
+This kernel strategy balances the needs of a stable server infrastructure with the performance demands of interactive desktop environments.
+
 ## Making Changes
 
 ### Adding a New Module

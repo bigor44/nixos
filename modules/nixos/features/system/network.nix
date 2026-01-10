@@ -12,7 +12,6 @@ let
     mkIf
     types
     filterAttrs
-    mapAttrs
     mapAttrsToList
     concatStringsSep
     ;
@@ -54,16 +53,6 @@ in
         }
       );
     };
-
-    # Derive IPs from hosts for backward compatibility
-    ips = mapAttrs (
-      name: _:
-      mkOption {
-        type = types.str;
-        default = config.bigor.network.hosts.${name}.ip;
-        description = "Static IP for ${name}";
-      }
-    ) hostsWithIPs;
   };
 
   config = mkMerge [

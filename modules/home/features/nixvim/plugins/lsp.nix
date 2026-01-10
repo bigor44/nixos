@@ -28,7 +28,7 @@ in
           validate.enable = true;
           schemas = [
             {
-              fileMatch = [ "*.json" ];
+              fileMatch = [ "package.json" ];
               url = "https://json.schemastore.org/package.json";
             }
           ];
@@ -65,7 +65,8 @@ in
               '';
             };
 
-            # Formatter (must match Conform / treefmt)
+            # Formatter for Nix files (in-editor formatting)
+            # Note: treefmt is project-specific; nixfmt works universally
             formatting = {
               command = [ "nixfmt" ];
             };

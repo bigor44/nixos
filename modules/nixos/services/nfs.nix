@@ -16,7 +16,7 @@ let
   cfg = config.bigor.services.nfs;
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
-  inherit (networkCfg) ips mainInterface;
+  inherit (networkCfg) mainInterface;
 
   # Check if /mnt/storage is a real local filesystem (not NFS, not disabled)
   hasLocalStorage =
@@ -98,7 +98,7 @@ in
 
       (mkIf cfg.client {
         fileSystems."/mnt/storage" = {
-          device = "${ips.minipc}:/mnt/storage";
+          device = "${config.bigor.network.hosts.minipc.ip}:/mnt/storage";
           fsType = "nfs";
           # Automount on access, not at boot
           options = [

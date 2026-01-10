@@ -76,5 +76,28 @@
     # Trouble (Diagnostics List)
     # ==========================================================================
     trouble.enable = true;
+
+    # ==========================================================================
+    # Conform (Multi-formatter)
+    # ==========================================================================
+    conform-nvim = {
+      enable = true;
+      settings = {
+        formatters_by_ft = {
+          nix = [ "nixfmt" ];
+          sh = [ "shfmt" ];
+          bash = [ "shfmt" ];
+          json = [ "prettier" ];
+          jsonc = [ "prettier" ];
+          yaml = [ "prettier" ];
+          markdown = [ "prettier" ];
+          toml = [ "taplo" ];
+        };
+        format_on_save = {
+          lsp_format = "fallback";
+          timeout_ms = 500;
+        };
+      };
+    };
   };
 }
