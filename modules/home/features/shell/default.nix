@@ -4,7 +4,9 @@
   lib,
   ...
 }:
-with lib;
+let
+  inherit (lib) mkEnableOption;
+in
 {
   imports = [
     ./zsh.nix

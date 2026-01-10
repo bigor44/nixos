@@ -190,8 +190,8 @@ All custom modules follow this pattern:
 
 ```nix
 { config, lib, ... }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf mkOption types;
   cfg = config.bigor.<category>.<module-name>;
 in
 {
@@ -205,6 +205,12 @@ in
   };
 }
 ```
+
+**Key Points**:
+
+- Use `inherit (lib)` to explicitly import needed functions from lib
+- Avoid `with lib;` as it can cause naming conflicts and reduces code clarity
+- Only inherit the functions you actually use in the module
 
 Enable modules in host configs:
 

@@ -6,8 +6,17 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkMerge
+    types
+    filterAttrs
+    mapAttrs'
+    nameValuePair
+    ;
   cfg = config.bigor.services.blocky;
   inherit (config.bigor.network) mainInterface;
   minipcIp = config.bigor.network.hosts.minipc.ip;

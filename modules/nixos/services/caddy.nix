@@ -5,8 +5,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.services.caddy;
   inherit (config.bigor.network) mainInterface;
 in

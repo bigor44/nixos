@@ -15,8 +15,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf optionals;
   cfg = config.bigor.services.unbound;
 in
 {
@@ -51,7 +51,7 @@ in
         "127.0.0.0/8 allow"
         "::1 allow"
       ]
-      ++ (lib.optionals cfg.listenOnLan [
+      ++ (optionals cfg.listenOnLan [
         "${config.bigor.network.subnet} allow"
       ]);
     in

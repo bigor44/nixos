@@ -6,8 +6,8 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.home.features.gui;
 in
 {

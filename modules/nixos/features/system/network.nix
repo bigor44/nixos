@@ -6,38 +6,48 @@
   ...
 }:
 let
+  inherit (lib)
+    mkOption
+    mkMerge
+    mkIf
+    types
+    filterAttrs
+    mapAttrs
+    mapAttrsToList
+    concatStringsSep
+    ;
   cfg = config.bigor.network;
   hostname = config.networking.hostName;
-  hostsWithIPs = lib.filterAttrs (_: host: host.ip != null) cfg.hosts;
+  hostsWithIPs = filterAttrs (_: host: host.ip != null) cfg.hosts;
 in
 {
   options.bigor.network = {
-    subnet = lib.mkOption {
-      type = lib.types.strMatching "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$";
+    subnet = mkOption {
+      type = types.strMatching "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$";
       default = "192.168.1.0/24";
       description = "Network subnet in CIDR notation (e.g., 192.168.1.0/24)";
     };
 
-    mainInterface = lib.mkOption {
-      type = lib.types.str;
+    mainInterface = mkOption {
+      type = types.str;
       description = "Primary network interface name (derived from hosts topology)";
       default = cfg.hosts.${hostname}.interface or "";
       readOnly = true;
     };
 
-    hosts = lib.mkOption {
+    hosts = mkOption {
       description = "All hosts in the network with their static IPs and interfaces";
       default = { };
-      type = lib.types.attrsOf (
-        lib.types.submodule {
+      type = types.attrsOf (
+        types.submodule {
           options = {
-            ip = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
+            ip = mkOption {
+              type = types.nullOr types.str;
               default = null;
               description = "Static IP address (null for DHCP hosts)";
             };
-            interface = lib.mkOption {
-              type = lib.types.str;
+            interface = mkOption {
+              type = types.str;
               description = "Primary network interface";
             };
           };
@@ -46,17 +56,17 @@ in
     };
 
     # Derive IPs from hosts for backward compatibility
-    ips = lib.mapAttrs (
+    ips = mapAttrs (
       name: _:
-      lib.mkOption {
-        type = lib.types.str;
+      mkOption {
+        type = types.str;
         default = config.bigor.network.hosts.${name}.ip;
         description = "Static IP for ${name}";
       }
     ) hostsWithIPs;
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     # Define hosts
     {
       bigor.network.hosts = {
@@ -83,7 +93,7 @@ in
           message = "Host '${hostname}' is not defined in bigor.network.hosts. Add it to the network topology.";
         }
       ]
-      ++ lib.mapAttrsToList (name: host: {
+      ++ mapAttrsToList (name: host: {
         assertion = host.ip != null -> host.interface != null;
         message = "Host '${name}' has a static IP but no interface defined. Static IP requires an interface.";
       }) cfg.hosts;
@@ -91,8 +101,8 @@ in
 
     # Generate /etc/hosts from hosts registry
     {
-      networking.extraHosts = lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: host: "${host.ip} ${name}") hostsWithIPs
+      networking.extraHosts = concatStringsSep "\n" (
+        mapAttrsToList (name: host: "${host.ip} ${name}") hostsWithIPs
       );
     }
 
@@ -100,7 +110,7 @@ in
     { networking.nftables.enable = true; }
 
     # Configure DNS servers when Blocky is enabled locally
-    (lib.mkIf config.bigor.services.blocky.enable (
+    (mkIf config.bigor.services.blocky.enable (
       let
         fallbackDNS = [
           "127.0.0.1" # Blocky (primary)

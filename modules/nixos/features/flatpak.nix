@@ -5,8 +5,8 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf getExe;
   cfg = config.bigor.features.flatpak;
 in
 {
@@ -24,7 +24,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${lib.getExe config.services.flatpak.package} remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo";
+        ExecStart = "${getExe config.services.flatpak.package} remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo";
       };
     };
   };

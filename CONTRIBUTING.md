@@ -46,8 +46,8 @@ All modules follow this structure:
 
 ```nix
 { config, lib, ... }:
-with lib;
 let
+  inherit (lib) mkIf mkEnableOption mkOption types;
   cfg = config.bigor.<category>.<module-name>;
 in
 {
@@ -69,6 +69,7 @@ in
 - Home modules: `bigor.home.*`
 - Always provide an `enable` option
 - Use descriptive option names
+- **Avoid `with lib;`** - prefer explicit `inherit (lib)` for better readability and to avoid naming conflicts
 
 ### 2. Code Quality
 

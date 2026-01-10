@@ -5,8 +5,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkIf;
   cfg = config.bigor.home.features.shell;
 in
 {

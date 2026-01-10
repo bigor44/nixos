@@ -6,8 +6,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.fonts;
 in
 {

@@ -5,8 +5,8 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.bigor.profiles.workstation;
 in
 {

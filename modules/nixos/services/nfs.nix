@@ -5,8 +5,14 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkMerge
+    types
+    ;
   cfg = config.bigor.services.nfs;
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;

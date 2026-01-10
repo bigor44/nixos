@@ -5,8 +5,8 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.desktop.cosmic;
 in
 {
