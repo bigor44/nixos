@@ -1,6 +1,8 @@
 # Module: unbound
 # Purpose: High-performance recursive DNS resolver with DNSSEC validation
 #
+# Note: This service is typically auto-enabled by bigor.policies.dns when mode is "local-recursive"
+#
 # Features:
 # - Recursive DNS resolution with DNSSEC validation
 # - Optimized cache (256MB) with prefetching

@@ -25,6 +25,12 @@
     ../modules/nixos/features/flatpak.nix
     ../modules/nixos/features/via.nix
 
+    # Policies (strategic decisions)
+    ../modules/nixos/policies/kernel.nix
+    ../modules/nixos/policies/power.nix
+    ../modules/nixos/policies/dns.nix
+    ../modules/nixos/policies/storage.nix
+
     # Services
     ../modules/nixos/services/blocky.nix
     ../modules/nixos/services/caddy.nix

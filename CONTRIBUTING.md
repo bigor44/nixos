@@ -65,11 +65,52 @@ in
 **Key Points**:
 
 - Use the `bigor` namespace for all custom options
-- System modules: `bigor.features.*`, `bigor.services.*`, `bigor.profiles.*`
+- System modules: `bigor.features.*`, `bigor.services.*`, `bigor.profiles.*`, `bigor.policies.*`
 - Home modules: `bigor.home.*`
-- Always provide an `enable` option
+- Always provide an `enable` option for features/services/profiles (but NOT for policies)
 - Use descriptive option names
 - **Avoid `with lib;`** - prefer explicit `inherit (lib)` for better readability and to avoid naming conflicts
+
+#### Policy Module Pattern
+
+Policies are a special type of module that declare strategic decisions (kernel selection, DNS strategy, power management). Unlike features/services, **policies do not have an `enable` option** - they are always active and use enums to select strategies:
+
+```nix
+{ config, lib, ... }:
+let
+  inherit (lib) mkOption types;
+  cfg = config.bigor.policies.<policy-name>;
+in
+{
+  options.bigor.policies.<policy-name> = mkOption {
+    type = types.enum [ "option1" "option2" "option3" ];
+    default = "option1";
+    description = ''
+      Policy description explaining each option:
+      - "option1": Description of strategy 1
+      - "option2": Description of strategy 2
+      - "option3": Description of strategy 3
+    '';
+  };
+
+  config = {
+    # Implement the policy by setting low-level NixOS options
+    # based on the selected strategy
+  };
+}
+```
+
+**Policy modules may also provide computed values** for other modules to consume:
+
+```nix
+options.bigor.policies.<policy-name>.computed = {
+  someValue = mkOption {
+    type = types.bool;
+    readOnly = true;
+    default = cfg == "option2";
+  };
+};
+```
 
 ### 2. Code Quality
 
@@ -350,6 +391,89 @@ git push origin feature/my-feature
    ```
 
 5. **Test service functionality** after deployment
+
+### Adding a New Policy
+
+Policies centralize strategic decisions (kernel selection, DNS strategy, storage mode, etc.) to avoid duplication across hosts.
+
+1. **Create policy module** in `modules/nixos/policies/<name>.nix`:
+
+   ```nix
+   { config, lib, ... }:
+   let
+     inherit (lib) mkOption types;
+     cfg = config.bigor.policies.<name>;
+   in
+   {
+     options.bigor.policies.<name> = mkOption {
+       type = types.enum [ "strategy1" "strategy2" "strategy3" ];
+       default = "strategy1";
+       description = ''
+         Policy description:
+         - "strategy1": Description
+         - "strategy2": Description
+         - "strategy3": Description
+       '';
+     };
+
+     config = {
+       # Implement policy by setting NixOS options based on strategy
+       # Example: boot.kernelPackages = if cfg == "strategy1" then ... else ...
+     };
+   }
+   ```
+
+2. **Add to `nix/modules.nix`**:
+
+   ```nix
+   nixosModules = [
+     # ... existing modules
+     # Policies (strategic decisions)
+     ../modules/nixos/policies/<name>.nix
+   ];
+   ```
+
+3. **Add computed values** if other modules need to consume policy decisions:
+
+   ```nix
+   options.bigor.policies.<name>.computed = {
+     shouldDoSomething = mkOption {
+       type = types.bool;
+       readOnly = true;
+       default = cfg == "strategy2";
+       description = "Computed flag for service modules to read";
+     };
+   };
+   ```
+
+4. **Add assertions** to validate policy coherence:
+
+   ```nix
+   config.assertions = [
+     {
+       assertion = cfg == "strategy2" -> <some-condition>;
+       message = "Policy 'strategy2' requires <condition>";
+     }
+   ];
+   ```
+
+5. **Use in host configuration**:
+
+   ```nix
+   bigor.policies.<name> = "strategy2";
+   ```
+
+6. **Test all affected hosts**:
+   ```bash
+   nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel
+   ```
+
+**Benefits of policies:**
+
+- Centralize strategic decisions in one place
+- Eliminate duplication (e.g., kernel selection across multiple hosts)
+- Service modules become pure implementation (no conditional logic)
+- Easy to change strategy globally
 
 ## Working with Secrets
 

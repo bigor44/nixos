@@ -1,5 +1,8 @@
 # Module: nfs
 # Purpose: Network file sharing (server exports, client mounts, local storage)
+#
+# Note: This service is typically configured by bigor.policies.storage
+# The storage policy sets server/client/localStorage options based on the storage mode
 {
   config,
   lib,
@@ -14,15 +17,8 @@ let
     types
     ;
   cfg = config.bigor.services.nfs;
-  hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface;
-
-  # Check if /mnt/storage is a real local filesystem (not NFS, not disabled)
-  hasLocalStorage =
-    config.fileSystems ? "/mnt/storage"
-    && config.fileSystems."/mnt/storage".fsType != "nfs"
-    && config.fileSystems."/mnt/storage".device != "none";
 in
 {
   options.bigor.services.nfs = {
@@ -48,22 +44,33 @@ in
     let
       # NFS export options: all requests mapped to bigor (1000:100) for security
       nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
+
+      hostname = config.networking.hostName;
+
+      # Check if /mnt/storage is mounted (either via localStorage or externally)
+      hasStorageMounted =
+        config.fileSystems ? "/mnt/storage" && config.fileSystems."/mnt/storage".device != "none";
     in
     mkMerge [
-      # Assertions for coherence
+      # Safety assertions when service is used directly (bypassing policy layer)
+      # Note: More comprehensive validation exists in bigor.policies.storage
       {
         assertions = [
           {
-            assertion = cfg.client -> networkCfg.hosts.${hostname}.ip != null;
-            message = "NFS client requires a static IP. Host '${hostname}' uses DHCP.";
+            assertion = cfg.server -> networkCfg.hosts.${hostname}.ip != null;
+            message = "NFS server requires a static IP for ${hostname}. Consider using bigor.policies.storage.mode = \"nfs-server\" instead.";
           }
           {
-            assertion = cfg.server -> hasLocalStorage;
-            message = "NFS server requires /mnt/storage to be mounted from a local disk.";
+            assertion = cfg.server -> hasStorageMounted;
+            message = "NFS server requires /mnt/storage to be mounted. Enable localStorage or use bigor.policies.storage.";
+          }
+          {
+            assertion = cfg.client -> networkCfg.hosts.${hostname}.ip != null;
+            message = "NFS client requires a static IP for ${hostname}. Consider using bigor.policies.storage.mode = \"nfs-client\" instead.";
           }
           {
             assertion = !(cfg.client && cfg.localStorage.enable);
-            message = "Cannot enable both NFS client and localStorage for /mnt/storage.";
+            message = "Cannot enable both NFS client and localStorage for /mnt/storage (conflicting mounts).";
           }
         ];
       }

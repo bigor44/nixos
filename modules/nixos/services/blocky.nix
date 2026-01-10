@@ -34,16 +34,6 @@ in
   options.bigor.services.blocky = {
     enable = mkEnableOption "Blocky DNS proxy with ad blocking";
 
-    useLocalUnbound = mkEnableOption ''
-      Use local Unbound (127.0.0.1:5335) instead of remote minipc.
-      Enable this on the DNS server (minipc) itself.
-    '';
-
-    portableMode = mkEnableOption ''
-      Portable mode: skip minipc upstream, use fallback DNS directly.
-      Enable this on portable hosts that are often outside the local network.
-    '';
-
     fallbackUpstreams = mkOption {
       type = types.listOf types.str;
       default = [
@@ -65,13 +55,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.useLocalUnbound -> config.bigor.services.unbound.enable;
-        message = "blocky.useLocalUnbound requires unbound.enable";
-      }
-    ];
-
     services.blocky = {
       enable = true;
 
@@ -85,19 +68,11 @@ in
         };
 
         # =======================================================================
-        # Upstream DNS with automatic failover
+        # Upstream DNS with automatic failover (configured via DNS policy)
         # =======================================================================
         upstreams = {
-          groups.default =
-            if cfg.useLocalUnbound then
-              # DNS server (minipc): local Unbound first, then external fallback
-              [ "127.0.0.1:5335" ] ++ cfg.fallbackUpstreams
-            else if cfg.portableMode then
-              # Portable mode: external DNS only (no minipc dependency)
-              cfg.fallbackUpstreams
-            else
-              # Other hosts: minipc first, then failover to external
-              [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
+          # DNS upstreams are computed by bigor.policies.dns based on mode
+          groups.default = config.bigor.policies.dns.computed.blockyUpstreams;
 
           # Strict: try upstreams in order, failover on timeout/error
           strategy = "parallel_best";
@@ -212,7 +187,7 @@ in
           ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
         };
       }
-      (mkIf cfg.useLocalUnbound {
+      (mkIf config.bigor.policies.dns.computed.shouldRunUnbound {
         after = [
           "unbound.service"
           "network-online.target"

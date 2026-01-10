@@ -166,6 +166,79 @@ The repository uses Flake-parts with explicit module imports:
 - **nixvim/**: Neovim with LSP, treesitter, completion, UI plugins (multi-file module)
 - **gui.nix**: Desktop applications (Prismlauncher, Discord, WhatsApp, Brave)
 
+### Policy Layer
+
+The configuration uses a policy layer to separate strategic decisions (what) from implementation details (how). Policies are declared at the host level and consumed by feature/service modules.
+
+**Available Policies:**
+
+- `bigor.policies.kernel`: Kernel selection
+  - `"server"`: LTS kernel for stability (linuxPackages)
+  - `"desktop"`: Zen kernel for desktop performance (linuxPackages_zen)
+  - `"hardened"`: Security-focused kernel (linuxPackages_hardened)
+  - `"latest"`: Latest mainline kernel (linuxPackages_latest)
+
+- `bigor.policies.power`: CPU power management
+  - `"amd-pstate"`: AMD P-State EPP active mode
+  - `"intel-pstate"`: Intel P-State active mode
+  - `"performance"`: Maximum performance
+  - `"balanced"`: Default kernel behavior
+  - `"powersave"`: Maximum power saving
+
+- `bigor.policies.dns.mode`: DNS resolution strategy
+  - `"local-recursive"`: Run Unbound + Blocky locally (server role)
+  - `"lan-recursive"`: Use LAN recursive resolver (workstation pointing to minipc)
+  - `"portable"`: Cloud DNS only, no LAN dependencies (portable hosts)
+  - `"cloud"`: Direct cloud DNS (future: no filtering)
+
+- `bigor.policies.storage.mode`: Storage access strategy
+  - `"nfs-server"`: Export local storage via NFS (requires static IP + device)
+  - `"nfs-client"`: Mount storage from minipc via NFS (requires static IP)
+  - `"local"`: Local storage mount, no network sharing (requires device)
+  - `"none"`: No storage mount
+
+**Policy vs Profile vs Features:**
+
+- **Policies** (`bigor.policies.*`): High-level strategic decisions (what kernel, what DNS strategy, what storage mode)
+- **Profiles** (`bigor.profiles.*`): Feature composition bundles (workstation enables audio + desktop + gaming)
+- **Features/Services** (`bigor.features.*`, `bigor.services.*`): Implementation details (how to configure PipeWire, Blocky, NFS)
+
+**Example Host Configuration:**
+
+```nix
+bigor = {
+  # Policies: strategic decisions visible at a glance
+  policies = {
+    kernel = "desktop";
+    power = "amd-pstate";
+    dns.mode = "lan-recursive";
+    storage.mode = "nfs-client";
+  };
+
+  # Profile: feature composition
+  profiles.workstation.enable = true;
+};
+```
+
+**Benefits:**
+
+- All strategic decisions visible in one block
+- No duplication of kernel/power settings across hosts
+- Service modules are pure implementation (no conditional logic for modes)
+- Easy to change strategy globally (e.g., all desktops to latest kernel)
+- Assertions validate policy coherence centrally
+
+**Implementation Details:**
+
+Policy modules provide computed read-only values that service modules consume:
+
+- `bigor.policies.dns.computed.blockyUpstreams`: Computed DNS upstream list based on mode
+- `bigor.policies.dns.computed.shouldRunUnbound`: Whether to run Unbound locally
+- `bigor.policies.storage.computed.shouldRunNfsServer`: Whether to export via NFS
+- `bigor.policies.storage.computed.shouldMountNfsClient`: Whether to mount remote NFS
+
+This eliminates conditional logic scattered across service modules and centralizes all decision-making in the policy layer.
+
 ### Network Topology
 
 Network configuration is centralized in `modules/nixos/features/system/network.nix`:

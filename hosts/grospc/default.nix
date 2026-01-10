@@ -1,20 +1,24 @@
 # Host: grospc
 # Purpose: Desktop workstation with gaming optimizations
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
   networking.hostName = "grospc";
   system.stateVersion = "25.11";
 
-  # AMD P-State EPP active mode for better power management
-  boot.kernelParams = [ "amd_pstate=active" ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-
   bigor = {
+    # Policies: strategic decisions
+    policies = {
+      kernel = "desktop";
+      power = "amd-pstate";
+      dns.mode = "lan-recursive";
+      storage.mode = "nfs-client";
+    };
+
+    # Profile and features
     profiles.workstation.enable = true;
     features.via.enable = true;
-    services.nfs.client = true;
   };
 
   fileSystems."/steamlibrary" = {

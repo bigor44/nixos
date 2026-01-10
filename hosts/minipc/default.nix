@@ -1,6 +1,6 @@
 # Host: minipc
 # Purpose: Homelab server with DNS, Caddy, and NFS
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -8,24 +8,19 @@
   system.stateVersion = "25.11";
 
   bigor = {
-    profiles.homelab-master.enable = true;
-
-    services = {
-      # DNS Stack: Unbound + Blocky
-      unbound.listenOnLan = true;
-      blocky.useLocalUnbound = true;
-
-      # Local storage for NFS server
-      nfs.localStorage = {
-        enable = true;
+    # Policies: strategic decisions
+    policies = {
+      kernel = "server";
+      power = "amd-pstate";
+      dns.mode = "local-recursive";
+      storage = {
+        mode = "nfs-server";
         device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
       };
     };
-  };
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages;
-    kernelParams = [ "amd_pstate=active" ];
+    # Profile
+    profiles.homelab-master.enable = true;
   };
 
   hardware.cpu.amd.updateMicrocode = true;

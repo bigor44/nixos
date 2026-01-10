@@ -32,6 +32,7 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 ## Key Design Principles
 
 - **Single source of truth** for systems and users
+- **Policy-driven configuration** - strategic decisions (kernel, DNS, storage) centralized and explicit
 - **Feature-based composition** instead of host-specific snowflakes
 - **Profiles** to express machine roles (workstation, server, etc.)
 - **Strict formatting and linting** enforced via flake checks
@@ -64,6 +65,7 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 │   └── nixos/
 │       ├── features/       # NixOS feature modules
 │       ├── services/       # NixOS service modules
+│       ├── policies/       # Strategic decision modules (kernel, DNS, storage)
 │       └── profiles/       # Composite profiles
 ├── dotfiles/               # COSMIC DE and autostart configs
 ├── scripts/                # Utility & automation scripts
@@ -79,6 +81,7 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 
 The repository uses **flake-parts** to organize the configuration:
 
+- `policies` - strategic decisions (what kernel, what DNS strategy, what storage mode)
 - `features` - atomic, reusable building blocks
 - `services` - system services (DNS, SSH, NFS, Caddy, etc.)
 - `profiles` - machine roles composed of features and services
@@ -90,25 +93,108 @@ Module imports are explicit in `nix/modules.nix` for clarity and maintainability
 
 ---
 
-### 2. NixOS Configuration
+### 2. Policy Layer
+
+The configuration uses a **policy layer** to separate strategic decisions ("what") from implementation details ("how").
+
+#### Available Policies
+
+- **`bigor.policies.kernel`** - Kernel selection
+  - `"server"`: LTS kernel for stability
+  - `"desktop"`: Zen kernel for performance
+  - `"hardened"`: Security-focused kernel
+  - `"latest"`: Latest mainline kernel
+
+- **`bigor.policies.power`** - CPU power management
+  - `"amd-pstate"`: AMD P-State EPP active mode
+  - `"intel-pstate"`: Intel P-State active mode
+  - `"performance"`: Maximum performance
+  - `"balanced"`: Default kernel behavior
+  - `"powersave"`: Maximum power saving
+
+- **`bigor.policies.dns.mode`** - DNS resolution strategy
+  - `"local-recursive"`: Run Unbound + Blocky locally (server role)
+  - `"lan-recursive"`: Use LAN recursive resolver (workstation)
+  - `"portable"`: Cloud DNS only, no LAN dependencies
+  - `"cloud"`: Direct cloud DNS (future: no filtering)
+
+- **`bigor.policies.storage.mode`** - Storage access strategy
+  - `"nfs-server"`: Export local storage via NFS
+  - `"nfs-client"`: Mount storage from minipc
+  - `"local"`: Local storage mount, no network sharing
+  - `"none"`: No storage mount
+
+#### Example Host Configuration
+
+```nix
+bigor = {
+  # Policies: strategic decisions visible at a glance
+  policies = {
+    kernel = "desktop";
+    power = "amd-pstate";
+    dns.mode = "lan-recursive";
+    storage.mode = "nfs-client";
+  };
+
+  # Profile: feature composition
+  profiles.workstation.enable = true;
+};
+```
+
+#### Benefits
+
+- **No duplication**: Kernel/power settings declared once (not in 3 places)
+- **Clear intent**: All strategic decisions visible at a glance
+- **Simplified services**: Blocky, Unbound, NFS are pure implementation
+- **Centralized validation**: Assertions validate policy coherence
+- **Easy global changes**: Change all desktops to latest kernel in one place
+
+---
+
+### 3. NixOS Configuration
 
 NixOS modules are organized by concern:
 
+- **Policies**: Strategic decisions (kernel, power, DNS, storage)
 - **System features**: boot, locale, fonts, networking, users
 - **Desktop features**: COSMIC desktop, audio, gaming
 - **Services**: Blocky, Unbound, SSH, Caddy, NFS
 - **Profiles**: workstation, homelab server
 
-Example:
+Example workstation:
 
 ```nix
-bigor.profiles.workstation.enable = true;
-bigor.profiles.homelab-master.enable = true;
+bigor = {
+  policies = {
+    kernel = "desktop";
+    power = "amd-pstate";
+    dns.mode = "lan-recursive";
+    storage.mode = "nfs-client";
+  };
+  profiles.workstation.enable = true;
+};
+```
+
+Example server:
+
+```nix
+bigor = {
+  policies = {
+    kernel = "server";
+    power = "amd-pstate";
+    dns.mode = "local-recursive";
+    storage = {
+      mode = "nfs-server";
+      device = "/dev/disk/by-uuid/...";
+    };
+  };
+  profiles.homelab-master.enable = true;
+};
 ```
 
 ---
 
-### 3. Home Manager
+### 4. Home Manager
 
 Home Manager is integrated via the NixOS module and used for:
 
@@ -187,6 +273,10 @@ A central part of the repository is a **production-grade DNS stack**:
 - Local domain rewrites (`*.bigor.lan`)
 - Privacy-friendly logging
 - **SPOF mitigation**: Fallback to external DNS (1.1.1.1) if Blocky is down
+- **Policy-driven modes**: DNS strategy configured via `bigor.policies.dns.mode`
+  - `local-recursive`: minipc runs both Unbound and Blocky
+  - `lan-recursive`: workstations use minipc as upstream
+  - `portable`: minidesk uses cloud DNS only (no LAN dependencies)
 
 ### Network Topology
 
@@ -213,8 +303,12 @@ This registry is used to generate:
 
 - Hostname must exist in the hosts registry
 - Static IP requires an interface
-- NFS client requires a static IP
-- NFS server requires local storage mounted
+- **Policy coherence** (in policy modules):
+  - DNS `local-recursive` mode requires static IP
+  - DNS `lan-recursive` mode requires minipc to have static IP
+  - Storage `nfs-server` mode requires static IP + local device
+  - Storage `nfs-client` mode requires static IP
+  - Storage `local` mode requires device specified
 - Prevents typos and misconfigurations at build time
 
 ---
