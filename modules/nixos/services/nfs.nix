@@ -44,33 +44,24 @@ in
     let
       # NFS export options: all requests mapped to bigor (1000:100) for security
       nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
-
-      hostname = config.networking.hostName;
-
-      # Check if /mnt/storage is mounted (either via localStorage or externally)
-      hasStorageMounted =
-        config.fileSystems ? "/mnt/storage" && config.fileSystems."/mnt/storage".device != "none";
     in
     mkMerge [
-      # Safety assertions when service is used directly (bypassing policy layer)
-      # Note: More comprehensive validation exists in bigor.policies.storage
+      # Safety assertions: enforce using policy layer for proper validation
+      # The policy layer handles all validation (static IP, device, coherence)
       {
         assertions = [
           {
-            assertion = cfg.server -> networkCfg.hosts.${hostname}.ip != null;
-            message = "NFS server requires a static IP for ${hostname}. Consider using bigor.policies.storage.mode = \"nfs-server\" instead.";
+            assertion = !cfg.server || config.bigor.policies.storage.computed.shouldRunNfsServer;
+            message = "NFS server should be enabled via bigor.policies.storage.mode = \"nfs-server\" instead of bigor.services.nfs.server. This ensures proper static IP and storage validation.";
           }
           {
-            assertion = cfg.server -> hasStorageMounted;
-            message = "NFS server requires /mnt/storage to be mounted. Enable localStorage or use bigor.policies.storage.";
+            assertion = !cfg.client || config.bigor.policies.storage.computed.shouldMountNfsClient;
+            message = "NFS client should be enabled via bigor.policies.storage.mode = \"nfs-client\" instead of bigor.services.nfs.client. This ensures static IP validation.";
           }
           {
-            assertion = cfg.client -> networkCfg.hosts.${hostname}.ip != null;
-            message = "NFS client requires a static IP for ${hostname}. Consider using bigor.policies.storage.mode = \"nfs-client\" instead.";
-          }
-          {
-            assertion = !(cfg.client && cfg.localStorage.enable);
-            message = "Cannot enable both NFS client and localStorage for /mnt/storage (conflicting mounts).";
+            assertion =
+              !cfg.localStorage.enable || (config.bigor.policies.storage.computed.localDevice != null);
+            message = "Local storage should be configured via bigor.policies.storage (mode = \"nfs-server\" or \"local\") instead of bigor.services.nfs.localStorage directly.";
           }
         ];
       }

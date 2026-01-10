@@ -396,16 +396,16 @@ git push origin feature/my-feature
 
 Policies centralize strategic decisions (kernel selection, DNS strategy, storage mode, etc.) to avoid duplication across hosts.
 
-1. **Create policy module** in `modules/nixos/policies/<name>.nix`:
+1. **Create policy module** in `modules/nixos/policies/<policy-name>.nix`:
 
    ```nix
    { config, lib, ... }:
    let
      inherit (lib) mkOption types;
-     cfg = config.bigor.policies.<name>;
+     cfg = config.bigor.policies.<policy-name>;
    in
    {
-     options.bigor.policies.<name> = mkOption {
+     options.bigor.policies.<policy-name> = mkOption {
        type = types.enum [ "strategy1" "strategy2" "strategy3" ];
        default = "strategy1";
        description = ''
@@ -418,7 +418,7 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
 
      config = {
        # Implement policy by setting NixOS options based on strategy
-       # Example: boot.kernelPackages = if cfg == "strategy1" then ... else ...
+       # Example: boot.kernelPackages = { strategy1 = ...; strategy2 = ...; }.${cfg};
      };
    }
    ```
@@ -429,14 +429,14 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
    nixosModules = [
      # ... existing modules
      # Policies (strategic decisions)
-     ../modules/nixos/policies/<name>.nix
+     ../modules/nixos/policies/<policy-name>.nix
    ];
    ```
 
 3. **Add computed values** if other modules need to consume policy decisions:
 
    ```nix
-   options.bigor.policies.<name>.computed = {
+   options.bigor.policies.<policy-name>.computed = {
      shouldDoSomething = mkOption {
        type = types.bool;
        readOnly = true;
@@ -460,7 +460,7 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
 5. **Use in host configuration**:
 
    ```nix
-   bigor.policies.<name> = "strategy2";
+   bigor.policies.<policy-name> = "strategy2";
    ```
 
 6. **Test all affected hosts**:
