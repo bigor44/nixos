@@ -1,8 +1,5 @@
 # Module: nfs
 # Purpose: Network file sharing (server exports, client mounts, local storage)
-#
-# Note: This service is typically configured by bigor.policies.storage
-# The storage policy sets server/client/localStorage options based on the storage mode
 {
   config,
   lib,
@@ -22,11 +19,33 @@ let
 in
 {
   options.bigor.services.nfs = {
-    server = mkEnableOption "NFS server exporting /mnt/storage";
-    client = mkEnableOption "NFS client mounting remote shares";
+    server = mkEnableOption "NFS server exporting /mnt/storage" // {
+      description = ''
+        Enable NFS server to export /mnt/storage to the local network.
+
+        Note: This is typically configured via bigor.policies.storage.mode = "nfs-server",
+        which handles validation (static IP, storage device) automatically.
+      '';
+    };
+
+    client = mkEnableOption "NFS client mounting remote shares" // {
+      description = ''
+        Enable NFS client to mount /mnt/storage from minipc.
+
+        Note: This is typically configured via bigor.policies.storage.mode = "nfs-client",
+        which validates that the host has a static IP for reliable NFS access.
+      '';
+    };
 
     localStorage = {
-      enable = mkEnableOption "local storage mount at /mnt/storage";
+      enable = mkEnableOption "local storage mount at /mnt/storage" // {
+        description = ''
+          Enable local storage mount at /mnt/storage.
+
+          Note: This is typically configured via bigor.policies.storage (mode = "nfs-server" or "local"),
+          which validates that a storage device is specified.
+        '';
+      };
       device = mkOption {
         type = types.str;
         description = "Device path or UUID for local storage (e.g., /dev/disk/by-uuid/...)";
@@ -46,22 +65,20 @@ in
       nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
     in
     mkMerge [
-      # Safety assertions: enforce using policy layer for proper validation
-      # The policy layer handles all validation (static IP, device, coherence)
+      # Safety assertions: policy layer must authorize service activation
       {
         assertions = [
           {
-            assertion = !cfg.server || config.bigor.policies.storage.computed.shouldRunNfsServer;
-            message = "NFS server should be enabled via bigor.policies.storage.mode = \"nfs-server\" instead of bigor.services.nfs.server. This ensures proper static IP and storage validation.";
+            assertion = cfg.server -> config.bigor.policies.storage.computed.shouldRunNfsServer;
+            message = "NFS server requires bigor.policies.storage.mode = \"nfs-server\" (validates prerequisites)";
           }
           {
-            assertion = !cfg.client || config.bigor.policies.storage.computed.shouldMountNfsClient;
-            message = "NFS client should be enabled via bigor.policies.storage.mode = \"nfs-client\" instead of bigor.services.nfs.client. This ensures static IP validation.";
+            assertion = cfg.client -> config.bigor.policies.storage.computed.shouldMountNfsClient;
+            message = "NFS client requires bigor.policies.storage.mode = \"nfs-client\" (validates static IP)";
           }
           {
-            assertion =
-              !cfg.localStorage.enable || (config.bigor.policies.storage.computed.localDevice != null);
-            message = "Local storage should be configured via bigor.policies.storage (mode = \"nfs-server\" or \"local\") instead of bigor.services.nfs.localStorage directly.";
+            assertion = cfg.localStorage.enable -> (config.bigor.policies.storage.computed.localDevice != null);
+            message = "Local storage requires bigor.policies.storage with mode = \"nfs-server\" or \"local\" (validates device)";
           }
         ];
       }

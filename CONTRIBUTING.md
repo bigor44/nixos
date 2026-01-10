@@ -474,6 +474,29 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
 - Eliminate duplication (e.g., kernel selection across multiple hosts)
 - Service modules become pure implementation (no conditional logic)
 - Easy to change strategy globally
+- Services retain flexibility for advanced users to override when needed
+
+**Service flexibility:**
+
+While policies provide the recommended path, services can offer override options for power users:
+
+```nix
+# Example: Blocky service with policy override
+options.bigor.services.blocky = {
+  followDnsPolicy = mkOption {
+    type = types.bool;
+    default = true;
+    description = "Use DNS policy (true) or manual upstreams (false)";
+  };
+  upstreams = mkOption {
+    type = types.listOf types.str;
+    default = [];
+    description = "Manual upstreams (only when followDnsPolicy = false)";
+  };
+};
+```
+
+Services should protect direct options with assertions that validate against policy computed values to ensure prerequisites are met.
 
 ## Working with Secrets
 

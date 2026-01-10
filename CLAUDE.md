@@ -178,12 +178,14 @@ The configuration uses a policy layer to separate strategic decisions (what) fro
   - `"hardened"`: Security-focused kernel (linuxPackages_hardened)
   - `"latest"`: Latest mainline kernel (linuxPackages_latest)
 
-- `bigor.policies.power`: CPU power management
-  - `"amd-pstate"`: AMD P-State EPP active mode
-  - `"intel-pstate"`: Intel P-State active mode
-  - `"performance"`: Maximum performance
-  - `"balanced"`: Default kernel behavior
-  - `"powersave"`: Maximum power saving
+- `bigor.policies.power`: System-wide power management (kernel params, CPU governor, power-profiles-daemon)
+  - `"amd-pstate"`: AMD P-State EPP active mode + power-profiles-daemon for runtime control
+  - `"intel-pstate"`: Intel P-State active mode + power-profiles-daemon for runtime control
+  - `"performance"`: Maximum performance with performance governor
+  - `"balanced"`: Default kernel behavior, no explicit governor
+  - `"powersave"`: Maximum power saving with powersave governor
+
+  P-State modes enable power-profiles-daemon, allowing desktop environments (COSMIC, GNOME, KDE) to switch between performance/balanced/power-saver profiles at runtime.
 
 - `bigor.policies.dns.mode`: DNS resolution strategy
   - `"local-recursive"`: Run Unbound + Blocky locally (server role)
@@ -238,6 +240,22 @@ Policy modules provide computed read-only values that service modules consume:
 - `bigor.policies.storage.computed.shouldMountNfsClient`: Whether to mount remote NFS
 
 This eliminates conditional logic scattered across service modules and centralizes all decision-making in the policy layer.
+
+**Service Flexibility:**
+
+While policies provide the recommended configuration path, services retain independent configurability for advanced use cases:
+
+- **Blocky** (`bigor.services.blocky`):
+  - `followDnsPolicy` (default: `true`): Use DNS policy for upstream configuration
+  - Set to `false` to manually configure upstreams via `bigor.services.blocky.upstreams`
+  - Useful for testing or custom DNS setups without changing the global policy
+
+- **NFS** (`bigor.services.nfs`):
+  - Direct `server`, `client`, and `localStorage` options are available but protected by assertions
+  - Assertions ensure the storage policy has validated prerequisites (static IP, device availability)
+  - Use the policy layer (`bigor.policies.storage.mode`) for safe, validated configuration
+
+This design allows power users to override policy when needed while keeping the default path simple and safe.
 
 ### Network Topology
 

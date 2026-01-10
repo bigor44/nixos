@@ -1,8 +1,6 @@
 # Module: unbound
 # Purpose: High-performance recursive DNS resolver with DNSSEC validation
 #
-# Note: This service is typically auto-enabled by bigor.policies.dns when mode is "local-recursive"
-#
 # Features:
 # - Recursive DNS resolution with DNSSEC validation
 # - Optimized cache (256MB) with prefetching
@@ -23,7 +21,14 @@ let
 in
 {
   options.bigor.services.unbound = {
-    enable = mkEnableOption "Unbound DNS resolver";
+    enable = mkEnableOption "Unbound DNS resolver" // {
+      description = ''
+        Enable Unbound high-performance recursive DNS resolver with DNSSEC validation.
+
+        Note: This service is typically auto-enabled by bigor.policies.dns when mode is "local-recursive".
+        The DNS policy handles Unbound configuration and integration with Blocky automatically.
+      '';
+    };
 
     listenOnLan = mkEnableOption ''
       listening on LAN interface in addition to localhost.

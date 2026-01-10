@@ -105,12 +105,13 @@ The configuration uses a **policy layer** to separate strategic decisions ("what
   - `"hardened"`: Security-focused kernel
   - `"latest"`: Latest mainline kernel
 
-- **`bigor.policies.power`** - CPU power management
-  - `"amd-pstate"`: AMD P-State EPP active mode
-  - `"intel-pstate"`: Intel P-State active mode
-  - `"performance"`: Maximum performance
-  - `"balanced"`: Default kernel behavior
-  - `"powersave"`: Maximum power saving
+- **`bigor.policies.power`** - System-wide power management
+  - `"amd-pstate"`: AMD P-State EPP active mode + power-profiles-daemon
+  - `"intel-pstate"`: Intel P-State active mode + power-profiles-daemon
+  - `"performance"`: Maximum performance with performance governor
+  - `"balanced"`: Default kernel behavior, no explicit governor
+  - `"powersave"`: Maximum power saving with powersave governor
+  - P-State modes enable runtime power profile switching via desktop environments
 
 - **`bigor.policies.dns.mode`** - DNS resolution strategy
   - `"local-recursive"`: Run Unbound + Blocky locally (server role)
@@ -148,6 +149,9 @@ bigor = {
 - **Simplified services**: Blocky, Unbound, NFS are pure implementation
 - **Centralized validation**: Assertions validate policy coherence
 - **Easy global changes**: Change all desktops to latest kernel in one place
+- **Service flexibility**: Advanced users can override policy when needed
+  - Blocky: `followDnsPolicy = false` for manual upstream configuration
+  - NFS: Direct options available but assertion-protected for safety
 
 ---
 
