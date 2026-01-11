@@ -182,6 +182,47 @@ nix flake lock --update-input nixpkgs  # Update specific input
 nix flake show                    # Show flake outputs
 ```
 
+### Assertion Validation
+
+The repository includes **automatic policy assertion checks** that validate strategic decisions during `nix flake check`.
+
+**What's validated:**
+
+- DNS mode prerequisites (static IP requirements for `local-recursive`, minipc availability for `lan-recursive`)
+- Storage mode prerequisites (static IP for NFS modes, device availability for local/server modes)
+- Policy coherence (no conflicting configurations like NFS client with local device)
+
+**How it works:**
+
+```bash
+# Assertions are validated during any full check
+check-full                        # Includes assertion validation
+nix flake check                   # Also validates assertions
+
+# Per-host assertion checks are available
+nix build .#checks.x86_64-linux.grospc-assertions --no-link
+nix build .#checks.x86_64-linux.minipc-assertions --no-link
+nix build .#checks.x86_64-linux.minidesk-assertions --no-link
+```
+
+**Benefits:**
+
+- **Fail fast**: Catch configuration errors at validation time, not at rebuild time
+- **Lightweight**: Assertions are evaluated without building the full system (~3-4s for all hosts)
+- **CI-safe**: All `nix flake check` runs validate assertions automatically
+- **Clear messages**: Failed assertions show exactly what's wrong and which host is affected
+
+**Example failure:**
+
+```bash
+$ nix build .#checks.x86_64-linux.minidesk-assertions --no-link
+error: Failed assertions for minidesk:
+- Storage policy 'nfs-client' requires a static IP for minidesk
+- Storage policy 'nfs-client' should not have local device (conflicts with remote mount)
+```
+
+This ensures that the policy layer's strategic assertions are **always validated** before code is committed or pushed, preventing invalid configurations from entering the repository.
+
 ### CI Workflow
 
 For CI/PR checks, use the full check:
@@ -418,12 +459,13 @@ While policies provide the recommended configuration path, services retain indep
 - **Policy Layer** (`modules/nixos/policies/`): Authoritative source for strategic assertions
   - Validates prerequisites: static IP requirements, device availability, mode coherence
   - Example: "nfs-server requires static IP", "local-recursive DNS requires static IP"
+  - **Automatically validated** during `nix flake check` (see Quality Assurance → Assertion Validation)
 
 - **Service Layer** (`modules/nixos/services/`, `modules/nixos/features/`): Technical assertions only
   - Validates implementation constraints: "cannot be NFS server and client", "localStorage requires device"
   - No duplication of strategic validations
 
-This design allows power users to override policy when needed while keeping the default path simple and safe.
+This design allows power users to override policy when needed while keeping the default path simple and safe. All policy assertions are **validated automatically** during QA checks, ensuring invalid configurations are caught before commit/push (not at rebuild time).
 
 ### Network Topology
 
