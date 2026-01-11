@@ -57,9 +57,12 @@ in
         type = types.listOf types.str;
         readOnly = true;
         default =
+          let
+            unboundPort = toString networkCfg.ports.unbound;
+          in
           {
-            local-recursive = [ "127.0.0.1:5335" ] ++ cfg.fallbackUpstreams;
-            lan-recursive = [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
+            local-recursive = [ "127.0.0.1:${unboundPort}" ] ++ cfg.fallbackUpstreams;
+            lan-recursive = [ "${minipcIp}:${unboundPort}" ] ++ cfg.fallbackUpstreams;
             portable = cfg.fallbackUpstreams;
             # Note: "cloud" currently identical to "portable" (reserved for future use)
             cloud = cfg.fallbackUpstreams;

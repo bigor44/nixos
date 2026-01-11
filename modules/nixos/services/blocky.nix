@@ -18,8 +18,9 @@ let
     nameValuePair
     ;
   cfg = config.bigor.services.blocky;
-  inherit (config.bigor.network) mainInterface;
-  minipcIp = config.bigor.network.hosts.minipc.ip;
+  networkCfg = config.bigor.network;
+  inherit (networkCfg) mainInterface ports;
+  minipcIp = networkCfg.hosts.minipc.ip;
 
   # Auto-generate DNS rewrites from bigor.network.hosts
   customDNSMapping = filterAttrs (_: ip: ip != null) (
@@ -75,8 +76,7 @@ in
         # Ports
         # =======================================================================
         ports = {
-          dns = 53;
-          http = 4000; # Metrics endpoint
+          inherit (ports.blocky) dns http;
         };
 
         # =======================================================================
@@ -181,8 +181,8 @@ in
     # Firewall
     # ===========================================================================
     networking.firewall.interfaces.${mainInterface} = {
-      allowedTCPPorts = [ 53 ];
-      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ ports.blocky.dns ];
+      allowedUDPPorts = [ ports.blocky.dns ];
     };
 
     # ===========================================================================

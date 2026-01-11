@@ -15,7 +15,7 @@ let
     ;
   cfg = config.bigor.services.nfs;
   networkCfg = config.bigor.network;
-  inherit (networkCfg) mainInterface;
+  inherit (networkCfg) mainInterface ports;
 in
 {
   options.bigor.services.nfs = {
@@ -61,24 +61,34 @@ in
 
   config =
     let
+      hostname = config.networking.hostName;
       # NFS export options: all requests mapped to bigor (1000:100) for security
       nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
     in
     mkMerge [
-      # Safety assertions: policy layer must authorize service activation
+      # Safety assertions: validate technical prerequisites for manual configuration
+      # Note: When using bigor.policies.storage, these checks are performed by the policy layer
       {
         assertions = [
           {
-            assertion = cfg.server -> config.bigor.policies.storage.computed.shouldRunNfsServer;
-            message = "NFS server requires bigor.policies.storage.mode = \"nfs-server\" (validates prerequisites)";
+            assertion = cfg.server -> (networkCfg.hosts.${hostname}.ip != null);
+            message = "NFS server requires a static IP address for ${hostname}. Configure bigor.network.hosts.${hostname}.ip or use bigor.policies.storage.mode = \"nfs-server\".";
           }
           {
-            assertion = cfg.client -> config.bigor.policies.storage.computed.shouldMountNfsClient;
-            message = "NFS client requires bigor.policies.storage.mode = \"nfs-client\" (validates static IP)";
+            assertion = cfg.server -> (cfg.localStorage.enable && cfg.localStorage.device != null);
+            message = "NFS server requires local storage to be configured. Enable bigor.services.nfs.localStorage with a device or use bigor.policies.storage.mode = \"nfs-server\".";
           }
           {
-            assertion = cfg.localStorage.enable -> (config.bigor.policies.storage.computed.localDevice != null);
-            message = "Local storage requires bigor.policies.storage with mode = \"nfs-server\" or \"local\" (validates device)";
+            assertion = cfg.client -> (networkCfg.hosts.${hostname}.ip != null);
+            message = "NFS client requires a static IP address for ${hostname} for reliable mounting. Configure bigor.network.hosts.${hostname}.ip or use bigor.policies.storage.mode = \"nfs-client\".";
+          }
+          {
+            assertion = cfg.localStorage.enable -> (cfg.localStorage.device != null);
+            message = "Local storage requires a device to be specified in bigor.services.nfs.localStorage.device.";
+          }
+          {
+            assertion = !(cfg.server && cfg.client);
+            message = "Cannot enable both NFS server and client on the same host.";
           }
         ];
       }
@@ -101,12 +111,12 @@ in
         # Open NFS ports (RPC + NFS server)
         networking.firewall.interfaces.${mainInterface} = {
           allowedTCPPorts = [
-            111
-            2049
+            ports.nfs.rpc
+            ports.nfs.server
           ];
           allowedUDPPorts = [
-            111
-            2049
+            ports.nfs.rpc
+            ports.nfs.server
           ];
         };
       })

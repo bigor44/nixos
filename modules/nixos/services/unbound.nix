@@ -40,10 +40,11 @@ in
   config = mkIf cfg.enable (
     let
       inherit (config.networking) hostName;
-      inherit (config.bigor.network) mainInterface;
+      networkCfg = config.bigor.network;
+      inherit (networkCfg) mainInterface ports;
 
       # Get this host's IP from hosts registry
-      hostConfig = config.bigor.network.hosts.${hostName};
+      hostConfig = networkCfg.hosts.${hostName};
       lanInterface = if cfg.listenOnLan then [ hostConfig.ip ] else [ ];
 
       # Build interface list (localhost + optional LAN)
@@ -70,7 +71,7 @@ in
           server = {
             # Listen on localhost (+ optional LAN interface)
             interface = interfaces;
-            port = 5335; # Non-standard port to avoid conflicts
+            port = ports.unbound;
 
             # Performance optimizations
             num-threads = 4;
@@ -133,8 +134,8 @@ in
 
       # Open firewall port when listening on LAN
       networking.firewall.interfaces.${mainInterface} = mkIf cfg.listenOnLan {
-        allowedTCPPorts = [ 5335 ];
-        allowedUDPPorts = [ 5335 ];
+        allowedTCPPorts = [ ports.unbound ];
+        allowedUDPPorts = [ ports.unbound ];
       };
     }
   );

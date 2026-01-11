@@ -33,7 +33,12 @@ let
             backupFileExtension = "backup";
             extraSpecialArgs = { inherit inputs; };
             sharedModules = commonHomeModules;
-            users.bigor = import ../hosts/${hostname}/home.nix;
+            users.bigor = {
+              imports = [
+                ../users/bigor
+                ../hosts/${hostname}/home.nix
+              ];
+            };
           };
         }
       ];

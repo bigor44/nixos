@@ -1,6 +1,6 @@
 # Module: nix/devshell.nix
 # Purpose: Development shell with QA tools and pre-commit hook auto-install
-_: {
+{
   perSystem =
     { pkgs, ... }:
     {

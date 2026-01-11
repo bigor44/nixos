@@ -53,6 +53,26 @@ in
         }
       );
     };
+
+    ports = mkOption {
+      description = "Standard port numbers for all network services";
+      readOnly = true;
+      default = {
+        blocky = {
+          dns = 53;
+          http = 4000; # Metrics endpoint
+        };
+        unbound = 5335; # Non-standard to avoid conflicts
+        caddy = {
+          http = 80;
+          https = 443;
+        };
+        nfs = {
+          rpc = 111;
+          server = 2049;
+        };
+      };
+    };
   };
 
   config = mkMerge [

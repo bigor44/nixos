@@ -8,7 +8,8 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.services.caddy;
-  inherit (config.bigor.network) mainInterface;
+  networkCfg = config.bigor.network;
+  inherit (networkCfg) mainInterface ports;
 in
 {
   options.bigor.services.caddy.enable = mkEnableOption "Caddy reverse proxy";
@@ -21,8 +22,8 @@ in
     # Open Caddy ports
     networking.firewall.interfaces.${mainInterface} = {
       allowedTCPPorts = [
-        80
-        443
+        ports.caddy.http
+        ports.caddy.https
       ];
     };
   };
