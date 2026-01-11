@@ -48,7 +48,7 @@ nix fmt         # Auto-format all files
 
 # Before committing
 qs              # Quick check: staged files
-gcn             # Safe commit: add all + format + check + commit
+gcn             # Safe commit: format + add all + check + commit
 
 # Before pushing
 gps             # Safe push: full check + push
@@ -120,11 +120,11 @@ git commit --no-verify
 
 ### Safe Workflow Aliases
 
-**gcn** - Safe commit (add all + format + check + commit):
+**gcn** - Safe commit (format + add all + check + commit):
 
 ```bash
 gcn -m "feat: add new feature"
-# Equivalent to: gaa && nix fmt && check-quick && gc -m "..."
+# Equivalent to: nix fmt && gaa && qs && gc -m "..."
 ```
 
 **gps** - Safe push (full check before push):
@@ -259,7 +259,7 @@ The repository includes `.statix.toml` documenting code conventions:
 
 **Safe Workflows:**
 
-- `gcn` → Add all + format + check + commit
+- `gcn` → Format + add all + check + commit
 - `gps` → Full check + push
 - `nhs` → Full check + rebuild
 

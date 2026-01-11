@@ -451,7 +451,7 @@ git commit --no-verify
 
 ### Safe Workflow Aliases
 
-**gcn** - Safe commit (add all + format + check + commit):
+**gcn** - Safe commit (format + add all + check + commit):
 
 ```bash
 gcn -m "feat: add new feature"

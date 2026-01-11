@@ -56,7 +56,7 @@ in
         mega = "check-mega"; # Intelligent orchestration
 
         # Safe Workflows
-        gcn = "gaa && nix fmt && check-quick && gc"; # Safe commit
+        gcn = "nix fmt && gaa && qs && gc"; # Safe commit
         gps = "check-full && gp"; # Safe push
         nhs = "check-full && nh os switch"; # Safe rebuild
 
