@@ -76,7 +76,8 @@ in
   };
 
   config = {
-    # Policy coherence assertions
+    # Strategic assertions: validate prerequisites for storage modes
+    # This is the authoritative validation layer for storage configuration
     # Note: "local" mode does NOT require static IP (can use DHCP)
     # Only NFS modes require static IP for reliable network mounting
     assertions = [

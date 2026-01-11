@@ -384,7 +384,7 @@ bigor = {
 - No duplication of kernel/power settings across hosts
 - Service modules are pure implementation (no conditional logic for modes)
 - Easy to change strategy globally (e.g., all desktops to latest kernel)
-- Assertions validate policy coherence centrally
+- **Assertions centralized in policy layer**: Strategic validations (static IP requirements, device availability) are authoritative in policy modules; service modules only contain technical assertions
 
 **Implementation Details:**
 
@@ -408,9 +408,20 @@ While policies provide the recommended configuration path, services retain indep
   - Useful for testing or custom DNS setups without changing the global policy
 
 - **NFS** (`bigor.services.nfs`):
-  - Direct `server`, `client`, and `localStorage` options are available but protected by assertions
-  - Assertions ensure the storage policy has validated prerequisites (static IP, device availability)
-  - Use the policy layer (`bigor.policies.storage.mode`) for safe, validated configuration
+  - Direct `server`, `client`, and `localStorage` options are available for manual configuration
+  - **Strategic assertions** (static IP requirements, device availability) are validated by `bigor.policies.storage`
+  - **Technical assertions** (localStorage requires device, cannot be server+client) remain in the service module
+  - Recommended: Use the policy layer (`bigor.policies.storage.mode`) for safe, validated configuration
+
+**Assertion Architecture:**
+
+- **Policy Layer** (`modules/nixos/policies/`): Authoritative source for strategic assertions
+  - Validates prerequisites: static IP requirements, device availability, mode coherence
+  - Example: "nfs-server requires static IP", "local-recursive DNS requires static IP"
+
+- **Service Layer** (`modules/nixos/services/`, `modules/nixos/features/`): Technical assertions only
+  - Validates implementation constraints: "cannot be NFS server and client", "localStorage requires device"
+  - No duplication of strategic validations
 
 This design allows power users to override policy when needed while keeping the default path simple and safe.
 

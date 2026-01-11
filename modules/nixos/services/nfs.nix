@@ -61,26 +61,23 @@ in
 
   config =
     let
-      hostname = config.networking.hostName;
       # NFS export options: all requests mapped to bigor (1000:100) for security
       nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
     in
     mkMerge [
-      # Safety assertions: validate technical prerequisites for manual configuration
-      # Note: When using bigor.policies.storage, these checks are performed by the policy layer
+      # Technical assertions for direct service configuration
+      # Note: Strategic prerequisites (static IP, device availability) are validated by
+      # bigor.policies.storage. Use the policy layer for safe, validated configuration.
       {
         assertions = [
           {
-            assertion = cfg.server -> (networkCfg.hosts.${hostname}.ip != null);
-            message = "NFS server requires a static IP address for ${hostname}. Configure bigor.network.hosts.${hostname}.ip or use bigor.policies.storage.mode = \"nfs-server\".";
-          }
-          {
             assertion = cfg.server -> (cfg.localStorage.enable && cfg.localStorage.device != null);
-            message = "NFS server requires local storage to be configured. Enable bigor.services.nfs.localStorage with a device or use bigor.policies.storage.mode = \"nfs-server\".";
-          }
-          {
-            assertion = cfg.client -> (networkCfg.hosts.${hostname}.ip != null);
-            message = "NFS client requires a static IP address for ${hostname} for reliable mounting. Configure bigor.network.hosts.${hostname}.ip or use bigor.policies.storage.mode = \"nfs-client\".";
+            message = ''
+              NFS server requires local storage to be configured.
+
+              Recommended: Use bigor.policies.storage.mode = "nfs-server" for validated configuration.
+              Manual: Enable bigor.services.nfs.localStorage with a device.
+            '';
           }
           {
             assertion = cfg.localStorage.enable -> (cfg.localStorage.device != null);

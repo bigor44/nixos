@@ -82,12 +82,23 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 
 ### 1. Flakes & Flake-parts
 
-The repository uses **flake-parts** to organize the configuration:
+The repository uses **flake-parts** to organize the configuration into distinct layers:
 
-- `policies` - strategic decisions (what kernel, what DNS strategy, what storage mode)
-- `features` - atomic, reusable building blocks
-- `services` - system services (DNS, SSH, NFS, Caddy, etc.)
-- `profiles` - machine roles composed of features and services
+- **`policies`** (`modules/nixos/policies/`) - Strategic decisions with authoritative validation
+  - What kernel, DNS strategy, storage mode, power management
+  - Provides computed values for services to consume
+  - Validates prerequisites (static IP, device availability, mode coherence)
+
+- **`features`** (`modules/nixos/features/`) - Atomic, reusable building blocks
+  - System features (boot, network, locale, fonts, etc.)
+  - Desktop features (COSMIC, audio, gaming, etc.)
+
+- **`services`** (`modules/nixos/services/`) - System services with pure implementation
+  - DNS (Blocky, Unbound), SSH, NFS, Caddy
+  - Consume policy decisions, validate technical constraints only
+
+- **`profiles`** (`modules/nixos/profiles/`) - Machine roles composed of features and services
+  - Workstation, homelab server, etc.
 
 All configuration lives under the `bigor.*` namespace to avoid collisions
 with upstream NixOS or Home Manager options.
@@ -150,11 +161,40 @@ bigor = {
 - **No duplication**: Kernel/power settings declared once (not in 3 places)
 - **Clear intent**: All strategic decisions visible at a glance
 - **Simplified services**: Blocky, Unbound, NFS are pure implementation
-- **Centralized validation**: Assertions validate policy coherence
+- **Centralized validation**: Assertions validate policy coherence in the policy layer
 - **Easy global changes**: Change all desktops to latest kernel in one place
 - **Service flexibility**: Advanced users can override policy when needed
   - Blocky: `followDnsPolicy = false` for manual upstream configuration
   - NFS: Direct options available but assertion-protected for safety
+
+#### Assertion Architecture
+
+The configuration uses a **two-layer assertion architecture** to separate strategic validation from technical validation:
+
+**Policy Layer** (`modules/nixos/policies/`) - Authoritative source for strategic assertions:
+
+- Validates prerequisites: static IP requirements, device availability, mode coherence
+- Examples:
+  - DNS `local-recursive` mode requires static IP
+  - DNS `lan-recursive` mode requires minipc to have static IP
+  - Storage `nfs-server` mode requires static IP + local device
+  - Storage `nfs-client` mode requires static IP
+  - Storage `nfs-server`/`local` modes require device specified
+
+**Service Layer** (`modules/nixos/services/`, `modules/nixos/features/`) - Technical assertions only:
+
+- Validates implementation constraints that are independent of strategic decisions
+- Examples:
+  - Cannot enable both NFS server and client simultaneously
+  - localStorage requires a device to be specified
+- **No duplication** of strategic validations from the policy layer
+
+This architecture provides:
+
+- **Single source of truth**: Strategic validations are authoritative in policies
+- **Maintainability**: Changing a validation rule only requires updating the policy module
+- **Clear separation**: Strategic prerequisites vs technical constraints
+- **Helpful error messages**: Policy assertions guide users to the recommended configuration path
 
 ---
 
@@ -308,17 +348,27 @@ This registry is used to generate:
 
 **Single Source of Truth**: `mainInterface` is automatically derived from the hosts topology - no manual configuration needed.
 
-**Validation**: Assertions ensure configuration consistency:
+**Validation**: Assertions ensure configuration consistency at build time:
+
+**Network Layer** (in `modules/nixos/features/system/network.nix`):
 
 - Hostname must exist in the hosts registry
 - Static IP requires an interface
-- **Policy coherence** (in policy modules):
-  - DNS `local-recursive` mode requires static IP
-  - DNS `lan-recursive` mode requires minipc to have static IP
-  - Storage `nfs-server` mode requires static IP + local device
-  - Storage `nfs-client` mode requires static IP
-  - Storage `local` mode requires device specified
-- Prevents typos and misconfigurations at build time
+
+**Policy Layer** (in `modules/nixos/policies/`):
+
+- DNS `local-recursive` mode requires static IP
+- DNS `lan-recursive` mode requires minipc to have static IP
+- Storage `nfs-server` mode requires static IP + local device
+- Storage `nfs-client` mode requires static IP
+- Storage `nfs-server`/`local` modes require device specified
+
+**Service Layer** (in `modules/nixos/services/`):
+
+- Technical constraints (e.g., cannot be NFS server and client simultaneously)
+- No duplication of strategic validations
+
+This prevents typos and misconfigurations at build time with clear error messages.
 
 ---
 

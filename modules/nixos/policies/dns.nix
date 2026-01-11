@@ -81,6 +81,8 @@ in
   };
 
   config = {
+    # Strategic assertions: validate prerequisites for DNS modes
+    # This is the authoritative validation layer for DNS configuration
     assertions = [
       {
         assertion = cfg.mode == "local-recursive" -> networkCfg.hosts.${hostname}.ip != null;
