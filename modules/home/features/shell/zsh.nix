@@ -49,6 +49,17 @@ in
         nfc = "nix flake check";
         nfu = "nix flake update";
 
+        # Quality Assurance
+        qc = "check-quick"; # Quick check: changed files
+        qs = "check-quick --staged"; # Quick check: staged files
+        qf = "check-full"; # Full check: everything
+        mega = "check-mega"; # Intelligent orchestration
+
+        # Safe Workflows
+        gcn = "gaa && nix fmt && check-quick && gc"; # Safe commit
+        gps = "check-full && gp"; # Safe push
+        nhs = "check-full && nh os switch"; # Safe rebuild
+
         # System info
         ports = "netstat -tulanp";
         meminfo = "free -h";

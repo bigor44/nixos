@@ -40,12 +40,13 @@
 
     # Profiles (composite configurations)
     ../modules/nixos/profiles/workstation.nix
-    ../modules/nixos/profiles/homelab_master.nix
+    ../modules/nixos/profiles/homelab-master.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace
   homeModules = [
     ../modules/home/features/cli-packages.nix
+    ../modules/home/features/dev-scripts.nix
     ../modules/home/features/git.nix
     ../modules/home/features/shell
     ../modules/home/features/nixvim

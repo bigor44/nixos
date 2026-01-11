@@ -36,6 +36,7 @@
       imports = [
         ./nix/hosts.nix
         ./nix/checks.nix
+        ./nix/devshell.nix
       ];
 
       perSystem =

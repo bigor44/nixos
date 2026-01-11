@@ -5,10 +5,6 @@ let
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
   minipcIp = networkCfg.hosts.minipc.ip;
-  fallbackUpstreams = [
-    "1.1.1.1"
-    "9.9.9.9"
-  ];
 in
 {
   options.bigor.policies.dns = {
@@ -33,6 +29,22 @@ in
       '';
     };
 
+    fallbackUpstreams = mkOption {
+      type = types.listOf types.str;
+      default = [
+        "1.1.1.1"
+        "9.9.9.9"
+      ];
+      description = ''
+        Fallback cloud DNS servers used when local/LAN recursive resolvers are unreachable.
+        These are used in lan-recursive mode as failover, and as primary upstreams in portable/cloud modes.
+      '';
+      example = [
+        "9.9.9.9"
+        "149.112.112.112"
+      ];
+    };
+
     computed = {
       shouldRunUnbound = mkOption {
         type = types.bool;
@@ -46,11 +58,11 @@ in
         readOnly = true;
         default =
           {
-            local-recursive = [ "127.0.0.1:5335" ] ++ fallbackUpstreams;
-            lan-recursive = [ "${minipcIp}:5335" ] ++ fallbackUpstreams;
-            portable = fallbackUpstreams;
+            local-recursive = [ "127.0.0.1:5335" ] ++ cfg.fallbackUpstreams;
+            lan-recursive = [ "${minipcIp}:5335" ] ++ cfg.fallbackUpstreams;
+            portable = cfg.fallbackUpstreams;
             # Note: "cloud" currently identical to "portable" (reserved for future use)
-            cloud = fallbackUpstreams;
+            cloud = cfg.fallbackUpstreams;
           }
           .${cfg.mode};
         description = "Computed Blocky upstream servers based on DNS policy";

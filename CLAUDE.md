@@ -35,41 +35,208 @@ nh os test
 nh os switch --hostname minipc
 ```
 
-### Development Workflow
+## Quality Assurance Workflow
+
+The repository uses a **3-tier QA system** optimized for speed during development while maintaining CI-grade validation for commits and pushes.
+
+### Quick Reference
 
 ```bash
-# IMPORTANT: Always run these checks before 'nix flake check'
-# 1. Format code with treefmt
-nix fmt
+# During active development (instant feedback, <0.1s)
+qc              # Quick check: changed files only
+nix fmt         # Auto-format all files
 
-# 2. Check for dead code
-deadnix --fail .
+# Before committing
+qs              # Quick check: staged files
+gcn             # Safe commit: add all + format + check + commit
 
-# 3. Run statix linter
-statix check --ignore .* .
+# Before pushing
+gps             # Safe push: full check + push
+qf              # Full check without push
 
-# 4. Run all flake checks (formatting + linting)
-nix flake check
-
-# Update flake inputs
-nix flake update
-
-# Update specific input
-nix flake lock --update-input nixpkgs
-
-# Show flake outputs
-nix flake show
+# Intelligent orchestration
+mega            # Auto-detect git state and run appropriate checks
 ```
 
-### Zsh Shell Aliases (defined in modules/home/features/shell.nix and modules/home/features/git.nix)
+### Check Tiers
+
+**Tier 1 - Instant (< 0.1s)** - Changed files only:
+
+```bash
+qc                    # Quick check on modified files
+check-quick           # Same, explicit command
+qs                    # Quick check on staged files (for pre-commit)
+check-quick --staged  # Same, explicit command
+```
+
+**Tier 2 - Full (~16.5s)** - Complete validation:
+
+```bash
+qf              # Full check: format + lint + dead code + eval + flake checks
+check-full      # Same, explicit command
+nix flake check # Raw Nix flake checks (still works)
+```
+
+**Tier 3 - Intelligent** - Adaptive based on git state:
+
+```bash
+mega            # Analyzes git state and chooses appropriate check
+check-mega      # Same, explicit command
+```
+
+### Performance Comparison
+
+| Workflow       | Before (manual) | After (new system) | Speedup |
+| -------------- | --------------- | ------------------ | ------- |
+| Dev cycle      | 16.5s           | 0.03s              | 500x    |
+| Pre-commit     | Manual/skipped  | Automatic, <0.1s   | ∞       |
+| Pre-push       | Not validated   | 16.5s (automatic)  | N/A     |
+| CI equivalence | 16.5s           | 16.5s (same)       | 1x      |
+
+### Pre-Commit Hooks
+
+**Installation** (one-time per clone):
+
+```bash
+# Automatic via devShell (recommended)
+nix develop
+
+# Manual installation
+install-git-hooks
+```
+
+**What it validates:**
+
+- Format check on staged `.nix` files (nixfmt)
+- Linter check (statix + deadnix)
+- SOPS secrets validation (if modified)
+- Prevention of sensitive file commits (`.pem`, `.key`, etc.)
+
+**Skip when needed:**
+
+```bash
+git commit --no-verify
+```
+
+### Safe Workflow Aliases
+
+**gcn** - Safe commit (add all + format + check + commit):
+
+```bash
+gcn -m "feat: add new feature"
+# Equivalent to: gaa && nix fmt && check-quick && gc -m "..."
+```
+
+**gps** - Safe push (full check before push):
+
+```bash
+gps
+# Equivalent to: check-full && gp
+```
+
+**nhs** - Safe rebuild (full check before switch):
+
+```bash
+nhs
+# Equivalent to: check-full && nh os switch
+```
+
+### Development Workflow
+
+**Recommended workflow:**
+
+1. **Develop**: Edit code, run `qc` after changes (instant feedback)
+2. **Format**: Run `nix fmt` before staging
+3. **Commit**: Use `gcn -m "message"` (validates automatically)
+4. **Push**: Use `gps` (full check + push)
+
+**Alternative workflow (more control):**
+
+1. Edit code
+2. `qc` - Quick check
+3. `nix fmt` - Format
+4. `git add -A` - Stage changes
+5. `qs` - Check staged files
+6. `git commit -m "message"` - Pre-commit hook validates
+7. `qf` - Full check
+8. `git push` - Push to remote
+
+### Manual Checks
+
+```bash
+# Format
+nix fmt                           # Auto-format all files
+treefmt --check                   # Check only (no changes)
+
+# Linting
+statix check --ignore .* .        # Run statix linter
+deadnix --fail .                  # Check for dead code
+
+# Full validation pipeline
+check-full                        # Orchestrated full check (5 steps)
+nix flake check                   # Raw flake checks
+
+# Update dependencies
+nix flake update                  # Update all inputs (alias: nfu)
+nix flake lock --update-input nixpkgs  # Update specific input
+nix flake show                    # Show flake outputs
+```
+
+### CI Workflow
+
+For CI/PR checks, use the full check:
+
+```bash
+check-full
+```
+
+This runs:
+
+1. Format validation (treefmt)
+2. Dead code check (deadnix)
+3. Linter check (statix)
+4. Evaluation check (nix flake show)
+5. Full flake checks (nix flake check)
+
+### Statix Configuration
+
+The repository includes `.statix.toml` documenting code conventions:
+
+- **No `with lib;`** - Use explicit imports: `inherit (lib) mkOption mkIf;`
+- **Use mkEnableOption** - For all feature modules
+- **Policy modules** - Use `readOnly` options for computed values
+- **Disabled rules** - Only `eta_reduction` (can reduce readability)
+
+### Shell Aliases Reference
+
+**Quality Assurance:**
+
+- `qc` → `check-quick` (changed files)
+- `qs` → `check-quick --staged` (staged files)
+- `qf` → `check-full` (complete validation)
+- `mega` → `check-mega` (intelligent check)
+
+**Safe Workflows:**
+
+- `gcn` → Add all + format + check + commit
+- `gps` → Full check + push
+- `nhs` → Full check + rebuild
+
+**Nix:**
 
 - `nfc` → `nix flake check`
 - `nfu` → `nix flake update`
+
+**Git:**
+
 - `g` → `git`
 - `gst` → `git status`
 - `gc` → `git commit`
 - `gaa` → `git add -A`
 - `gp` → `git push`
+
+**Navigation:**
+
 - `ll` → `eza -l --icons --git`
 - `la` → `eza -lah --icons --git`
 
@@ -83,21 +250,7 @@ sops secrets/secrets.yaml
 sops -d secrets/secrets.yaml
 ```
 
-### Linting and Formatting
-
-```bash
-# Check Nix formatting with treefmt
-treefmt --check
-
-# Auto-format all files
-treefmt
-
-# Run statix linter
-statix check --ignore .* .
-
-# Check for dead code
-deadnix --fail .
-```
+Pre-commit hook automatically validates SOPS secrets when modified.
 
 ## Architecture
 
@@ -155,7 +308,7 @@ The repository uses Flake-parts with explicit module imports:
 - **features/desktop/**: COSMIC DE (`base.nix`, `cosmic.nix`, `apps.nix`)
 - **features/gaming.nix**: Steam, GameMode optimizations
 - **features/fonts.nix**: Font configuration
-- **profiles/**: Composite configurations (`workstation.nix`, `homelab_master.nix`)
+- **profiles/**: Composite configurations (`workstation.nix`, `homelab-master.nix`)
 - **services/**: Network services (`blocky.nix`, `caddy.nix`, `nfs.nix`, `sshd.nix`, `unbound.nix`)
 
 **Home Modules** (`modules/home/features/`):
@@ -192,6 +345,9 @@ The configuration uses a policy layer to separate strategic decisions (what) fro
   - `"lan-recursive"`: Use LAN recursive resolver (workstation pointing to minipc)
   - `"portable"`: Cloud DNS only, no LAN dependencies (portable hosts)
   - `"cloud"`: Direct cloud DNS (future: no filtering)
+- `bigor.policies.dns.fallbackUpstreams`: Fallback cloud DNS servers (default: `["1.1.1.1" "9.9.9.9"]`)
+  - Used as failover in `lan-recursive` mode when minipc is unreachable
+  - Used as primary upstreams in `portable` and `cloud` modes
 
 - `bigor.policies.storage.mode`: Storage access strategy
   - `"nfs-server"`: Export local storage via NFS (requires static IP + device)
@@ -248,6 +404,7 @@ While policies provide the recommended configuration path, services retain indep
 - **Blocky** (`bigor.services.blocky`):
   - `followDnsPolicy` (default: `true`): Use DNS policy for upstream configuration
   - Set to `false` to manually configure upstreams via `bigor.services.blocky.upstreams`
+  - Fallback upstreams are centrally configured via `bigor.policies.dns.fallbackUpstreams`
   - Useful for testing or custom DNS setups without changing the global policy
 
 - **NFS** (`bigor.services.nfs`):
@@ -447,6 +604,8 @@ Located in `modules/home/features/nixvim/`:
 - `plugins/`: Plugin configurations (ui, lsp, editor, treesitter, completion)
 
 LSP servers configured: bashls, marksman, yaml-language-server, nixd
+
+**Note on nixd configuration**: The flake path is hardcoded to `/home/bigor/nixos` instead of using `inputs.self.outPath` for stability. Using `inputs.self.outPath` can cause nixd issues when the git tree is dirty, as the path may change unexpectedly.
 
 ## Quality Assurance
 

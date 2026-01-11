@@ -6,5 +6,8 @@
 
   home.stateVersion = "25.11";
 
-  bigor.home.features.gui.enable = true;
+  bigor.home.features = {
+    dev-scripts.enable = true;
+    gui.enable = true;
+  };
 }

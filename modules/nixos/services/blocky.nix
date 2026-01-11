@@ -50,24 +50,12 @@ in
       description = ''
         Manual DNS upstream servers (only used when followDnsPolicy = false).
         When followDnsPolicy is true, this option is ignored and upstreams are determined by bigor.policies.dns.
+        Fallback upstreams are configured via bigor.policies.dns.fallbackUpstreams.
       '';
       example = [
         "127.0.0.1:5335"
         "1.1.1.1"
         "9.9.9.9"
-      ];
-    };
-
-    fallbackUpstreams = mkOption {
-      type = types.listOf types.str;
-      default = [
-        "1.1.1.1"
-        "9.9.9.9"
-      ];
-      description = "Fallback DNS servers when primary (minipc) is unreachable (only used when followDnsPolicy = true in lan-recursive mode)";
-      example = [
-        "9.9.9.9"
-        "149.112.112.112"
       ];
     };
 

@@ -47,9 +47,12 @@ This repository is intended to be **shared, audited, and reused as inspiration**
 ├── flake.nix               # Flake-parts entry point
 ├── flake.lock              # Dependency lockfile
 ├── treefmt.toml            # Formatting configuration
+├── .statix.toml            # Statix linter configuration
 ├── nix/
 │   ├── modules.nix         # Explicit module import list
-│   └── hosts.nix           # NixOS configuration definitions
+│   ├── hosts.nix           # NixOS configuration definitions
+│   ├── checks.nix          # Flake checks (formatting, linting)
+│   └── devshell.nix        # Development shell with QA tools
 ├── hosts/                  # Host-specific configurations
 │   ├── grospc/
 │   │   ├── default.nix     # NixOS config
@@ -203,16 +206,18 @@ bigor = {
 Home Manager is integrated via the NixOS module and used for:
 
 - Shell (Zsh + Starship)
-- CLI tooling
+- CLI tooling (eza, fd, ripgrep, btop, lazygit, etc.)
 - Git configuration
 - Neovim (via nixvim)
 - GUI applications (per host)
+- Development QA scripts (check-quick, check-full, check-mega, install-git-hooks)
 
 All Home Manager modules use the `bigor.home.features.*` namespace:
 
 ```nix
 bigor.home.features.shell.enable = true;
 bigor.home.features.nixvim.enable = true;
+bigor.home.features.dev-scripts.enable = true;  # QA scripts
 bigor.home.features.gui.enable = true;
 ```
 
@@ -329,21 +334,129 @@ Secrets are managed using **sops-nix** with **age**:
 
 ---
 
-## Tooling & Automation
+## Quality Assurance & Tooling
 
-### Flake Checks
+### 3-Tier QA System
 
-The repository enforces quality through flake checks (defined in `flake.nix` perSystem):
+The repository uses a **3-tier QA system** optimized for speed during development while maintaining CI-grade validation:
 
-- **treefmt** - formatting enforcement
-- **statix** - Nix linting
-- **deadnix** - unused code detection
-
-Run all checks:
+**Tier 1 - Instant (< 0.1s)** - Changed files only:
 
 ```bash
-nix flake check
+qc              # Quick check on modified files
+qs              # Quick check on staged files
+check-quick     # Explicit command
 ```
+
+**Tier 2 - Full (~16.5s)** - Complete validation:
+
+```bash
+qf              # Full check: format + lint + dead code + eval + flake checks
+check-full      # Explicit command
+nix flake check # Raw Nix flake checks (still works)
+```
+
+**Tier 3 - Intelligent** - Adaptive based on git state:
+
+```bash
+mega            # Analyzes git state and runs appropriate check
+check-mega      # Explicit command
+```
+
+### Performance Improvement
+
+| Workflow       | Before (manual) | After (QA system) | Speedup |
+| -------------- | --------------- | ----------------- | ------- |
+| Dev cycle      | 16.5s           | 0.03s             | 500x    |
+| Pre-commit     | Manual/skipped  | Automatic, <0.1s  | ∞       |
+| Pre-push       | Not validated   | 16.5s (automatic) | N/A     |
+| CI equivalence | 16.5s           | 16.5s (same)      | 1x      |
+
+### Pre-Commit Hooks
+
+Pre-commit hooks automatically validate changes before commit:
+
+**Installation** (one-time per clone):
+
+```bash
+# Automatic via devShell (recommended)
+nix develop
+
+# Manual installation
+install-git-hooks
+```
+
+**What it validates:**
+
+- Format check on staged `.nix` files (nixfmt)
+- Linter check (statix + deadnix)
+- SOPS secrets validation (if modified)
+- Prevention of sensitive file commits (`.pem`, `.key`, etc.)
+
+**Skip when needed:**
+
+```bash
+git commit --no-verify
+```
+
+### Safe Workflow Aliases
+
+**gcn** - Safe commit (add all + format + check + commit):
+
+```bash
+gcn -m "feat: add new feature"
+```
+
+**gps** - Safe push (full check before push):
+
+```bash
+gps
+```
+
+**nhs** - Safe rebuild (full check before switch):
+
+```bash
+nhs
+```
+
+### Development Workflow
+
+**Recommended workflow:**
+
+1. **Develop**: Edit code, run `qc` after changes (instant feedback)
+2. **Format**: Run `nix fmt` before staging
+3. **Commit**: Use `gcn -m "message"` (validates automatically)
+4. **Push**: Use `gps` (full check + push)
+
+### Quality Tools
+
+The repository enforces quality through automated checks:
+
+- **treefmt** - formatting enforcement (nixfmt, shfmt, prettier, taplo)
+- **statix** - Nix linting (configured via `.statix.toml`)
+- **deadnix** - unused code detection
+
+Configuration:
+
+- `.statix.toml` - Documents code conventions and disables overly strict rules
+- `treefmt.toml` - Multi-language formatting configuration
+- `nix/checks.nix` - Flake check definitions
+
+### DevShell
+
+A development shell is provided with all QA tools:
+
+```bash
+nix develop
+```
+
+Includes:
+
+- All formatters (treefmt, nixfmt, shfmt, prettier, taplo)
+- Linters (statix, deadnix)
+- Build tools (nh)
+- Secrets management (sops, age)
+- Auto-installation of pre-commit hooks
 
 ---
 
