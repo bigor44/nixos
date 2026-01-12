@@ -5,7 +5,7 @@ keys:
   - &host_minidesk age1ns0c58jr74sqlxfapz308p2wqwuj99gan6f3y7m9sytdxxpgr3rqf2cs9x
 
 creation_rules:
-  # Secrets partagés par tous les hosts
+  # Shared secrets for all hosts
   - path_regex: secrets/secrets\.yaml$
     key_groups:
       - age:

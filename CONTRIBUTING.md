@@ -602,6 +602,7 @@ COSMIC DE configuration files in `dotfiles/cosmic/` are **symlinked** (not copie
 - **Prefer explicit over implicit**
 - **Use meaningful variable names**
 - **Add comments** for complex logic
+- **Write all comments in English** - this ensures consistency and accessibility for all contributors
 - **Avoid dead code** (detected by deadnix)
 
 ### File Organization
