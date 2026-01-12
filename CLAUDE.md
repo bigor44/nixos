@@ -137,12 +137,18 @@ bigor = {
 
 ### Network Topology
 
-All network configuration is centralized in `modules/nixos/features/system/network.nix`:
+Network topology is managed in two files:
 
-- **`bigor.network.hosts`**: Defines all hosts with their IP addresses and network interfaces
-- **`bigor.network.subnet`**: Network CIDR (default: "192.168.1.0/24")
-- **`bigor.network.ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
-- **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
+1. **`nix/network-topology.nix`**: Pure data file containing:
+   - **`hosts`**: All hosts with their IP addresses and network interfaces
+   - **`subnet`**: Network CIDR (default: "192.168.1.0/24")
+   - **`ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
+
+2. **`modules/nixos/features/system/network.nix`**: NixOS module providing:
+   - **`bigor.network.*`** options (reads data from topology file)
+   - **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
+   - `/etc/hosts` generation from topology
+   - Network configuration logic (DNS, firewall)
 
 Services should reference `config.bigor.network.hosts.<hostname>.ip` instead of hardcoding IPs.
 
@@ -275,9 +281,9 @@ Policy assertions are validated during `nix flake check` - if a host configurati
 2. Create `default.nix` (NixOS config) and `home.nix` (Home Manager config)
 3. Generate hardware config: `nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware-configuration.nix`
 4. Add to `nix/hosts.nix`: `<hostname> = mkHost "<hostname>";`
-5. Add to network topology in `modules/nixos/features/system/network.nix`:
+5. Add to network topology in `nix/network-topology.nix`:
    ```nix
-   bigor.network.hosts.<hostname> = {
+   hosts.<hostname> = {
      ip = "192.168.1.XX";  # or null for DHCP
      interface = "enp0s0";
    };
@@ -297,7 +303,8 @@ Policy assertions are validated during `nix flake check` - if a host configurati
 
 - **flake.nix**: Main entry point
 - **nix/modules.nix**: Module registry (add ALL new modules here)
-- **modules/nixos/features/system/network.nix**: Network topology (all IPs, interfaces, ports)
+- **nix/network-topology.nix**: Network topology data (all IPs, interfaces, ports)
+- **modules/nixos/features/system/network.nix**: Network configuration module
 - **modules/nixos/policies/**: Strategic decisions (kernel, power, DNS, storage)
 - **.statix.toml**: Linter configuration and codebase conventions
 - **treefmt.toml**: Formatter configuration

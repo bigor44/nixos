@@ -354,10 +354,10 @@ git push origin feature/my-feature
    };
    ```
 
-6. **Add to network topology** in `modules/nixos/features/system/network.nix`:
+6. **Add to network topology** in `nix/network-topology.nix`:
 
    ```nix
-   bigor.network.hosts.<hostname> = {
+   hosts.<hostname> = {
      ip = "192.168.1.XX";  # or null for DHCP
      interface = "enp0s0";
    };

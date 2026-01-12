@@ -1,8 +1,10 @@
 # Feature: system.network
 # Purpose: Network configuration, static /etc/hosts entries, and network topology
+# Topology data is imported from nix/network-topology.nix via specialArgs
 {
   lib,
   config,
+  networkTopology,
   ...
 }:
 let
@@ -23,7 +25,7 @@ in
   options.bigor.network = {
     subnet = mkOption {
       type = types.strMatching "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$";
-      default = "192.168.1.0/24";
+      default = networkTopology.subnet;
       description = "Network subnet in CIDR notation (e.g., 192.168.1.0/24)";
     };
 
@@ -36,7 +38,7 @@ in
 
     hosts = mkOption {
       description = "All hosts in the network with their static IPs and interfaces";
-      default = { };
+      default = networkTopology.hosts;
       type = types.attrsOf (
         types.submodule {
           options = {
@@ -57,42 +59,11 @@ in
     ports = mkOption {
       description = "Standard port numbers for all network services";
       readOnly = true;
-      default = {
-        blocky = {
-          dns = 53;
-          http = 4000; # Metrics endpoint
-        };
-        unbound = 5335; # Non-standard to avoid conflicts
-        caddy = {
-          http = 80;
-          https = 443;
-        };
-        nfs = {
-          rpc = 111;
-          server = 2049;
-        };
-      };
+      default = networkTopology.ports;
     };
   };
 
   config = mkMerge [
-    # Define hosts
-    {
-      bigor.network.hosts = {
-        minipc = {
-          ip = "192.168.1.10";
-          interface = "enp2s0";
-        };
-        grospc = {
-          ip = "192.168.1.11";
-          interface = "enp14s0";
-        };
-        minidesk = {
-          ip = null; # DHCP
-          interface = "enp2s0";
-        };
-      };
-    }
 
     # Assertions to validate network configuration
     {

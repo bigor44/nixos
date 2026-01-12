@@ -21,6 +21,7 @@ A modular, policy-driven NixOS configuration managing a homelab server and deskt
 ├── nix/
 │   ├── hosts.nix               # NixOS configurations for all hosts
 │   ├── modules.nix             # Module registry (import list)
+│   ├── network-topology.nix    # Network topology data (IPs, interfaces, ports)
 │   ├── checks.nix              # Automated quality checks
 │   └── devshell.nix            # Development environment
 ├── hosts/
@@ -92,7 +93,10 @@ config.bigor.policies.dns.computed.blockyUpstreams
 
 ### Network Topology
 
-All network configuration is centralized in `modules/nixos/features/system/network.nix`:
+Network topology is managed in two files:
+
+1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, and port definitions
+2. **`modules/nixos/features/system/network.nix`**: NixOS module that reads the topology and provides configuration logic
 
 ```nix
 bigor.network.hosts.minipc.ip        # "192.168.1.10"
@@ -172,10 +176,10 @@ All custom options use the `bigor.*` namespace with clear categories:
 
 3. **Add host to network topology**:
 
-   Edit `modules/nixos/features/system/network.nix`:
+   Edit `nix/network-topology.nix`:
 
    ```nix
-   bigor.network.hosts.myhost = {
+   hosts.myhost = {
      ip = null;  # or "192.168.1.XX" for static IP
      interface = "eth0";
    };
@@ -254,7 +258,7 @@ This repository is designed to be forked and customized. Here are common customi
 
 1. **Replace the namespace**: Search and replace `bigor` with your preferred namespace
 2. **Remove unused hosts**: Delete host directories and remove from `nix/hosts.nix`
-3. **Adjust network topology**: Update IPs and interfaces in `modules/nixos/features/system/network.nix`
+3. **Adjust network topology**: Update IPs and interfaces in `nix/network-topology.nix`
 4. **Configure policies**: Set kernel, DNS, power, and storage strategies per host
 5. **Enable/disable features**: Toggle audio, gaming, flatpak, etc. as needed
 6. **Customize secrets**: Replace `.sops.yaml` with your age keys
@@ -265,7 +269,7 @@ If you're new to NixOS or want to understand the patterns used here:
 
 - **Module pattern**: See `CLAUDE.md` for detailed module templates
 - **Policy system**: Read `modules/nixos/policies/` for examples
-- **Network topology**: Study `modules/nixos/features/system/network.nix`
+- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/features/system/network.nix`
 - **Quality tooling**: Explore `modules/home/features/dev-scripts.nix`
 
 ## Project Goals
