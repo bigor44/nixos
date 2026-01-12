@@ -80,14 +80,13 @@ All modules use the `bigor.*` namespace and follow a strict categorization:
 **Features** (`bigor.features.*`): Optional capabilities with `enable` option
 
 - System features: `base`, `boot`, `network`, `packages`, `sops`, `users`, `french-locale`
-- Hardware features: `audio`, `desktop`, `gaming`, `flatpak`, `via`
+- Desktop features: `audio`, `desktop`, `gaming`, `flatpak`, `via`
+- Hardware features: `cpu-power-management` (auto-detects AMD/Intel and configures P-States)
 
 **Policies** (`bigor.policies.*`): Strategic decisions with enum selection (NO `enable` option)
 
-- `kernel`: Kernel selection ("server", "desktop", "hardened", "latest")
-- `power`: Power management ("amd-pstate", "intel-pstate", "none")
 - `dns.mode`: DNS strategy ("local-recursive", "lan-recursive", "portable", "cloud")
-- `storage`: Storage configuration ("nfs-server", "nfs-client", "standalone")
+- `storage.mode`: Storage configuration ("nfs-server", "nfs-client", "local", "none")
 
 Policies provide `computed` read-only values for services to consume.
 
@@ -126,13 +125,20 @@ Each host has:
 Hosts define policies and enable profiles/features. Example:
 
 ```nix
-bigor = {
-  policies = {
-    kernel = "server";
-    dns.mode = "local-recursive";
+{ pkgs, ... }:
+{
+  # Kernel selection (direct NixOS option)
+  boot.kernelPackages = pkgs.linuxPackages;
+
+  bigor = {
+    policies = {
+      dns.mode = "local-recursive";
+      storage.mode = "nfs-server";
+    };
+    features.cpu-power-management.enable = true;
+    profiles.homelab-master.enable = true;
   };
-  profiles.homelab-master.enable = true;
-};
+}
 ```
 
 ### Network Topology
@@ -163,15 +169,29 @@ Current topology:
 
 ### Policy System
 
-Policies centralize strategic decisions to eliminate duplication across hosts:
+Policies centralize **strategic architectural decisions** that have complex downstream effects across multiple services. They should only be used when a decision:
 
-1. **Declaration**: Policies use `mkOption` with `types.enum`, no `enable` option
+1. Represents fundamentally different architectural patterns
+2. Has cascading effects on multiple services
+3. Requires complex validation and computed values
+4. Is used differently across multiple hosts
+
+**Current policies:**
+
+- **DNS**: Manages DNS resolution strategy with auto-configuration of Unbound and Blocky
+- **Storage**: Manages NFS server/client/local storage patterns
+
+**Policy characteristics:**
+
+1. **Declaration**: Use `mkOption` with `types.enum`, NO `enable` option
 2. **Implementation**: Set low-level NixOS options based on selected strategy
 3. **Computed Values**: Provide read-only values via `computed.*` for services to consume
 4. **Assertions**: Validate prerequisites for selected strategies
 5. **Auto-enable**: Can auto-enable services (e.g., DNS policy enables Unbound when `mode = "local-recursive"`)
 
 Example: DNS policy computes upstream servers based on strategy, services read `config.bigor.policies.dns.computed.blockyUpstreams`.
+
+**When NOT to use policies:** Simple configuration choices should use direct NixOS options (e.g., `boot.kernelPackages`) or auto-detecting features (e.g., `cpu-power-management`).
 
 ### Module Pattern
 
@@ -271,12 +291,24 @@ Policy assertions are validated during `nix flake check` - if a host configurati
 
 ### Adding a New Policy
 
+**IMPORTANT**: Only create a policy if it meets ALL criteria:
+
+- Represents fundamentally different architectural patterns
+- Has complex downstream effects on multiple services
+- Requires computed values used by other modules
+- Is used differently across multiple hosts
+- Cannot be replaced by direct NixOS options or auto-detection
+
+If your use case doesn't meet these criteria, use a feature module or direct NixOS configuration instead.
+
+**If you must create a policy:**
+
 1. Create policy module in `modules/nixos/policies/<policy-name>.nix`
 2. Use enum type with strategies, NO `enable` option
-3. Add `computed.*` read-only values if needed
+3. Add `computed.*` read-only values for services to consume
 4. Add assertions to validate prerequisites
 5. Add to `nix/modules.nix` under nixosModules
-6. Set in host config: `bigor.policies.<policy-name> = "strategy";`
+6. Set in host config: `bigor.policies.<policy-name>.mode = "strategy";`
 
 ### Adding a New Host
 
@@ -308,7 +340,8 @@ Policy assertions are validated during `nix flake check` - if a host configurati
 - **nix/modules.nix**: Module registry (add ALL new modules here)
 - **nix/network-topology.nix**: Network topology data (all IPs, interfaces, ports)
 - **modules/nixos/features/system/network.nix**: Network configuration module
-- **modules/nixos/policies/**: Strategic decisions (kernel, power, DNS, storage)
+- **modules/nixos/policies/**: Strategic architectural decisions (DNS, storage)
+- **modules/nixos/features/hardware/**: Hardware-specific features with auto-detection
 - **.statix.toml**: Linter configuration and codebase conventions
 - **treefmt.toml**: Formatter configuration
 - **CONTRIBUTING.md**: Detailed development workflow and patterns

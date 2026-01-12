@@ -73,7 +73,18 @@ in
 
 #### Policy Module Pattern
 
-Policies are a special type of module that declare strategic decisions (kernel selection, DNS strategy, power management). Unlike features/services, **policies do not have an `enable` option** - they are always active and use enums to select strategies:
+Policies are a special type of module that declare **strategic architectural decisions** with complex downstream effects (DNS strategy, storage patterns). Unlike features/services, **policies do not have an `enable` option** - they are always active and use enums to select strategies.
+
+**IMPORTANT**: Only create policies for decisions that:
+
+- Represent fundamentally different architectural patterns
+- Have cascading effects on multiple services
+- Require computed values used by other modules
+- Are used differently across multiple hosts
+
+For simple configuration choices, use direct NixOS options or auto-detecting features instead.
+
+**Example policy module:**
 
 ```nix
 { config, lib, ... }:

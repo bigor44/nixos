@@ -18,10 +18,9 @@
     ../modules/nixos/features/gaming.nix
     ../modules/nixos/features/flatpak.nix
     ../modules/nixos/features/via.nix
+    ../modules/nixos/features/hardware/cpu-power-management.nix
 
     # Policies (strategic decisions)
-    ../modules/nixos/policies/kernel.nix
-    ../modules/nixos/policies/power.nix
     ../modules/nixos/policies/dns.nix
     ../modules/nixos/policies/storage.nix
 
