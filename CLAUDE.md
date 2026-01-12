@@ -98,6 +98,7 @@ All modules use the `bigor.*` namespace and follow a strict categorization:
 **Common** (`modules/nixos/common/`): Non-optional base configuration applied to all hosts
 
 - `boot`: Bootloader configuration (UEFI systemd-boot)
+- `localization`: French locale, timezone (Europe/Paris), and keyboard layout
 - `network`: Network topology, `/etc/hosts` generation, firewall (provides `bigor.network.*` options)
 - `packages`: Essential CLI tools (zsh, tmux, nh, etc.)
 - `sops`: Secrets management base configuration
@@ -107,7 +108,6 @@ Note: Core Nix settings (binary caches, flakes, trusted users, internal CA) are 
 
 **Features** (`bigor.features.*`): Optional capabilities with `enable` option
 
-- `french-locale`: French locale, timezone (Europe/Paris), and keyboard layout
 - Desktop features: `audio`, `desktop`, `gaming`, `flatpak`, `via`
 - Hardware features: `cpu-power-management` (auto-detects AMD/Intel and configures P-States)
 

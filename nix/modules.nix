@@ -6,13 +6,13 @@
     # Common - Non-optional base configuration (applied to all hosts)
     # Note: Core Nix settings (caches, flakes, CA trust) are in nix/hosts.nix
     ../modules/nixos/common/boot.nix
+    ../modules/nixos/common/localization.nix
     ../modules/nixos/common/network.nix
     ../modules/nixos/common/packages.nix
     ../modules/nixos/common/sops.nix
     ../modules/nixos/common/users.nix
 
     # Features - Optional capabilities
-    ../modules/nixos/features/french-locale.nix
     ../modules/nixos/features/desktop.nix
     ../modules/nixos/features/audio.nix
     ../modules/nixos/features/gaming.nix

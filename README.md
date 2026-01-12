@@ -112,9 +112,9 @@ Services reference the topology instead of hardcoding values, making the configu
 
 All custom options use the `bigor.*` namespace with clear categories:
 
-- `modules/nixos/common/` - Non-optional base configuration (boot, network, packages, sops, users)
+- `modules/nixos/common/` - Non-optional base configuration (boot, localization, network, packages, sops, users)
   - Note: Core Nix settings (caches, flakes, CA) are in `nix/hosts.nix`
-- `bigor.features.*` - Optional capabilities with `enable` option (audio, desktop, gaming, french-locale)
+- `bigor.features.*` - Optional capabilities with `enable` option (audio, desktop, gaming)
 - `bigor.policies.*` - Strategic decisions (DNS, storage)
 - `bigor.services.*` - Network services (blocky, caddy, nfs, unbound)
 - `bigor.profiles.*` - Composite configurations (workstation, homelab-master)

@@ -24,7 +24,6 @@
     # Features
     features = {
       cpu-power-management.enable = true;
-      french-locale.enable = true;
     };
 
     # Profile and overrides

@@ -21,7 +21,6 @@
     profiles.workstation.enable = true;
     features = {
       cpu-power-management.enable = true;
-      french-locale.enable = true;
       via.enable = true;
     };
   };
