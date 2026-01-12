@@ -52,6 +52,31 @@ nhs                # Full check + rebuild (switch)
 nhb                # Full check + rebuild (boot)
 ```
 
+### Development Scripts
+
+All development scripts are provided by `bigor.home.features.dev-scripts`:
+
+**Quality Assurance:**
+
+- `check-quick` (alias: `qc`): Fast incremental check on changed files (<0.1s)
+- `check-full` (alias: `qf`): Complete CI-equivalent check (~16s)
+  - Runs: format check, dead code check, linter, evaluation, flake checks
+- `check-mega` (alias: `mega`): Intelligent orchestrator that adapts to git state
+  - Clean tree with unpushed commits → full check
+  - Staged files → quick check on staged
+  - Modified files → quick check on modified
+
+**Testing:**
+
+- `dns-test`: DNS stack functional test
+  - Validates: DNS reachability, local rewrites, external resolution, ad blocking, DNSSEC
+
+**Git Hooks:**
+
+- `install-git-hooks`: Install pre-commit hook for automatic validation
+  - Checks: format/lint on staged .nix files, SOPS secrets validation, sensitive file prevention
+  - Skip with: `git commit --no-verify`
+
 ## Architecture
 
 ### Flake Structure
@@ -101,7 +126,7 @@ Policies provide `computed` read-only values for services to consume.
 All under `bigor.home.features.*` namespace:
 
 - `cli-packages`: CLI utilities
-- `dev-scripts`: QA scripts (check-quick, check-full, check-mega)
+- `dev-scripts`: Development scripts (check-quick, check-full, check-mega, dns-test, install-git-hooks)
 - `git`: Git configuration
 - `shell`: Zsh with aliases and plugins
 - `nixvim`: Neovim configuration
@@ -272,6 +297,24 @@ Files in `dotfiles/cosmic/` are **symlinked** (not copied). Changes take effect 
 5. **Apply**: `nh os switch` (permanent)
 
 Policy assertions are validated during `nix flake check` - if a host configuration violates policy prerequisites, the check will fail with a descriptive error message.
+
+### Testing DNS Stack
+
+Test DNS functionality on hosts with DNS services enabled:
+
+```bash
+dns-test
+```
+
+This validates:
+
+1. DNS server reachability (127.0.0.1)
+2. Local domain resolution (e.g., minipc.bigor.lan)
+3. External domain resolution (e.g., google.com)
+4. Ad blocking effectiveness (ads.youtube.com → 0.0.0.0)
+5. DNSSEC validation
+
+**Note**: This test requires `bigor.home.features.dev-scripts.enable = true` in your Home Manager configuration.
 
 ## Adding New Components
 
