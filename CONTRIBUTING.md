@@ -65,9 +65,14 @@ in
 **Key Points**:
 
 - Use the `bigor` namespace for all custom options
-- System modules: `bigor.features.*`, `bigor.services.*`, `bigor.profiles.*`, `bigor.policies.*`
+- System modules:
+  - Common (non-optional): `modules/nixos/common/` - NO `enable` option, applied to all hosts
+  - Features (optional): `bigor.features.*` - WITH `enable` option
+  - Services: `bigor.services.*` - WITH `enable` option
+  - Profiles: `bigor.profiles.*` - WITH `enable` option
+  - Policies: `bigor.policies.*` - NO `enable` option, use enum selection
 - Home modules: `bigor.home.*`
-- Always provide an `enable` option for features/services/profiles (but NOT for policies)
+- Always provide an `enable` option for features/services/profiles (but NOT for policies or common modules)
 - Use descriptive option names
 - **Avoid `with lib;`** - prefer explicit `inherit (lib)` for better readability and to avoid naming conflicts
 
@@ -268,24 +273,30 @@ git push origin feature/my-feature
 
 ### Adding a New Module
 
+**For optional features or services:**
+
 1. **Create the module file**:
 
    ```bash
-   # System module
-   touch modules/nixos/features/<category>/<name>.nix
+   # Optional feature module
+   touch modules/nixos/features/<name>.nix
+   # or in a subdirectory: modules/nixos/features/<category>/<name>.nix
+
+   # Service module
+   touch modules/nixos/services/<name>.nix
 
    # Home module
    touch modules/home/<name>.nix
    ```
 
-2. **Implement using the module pattern** (see above)
+2. **Implement using the module pattern** with `enable` option (see above)
 
 3. **Add the module to `nix/modules.nix`**:
 
    ```nix
    nixosModules = [
      # ... existing modules
-     ../modules/nixos/features/<category>/<name>.nix
+     ../modules/nixos/features/<name>.nix  # or services/
    ];
 
    # or for home modules:
@@ -298,7 +309,8 @@ git push origin feature/my-feature
 4. **Enable in a host configuration**:
 
    ```nix
-   bigor.features.<category>.<name>.enable = true;
+   bigor.features.<name>.enable = true;
+   # or bigor.services.<name>.enable = true;
    ```
 
 5. **Test and commit**:
@@ -309,6 +321,30 @@ git push origin feature/my-feature
    nix flake check
    nh os test
    ```
+
+**For non-optional base configuration:**
+
+1. **Create the module file**:
+
+   ```bash
+   touch modules/nixos/common/<name>.nix
+   ```
+
+2. **Implement WITHOUT `enable` option** (always applied to all hosts)
+
+3. **Add to `nix/modules.nix`** under common section:
+
+   ```nix
+   nixosModules = [
+     # Common - Non-optional base configuration
+     ../modules/nixos/common/<name>.nix
+     # ...
+   ];
+   ```
+
+4. **Configuration is applied automatically** to all hosts
+
+5. **Alternative**: For truly universal infrastructure config (like Nix caches), add directly to `nix/hosts.nix` in the `mkHost` function
 
 ### Adding a New Host
 

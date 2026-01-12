@@ -95,9 +95,19 @@ All modules use the `bigor.*` namespace and follow a strict categorization:
 
 #### NixOS Modules (`modules/nixos/`)
 
+**Common** (`modules/nixos/common/`): Non-optional base configuration applied to all hosts
+
+- `boot`: Bootloader configuration (UEFI systemd-boot)
+- `network`: Network topology, `/etc/hosts` generation, firewall (provides `bigor.network.*` options)
+- `packages`: Essential CLI tools (zsh, tmux, nh, etc.)
+- `sops`: Secrets management base configuration
+- `users`: User account management
+
+Note: Core Nix settings (binary caches, flakes, trusted users, internal CA) are configured directly in `nix/hosts.nix` as they apply universally to all hosts.
+
 **Features** (`bigor.features.*`): Optional capabilities with `enable` option
 
-- System features: `base`, `boot`, `network`, `packages`, `sops`, `users`, `french-locale`
+- `french-locale`: French locale, timezone (Europe/Paris), and keyboard layout
 - Desktop features: `audio`, `desktop`, `gaming`, `flatpak`, `via`
 - Hardware features: `cpu-power-management` (auto-detects AMD/Intel and configures P-States)
 
@@ -169,7 +179,7 @@ Network topology is managed in two files:
    - **`domain`**: Local domain name for all hosts (e.g., "bigor.lan")
    - **`ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
 
-2. **`modules/nixos/features/system/network.nix`**: NixOS module providing:
+2. **`modules/nixos/common/network.nix`**: NixOS module providing:
    - **`bigor.network.*`** options (reads data from topology file)
    - **`bigor.network.domain`**: Read-only, local domain name from topology
    - **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
@@ -320,10 +330,19 @@ This validates:
 
 ### Adding a New Module
 
-1. Create module file in `modules/nixos/features/<category>/` or `modules/nixos/services/`
-2. Follow the module pattern (see above)
+**For optional features or services:**
+
+1. Create module file in `modules/nixos/features/` (or subdirectory) or `modules/nixos/services/`
+2. Follow the feature/service module pattern with `enable` option (see above)
 3. Add to `nix/modules.nix` in the appropriate list
 4. Enable in host config: `bigor.<category>.<name>.enable = true;`
+
+**For non-optional base configuration:**
+
+1. Create module file in `modules/nixos/common/`
+2. Configuration is applied to all hosts automatically (no `enable` option)
+3. Add to `nix/modules.nix` under the `nixosModules` common section
+4. Or add directly to `nix/hosts.nix` if it's truly universal infrastructure config
 
 ### Adding a New Policy
 
@@ -373,10 +392,13 @@ If your use case doesn't meet these criteria, use a feature module or direct Nix
 ## Important Files
 
 - **flake.nix**: Main entry point
+- **nix/hosts.nix**: Host definitions and universal Nix configuration (caches, flakes, CA)
 - **nix/modules.nix**: Module registry (add ALL new modules here)
 - **nix/network-topology.nix**: Network topology data (all IPs, interfaces, ports)
-- **modules/nixos/features/system/network.nix**: Network configuration module
+- **modules/nixos/common/**: Non-optional base configuration for all hosts
+- **modules/nixos/common/network.nix**: Network configuration module (provides `bigor.network.*`)
 - **modules/nixos/policies/**: Strategic architectural decisions (DNS, storage)
+- **modules/nixos/features/**: Optional capabilities with `enable` option
 - **modules/nixos/features/hardware/**: Hardware-specific features with auto-detection
 - **.statix.toml**: Linter configuration and codebase conventions
 - **treefmt.toml**: Formatter configuration

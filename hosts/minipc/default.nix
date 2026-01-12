@@ -21,7 +21,10 @@
     };
 
     # Features
-    features.cpu-power-management.enable = true;
+    features = {
+      cpu-power-management.enable = true;
+      french-locale.enable = true;
+    };
 
     # Profile
     profiles.homelab-master.enable = true;

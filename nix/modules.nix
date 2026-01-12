@@ -3,16 +3,16 @@
 {
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
-    # Features - System
-    ../modules/nixos/features/system/base.nix
-    ../modules/nixos/features/system/boot.nix
-    ../modules/nixos/features/system/french-locale.nix
-    ../modules/nixos/features/system/network.nix
-    ../modules/nixos/features/system/packages.nix
-    ../modules/nixos/features/system/sops.nix
-    ../modules/nixos/features/system/users.nix
+    # Common - Non-optional base configuration (applied to all hosts)
+    # Note: Core Nix settings (caches, flakes, CA trust) are in nix/hosts.nix
+    ../modules/nixos/common/boot.nix
+    ../modules/nixos/common/network.nix
+    ../modules/nixos/common/packages.nix
+    ../modules/nixos/common/sops.nix
+    ../modules/nixos/common/users.nix
 
-    # Features - Desktop & Hardware
+    # Features - Optional capabilities
+    ../modules/nixos/features/french-locale.nix
     ../modules/nixos/features/desktop.nix
     ../modules/nixos/features/audio.nix
     ../modules/nixos/features/gaming.nix

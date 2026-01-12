@@ -30,8 +30,9 @@ A modular, policy-driven NixOS configuration managing a homelab server and deskt
 │   └── minidesk/               # Portable laptop (DHCP)
 ├── modules/
 │   ├── nixos/
+│   │   ├── common/             # Non-optional base configuration (boot, network, packages...)
 │   │   ├── features/           # Optional capabilities (audio, desktop, gaming...)
-│   │   ├── policies/           # Strategic decisions (kernel, DNS, power, storage)
+│   │   ├── policies/           # Strategic decisions (DNS, storage)
 │   │   ├── services/           # Network services (blocky, caddy, nfs, unbound)
 │   │   └── profiles/           # Composite configs (workstation, homelab-master)
 │   └── home/
@@ -96,7 +97,7 @@ config.bigor.policies.dns.computed.blockyUpstreams
 Network topology is managed in two files:
 
 1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, domain, and port definitions
-2. **`modules/nixos/features/system/network.nix`**: NixOS module that reads the topology and provides configuration logic
+2. **`modules/nixos/common/network.nix`**: NixOS module that reads the topology and provides configuration logic
 
 ```nix
 bigor.network.hosts.minipc.ip        # "192.168.1.10"
@@ -111,9 +112,11 @@ Services reference the topology instead of hardcoding values, making the configu
 
 All custom options use the `bigor.*` namespace with clear categories:
 
-- `bigor.features.*` - Optional capabilities (audio, desktop, gaming)
-- `bigor.policies.*` - Strategic decisions (kernel, DNS, power)
-- `bigor.services.*` - Network services (blocky, caddy, nfs)
+- `modules/nixos/common/` - Non-optional base configuration (boot, network, packages, sops, users)
+  - Note: Core Nix settings (caches, flakes, CA) are in `nix/hosts.nix`
+- `bigor.features.*` - Optional capabilities with `enable` option (audio, desktop, gaming, french-locale)
+- `bigor.policies.*` - Strategic decisions (DNS, storage)
+- `bigor.services.*` - Network services (blocky, caddy, nfs, unbound)
 - `bigor.profiles.*` - Composite configurations (workstation, homelab-master)
 - `bigor.home.features.*` - Home Manager modules (CLI, GUI, shell)
 
@@ -270,7 +273,7 @@ If you're new to NixOS or want to understand the patterns used here:
 
 - **Module pattern**: See `CLAUDE.md` for detailed module templates
 - **Policy system**: Read `modules/nixos/policies/` for examples
-- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/features/system/network.nix`
+- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/common/network.nix`
 - **Quality tooling**: Explore `modules/home/features/dev-scripts.nix`
 
 ## Project Goals
