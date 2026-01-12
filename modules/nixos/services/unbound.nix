@@ -41,7 +41,7 @@ in
     let
       inherit (config.networking) hostName;
       networkCfg = config.bigor.network;
-      inherit (networkCfg) mainInterface ports;
+      inherit (networkCfg) mainInterface ports domain;
 
       # Get this host's IP from hosts registry
       hostConfig = networkCfg.hosts.${hostName};
@@ -109,7 +109,7 @@ in
             access-control = accessControl;
 
             # Private domains (prevent recursive lookup for local domains)
-            private-domain = [ "bigor.lan" ];
+            private-domain = [ domain ];
 
             # Logging (minimal for production)
             verbosity = 1;

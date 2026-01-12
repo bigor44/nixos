@@ -5,6 +5,9 @@
   # Network subnet in CIDR notation
   subnet = "192.168.1.0/24";
 
+  # Local domain name for all hosts
+  domain = "bigor.lan";
+
   # All hosts in the network with their static IPs and interfaces
   hosts = {
     minipc = {

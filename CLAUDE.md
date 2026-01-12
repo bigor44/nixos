@@ -142,13 +142,16 @@ Network topology is managed in two files:
 1. **`nix/network-topology.nix`**: Pure data file containing:
    - **`hosts`**: All hosts with their IP addresses and network interfaces
    - **`subnet`**: Network CIDR (default: "192.168.1.0/24")
+   - **`domain`**: Local domain name for all hosts (e.g., "bigor.lan")
    - **`ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
 
 2. **`modules/nixos/features/system/network.nix`**: NixOS module providing:
    - **`bigor.network.*`** options (reads data from topology file)
+   - **`bigor.network.domain`**: Read-only, local domain name from topology
    - **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
    - `/etc/hosts` generation from topology
    - Network configuration logic (DNS, firewall)
+   - Warnings when domain is not set
 
 Services should reference `config.bigor.network.hosts.<hostname>.ip` instead of hardcoding IPs.
 

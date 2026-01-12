@@ -95,16 +95,17 @@ config.bigor.policies.dns.computed.blockyUpstreams
 
 Network topology is managed in two files:
 
-1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, and port definitions
+1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, domain, and port definitions
 2. **`modules/nixos/features/system/network.nix`**: NixOS module that reads the topology and provides configuration logic
 
 ```nix
 bigor.network.hosts.minipc.ip        # "192.168.1.10"
 bigor.network.ports.blocky.dns       # 53
 bigor.network.subnet                 # "192.168.1.0/24"
+bigor.network.domain                 # "bigor.lan"
 ```
 
-Services reference the topology instead of hardcoding values, making the configuration self-documenting and easy to maintain.
+Services reference the topology instead of hardcoding values, making the configuration self-documenting and easy to maintain. A warning is emitted if the domain is not set.
 
 ### Module Namespaces
 

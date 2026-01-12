@@ -19,15 +19,14 @@ let
     ;
   cfg = config.bigor.services.blocky;
   networkCfg = config.bigor.network;
-  inherit (networkCfg) mainInterface ports;
-  minipcIp = networkCfg.hosts.minipc.ip;
+  inherit (networkCfg) mainInterface ports domain;
 
   # Auto-generate DNS rewrites from bigor.network.hosts
   customDNSMapping = filterAttrs (_: ip: ip != null) (
-    mapAttrs' (name: host: nameValuePair "${name}.bigor.lan" host.ip) config.bigor.network.hosts
+    mapAttrs' (name: host: nameValuePair "${name}.${domain}" host.ip) config.bigor.network.hosts
     // {
       # Alias for main domain
-      "bigor.lan" = minipcIp;
+      ${domain} = networkCfg.hosts.minipc.ip;
     }
   );
 in

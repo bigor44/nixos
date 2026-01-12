@@ -29,6 +29,13 @@ in
       description = "Network subnet in CIDR notation (e.g., 192.168.1.0/24)";
     };
 
+    domain = mkOption {
+      type = types.str;
+      default = networkTopology.domain;
+      description = "Local domain name for all hosts (e.g., bigor.lan)";
+      readOnly = true;
+    };
+
     mainInterface = mkOption {
       type = types.str;
       description = "Primary network interface name (derived from hosts topology)";
@@ -64,9 +71,9 @@ in
   };
 
   config = mkMerge [
-
-    # Assertions to validate network configuration
+    # Base network configuration (always applied)
     {
+      # Validate network configuration
       assertions = [
         {
           assertion = hostname != "" -> cfg.hosts ? ${hostname};
@@ -77,19 +84,19 @@ in
         assertion = host.ip != null -> host.interface != null;
         message = "Host '${name}' has a static IP but no interface defined. Static IP requires an interface.";
       }) cfg.hosts;
-    }
 
-    # Generate /etc/hosts from hosts registry
-    {
+      warnings = lib.optional (cfg.domain == "") "bigor.network.domain is not set";
+
+      # Generate /etc/hosts from hosts registry
       networking.extraHosts = concatStringsSep "\n" (
         mapAttrsToList (name: host: "${host.ip} ${name}") hostsWithIPs
       );
+
+      # Enable nftables (modern firewall backend)
+      networking.nftables.enable = true;
     }
 
-    # Enable nftables (modern firewall backend)
-    { networking.nftables.enable = true; }
-
-    # Configure DNS servers when Blocky is enabled locally
+    # DNS configuration when Blocky is enabled locally
     (mkIf config.bigor.services.blocky.enable (
       let
         fallbackDNS = [
