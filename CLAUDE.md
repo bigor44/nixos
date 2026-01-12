@@ -26,20 +26,13 @@ nh os build --hostname minipc
 
 ### Code Quality Workflow
 
-**CRITICAL: These commands MUST be run in order before committing:**
+**CRITICAL: Always validate changes before committing:**
 
 ```bash
-# 1. Format code
-nix fmt
+# Preferred: Run all checks in one command
+check-full   # or: qf
 
-# 2. Check for dead code
-deadnix --fail .
-
-# 3. Lint for anti-patterns
-statix check --ignore .* .
-
-# 4. Run all flake checks (includes assertions)
-nix flake check
+# This runs: format + deadnix + statix + nix flake check
 ```
 
 ### Development Shell Shortcuts
@@ -273,7 +266,7 @@ Files in `dotfiles/cosmic/` are **symlinked** (not copied). Changes take effect 
 ## Testing New Changes
 
 1. **Make changes** to modules or host configs
-2. **Format and check**: `nix fmt && deadnix --fail . && statix check --ignore .* . && nix flake check`
+2. **Validate**: `check-full` (runs format + deadnix + statix + flake check)
 3. **Build**: `nh os build` (or `nh os build --hostname <host>`)
 4. **Test**: `nh os test` (reverts on reboot)
 5. **Apply**: `nh os switch` (permanent)
