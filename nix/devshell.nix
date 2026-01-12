@@ -45,6 +45,7 @@
           echo "  gcn    → Add + format + check + commit (safe)"
           echo "  gps    → Full check + push (safe)"
           echo "  nhs    → Full check + rebuild (safe)"
+          echo "  nhb    → Full check + rebuild boot (safe)"
           echo ""
 
           # Auto-install pre-commit hook if not present

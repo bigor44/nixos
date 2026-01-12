@@ -12,15 +12,9 @@
     ../modules/nixos/features/system/sops.nix
     ../modules/nixos/features/system/users.nix
 
-    # Features - Desktop
-    ../modules/nixos/features/desktop/base.nix
-    ../modules/nixos/features/desktop/cosmic.nix
-    ../modules/nixos/features/desktop/apps.nix
-
-    # Features - Hardware/Peripherals
+    # Features - Desktop & Hardware
+    ../modules/nixos/features/desktop.nix
     ../modules/nixos/features/audio.nix
-    ../modules/nixos/features/bluetooth.nix
-    ../modules/nixos/features/fonts.nix
     ../modules/nixos/features/gaming.nix
     ../modules/nixos/features/flatpak.nix
     ../modules/nixos/features/via.nix

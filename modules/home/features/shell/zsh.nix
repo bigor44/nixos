@@ -59,6 +59,7 @@ in
         gcn = "nix fmt && gaa && qs && gc"; # Safe commit
         gps = "check-full && gp"; # Safe push
         nhs = "check-full && nh os switch"; # Safe rebuild
+        nhb = "check-full && nh os boot"; # Safe rebuild (boot)
 
         # System info
         ports = "netstat -tulanp";

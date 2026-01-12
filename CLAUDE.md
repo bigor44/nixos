@@ -141,6 +141,13 @@ nhs
 # Equivalent to: check-full && nh os switch
 ```
 
+**nhb** - Safe rebuild boot (full check before boot):
+
+```bash
+nhb
+# Equivalent to: check-full && nh os boot
+```
+
 ### Development Workflow
 
 **Recommended workflow:**
@@ -262,6 +269,7 @@ The repository includes `.statix.toml` documenting code conventions:
 - `gcn` → Format + add all + check + commit
 - `gps` → Full check + push
 - `nhs` → Full check + rebuild
+- `nhb` → Full check + rebuild boot
 
 **Nix:**
 
