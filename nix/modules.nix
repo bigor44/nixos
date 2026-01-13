@@ -20,6 +20,7 @@
     ../modules/nixos/capabilities/caddy.nix
     ../modules/nixos/capabilities/cpu-power-management.nix
     ../modules/nixos/capabilities/desktop.nix
+    ../modules/nixos/capabilities/desktop-full.nix
     ../modules/nixos/capabilities/flatpak.nix
     ../modules/nixos/capabilities/gaming.nix
     ../modules/nixos/capabilities/nfs.nix
