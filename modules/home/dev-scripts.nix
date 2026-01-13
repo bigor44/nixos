@@ -1,4 +1,4 @@
-# Module: modules/home/features/dev-scripts.nix
+# Module: dev-scripts
 # Purpose: Development QA scripts for fast quality checks
 #
 # Provides 5 commands:
@@ -8,15 +8,8 @@
 # - dns-test: DNS stack functional test (local DNS, ad blocking, DNSSEC)
 # - install-git-hooks: Install pre-commit hook
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.home.features.dev-scripts;
 
   # Script: check-quick
   # Fast incremental check: only verify changed Nix files
@@ -321,17 +314,11 @@ let
   '';
 in
 {
-  options.bigor.home.features.dev-scripts = {
-    enable = mkEnableOption "Development QA scripts";
-  };
-
-  config = mkIf cfg.enable {
-    home.packages = [
-      check-quick
-      check-full
-      check-mega
-      dns-test
-      install-git-hooks
-    ];
-  };
+  home.packages = [
+    check-quick
+    check-full
+    check-mega
+    dns-test
+    install-git-hooks
+  ];
 }

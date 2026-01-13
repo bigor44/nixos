@@ -30,13 +30,10 @@ A modular, policy-driven NixOS configuration managing a homelab server and deskt
 │   └── minidesk/               # Portable laptop (DHCP)
 ├── modules/
 │   ├── nixos/
-│   │   ├── common/             # Non-optional base configuration (boot, network, packages...)
-│   │   ├── features/           # Optional capabilities (audio, desktop, gaming...)
-│   │   ├── policies/           # Strategic decisions (DNS, storage)
-│   │   ├── services/           # Network services (blocky, caddy, nfs, unbound)
-│   │   └── profiles/           # Composite configs (workstation, homelab-master)
-│   └── home/
-│       └── features/           # Home Manager modules (CLI, GUI, dev-scripts)
+│   │   ├── platform/           # Always-active infrastructure (boot, network, packages, sops, users)
+│   │   │   └── policies/       # Strategic decisions (DNS, storage)
+│   │   └── capabilities/       # Optional features and services (audio, desktop, gaming, blocky, caddy, nfs, unbound)
+│   └── home/                   # Home Manager modules (always-active: CLI, git, shell, nixvim; optional: gui)
 ├── users/
 │   └── bigor/                  # User-specific configuration
 ├── dotfiles/                   # Symlinked configuration files
@@ -116,7 +113,9 @@ All custom options use the `bigor.*` namespace with clear categories:
   - Note: Core Nix settings (caches, flakes, CA) are in `nix/hosts.nix`
 - `bigor.platform.policies.*` - Strategic decisions (DNS, storage)
 - `bigor.capabilities.*` - Optional features and services (audio, desktop, gaming, blocky, caddy, nfs, unbound)
-- `bigor.home.features.*` - Home Manager modules (CLI, GUI, shell)
+- `bigor.home.*` - Home Manager modules
+  - Always-active: cli-packages, dev-scripts, git, shell, nixvim
+  - Optional: gui (GUI applications)
 
 ## Quick Start
 
@@ -169,10 +168,9 @@ All custom options use the `bigor.*` namespace with clear categories:
    {
      home.stateVersion = "25.11";
 
-     bigor.home.features = {
-       gui.enable = true;
-       dev-scripts.enable = true;
-     };
+     # Most home modules are always active (cli-packages, dev-scripts, git, shell, nixvim)
+     # Only GUI applications are optional:
+     bigor.home.gui.enable = true;
    }
    ```
 
@@ -261,18 +259,19 @@ This repository is designed to be forked and customized. Here are common customi
 1. **Replace the namespace**: Search and replace `bigor` with your preferred namespace
 2. **Remove unused hosts**: Delete host directories and remove from `nix/hosts.nix`
 3. **Adjust network topology**: Update IPs and interfaces in `nix/network-topology.nix`
-4. **Configure policies**: Set kernel, DNS, power, and storage strategies per host
-5. **Enable/disable features**: Toggle audio, gaming, flatpak, etc. as needed
-6. **Customize secrets**: Replace `.sops.yaml` with your age keys
+4. **Configure policies**: Set DNS and storage strategies per host
+5. **Enable/disable capabilities**: Toggle audio, gaming, flatpak, desktop, etc. as needed
+6. **Customize home modules**: GUI is optional, others are always active
+7. **Customize secrets**: Replace `.sops.yaml` with your age keys
 
 ### Learning Resources
 
 If you're new to NixOS or want to understand the patterns used here:
 
 - **Module pattern**: See `CLAUDE.md` for detailed module templates
-- **Policy system**: Read `modules/nixos/policies/` for examples
-- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/common/network.nix`
-- **Quality tooling**: Explore `modules/home/features/dev-scripts.nix`
+- **Policy system**: Read `modules/nixos/platform/policies/` for examples
+- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/platform/network.nix`
+- **Quality tooling**: Explore `modules/home/dev-scripts.nix`
 
 ## Project Goals
 

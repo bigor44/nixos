@@ -9,10 +9,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.home.features.gui;
+  cfg = config.bigor.home.gui;
 in
 {
-  options.bigor.home.features.gui.enable = mkEnableOption "Desktop applications";
+  options.bigor.home.gui.enable = mkEnableOption "Desktop applications";
 
   config =
     let

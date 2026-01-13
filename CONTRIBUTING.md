@@ -70,6 +70,8 @@ in
   - Policies (strategic): `bigor.platform.policies.*` - NO `enable` option, use enum selection
   - Capabilities (optional): `bigor.capabilities.*` - WITH `enable` option
 - Home modules: `bigor.home.*`
+  - Most home modules are always-active (NO `enable` option, applied to all users)
+  - Only `gui` has an `enable` option for optional GUI applications
 - Always provide an `enable` option for capabilities (but NOT for policies or platform modules)
 - Use descriptive option names
 - **Avoid `with lib;`** - prefer explicit `inherit (lib)` for better readability and to avoid naming conflicts
@@ -320,22 +322,33 @@ git push origin feature/my-feature
 1. **Create the module file**:
 
    ```bash
-   touch modules/nixos/common/<name>.nix
+   # NixOS platform module
+   touch modules/nixos/platform/<name>.nix
+
+   # Home Manager always-active module
+   touch modules/home/<name>.nix
    ```
 
-2. **Implement WITHOUT `enable` option** (always applied to all hosts)
+2. **Implement WITHOUT `enable` option** (always applied to all hosts/users)
 
-3. **Add to `nix/modules.nix`** under common section:
+3. **Add to `nix/modules.nix`** under platform section:
 
    ```nix
    nixosModules = [
-     # Common - Non-optional base configuration
-     ../modules/nixos/common/<name>.nix
+     # Platform - Non-optional base configuration
+     ../modules/nixos/platform/<name>.nix
+     # ...
+   ];
+
+   # or for home modules:
+   homeModules = [
+     # Always-active home modules
+     ../modules/home/<name>.nix
      # ...
    ];
    ```
 
-4. **Configuration is applied automatically** to all hosts
+4. **Configuration is applied automatically** to all hosts/users
 
 5. **Alternative**: For truly universal infrastructure config (like Nix caches), add directly to `nix/hosts.nix` in the `mkHost` function
 
@@ -370,12 +383,12 @@ git push origin feature/my-feature
    ```nix
    { ... }:
    {
-     imports = [ ../../users/bigor ];
-
      home.stateVersion = "25.11";
 
      # Host-specific home configuration...
-     # bigor.home.features.gui.enable = true;
+     # Most home modules are always active (cli-packages, dev-scripts, git, shell, nixvim)
+     # Only GUI applications are optional:
+     bigor.home.gui.enable = true;
    }
    ```
 

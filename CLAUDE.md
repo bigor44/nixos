@@ -54,7 +54,7 @@ nhb                # Full check + rebuild (boot)
 
 ### Development Scripts
 
-All development scripts are provided by `bigor.home.features.dev-scripts`:
+All development scripts are provided by `bigor.home.dev-scripts`:
 
 **Quality Assurance:**
 
@@ -134,16 +134,21 @@ Network services:
 - `ssh`: SSH daemon
 - `unbound`: Recursive DNS resolver
 
-#### Home Manager Modules (`modules/home/features/`)
+#### Home Manager Modules (`modules/home/`)
 
-All under `bigor.home.features.*` namespace:
+All under `bigor.home.*` namespace:
+
+**Always-active modules** (applied to all hosts automatically, no `enable` option):
 
 - `cli-packages`: CLI utilities
 - `dev-scripts`: Development scripts (check-quick, check-full, check-mega, dns-test, install-git-hooks)
 - `git`: Git configuration
 - `shell`: Zsh with aliases and plugins
 - `nixvim`: Neovim configuration
-- `gui`: GUI applications
+
+**Optional modules** (with `enable` option):
+
+- `gui`: GUI applications (enable with `bigor.home.gui.enable = true;`)
 
 #### Host Configurations (`hosts/`)
 
@@ -333,7 +338,7 @@ This validates:
 4. Ad blocking effectiveness (ads.youtube.com → 0.0.0.0)
 5. DNSSEC validation
 
-**Note**: This test requires `bigor.home.features.dev-scripts.enable = true` in your Home Manager configuration.
+**Note**: This test is provided by the `bigor.home.dev-scripts` module, which is always active.
 
 ## Adding New Components
 
