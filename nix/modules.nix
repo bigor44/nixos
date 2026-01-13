@@ -6,6 +6,7 @@
     # Platform - Always-active infrastructure + strategic policies
     # Note: Core Nix settings (caches, flakes, CA trust) are in nix/hosts.nix
     ../modules/nixos/platform/boot.nix
+    ../modules/nixos/platform/fonts.nix
     ../modules/nixos/platform/localization.nix
     ../modules/nixos/platform/network.nix
     ../modules/nixos/platform/packages.nix
@@ -17,10 +18,10 @@
     # Capabilities - Optional features and services
     ../modules/nixos/capabilities/audio.nix
     ../modules/nixos/capabilities/blocky.nix
+    ../modules/nixos/capabilities/bluetooth.nix
     ../modules/nixos/capabilities/caddy.nix
     ../modules/nixos/capabilities/cpu-power-management.nix
     ../modules/nixos/capabilities/desktop.nix
-    ../modules/nixos/capabilities/desktop-full.nix
     ../modules/nixos/capabilities/flatpak.nix
     ../modules/nixos/capabilities/gaming.nix
     ../modules/nixos/capabilities/nfs.nix

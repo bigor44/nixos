@@ -135,7 +135,7 @@ nhs
 - **Kernel**: Zen (performance optimized)
 - **DNS**: LAN recursive (uses minipc as resolver)
 - **Storage**: NFS client (mounts from minipc)
-- **Capabilities**: Desktop, gaming, audio, VIA keyboard
+- **Capabilities**: Desktop, audio, flatpak, bluetooth, gaming, blocky, VIA keyboard
 
 ### minipc (Home Server)
 
@@ -149,7 +149,7 @@ nhs
 - **Kernel**: Zen (performance optimized)
 - **DNS**: Portable mode (cloud fallbacks)
 - **Storage**: Local storage
-- **Capabilities**: Desktop, gaming (when docked)
+- **Capabilities**: Desktop, audio, flatpak, bluetooth, gaming, blocky, SSH
 
 ## 🔧 Module System
 
@@ -157,9 +157,13 @@ nhs
 
 Always-active infrastructure:
 
-- `boot.nix` - Bootloader configuration
+- `boot.nix` - Bootloader, kernel, Plymouth
+- `fonts.nix` - System fonts and font configuration
+- `localization.nix` - Timezone, locale, keyboard
 - `network.nix` - Network topology injection
-- `users.nix` - User accounts
+- `packages.nix` - Core system packages
+- `sops.nix` - Secret management via SOPS
+- `users.nix` - User account management
 - `policies/dns.nix` - DNS resolution strategy
 - `policies/storage.nix` - Storage strategy
 
@@ -167,11 +171,18 @@ Always-active infrastructure:
 
 Optional features (enabled per-host):
 
-- `desktop.nix` - COSMIC desktop environment
-- `gaming.nix` - Steam + GameMode
+- `audio.nix` - PipeWire audio stack
 - `blocky.nix` - DNS ad-blocking proxy
-- `caddy.nix` - Reverse proxy with HTTPS
+- `bluetooth.nix` - Bluetooth support
+- `caddy.nix` - Reverse proxy with internal CA
+- `cpu-power-management.nix` - Laptop power management
+- `desktop.nix` - COSMIC desktop environment
+- `flatpak.nix` - Flatpak support
+- `gaming.nix` - Steam, Lutris, gamemode
+- `nfs.nix` - NFS server/client (reads from storage policy)
+- `sshd.nix` - SSH server
 - `unbound.nix` - Recursive DNS resolver
+- `via.nix` - VIA keyboard configurator
 
 ### Home Manager Modules (`modules/home/`)
 

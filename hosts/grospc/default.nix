@@ -19,13 +19,16 @@
 
     # Capabilities: optional features and services
     capabilities = {
+      blocky.enable = true;
       cpu-power-management.enable = true;
       via.enable = true;
 
       # Desktop features
-      desktopFull.enable = true;
+      desktop.enable = true;
+      audio.enable = true;
+      flatpak.enable = true;
+      bluetooth.enable = true;
       gaming.enable = true;
-      blocky.enable = true;
     };
   };
 

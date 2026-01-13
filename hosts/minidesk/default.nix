@@ -25,11 +25,14 @@
     capabilities = {
       cpu-power-management.enable = true;
       ssh.enable = true;
+      blocky.enable = true;
 
       # Desktop features
-      desktopFull.enable = true;
+      desktop.enable = true;
+      audio.enable = true;
+      flatpak.enable = true;
+      bluetooth.enable = true;
       gaming.enable = true;
-      blocky.enable = true;
     };
   };
 }

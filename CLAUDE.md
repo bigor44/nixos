@@ -130,6 +130,7 @@ This repository uses **flake-parts** for modular flake organization:
 Always-active infrastructure and strategic policies. Never gated by `enable` option.
 
 - `boot.nix` - Bootloader, kernel, Plymouth
+- `fonts.nix` - System fonts and font configuration
 - `localization.nix` - Timezone, locale, keyboard
 - `network.nix` - Network topology injection (IPs, ports, domain)
 - `packages.nix` - Core system packages
@@ -146,10 +147,10 @@ Optional features, always gated by `enable = mkEnableOption`.
 
 - `audio.nix` - PipeWire audio stack
 - `blocky.nix` - DNS ad-blocker (reads from DNS policy)
+- `bluetooth.nix` - Bluetooth support
 - `caddy.nix` - Reverse proxy with internal CA
 - `cpu-power-management.nix` - Laptop power management
 - `desktop.nix` - COSMIC desktop environment
-- `desktop-full.nix` - Bundle: desktop + audio + flatpak + bluetooth + fonts
 - `flatpak.nix` - Flatpak support
 - `gaming.nix` - Steam, Lutris, gamemode
 - `nfs.nix` - NFS server/client (reads from storage policy)
@@ -178,9 +179,12 @@ Example host structure:
       storage.mode = "nfs-client";
     };
     capabilities = {
-      desktopFull.enable = true;
-      gaming.enable = true;
       blocky.enable = true;
+      desktop.enable = true;
+      audio.enable = true;
+      flatpak.enable = true;
+      bluetooth.enable = true;
+      gaming.enable = true;
     };
   };
 }
