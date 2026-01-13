@@ -6,12 +6,12 @@ let
     types
     mkMerge
     ;
-  cfg = config.bigor.policies.storage;
+  cfg = config.bigor.platform.policies.storage;
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
 in
 {
-  options.bigor.policies.storage = {
+  options.bigor.platform.policies.storage = {
     mode = mkOption {
       type = types.enum [
         "nfs-server"
@@ -100,7 +100,7 @@ in
     ];
 
     # Auto-configure NFS service based on policy
-    bigor.services.nfs = mkMerge [
+    bigor.capabilities.nfs = mkMerge [
       (mkIf cfg.computed.shouldRunNfsServer {
         server = lib.mkDefault true;
         localStorage = {

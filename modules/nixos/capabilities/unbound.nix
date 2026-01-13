@@ -17,15 +17,15 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf optionals;
-  cfg = config.bigor.services.unbound;
+  cfg = config.bigor.capabilities.unbound;
 in
 {
-  options.bigor.services.unbound = {
+  options.bigor.capabilities.unbound = {
     enable = mkEnableOption "Unbound DNS resolver" // {
       description = ''
         Enable Unbound high-performance recursive DNS resolver with DNSSEC validation.
 
-        Note: This service is typically auto-enabled by bigor.policies.dns when mode is "local-recursive".
+        Note: This service is typically auto-enabled by bigor.platform.policies.dns when mode is "local-recursive".
         The DNS policy handles Unbound configuration and integration with Blocky automatically.
       '';
     };

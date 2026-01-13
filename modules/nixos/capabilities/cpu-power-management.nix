@@ -1,14 +1,14 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
-  cfg = config.bigor.features.cpu-power-management;
+  cfg = config.bigor.capabilities.cpu-power-management;
 
   # Auto-detect CPU vendor
   hasAMD = config.hardware.cpu.amd.updateMicrocode or false;
   hasIntel = config.hardware.cpu.intel.updateMicrocode or false;
 in
 {
-  options.bigor.features.cpu-power-management = {
+  options.bigor.capabilities.cpu-power-management = {
     enable = mkEnableOption "CPU power management with P-State support";
   };
 

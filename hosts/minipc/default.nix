@@ -11,8 +11,8 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    # Policies: strategic decisions
-    policies = {
+    # Platform policies: strategic infrastructure decisions
+    platform.policies = {
       dns.mode = "local-recursive";
       storage = {
         mode = "nfs-server";
@@ -20,13 +20,17 @@
       };
     };
 
-    # Features
-    features = {
+    # Capabilities: optional features and services
+    capabilities = {
       cpu-power-management.enable = true;
-    };
 
-    # Profile
-    profiles.homelab-master.enable = true;
+      # Services (expanded from homelab-master profile)
+      ssh.enable = true;
+      caddy.enable = true;
+      unbound.enable = true;
+      blocky.enable = true;
+      nfs.server = true;
+    };
   };
 
   hardware.cpu.amd.updateMicrocode = true;

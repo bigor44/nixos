@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf getExe;
-  cfg = config.bigor.features.flatpak;
+  cfg = config.bigor.capabilities.flatpak;
 in
 {
-  options.bigor.features.flatpak.enable = mkEnableOption "Flatpak with Flathub repository";
+  options.bigor.capabilities.flatpak.enable = mkEnableOption "Flatpak with Flathub repository";
 
   config = mkIf cfg.enable {
     services.flatpak.enable = true;

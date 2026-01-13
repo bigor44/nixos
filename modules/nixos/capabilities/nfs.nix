@@ -13,12 +13,12 @@ let
     mkMerge
     types
     ;
-  cfg = config.bigor.services.nfs;
+  cfg = config.bigor.capabilities.nfs;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports;
 in
 {
-  options.bigor.services.nfs = {
+  options.bigor.capabilities.nfs = {
     server = mkEnableOption "NFS server exporting /mnt/storage" // {
       description = ''
         Enable NFS server to export /mnt/storage to the local network.

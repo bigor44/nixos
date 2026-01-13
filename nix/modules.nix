@@ -3,37 +3,29 @@
 {
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
-    # Common - Non-optional base configuration (applied to all hosts)
+    # Platform - Always-active infrastructure + strategic policies
     # Note: Core Nix settings (caches, flakes, CA trust) are in nix/hosts.nix
-    ../modules/nixos/common/boot.nix
-    ../modules/nixos/common/localization.nix
-    ../modules/nixos/common/network.nix
-    ../modules/nixos/common/packages.nix
-    ../modules/nixos/common/sops.nix
-    ../modules/nixos/common/users.nix
+    ../modules/nixos/platform/boot.nix
+    ../modules/nixos/platform/localization.nix
+    ../modules/nixos/platform/network.nix
+    ../modules/nixos/platform/packages.nix
+    ../modules/nixos/platform/sops.nix
+    ../modules/nixos/platform/users.nix
+    ../modules/nixos/platform/policies/dns.nix
+    ../modules/nixos/platform/policies/storage.nix
 
-    # Features - Optional capabilities
-    ../modules/nixos/features/desktop.nix
-    ../modules/nixos/features/audio.nix
-    ../modules/nixos/features/gaming.nix
-    ../modules/nixos/features/flatpak.nix
-    ../modules/nixos/features/via.nix
-    ../modules/nixos/features/hardware/cpu-power-management.nix
-
-    # Policies (strategic decisions)
-    ../modules/nixos/policies/dns.nix
-    ../modules/nixos/policies/storage.nix
-
-    # Services
-    ../modules/nixos/services/blocky.nix
-    ../modules/nixos/services/caddy.nix
-    ../modules/nixos/services/nfs.nix
-    ../modules/nixos/services/sshd.nix
-    ../modules/nixos/services/unbound.nix
-
-    # Profiles (composite configurations)
-    ../modules/nixos/profiles/workstation.nix
-    ../modules/nixos/profiles/homelab-master.nix
+    # Capabilities - Optional features and services
+    ../modules/nixos/capabilities/audio.nix
+    ../modules/nixos/capabilities/blocky.nix
+    ../modules/nixos/capabilities/caddy.nix
+    ../modules/nixos/capabilities/cpu-power-management.nix
+    ../modules/nixos/capabilities/desktop.nix
+    ../modules/nixos/capabilities/flatpak.nix
+    ../modules/nixos/capabilities/gaming.nix
+    ../modules/nixos/capabilities/nfs.nix
+    ../modules/nixos/capabilities/sshd.nix
+    ../modules/nixos/capabilities/unbound.nix
+    ../modules/nixos/capabilities/via.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace

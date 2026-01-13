@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.features.audio;
+  cfg = config.bigor.capabilities.audio;
 in
 {
-  options.bigor.features.audio.enable = mkEnableOption "Audio stack (Pipewire)";
+  options.bigor.capabilities.audio.enable = mkEnableOption "Audio stack (Pipewire)";
 
   config = mkIf cfg.enable {
     services.pipewire = {

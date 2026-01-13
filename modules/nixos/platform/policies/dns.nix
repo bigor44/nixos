@@ -1,13 +1,13 @@
 { config, lib, ... }:
 let
   inherit (lib) mkOption mkIf types;
-  cfg = config.bigor.policies.dns;
+  cfg = config.bigor.platform.policies.dns;
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
   minipcIp = networkCfg.hosts.minipc.ip;
 in
 {
-  options.bigor.policies.dns = {
+  options.bigor.platform.policies.dns = {
     mode = mkOption {
       type = types.enum [
         "local-recursive"
@@ -95,7 +95,7 @@ in
     ];
 
     # Auto-enable Unbound based on policy
-    bigor.services.unbound = mkIf cfg.computed.shouldRunUnbound {
+    bigor.capabilities.unbound = mkIf cfg.computed.shouldRunUnbound {
       enable = lib.mkDefault true;
       listenOnLan = lib.mkDefault true;
     };

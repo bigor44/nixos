@@ -7,12 +7,12 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.services.caddy;
+  cfg = config.bigor.capabilities.caddy;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports;
 in
 {
-  options.bigor.services.caddy.enable = mkEnableOption "Caddy reverse proxy";
+  options.bigor.capabilities.caddy.enable = mkEnableOption "Caddy reverse proxy";
 
   config = mkIf cfg.enable {
     services.caddy = {

@@ -97,7 +97,7 @@ in
     }
 
     # DNS configuration when Blocky is enabled locally
-    (mkIf config.bigor.services.blocky.enable (
+    (mkIf config.bigor.capabilities.blocky.enable (
       let
         fallbackDNS = [
           "127.0.0.1" # Blocky (primary)

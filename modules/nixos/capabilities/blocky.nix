@@ -17,7 +17,7 @@ let
     mapAttrs'
     nameValuePair
     ;
-  cfg = config.bigor.services.blocky;
+  cfg = config.bigor.capabilities.blocky;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports domain;
 
@@ -31,14 +31,14 @@ let
   );
 in
 {
-  options.bigor.services.blocky = {
+  options.bigor.capabilities.blocky = {
     enable = mkEnableOption "Blocky DNS proxy with ad blocking";
 
     followDnsPolicy = mkOption {
       type = types.bool;
       default = true;
       description = ''
-        Whether to use DNS policy (bigor.policies.dns) for upstream configuration.
+        Whether to use DNS policy (bigor.platform.policies.dns) for upstream configuration.
         When true (default), upstreams are automatically configured based on the DNS policy mode.
         When false, allows manual upstream configuration via the upstreams option.
       '';
@@ -49,8 +49,8 @@ in
       default = [ ];
       description = ''
         Manual DNS upstream servers (only used when followDnsPolicy = false).
-        When followDnsPolicy is true, this option is ignored and upstreams are determined by bigor.policies.dns.
-        Fallback upstreams are configured via bigor.policies.dns.fallbackUpstreams.
+        When followDnsPolicy is true, this option is ignored and upstreams are determined by bigor.platform.policies.dns.
+        Fallback upstreams are configured via bigor.platform.policies.dns.fallbackUpstreams.
       '';
       example = [
         "127.0.0.1:5335"
@@ -84,7 +84,10 @@ in
         upstreams = {
           # Use policy-based upstreams by default, or manual config if disabled
           groups.default =
-            if cfg.followDnsPolicy then config.bigor.policies.dns.computed.blockyUpstreams else cfg.upstreams;
+            if cfg.followDnsPolicy then
+              config.bigor.platform.policies.dns.computed.blockyUpstreams
+            else
+              cfg.upstreams;
 
           # Strict: try upstreams in order, failover on timeout/error
           strategy = "parallel_best";
@@ -199,7 +202,7 @@ in
           ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
         };
       }
-      (mkIf (cfg.followDnsPolicy && config.bigor.policies.dns.computed.shouldRunUnbound) {
+      (mkIf (cfg.followDnsPolicy && config.bigor.platform.policies.dns.computed.shouldRunUnbound) {
         after = [
           "unbound.service"
           "network-online.target"

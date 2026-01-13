@@ -8,10 +8,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.features.via;
+  cfg = config.bigor.capabilities.via;
 in
 {
-  options.bigor.features.via.enable = mkEnableOption "VIA keyboard configurator";
+  options.bigor.capabilities.via.enable = mkEnableOption "VIA keyboard configurator";
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.via ];

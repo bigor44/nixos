@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.services.ssh;
+  cfg = config.bigor.capabilities.ssh;
 in
 {
-  options.bigor.services.ssh.enable = mkEnableOption "OpenSSH daemon with hardened defaults";
+  options.bigor.capabilities.ssh.enable = mkEnableOption "OpenSSH daemon with hardened defaults";
 
   config = mkIf cfg.enable {
     services.openssh = {
