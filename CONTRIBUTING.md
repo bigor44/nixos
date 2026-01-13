@@ -66,13 +66,11 @@ in
 
 - Use the `bigor` namespace for all custom options
 - System modules:
-  - Common (non-optional): `modules/nixos/common/` - NO `enable` option, applied to all hosts
-  - Features (optional): `bigor.features.*` - WITH `enable` option
-  - Services: `bigor.services.*` - WITH `enable` option
-  - Profiles: `bigor.profiles.*` - WITH `enable` option
-  - Policies: `bigor.policies.*` - NO `enable` option, use enum selection
+  - Platform (non-optional): `modules/nixos/platform/` - NO `enable` option, applied to all hosts
+  - Policies (strategic): `bigor.platform.policies.*` - NO `enable` option, use enum selection
+  - Capabilities (optional): `bigor.capabilities.*` - WITH `enable` option
 - Home modules: `bigor.home.*`
-- Always provide an `enable` option for features/services/profiles (but NOT for policies or common modules)
+- Always provide an `enable` option for capabilities (but NOT for policies or platform modules)
 - Use descriptive option names
 - **Avoid `with lib;`** - prefer explicit `inherit (lib)` for better readability and to avoid naming conflicts
 
@@ -95,10 +93,10 @@ For simple configuration choices, use direct NixOS options or auto-detecting fea
 { config, lib, ... }:
 let
   inherit (lib) mkOption types;
-  cfg = config.bigor.policies.<policy-name>;
+  cfg = config.bigor.platform.policies.<policy-name>;
 in
 {
-  options.bigor.policies.<policy-name> = mkOption {
+  options.bigor.platform.policies.<policy-name> = mkOption {
     type = types.enum [ "option1" "option2" "option3" ];
     default = "option1";
     description = ''
@@ -119,7 +117,7 @@ in
 **Policy modules may also provide computed values** for other modules to consume:
 
 ```nix
-options.bigor.policies.<policy-name>.computed = {
+options.bigor.platform.policies.<policy-name>.computed = {
   someValue = mkOption {
     type = types.bool;
     readOnly = true;
@@ -273,17 +271,13 @@ git push origin feature/my-feature
 
 ### Adding a New Module
 
-**For optional features or services:**
+**For optional capabilities:**
 
 1. **Create the module file**:
 
    ```bash
-   # Optional feature module
-   touch modules/nixos/features/<name>.nix
-   # or in a subdirectory: modules/nixos/features/<category>/<name>.nix
-
-   # Service module
-   touch modules/nixos/services/<name>.nix
+   # Capability module (feature or service)
+   touch modules/nixos/capabilities/<name>.nix
 
    # Home module
    touch modules/home/<name>.nix
@@ -296,7 +290,7 @@ git push origin feature/my-feature
    ```nix
    nixosModules = [
      # ... existing modules
-     ../modules/nixos/features/<name>.nix  # or services/
+     ../modules/nixos/capabilities/<name>.nix
    ];
 
    # or for home modules:
@@ -309,8 +303,7 @@ git push origin feature/my-feature
 4. **Enable in a host configuration**:
 
    ```nix
-   bigor.features.<name>.enable = true;
-   # or bigor.services.<name>.enable = true;
+   bigor.capabilities.<name>.enable = true;
    ```
 
 5. **Test and commit**:
@@ -364,9 +357,9 @@ git push origin feature/my-feature
      networking.hostName = "<hostname>";
      system.stateVersion = "25.11";
 
-     bigor.profiles.<profile>.enable = true;
-     # or enable individual features:
-     # bigor.features.audio.enable = true;
+     bigor.capabilities.desktop.enable = true;
+     bigor.capabilities.audio.enable = true;
+     # ... other capabilities
 
      # Host-specific configuration...
    }
@@ -449,10 +442,10 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
    { config, lib, ... }:
    let
      inherit (lib) mkOption types;
-     cfg = config.bigor.policies.<policy-name>;
+     cfg = config.bigor.platform.policies.<policy-name>;
    in
    {
-     options.bigor.policies.<policy-name> = mkOption {
+     options.bigor.platform.policies.<policy-name> = mkOption {
        type = types.enum [ "strategy1" "strategy2" "strategy3" ];
        default = "strategy1";
        description = ''
@@ -483,7 +476,7 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
 3. **Add computed values** if other modules need to consume policy decisions:
 
    ```nix
-   options.bigor.policies.<policy-name>.computed = {
+   options.bigor.platform.policies.<policy-name>.computed = {
      shouldDoSomething = mkOption {
        type = types.bool;
        readOnly = true;
@@ -507,7 +500,7 @@ Policies centralize strategic decisions (kernel selection, DNS strategy, storage
 5. **Use in host configuration**:
 
    ```nix
-   bigor.policies.<policy-name> = "strategy2";
+   bigor.platform.policies.<policy-name> = "strategy2";
    ```
 
 6. **Test all affected hosts**:
@@ -529,7 +522,7 @@ While policies provide the recommended path, services can offer override options
 
 ```nix
 # Example: Blocky service with policy override
-options.bigor.services.blocky = {
+options.bigor.capabilities.blocky = {
   followDnsPolicy = mkOption {
     type = types.bool;
     default = true;

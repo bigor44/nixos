@@ -88,7 +88,7 @@ Policies provide computed read-only values that services consume:
 
 ```nix
 # Services automatically adapt to policy decisions
-config.bigor.policies.dns.computed.blockyUpstreams
+config.bigor.platform.policies.dns.computed.blockyUpstreams
 # Returns: ["192.168.1.10:5335", "1.1.1.1", "9.9.9.9"] in lan-recursive mode
 ```
 
@@ -97,7 +97,7 @@ config.bigor.policies.dns.computed.blockyUpstreams
 Network topology is managed in two files:
 
 1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, domain, and port definitions
-2. **`modules/nixos/common/network.nix`**: NixOS module that reads the topology and provides configuration logic
+2. **`modules/nixos/platform/network.nix`**: NixOS module that reads the topology and provides configuration logic
 
 ```nix
 bigor.network.hosts.minipc.ip        # "192.168.1.10"
@@ -112,12 +112,10 @@ Services reference the topology instead of hardcoding values, making the configu
 
 All custom options use the `bigor.*` namespace with clear categories:
 
-- `modules/nixos/common/` - Non-optional base configuration (boot, localization, network, packages, sops, users)
+- `modules/nixos/platform/` - Always-active infrastructure (boot, localization, network, packages, sops, users)
   - Note: Core Nix settings (caches, flakes, CA) are in `nix/hosts.nix`
-- `bigor.features.*` - Optional capabilities with `enable` option (audio, desktop, gaming)
-- `bigor.policies.*` - Strategic decisions (DNS, storage)
-- `bigor.services.*` - Network services (blocky, caddy, nfs, unbound)
-- `bigor.profiles.*` - Composite configurations (workstation, homelab-master)
+- `bigor.platform.policies.*` - Strategic decisions (DNS, storage)
+- `bigor.capabilities.*` - Optional features and services (audio, desktop, gaming, blocky, caddy, nfs, unbound)
 - `bigor.home.features.*` - Home Manager modules (CLI, GUI, shell)
 
 ## Quick Start

@@ -95,7 +95,9 @@ All modules use the `bigor.*` namespace and follow a strict categorization:
 
 #### NixOS Modules (`modules/nixos/`)
 
-**Common** (`modules/nixos/common/`): Non-optional base configuration applied to all hosts
+**Platform** (`modules/nixos/platform/`): Always-active infrastructure and strategic policies
+
+Base modules (non-optional configuration applied to all hosts):
 
 - `boot`: Bootloader configuration (UEFI systemd-boot)
 - `localization`: French locale, timezone (Europe/Paris), and keyboard layout
@@ -106,30 +108,31 @@ All modules use the `bigor.*` namespace and follow a strict categorization:
 
 Note: Core Nix settings (binary caches, flakes, trusted users, internal CA) are configured directly in `nix/hosts.nix` as they apply universally to all hosts.
 
-**Features** (`bigor.features.*`): Optional capabilities with `enable` option
-
-- Desktop features: `audio`, `desktop`, `gaming`, `flatpak`, `via`
-- Hardware features: `cpu-power-management` (auto-detects AMD/Intel and configures P-States)
-
-**Policies** (`bigor.policies.*`): Strategic decisions with enum selection (NO `enable` option)
+Policies (`bigor.platform.policies.*`): Strategic decisions with enum selection (NO `enable` option)
 
 - `dns.mode`: DNS strategy ("local-recursive", "lan-recursive", "portable", "cloud")
 - `storage.mode`: Storage configuration ("nfs-server", "nfs-client", "local", "none")
 
 Policies provide `computed` read-only values for services to consume.
 
-**Services** (`bigor.services.*`): Network daemons with `enable` option
+**Capabilities** (`bigor.capabilities.*`): Optional features and services with `enable` option
+
+Desktop/hardware features:
+
+- `audio`: PipeWire audio stack
+- `desktop`: COSMIC DE with NetworkManager and Firefox
+- `gaming`: Steam and GameMode
+- `flatpak`: Flatpak support
+- `via`: VIA keyboard firmware
+- `cpu-power-management`: Auto-detecting CPU power management (AMD/Intel P-States)
+
+Network services:
 
 - `blocky`: Ad-blocking DNS proxy
 - `caddy`: Reverse proxy and web server
 - `nfs`: NFS server/client (auto-configured via storage policy)
-- `sshd`: SSH daemon
+- `ssh`: SSH daemon
 - `unbound`: Recursive DNS resolver
-
-**Profiles** (`bigor.profiles.*`): Composite configurations enabling multiple features
-
-- `workstation`: Desktop with COSMIC DE, audio, gaming
-- `homelab-master`: Server with DNS, Caddy, NFS
 
 #### Home Manager Modules (`modules/home/features/`)
 
@@ -150,7 +153,7 @@ Each host has:
 - `home.nix`: Home Manager configuration
 - `hardware-configuration.nix`: Auto-generated hardware config
 
-Hosts define policies and enable profiles/features. Example:
+Hosts define policies and enable capabilities. Example:
 
 ```nix
 { pkgs, ... }:
@@ -159,12 +162,18 @@ Hosts define policies and enable profiles/features. Example:
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    policies = {
+    platform.policies = {
       dns.mode = "local-recursive";
       storage.mode = "nfs-server";
     };
-    features.cpu-power-management.enable = true;
-    profiles.homelab-master.enable = true;
+    capabilities = {
+      cpu-power-management.enable = true;
+      ssh.enable = true;
+      caddy.enable = true;
+      unbound.enable = true;
+      blocky.enable = true;
+      nfs.server = true;
+    };
   };
 }
 ```
@@ -179,7 +188,7 @@ Network topology is managed in two files:
    - **`domain`**: Local domain name for all hosts (e.g., "bigor.lan")
    - **`ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
 
-2. **`modules/nixos/common/network.nix`**: NixOS module providing:
+2. **`modules/nixos/platform/network.nix`**: NixOS module providing:
    - **`bigor.network.*`** options (reads data from topology file)
    - **`bigor.network.domain`**: Read-only, local domain name from topology
    - **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
@@ -217,22 +226,22 @@ Policies centralize **strategic architectural decisions** that have complex down
 4. **Assertions**: Validate prerequisites for selected strategies
 5. **Auto-enable**: Can auto-enable services (e.g., DNS policy enables Unbound when `mode = "local-recursive"`)
 
-Example: DNS policy computes upstream servers based on strategy, services read `config.bigor.policies.dns.computed.blockyUpstreams`.
+Example: DNS policy computes upstream servers based on strategy, services read `config.bigor.platform.policies.dns.computed.blockyUpstreams`.
 
 **When NOT to use policies:** Simple configuration choices should use direct NixOS options (e.g., `boot.kernelPackages`) or auto-detecting features (e.g., `cpu-power-management`).
 
 ### Module Pattern
 
-**Feature/Service modules** (with `enable` option):
+**Capability modules** (with `enable` option):
 
 ```nix
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.<category>.<module-name>;
+  cfg = config.bigor.capabilities.<module-name>;
 in
 {
-  options.bigor.<category>.<module-name> = {
+  options.bigor.capabilities.<module-name> = {
     enable = mkEnableOption "Description";
     # Additional options...
   };
@@ -249,10 +258,10 @@ in
 { config, lib, ... }:
 let
   inherit (lib) mkOption types;
-  cfg = config.bigor.policies.<policy-name>;
+  cfg = config.bigor.platform.policies.<policy-name>;
 in
 {
-  options.bigor.policies.<policy-name> = mkOption {
+  options.bigor.platform.policies.<policy-name> = mkOption {
     type = types.enum [ "strategy1" "strategy2" ];
     default = "strategy1";
     description = ''
@@ -262,7 +271,7 @@ in
     '';
   };
 
-  options.bigor.policies.<policy-name>.computed = {
+  options.bigor.platform.policies.<policy-name>.computed = {
     someValue = mkOption {
       type = types.bool;
       readOnly = true;
@@ -330,18 +339,18 @@ This validates:
 
 ### Adding a New Module
 
-**For optional features or services:**
+**For optional capabilities (features or services):**
 
-1. Create module file in `modules/nixos/features/` (or subdirectory) or `modules/nixos/services/`
-2. Follow the feature/service module pattern with `enable` option (see above)
-3. Add to `nix/modules.nix` in the appropriate list
-4. Enable in host config: `bigor.<category>.<name>.enable = true;`
+1. Create module file in `modules/nixos/capabilities/<name>.nix`
+2. Follow the capability module pattern with `enable` option (see above)
+3. Add to `nix/modules.nix` in the capabilities list
+4. Enable in host config: `bigor.capabilities.<name>.enable = true;`
 
 **For non-optional base configuration:**
 
-1. Create module file in `modules/nixos/common/`
+1. Create module file in `modules/nixos/platform/<name>.nix`
 2. Configuration is applied to all hosts automatically (no `enable` option)
-3. Add to `nix/modules.nix` under the `nixosModules` common section
+3. Add to `nix/modules.nix` under the platform section
 4. Or add directly to `nix/hosts.nix` if it's truly universal infrastructure config
 
 ### Adding a New Policy
@@ -354,16 +363,16 @@ This validates:
 - Is used differently across multiple hosts
 - Cannot be replaced by direct NixOS options or auto-detection
 
-If your use case doesn't meet these criteria, use a feature module or direct NixOS configuration instead.
+If your use case doesn't meet these criteria, use a capability module or direct NixOS configuration instead.
 
 **If you must create a policy:**
 
-1. Create policy module in `modules/nixos/policies/<policy-name>.nix`
+1. Create policy module in `modules/nixos/platform/policies/<policy-name>.nix`
 2. Use enum type with strategies, NO `enable` option
 3. Add `computed.*` read-only values for services to consume
 4. Add assertions to validate prerequisites
-5. Add to `nix/modules.nix` under nixosModules
-6. Set in host config: `bigor.policies.<policy-name>.mode = "strategy";`
+5. Add to `nix/modules.nix` under platform policies
+6. Set in host config: `bigor.platform.policies.<policy-name>.mode = "strategy";`
 
 ### Adding a New Host
 
@@ -382,11 +391,13 @@ If your use case doesn't meet these criteria, use a feature module or direct Nix
 
 ### Adding a New Service
 
-1. Create service module in `modules/nixos/services/<name>.nix`
-2. Follow module pattern with `enable` option
+Services are now capabilities. Follow the "Adding a New Module" instructions for capabilities:
+
+1. Create service module in `modules/nixos/capabilities/<name>.nix`
+2. Follow capability module pattern with `enable` option
 3. Reference network topology: `config.bigor.network.hosts.<hostname>.ip`
-4. Reference policy computed values: `config.bigor.policies.<policy>.computed.<value>`
-5. Add to `nix/modules.nix`
+4. Reference policy computed values: `config.bigor.platform.policies.<policy>.computed.<value>`
+5. Add to `nix/modules.nix` under capabilities
 6. Add assertions to validate against policy requirements
 
 ## Important Files
@@ -395,11 +406,10 @@ If your use case doesn't meet these criteria, use a feature module or direct Nix
 - **nix/hosts.nix**: Host definitions and universal Nix configuration (caches, flakes, CA)
 - **nix/modules.nix**: Module registry (add ALL new modules here)
 - **nix/network-topology.nix**: Network topology data (all IPs, interfaces, ports)
-- **modules/nixos/common/**: Non-optional base configuration for all hosts
-- **modules/nixos/common/network.nix**: Network configuration module (provides `bigor.network.*`)
-- **modules/nixos/policies/**: Strategic architectural decisions (DNS, storage)
-- **modules/nixos/features/**: Optional capabilities with `enable` option
-- **modules/nixos/features/hardware/**: Hardware-specific features with auto-detection
+- **modules/nixos/platform/**: Always-active infrastructure (boot, network, packages, sops, users)
+- **modules/nixos/platform/network.nix**: Network configuration module (provides `bigor.network.*`)
+- **modules/nixos/platform/policies/**: Strategic architectural decisions (DNS, storage)
+- **modules/nixos/capabilities/**: Optional features and services with `enable` option
 - **.statix.toml**: Linter configuration and codebase conventions
 - **treefmt.toml**: Formatter configuration
 - **CONTRIBUTING.md**: Detailed development workflow and patterns

@@ -23,7 +23,7 @@ in
       description = ''
         Enable NFS server to export /mnt/storage to the local network.
 
-        Note: This is typically configured via bigor.policies.storage.mode = "nfs-server",
+        Note: This is typically configured via bigor.platform.policies.storage.mode = "nfs-server",
         which handles validation (static IP, storage device) automatically.
       '';
     };
@@ -32,7 +32,7 @@ in
       description = ''
         Enable NFS client to mount /mnt/storage from minipc.
 
-        Note: This is typically configured via bigor.policies.storage.mode = "nfs-client",
+        Note: This is typically configured via bigor.platform.policies.storage.mode = "nfs-client",
         which validates that the host has a static IP for reliable NFS access.
       '';
     };
@@ -42,7 +42,7 @@ in
         description = ''
           Enable local storage mount at /mnt/storage.
 
-          Note: This is typically configured via bigor.policies.storage (mode = "nfs-server" or "local"),
+          Note: This is typically configured via bigor.platform.policies.storage (mode = "nfs-server" or "local"),
           which validates that a storage device is specified.
         '';
       };
@@ -67,7 +67,7 @@ in
     mkMerge [
       # Technical assertions for direct service configuration
       # Note: Strategic prerequisites (static IP, device availability) are validated by
-      # bigor.policies.storage. Use the policy layer for safe, validated configuration.
+      # bigor.platform.policies.storage. Use the policy layer for safe, validated configuration.
       {
         assertions = [
           {
@@ -75,13 +75,13 @@ in
             message = ''
               NFS server requires local storage to be configured.
 
-              Recommended: Use bigor.policies.storage.mode = "nfs-server" for validated configuration.
-              Manual: Enable bigor.services.nfs.localStorage with a device.
+              Recommended: Use bigor.platform.policies.storage.mode = "nfs-server" for validated configuration.
+              Manual: Enable bigor.capabilities.nfs.localStorage with a device.
             '';
           }
           {
             assertion = cfg.localStorage.enable -> (cfg.localStorage.device != null);
-            message = "Local storage requires a device to be specified in bigor.services.nfs.localStorage.device.";
+            message = "Local storage requires a device to be specified in bigor.capabilities.nfs.localStorage.device.";
           }
           {
             assertion = !(cfg.server && cfg.client);
