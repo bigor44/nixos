@@ -1,131 +1,65 @@
-# NixOS Configuration
+# 🐧 Bigor's NixOS Configuration
 
-A modular, policy-driven NixOS configuration managing a homelab server and desktop workstations using Flakes, Home Manager, and a custom module system.
+A modular, reproducible NixOS configuration managed with flakes and Home Manager. Built with a clear separation of platform infrastructure and optional capabilities.
 
-## Features
+## ✨ Features
 
-- **Policy-Based Architecture**: Strategic decisions (kernel, DNS, power, storage) defined once and enforced across hosts
-- **Modular Design**: Clean separation between features, services, policies, and profiles under the `bigor.*` namespace
-- **Multi-Host Management**: Unified configuration for homelab server (minipc), gaming workstation (grospc), and portable laptop (minidesk)
-- **Centralized Network Topology**: All IPs, interfaces, and ports defined in a single source of truth
-- **Integrated QA Tooling**: Fast incremental checks, pre-commit hooks, and CI-equivalent validation
-- **Declarative Secrets**: SOPS-nix with age encryption for secure credential management
-- **Modern Desktop**: COSMIC DE with Wayland, custom keybindings, and dotfile management
-- **Development Environment**: Pre-configured nixvim, zsh with plugins, and developer tools
+- **Modular Architecture**: Platform modules (always active) vs. capability modules (optional features)
+- **Multi-Host Support**: Configurations for desktop, server, and laptop
+- **Quality Assurance**: Built-in validation scripts (formatting, linting, dead code detection)
+- **Network Topology**: Centralized network configuration (IPs, ports, domain)
+- **Secret Management**: SOPS + age for encrypted secrets
+- **Development Workflow**: Pre-commit hooks and safe rebuild workflows
+- **Home Manager Integration**: User-level configuration with nixvim
 
-## Repository Structure
+## 🏗️ Architecture
+
+### Core Principles
+
+1. **Platform vs. Capabilities**:
+   - **Platform**: Always-active infrastructure (boot, network, users, policies)
+   - **Capabilities**: Optional features gated by `enable` options (desktop, gaming, services)
+
+2. **Policy-Driven Configuration**:
+   - DNS strategy (local-recursive, lan-recursive, portable, cloud)
+   - Storage strategy (nfs-server, nfs-client, local, none)
+   - Network topology centralized in `nix/network-topology.nix`
+
+3. **Quality First**:
+   - Automatic formatting with `nix fmt`
+   - Linting with statix and dead code detection
+   - Pre-commit hooks for validation
+   - Safe rebuild workflows with `nhs`/`nhb`
+
+## 🗂️ Directory Structure
 
 ```
-.
-├── flake.nix                    # Main entry point
-├── nix/
-│   ├── hosts.nix               # NixOS configurations for all hosts
-│   ├── modules.nix             # Module registry (import list)
-│   ├── network-topology.nix    # Network topology data (IPs, interfaces, ports)
-│   ├── checks.nix              # Automated quality checks
-│   └── devshell.nix            # Development environment
-├── hosts/
-│   ├── minipc/                 # Homelab server (AMD, NFS, DNS, Caddy)
-│   ├── grospc/                 # Gaming workstation (AMD, Zen kernel)
-│   └── minidesk/               # Portable laptop (DHCP)
-├── modules/
-│   ├── nixos/
-│   │   ├── platform/           # Always-active infrastructure (boot, network, packages, sops, users)
-│   │   │   └── policies/       # Strategic decisions (DNS, storage)
-│   │   └── capabilities/       # Optional features and services (audio, desktop, gaming, blocky, caddy, nfs, unbound)
-│   └── home/                   # Home Manager modules (always-active: CLI, git, shell, nixvim; optional: gui)
-├── users/
-│   └── bigor/                  # User-specific configuration
-├── dotfiles/                   # Symlinked configuration files
-└── secrets/                    # SOPS-encrypted secrets
+nixos/
+├── certs/                  # SSL certificates
+├── hosts/                  # Host-specific configurations
+│   ├── grospc/            # Desktop workstation
+│   ├── minipc/            # Home server
+│   └── minidesk/          # Portable laptop
+├── modules/               # Reusable modules
+│   ├── nixos/            # NixOS modules
+│   │   ├── platform/     # Platform infrastructure
+│   │   └── capabilities/ # Optional features
+│   └── home/             # Home Manager modules
+├── nix/                   # Flake parts
+├── scripts/               # Utility scripts
+├── secrets/               # Encrypted secrets
+└── users/                 # User configurations
 ```
 
-## Hosts
-
-### minipc (Homelab Server)
-
-- **Role**: Network infrastructure and storage server
-- **Kernel**: LTS (server policy)
-- **DNS**: Unbound + Blocky (recursive resolver with ad-blocking)
-- **Services**: Caddy reverse proxy, NFS server
-- **Network**: Static IP 192.168.1.10
-
-### grospc (Gaming Workstation)
-
-- **Role**: Primary desktop for work and gaming
-- **Kernel**: Zen (desktop policy, optimized for responsiveness)
-- **Desktop**: COSMIC DE with Wayland
-- **Features**: Audio, gaming, Flatpak, VIA keyboard configurator
-- **Network**: Static IP 192.168.1.11
-
-### minidesk (Portable Laptop)
-
-- **Role**: Mobile workstation
-- **DNS**: Portable mode (cloud upstreams, no LAN dependency)
-- **Desktop**: COSMIC DE with Wayland
-- **Network**: DHCP
-
-## Key Architectural Concepts
-
-### Policy System
-
-Policies centralize strategic decisions to eliminate duplication across hosts. Instead of repeating kernel selection or DNS configuration in every host, policies define the strategy once:
-
-```nix
-# In host configuration
-bigor.policies = {
-  kernel = "desktop";              # Automatically selects Zen kernel
-  dns.mode = "lan-recursive";      # Use minipc as DNS server
-  power = "amd-pstate";            # AMD CPU power management
-  storage.mode = "nfs-client";     # Mount NFS shares from minipc
-};
-```
-
-Policies provide computed read-only values that services consume:
-
-```nix
-# Services automatically adapt to policy decisions
-config.bigor.platform.policies.dns.computed.blockyUpstreams
-# Returns: ["192.168.1.10:5335", "1.1.1.1", "9.9.9.9"] in lan-recursive mode
-```
-
-### Network Topology
-
-Network topology is managed in two files:
-
-1. **`nix/network-topology.nix`**: Pure data file containing hosts, IPs, interfaces, subnet, domain, and port definitions
-2. **`modules/nixos/platform/network.nix`**: NixOS module that reads the topology and provides configuration logic
-
-```nix
-bigor.network.hosts.minipc.ip        # "192.168.1.10"
-bigor.network.ports.blocky.dns       # 53
-bigor.network.subnet                 # "192.168.1.0/24"
-bigor.network.domain                 # "bigor.lan"
-```
-
-Services reference the topology instead of hardcoding values, making the configuration self-documenting and easy to maintain. A warning is emitted if the domain is not set.
-
-### Module Namespaces
-
-All custom options use the `bigor.*` namespace with clear categories:
-
-- `modules/nixos/platform/` - Always-active infrastructure (boot, localization, network, packages, sops, users)
-  - Note: Core Nix settings (caches, flakes, CA) are in `nix/hosts.nix`
-- `bigor.platform.policies.*` - Strategic decisions (DNS, storage)
-- `bigor.capabilities.*` - Optional features and services (audio, desktop, gaming, blocky, caddy, nfs, unbound)
-- `bigor.home.*` - Home Manager modules
-  - Always-active: cli-packages, dev-scripts, git, shell, nixvim
-  - Optional: gui (GUI applications)
-
-## Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- NixOS 25.11 or later with flakes enabled
-- For secrets: age key in `~/.config/sops/age/keys.txt`
-- For development: [nh](https://github.com/viperML/nh) (NixOS Helper)
+- NixOS with flakes enabled
+- Git
+- Basic Nix knowledge
 
-### Installation
+### Quick Start
 
 1. **Clone the repository**:
 
@@ -134,194 +68,249 @@ All custom options use the `bigor.*` namespace with clear categories:
    cd ~/nixos
    ```
 
-2. **Create your host configuration**:
+2. **Enter development shell** (auto-installs tools and hooks):
 
    ```bash
-   mkdir -p hosts/myhost
-   nixos-generate-config --show-hardware-config > hosts/myhost/hardware-configuration.nix
+   nix develop
    ```
 
-   Create `hosts/myhost/default.nix`:
-
-   ```nix
-   { ... }:
-   {
-     imports = [ ./hardware-configuration.nix ];
-
-     networking.hostName = "myhost";
-     system.stateVersion = "25.11";
-
-     bigor = {
-       policies = {
-         kernel = "desktop";
-         dns.mode = "portable";
-       };
-       profiles.workstation.enable = true;
-     };
-   }
-   ```
-
-   Create `hosts/myhost/home.nix`:
-
-   ```nix
-   { ... }:
-   {
-     home.stateVersion = "25.11";
-
-     # Most home modules are always active (cli-packages, dev-scripts, git, shell, nixvim)
-     # Only GUI applications are optional:
-     bigor.home.gui.enable = true;
-   }
-   ```
-
-3. **Add host to network topology**:
-
-   Edit `nix/network-topology.nix`:
-
-   ```nix
-   hosts.myhost = {
-     ip = null;  # or "192.168.1.XX" for static IP
-     interface = "eth0";
-   };
-   ```
-
-4. **Register the host**:
-
-   Edit `nix/hosts.nix`:
-
-   ```nix
-   flake.nixosConfigurations = {
-     # ... existing hosts
-     myhost = mkHost "myhost";
-   };
-   ```
-
-5. **Build and test**:
-
+3. **Check configuration**:
    ```bash
-   # Build without applying
-   nix build .#nixosConfigurations.myhost.config.system.build.toplevel
-
-   # Or use nh for better UX
-   nh os build --hostname myhost
+   nix flake check
    ```
 
-6. **Apply configuration**:
-
-   ```bash
-   sudo nixos-rebuild switch --flake .#myhost
-   # or
-   nh os switch --hostname myhost
-   ```
-
-## Development Workflow
-
-### Quality Checks (Required Before Committing)
+### Building for a Specific Host
 
 ```bash
-# 1. Format code
+# Build configuration for grospc
+nix build .#nixosConfigurations.grospc.config.system.build.toplevel
+
+# Switch to configuration (with validation)
+nhs
+```
+
+## 🛠️ Development Workflow
+
+### Quality Assurance Commands
+
+| Command       | Description                             | When to Use           |
+| ------------- | --------------------------------------- | --------------------- |
+| `check-quick` | Fast incremental check (<0.1s)          | During development    |
+| `check-full`  | Complete CI-equivalent check (~16s)     | Before commits/pushes |
+| `check-mega`  | Intelligent check (adapts to git state) | General use           |
+| `nix fmt`     | Format all Nix files                    | After editing files   |
+| `dns-test`    | DNS stack functional test               | After DNS changes     |
+
+### Safe Workflow Aliases
+
+- **`gcn`**: Format + add all + check staged + commit
+- **`gps`**: Full check + push
+- **`nhs`**: Full check + rebuild switch (recommended)
+- **`nhb`**: Full check + rebuild boot
+
+### Typical Workflow
+
+```bash
+# 1. Make changes
+vim modules/nixos/capabilities/example.nix
+
+# 2. Format and validate
 nix fmt
+check-quick
 
-# 2. Check for dead code
-deadnix --fail .
+# 3. Commit safely
+gcn -m "Add new capability"
 
-# 3. Lint for anti-patterns
-statix check --ignore .* .
+# 4. Push safely
+gps
 
-# 4. Run all checks (formatting, linting, policy assertions)
-nix flake check
+# 5. Rebuild system
+nhs
 ```
 
-### Development Shell
+## 🖥️ Host Configurations
 
-Enter the development shell for access to QA tools and workflow shortcuts:
+### grospc (Desktop Workstation)
+
+- **Kernel**: Zen (performance optimized)
+- **DNS**: LAN recursive (uses minipc as resolver)
+- **Storage**: NFS client (mounts from minipc)
+- **Capabilities**: Desktop, gaming, audio, VIA keyboard
+
+### minipc (Home Server)
+
+- **Kernel**: LTS (stability focused)
+- **DNS**: Local recursive (provides DNS for LAN)
+- **Storage**: NFS server (exports storage)
+- **Capabilities**: Caddy, Unbound, Blocky, SSH, NFS
+
+### minidesk (Portable Laptop)
+
+- **Kernel**: Zen (performance optimized)
+- **DNS**: Portable mode (cloud fallbacks)
+- **Storage**: Local storage
+- **Capabilities**: Desktop, gaming (when docked)
+
+## 🔧 Module System
+
+### Platform Modules (`modules/nixos/platform/`)
+
+Always-active infrastructure:
+
+- `boot.nix` - Bootloader configuration
+- `network.nix` - Network topology injection
+- `users.nix` - User accounts
+- `policies/dns.nix` - DNS resolution strategy
+- `policies/storage.nix` - Storage strategy
+
+### Capability Modules (`modules/nixos/capabilities/`)
+
+Optional features (enabled per-host):
+
+- `desktop.nix` - COSMIC desktop environment
+- `gaming.nix` - Steam + GameMode
+- `blocky.nix` - DNS ad-blocking proxy
+- `caddy.nix` - Reverse proxy with HTTPS
+- `unbound.nix` - Recursive DNS resolver
+
+### Home Manager Modules (`modules/home/`)
+
+User-level configuration:
+
+- `cli-packages.nix` - Essential CLI tools
+- `nixvim/` - Neovim configuration
+- `shell/` - Zsh, Starship, shell tools
+- `gui.nix` - Desktop applications
+
+## 🔐 Secret Management
+
+Secrets are encrypted with [SOPS](https://github.com/getsops/sops) and [age](https://github.com/FiloSottile/age):
 
 ```bash
-nix develop
+# Edit encrypted secrets
+sops secrets/secrets.yaml
+
+# View decrypted secrets
+sops -d secrets/secrets.yaml
 ```
 
-Available commands:
+## 📡 Network Topology
 
-- `qc` or `check-quick` - Fast incremental check (changed files only, <0.1s)
-- `qf` or `check-full` - Complete CI-equivalent check (~16s)
-- `mega` or `check-mega` - Intelligent check (adapts to git state)
-- `gcn` - Add + format + check + commit workflow
-- `gps` - Full check + push workflow
+Network configuration is centralized in `nix/network-topology.nix`:
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed development guidelines.
+```nix
+{
+  subnet = "192.168.1.0/24";
+  domain = "bigor.lan";
 
-## Customization
+  hosts = {
+    minipc = { ip = "192.168.1.10"; interface = "enp2s0"; };
+    grospc = { ip = "192.168.1.11"; interface = "enp14s0"; };
+    minidesk = { ip = null; interface = "enp2s0"; }; # DHCP
+  };
+}
+```
 
-### Using This Configuration
+## 🧪 Testing
 
-This repository is designed to be forked and customized. Here are common customization points:
+### DNS Stack Test
 
-1. **Replace the namespace**: Search and replace `bigor` with your preferred namespace
-2. **Remove unused hosts**: Delete host directories and remove from `nix/hosts.nix`
-3. **Adjust network topology**: Update IPs and interfaces in `nix/network-topology.nix`
-4. **Configure policies**: Set DNS and storage strategies per host
-5. **Enable/disable capabilities**: Toggle audio, gaming, flatpak, desktop, etc. as needed
-6. **Customize home modules**: GUI is optional, others are always active
-7. **Customize secrets**: Replace `.sops.yaml` with your age keys
+```bash
+dns-test
+```
 
-### Learning Resources
+Validates:
 
-If you're new to NixOS or want to understand the patterns used here:
+- Local DNS resolution
+- Ad blocking effectiveness
+- DNSSEC validation
+- External resolution
 
-- **Module pattern**: See `CLAUDE.md` for detailed module templates
-- **Policy system**: Read `modules/nixos/platform/policies/` for examples
-- **Network topology**: Study `nix/network-topology.nix` and `modules/nixos/platform/network.nix`
-- **Quality tooling**: Explore `modules/home/dev-scripts.nix`
+### Format and Lint
 
-## Project Goals
+```bash
+nix fmt          # Format all files
+check-full       # Complete validation
+```
 
-This configuration prioritizes:
+## 🔄 Updates
 
-1. **Maintainability**: Clear module boundaries, explicit imports, no `with lib;`
-2. **Composability**: Mix and match features, policies, and profiles
-3. **Type Safety**: Leverages Nix type system with assertions and validation
-4. **Documentation**: Self-documenting through centralized topology and policies
-5. **Quality**: Automated formatting, linting, and dead code detection
+### Update All Inputs
 
-## Technology Stack
+```bash
+nix flake update
+```
 
-- **NixOS**: Declarative Linux distribution
-- **Nix Flakes**: Reproducible dependency management
-- **flake-parts**: Modular flake organization
-- **Home Manager**: Declarative user environment management
-- **nixvim**: Neovim configured in Nix
-- **SOPS-nix**: Secret management with age encryption
-- **COSMIC DE**: System76's Rust-based desktop environment
-- **Quality Tools**: nixfmt, statix, deadnix, treefmt
+### Update Specific Input
 
-## Contributing
+```bash
+nix flake lock --update-input nixpkgs
+```
 
-Contributions, suggestions, and questions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+## 🐛 Troubleshooting
 
-- Development workflow
-- Module patterns
-- Code style guidelines
-- Testing procedures
-- Commit message conventions
+### Common Issues
 
-## License
+1. **Formatting errors**:
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+   ```bash
+   nix fmt
+   ```
 
-## Acknowledgments
+2. **Linting errors**:
 
-- [NixOS](https://nixos.org/) community for the amazing ecosystem
-- [flake-parts](https://flake.parts/) for modular flake organization
-- [Home Manager](https://github.com/nix-community/home-manager) for user environment management
+   ```bash
+   statix check .
+   deadnix --fail .
+   ```
+
+3. **Evaluation errors**:
+
+   ```bash
+   nix flake check
+   ```
+
+4. **DNS not working**:
+   ```bash
+   dns-test
+   systemctl status blocky
+   systemctl status unbound
+   ```
+
+### Debugging
+
+- Use `nix flake show` to see flake structure
+- Use `nix eval .#nixosConfigurations.<host>.config` to inspect configuration
+- Check systemd logs: `journalctl -u blocky -u unbound`
+
+## 📚 Resources
+
+- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
+- [Home Manager](https://github.com/nix-community/home-manager)
+- [Flakes](https://nixos.wiki/wiki/Flakes)
+- [SOPS](https://github.com/getsops/sops)
+- [nh](https://github.com/viperML/nh)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make changes with proper validation
+4. Submit a pull request
+
+**Always run `check-full` before pushing changes!**
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [NixOS Community](https://nixos.org/community/)
+- [flake-parts](https://github.com/hercules-ci/flake-parts) for modular flakes
 - [nixvim](https://github.com/nix-community/nixvim) for Neovim configuration
-- [SOPS-nix](https://github.com/Mic92/sops-nix) for secrets management
-- [COSMIC DE](https://github.com/pop-os/cosmic-epoch) by System76
-
-## Contact
-
-- GitHub: [@bigor44](https://github.com/bigor44)
-- Repository: [github.com/bigor44/nixos](https://github.com/bigor44/nixos)
+- [sops-nix](https://github.com/Mic92/sops-nix) for secret management
 
 ---
 
-**Note**: This is a personal configuration shared for educational purposes. Secrets are encrypted with SOPS and hardware-specific settings are isolated in `hardware-configuration.nix`. Feel free to use this as inspiration for your own NixOS setup!
+_Built with ❤️ and Nix_

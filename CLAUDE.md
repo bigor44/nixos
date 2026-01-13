@@ -2,419 +2,360 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Repository Overview
+## Required Workflow for Claude
 
-This is a personal NixOS configuration repository using flake-parts for modular organization. It manages three hosts (minipc, grospc, minidesk) with a custom module system under the `bigor.*` namespace, integrating NixOS, Home Manager, nixvim, and sops-nix for secrets management.
+**CRITICAL**: When making changes to this repository, Claude MUST follow this workflow:
 
-## Quick Reference Commands
+1. **Before making changes**: Use `check-quick` or `check-mega` to understand current state
+2. **After editing files**: Run `nix fmt` to format changes
+3. **Before committing**: Run `check-full` to validate all changes
+4. **For system rebuilds**: Use `nh` workflows (`nhs`, `nhb`) which include automatic validation
 
-### Building and Testing
-
-```bash
-# Build without switching (recommended for testing)
-nh os build
-
-# Test configuration (reverts on reboot)
-nh os test
-
-# Apply changes permanently
-nh os switch
-
-# Build specific host
-nh os build --hostname minipc
-```
-
-### Code Quality Workflow
-
-**CRITICAL: Always validate changes before committing:**
+### Quality Check Commands (REQUIRED)
 
 ```bash
-# Preferred: Run all checks in one command
-check-full   # or: qf
+# Quick validation (use frequently during development)
+check-quick              # Check unstaged changes (<0.1s) - USE THIS OFTEN
+check-mega               # Intelligent check (adapts to git state) - PREFERRED
 
-# This runs: format + deadnix + statix + nix flake check
+# Full validation (before commits/pushes)
+check-full               # Complete CI-equivalent check (~16s) - REQUIRED BEFORE COMMITS
+
+# Format code (required after edits)
+nix fmt                  # Format all files - RUN AFTER EDITS
+
+# Safe rebuild workflows (includes validation)
+nhs                      # Full check + rebuild switch - USE INSTEAD OF nixos-rebuild
+nhb                      # Full check + rebuild boot
 ```
 
-### Development Shell Shortcuts
+**Why these tools?**
 
-When in the dev shell (`nix develop`), these aliases are available:
+- They enforce format, lint, and policy checks automatically
+- They're faster than manual `nix flake check`
+- They prevent broken configurations from being committed
+- The nh tools (`nhs`, `nhb`) include safety checks before rebuilding
+
+## Build and Development Commands
+
+### Testing and Validation
 
 ```bash
-qc, check-quick    # Quick check (changed files only, <0.1s)
-qs                 # Check staged files
-qf, check-full     # Full check (CI-equivalent, ~16s)
-mega, check-mega   # Intelligent check (adapts to git state)
+# Enter development shell (auto-installs pre-commit hooks)
+nix develop
 
-# Workflows
-gcn                # Add + format + check + commit
-gps                # Full check + push
-nhs                # Full check + rebuild (switch)
-nhb                # Full check + rebuild (boot)
+# Quick checks (fast, incremental)
+check-quick              # Check unstaged changes (<0.1s)
+check-quick --staged     # Check staged changes
+qc                       # Alias for check-quick
+
+# Full checks (CI-equivalent, ~16s)
+check-full               # Format, lint, dead code, evaluation, flake checks
+qf                       # Alias for check-full
+
+# Intelligent checks (adapts to git state)
+check-mega               # Analyzes git state and runs appropriate check
+mega                     # Alias for check-mega
+
+# DNS functional tests
+dns-test                 # Validate local DNS, ad blocking, DNSSEC
 ```
 
-### Development Scripts
+### Building and Deploying
 
-All development scripts are provided by `bigor.home.dev-scripts`:
+```bash
+# PREFERRED: Use nh workflows (includes automatic validation)
+nhs                      # Full check + rebuild switch (RECOMMENDED)
+nhb                      # Full check + rebuild boot (RECOMMENDED)
 
-**Quality Assurance:**
+# Manual builds (when nh workflows not appropriate)
+nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel
 
-- `check-quick` (alias: `qc`): Fast incremental check on changed files (<0.1s)
-- `check-full` (alias: `qf`): Complete CI-equivalent check (~16s)
-  - Runs: format check, dead code check, linter, evaluation, flake checks
-- `check-mega` (alias: `mega`): Intelligent orchestrator that adapts to git state
-  - Clean tree with unpushed commits → full check
-  - Staged files → quick check on staged
-  - Modified files → quick check on modified
+# Direct rebuild (NOT RECOMMENDED - use nhs/nhb instead)
+sudo nixos-rebuild switch --flake .
 
-**Testing:**
+# Git workflows (combine checks + operations)
+gps                      # Full check + push
+gcn                      # Add + format + check + commit
+```
 
-- `dns-test`: DNS stack functional test
-  - Validates: DNS reachability, local rewrites, external resolution, ad blocking, DNSSEC
+### Formatting and Linting
 
-**Git Hooks:**
+```bash
+# Format all files (REQUIRED after editing)
+nix fmt                  # Uses treefmt (nixfmt, shfmt, prettier, taplo)
 
-- `install-git-hooks`: Install pre-commit hook for automatic validation
-  - Checks: format/lint on staged .nix files, SOPS secrets validation, sensitive file prevention
-  - Skip with: `git commit --no-verify`
+# PREFERRED: Use check-quick/check-full instead of manual commands below
+check-quick              # Fast format + lint + dead code check
+check-full               # Complete validation (includes flake checks)
+
+# Manual linting (only use for debugging)
+statix check .           # Linter
+deadnix --fail .         # Dead code detection
+
+# Flake operations
+nix flake check          # Run all flake checks (includes policy assertions)
+nix flake show           # Evaluate flake structure
+```
+
+### Secret Management
+
+```bash
+# Edit SOPS-encrypted secrets
+sops secrets/example.yaml
+
+# Validate secrets
+sops -d secrets/example.yaml
+```
 
 ## Architecture
 
-### Flake Structure
+### Flake Structure (flake-parts)
 
-The flake uses flake-parts for organization:
+This repository uses **flake-parts** for modular flake organization:
 
-- **flake.nix**: Main entry point, imports `nix/hosts.nix`, `nix/checks.nix`, `nix/devshell.nix`
-- **nix/modules.nix**: Explicit import list for all custom NixOS and Home Manager modules
-- **nix/hosts.nix**: Defines all NixOS configurations using `mkHost` helper
-- **nix/checks.nix**: Automated checks (formatting, linting, policy assertions)
-- **nix/devshell.nix**: Development environment with QA tools
+- `flake.nix` - Entry point, imports parts from `nix/`
+- `nix/hosts.nix` - Defines all NixOS configurations via `mkHost` helper
+- `nix/modules.nix` - Explicit import list for all custom modules
+- `nix/checks.nix` - CI checks (format, lint, policy assertions)
+- `nix/devshell.nix` - Development shell with QA tools
+- `nix/network-topology.nix` - Centralized network data (IPs, ports, topology)
 
-### Module Organization
+### Module Organization: Platform vs Capabilities
 
-All modules use the `bigor.*` namespace and follow a strict categorization:
+**Core Principle**: Separate always-active infrastructure (platform) from optional features (capabilities).
 
-#### NixOS Modules (`modules/nixos/`)
+#### Platform Modules (`modules/nixos/platform/`)
 
-**Platform** (`modules/nixos/platform/`): Always-active infrastructure and strategic policies
+Always-active infrastructure and strategic policies. Never gated by `enable` option.
 
-Base modules (non-optional configuration applied to all hosts):
+- `boot.nix` - Bootloader, kernel, Plymouth
+- `localization.nix` - Timezone, locale, keyboard
+- `network.nix` - Network topology injection (IPs, ports, domain)
+- `packages.nix` - Core system packages
+- `sops.nix` - Secret management via SOPS
+- `users.nix` - User account management
+- `policies/dns.nix` - DNS resolution strategy (local/LAN/portable/cloud)
+- `policies/storage.nix` - Storage strategy (standalone/NFS)
 
-- `boot`: Bootloader configuration (UEFI systemd-boot)
-- `localization`: French locale, timezone (Europe/Paris), and keyboard layout
-- `network`: Network topology, `/etc/hosts` generation, firewall (provides `bigor.network.*` options)
-- `packages`: Essential CLI tools (zsh, tmux, nh, etc.)
-- `sops`: Secrets management base configuration
-- `users`: User account management
+**Policy Modules**: Compute strategic decisions and provide read-only values to capabilities. Example: DNS policy computes Blocky upstreams based on mode (local-recursive, lan-recursive, portable, cloud).
 
-Note: Core Nix settings (binary caches, flakes, trusted users, internal CA) are configured directly in `nix/hosts.nix` as they apply universally to all hosts.
+#### Capability Modules (`modules/nixos/capabilities/`)
 
-Policies (`bigor.platform.policies.*`): Strategic decisions with enum selection (NO `enable` option)
+Optional features, always gated by `enable = mkEnableOption`.
 
-- `dns.mode`: DNS strategy ("local-recursive", "lan-recursive", "portable", "cloud")
-- `storage.mode`: Storage configuration ("nfs-server", "nfs-client", "local", "none")
+- `audio.nix` - PipeWire audio stack
+- `blocky.nix` - DNS ad-blocker (reads from DNS policy)
+- `caddy.nix` - Reverse proxy with internal CA
+- `cpu-power-management.nix` - Laptop power management
+- `desktop.nix` - COSMIC desktop environment
+- `desktop-full.nix` - Bundle: desktop + audio + flatpak + bluetooth + fonts
+- `flatpak.nix` - Flatpak support
+- `gaming.nix` - Steam, Lutris, gamemode
+- `nfs.nix` - NFS server/client (reads from storage policy)
+- `sshd.nix` - SSH server
+- `unbound.nix` - Recursive DNS resolver
+- `via.nix` - VIA keyboard configurator
 
-Policies provide `computed` read-only values for services to consume.
+### Host Configuration Pattern
 
-**Capabilities** (`bigor.capabilities.*`): Optional features and services with `enable` option
+Each host consists of two files in `hosts/<hostname>/`:
 
-Desktop/hardware features:
+1. `default.nix` - System configuration (kernel, capabilities, policies)
+2. `home.nix` - Home Manager configuration for user `bigor`
 
-- `audio`: PipeWire audio stack
-- `desktop`: COSMIC DE with NetworkManager and Firefox
-- `gaming`: Steam and GameMode
-- `flatpak`: Flatpak support
-- `via`: VIA keyboard firmware
-- `cpu-power-management`: Auto-detecting CPU power management (AMD/Intel P-States)
-
-Network services:
-
-- `blocky`: Ad-blocking DNS proxy
-- `caddy`: Reverse proxy and web server
-- `nfs`: NFS server/client (auto-configured via storage policy)
-- `ssh`: SSH daemon
-- `unbound`: Recursive DNS resolver
-
-#### Home Manager Modules (`modules/home/`)
-
-All under `bigor.home.*` namespace:
-
-**Always-active modules** (applied to all hosts automatically, no `enable` option):
-
-- `cli-packages`: CLI utilities
-- `dev-scripts`: Development scripts (check-quick, check-full, check-mega, dns-test, install-git-hooks)
-- `git`: Git configuration
-- `shell`: Zsh with aliases and plugins
-- `nixvim`: Neovim configuration
-
-**Optional modules** (with `enable` option):
-
-- `gui`: GUI applications (enable with `bigor.home.gui.enable = true;`)
-
-#### Host Configurations (`hosts/`)
-
-Each host has:
-
-- `default.nix`: NixOS configuration (imports `hardware-configuration.nix`)
-- `home.nix`: Home Manager configuration
-- `hardware-configuration.nix`: Auto-generated hardware config
-
-Hosts define policies and enable capabilities. Example:
+Example host structure:
 
 ```nix
-{ pkgs, ... }:
+# hosts/grospc/default.nix
 {
-  # Kernel selection (direct NixOS option)
-  boot.kernelPackages = pkgs.linuxPackages;
+  networking.hostName = "grospc";
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
     platform.policies = {
-      dns.mode = "local-recursive";
-      storage.mode = "nfs-server";
+      dns.mode = "lan-recursive";
+      storage.mode = "nfs-client";
     };
     capabilities = {
-      cpu-power-management.enable = true;
-      ssh.enable = true;
-      caddy.enable = true;
-      unbound.enable = true;
+      desktopFull.enable = true;
+      gaming.enable = true;
       blocky.enable = true;
-      nfs.server = true;
     };
   };
 }
 ```
 
-### Network Topology
+### Network Topology (`nix/network-topology.nix`)
 
-Network topology is managed in two files:
+Centralized data structure for all network information:
 
-1. **`nix/network-topology.nix`**: Pure data file containing:
-   - **`hosts`**: All hosts with their IP addresses and network interfaces
-   - **`subnet`**: Network CIDR (default: "192.168.1.0/24")
-   - **`domain`**: Local domain name for all hosts (e.g., "bigor.lan")
-   - **`ports`**: Standard port numbers for all services (blocky, unbound, caddy, nfs)
+- Host IPs and interfaces
+- Service port numbers
+- Subnet and domain
+- Injected into all modules via `config.bigor.network`
 
-2. **`modules/nixos/platform/network.nix`**: NixOS module providing:
-   - **`bigor.network.*`** options (reads data from topology file)
-   - **`bigor.network.domain`**: Read-only, local domain name from topology
-   - **`bigor.network.mainInterface`**: Read-only, derived from current host's topology
-   - `/etc/hosts` generation from topology
-   - Network configuration logic (DNS, firewall)
-   - Warnings when domain is not set
+### Home Manager Modules (`modules/home/`)
 
-Services should reference `config.bigor.network.hosts.<hostname>.ip` instead of hardcoding IPs.
+User-level configuration:
 
-Current topology:
+- `cli-packages.nix` - CLI tools and utilities
+- `dev-scripts.nix` - QA scripts (check-quick, check-full, etc.)
+- `git.nix` - Git configuration
+- `gui.nix` - GUI applications (when `bigor.home.gui.enable = true`)
+- `shell/` - Zsh, Starship, shell tools
+- `nixvim/` - Neovim configuration via nixvim
 
-- minipc: 192.168.1.10 (enp2s0) - homelab server
-- grospc: 192.168.1.11 (enp14s0) - workstation
-- minidesk: DHCP (enp2s0) - portable laptop
-
-### Policy System
-
-Policies centralize **strategic architectural decisions** that have complex downstream effects across multiple services. They should only be used when a decision:
-
-1. Represents fundamentally different architectural patterns
-2. Has cascading effects on multiple services
-3. Requires complex validation and computed values
-4. Is used differently across multiple hosts
-
-**Current policies:**
-
-- **DNS**: Manages DNS resolution strategy with auto-configuration of Unbound and Blocky
-- **Storage**: Manages NFS server/client/local storage patterns
-
-**Policy characteristics:**
-
-1. **Declaration**: Use `mkOption` with `types.enum`, NO `enable` option
-2. **Implementation**: Set low-level NixOS options based on selected strategy
-3. **Computed Values**: Provide read-only values via `computed.*` for services to consume
-4. **Assertions**: Validate prerequisites for selected strategies
-5. **Auto-enable**: Can auto-enable services (e.g., DNS policy enables Unbound when `mode = "local-recursive"`)
-
-Example: DNS policy computes upstream servers based on strategy, services read `config.bigor.platform.policies.dns.computed.blockyUpstreams`.
-
-**When NOT to use policies:** Simple configuration choices should use direct NixOS options (e.g., `boot.kernelPackages`) or auto-detecting features (e.g., `cpu-power-management`).
+## Coding Conventions
 
 ### Module Pattern
 
-**Capability modules** (with `enable` option):
+All custom modules follow this pattern:
 
 ```nix
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.<module-name>;
+  inherit (lib) mkEnableOption mkIf mkOption types;
+  cfg = config.bigor.<category>.<module>;
 in
 {
-  options.bigor.capabilities.<module-name> = {
-    enable = mkEnableOption "Description";
-    # Additional options...
+  options.bigor.<category>.<module> = {
+    enable = mkEnableOption "description";
   };
 
   config = mkIf cfg.enable {
-    # Implementation...
+    # Implementation
   };
 }
 ```
 
-**Policy modules** (NO `enable` option):
+### Style Rules (enforced by `.statix.toml`)
 
-```nix
-{ config, lib, ... }:
-let
-  inherit (lib) mkOption types;
-  cfg = config.bigor.platform.policies.<policy-name>;
-in
-{
-  options.bigor.platform.policies.<policy-name> = mkOption {
-    type = types.enum [ "strategy1" "strategy2" ];
-    default = "strategy1";
-    description = ''
-      Policy description:
-      - "strategy1": Description
-      - "strategy2": Description
-    '';
-  };
+1. **NO `with lib;`** - Use explicit imports:
 
-  options.bigor.platform.policies.<policy-name>.computed = {
-    someValue = mkOption {
-      type = types.bool;
-      readOnly = true;
-      default = cfg == "strategy2";
-    };
-  };
-
-  config = {
-    # Implement policy by setting NixOS options
-    assertions = [ /* validate prerequisites */ ];
-  };
-}
-```
-
-### Code Style Conventions
-
-1. **NO `with lib;`** - Use explicit imports: `inherit (lib) mkOption mkIf types;`
-2. **Always use `mkEnableOption`** for feature/service enable options
-3. **Prefer explicit over implicit** - makes dependencies clear
-4. **Policy modules use `readOnly` options** for computed values
-5. **Add assertions** to validate configuration coherence
-
-These are enforced by statix linter (see `.statix.toml`).
-
-### Secrets Management
-
-- Uses sops-nix for encrypted secrets
-- Age key required: `~/.config/sops/age/keys.txt`
-- Edit secrets: `sops secrets/secrets.yaml`
-- Reference in config: `config.sops.secrets.<key>.path`
-
-### COSMIC DE Configuration
-
-Files in `dotfiles/cosmic/` are **symlinked** (not copied). Changes take effect immediately without rebuild. Remember to commit changes after editing.
-
-## Testing New Changes
-
-1. **Make changes** to modules or host configs
-2. **Validate**: `check-full` (runs format + deadnix + statix + flake check)
-3. **Build**: `nh os build` (or `nh os build --hostname <host>`)
-4. **Test**: `nh os test` (reverts on reboot)
-5. **Apply**: `nh os switch` (permanent)
-
-Policy assertions are validated during `nix flake check` - if a host configuration violates policy prerequisites, the check will fail with a descriptive error message.
-
-### Testing DNS Stack
-
-Test DNS functionality on hosts with DNS services enabled:
-
-```bash
-dns-test
-```
-
-This validates:
-
-1. DNS server reachability (127.0.0.1)
-2. Local domain resolution (e.g., minipc.bigor.lan)
-3. External domain resolution (e.g., google.com)
-4. Ad blocking effectiveness (ads.youtube.com → 0.0.0.0)
-5. DNSSEC validation
-
-**Note**: This test is provided by the `bigor.home.dev-scripts` module, which is always active.
-
-## Adding New Components
-
-### Adding a New Module
-
-**For optional capabilities (features or services):**
-
-1. Create module file in `modules/nixos/capabilities/<name>.nix`
-2. Follow the capability module pattern with `enable` option (see above)
-3. Add to `nix/modules.nix` in the capabilities list
-4. Enable in host config: `bigor.capabilities.<name>.enable = true;`
-
-**For non-optional base configuration:**
-
-1. Create module file in `modules/nixos/platform/<name>.nix`
-2. Configuration is applied to all hosts automatically (no `enable` option)
-3. Add to `nix/modules.nix` under the platform section
-4. Or add directly to `nix/hosts.nix` if it's truly universal infrastructure config
-
-### Adding a New Policy
-
-**IMPORTANT**: Only create a policy if it meets ALL criteria:
-
-- Represents fundamentally different architectural patterns
-- Has complex downstream effects on multiple services
-- Requires computed values used by other modules
-- Is used differently across multiple hosts
-- Cannot be replaced by direct NixOS options or auto-detection
-
-If your use case doesn't meet these criteria, use a capability module or direct NixOS configuration instead.
-
-**If you must create a policy:**
-
-1. Create policy module in `modules/nixos/platform/policies/<policy-name>.nix`
-2. Use enum type with strategies, NO `enable` option
-3. Add `computed.*` read-only values for services to consume
-4. Add assertions to validate prerequisites
-5. Add to `nix/modules.nix` under platform policies
-6. Set in host config: `bigor.platform.policies.<policy-name>.mode = "strategy";`
-
-### Adding a New Host
-
-1. Create `hosts/<hostname>/` directory
-2. Create `default.nix` (NixOS config) and `home.nix` (Home Manager config)
-3. Generate hardware config: `nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware-configuration.nix`
-4. Add to `nix/hosts.nix`: `<hostname> = mkHost "<hostname>";`
-5. Add to network topology in `nix/network-topology.nix`:
    ```nix
-   hosts.<hostname> = {
-     ip = "192.168.1.XX";  # or null for DHCP
-     interface = "enp0s0";
+   # Good
+   inherit (lib) mkOption mkIf mkEnableOption types;
+
+   # Bad
+   with lib;
+   ```
+
+2. **Use `mkEnableOption`** for all capability modules:
+
+   ```nix
+   # Good
+   enable = mkEnableOption "Feature description";
+
+   # Bad
+   enable = mkOption { type = types.bool; default = false; };
+   ```
+
+3. **Policy modules use `readOnly` options** for computed values:
+   ```nix
+   computed.value = mkOption {
+     type = types.str;
+     readOnly = true;
+     default = # ...computation
    };
    ```
-6. Test: `nh os build --hostname <hostname>`
 
-### Adding a New Service
+### Policy Assertions
 
-Services are now capabilities. Follow the "Adding a New Module" instructions for capabilities:
+Strategic constraints validated via `assertions` in policy modules. All assertions are checked during `nix flake check`:
 
-1. Create service module in `modules/nixos/capabilities/<name>.nix`
-2. Follow capability module pattern with `enable` option
-3. Reference network topology: `config.bigor.network.hosts.<hostname>.ip`
-4. Reference policy computed values: `config.bigor.platform.policies.<policy>.computed.<value>`
-5. Add to `nix/modules.nix` under capabilities
-6. Add assertions to validate against policy requirements
+```nix
+assertions = [
+  {
+    assertion = cfg.mode == "local-recursive" -> networkCfg.hosts.${hostname}.ip != null;
+    message = "DNS policy 'local-recursive' requires a static IP for ${hostname}";
+  }
+];
+```
 
-## Important Files
+## Hosts Overview
 
-- **flake.nix**: Main entry point
-- **nix/hosts.nix**: Host definitions and universal Nix configuration (caches, flakes, CA)
-- **nix/modules.nix**: Module registry (add ALL new modules here)
-- **nix/network-topology.nix**: Network topology data (all IPs, interfaces, ports)
-- **modules/nixos/platform/**: Always-active infrastructure (boot, network, packages, sops, users)
-- **modules/nixos/platform/network.nix**: Network configuration module (provides `bigor.network.*`)
-- **modules/nixos/platform/policies/**: Strategic architectural decisions (DNS, storage)
-- **modules/nixos/capabilities/**: Optional features and services with `enable` option
-- **.statix.toml**: Linter configuration and codebase conventions
-- **treefmt.toml**: Formatter configuration
-- **CONTRIBUTING.md**: Detailed development workflow and patterns
+- **minipc** - Home server (DNS: local-recursive, Storage: NFS server)
+- **grospc** - Desktop workstation (DNS: lan-recursive, Storage: NFS client, gaming)
+- **minidesk** - Portable laptop (DNS: portable, DHCP)
+
+## Git Workflow
+
+### Safe Workflow Commands
+
+Use these composite commands that include automatic validation:
+
+```bash
+gcn                      # nix fmt + add all + check staged + commit
+gps                      # check-full + push
+```
+
+These commands ensure code is validated before commits/pushes.
+
+### Pre-commit Hooks
+
+Pre-commit hooks are auto-installed on entering dev shell:
+
+- Format/lint check on staged `.nix` files (uses `check-quick --staged`)
+- SOPS secret validation
+- Prevent committing sensitive files (`.pem`, `.key`, etc.)
+
+Skip with: `git commit --no-verify` (not recommended)
+
+### Workflow Aliases Breakdown
+
+```bash
+# gcn = "nix fmt && gaa && qs && gc"
+# gaa = git add --all
+# qs = check-quick --staged
+# gc = git commit
+
+# gps = "check-full && gp"
+# gp = git push
+
+# nhs = "check-full && nh os switch"
+# nhb = "check-full && nh os boot"
+```
+
+## Claude Code Usage Guidelines
+
+When working in this repository, Claude Code should:
+
+### Always Use Validation Tools
+
+1. **After editing any .nix files**: Run `nix fmt`
+2. **During development**: Run `check-quick` or `check-mega` frequently
+3. **Before proposing commits**: Run `check-full` to ensure all checks pass
+4. **For system rebuilds**: Use `nhs` or `nhb` instead of raw `nixos-rebuild` commands
+
+### Typical Workflow
+
+```bash
+# 1. Make changes to .nix files
+vim modules/nixos/capabilities/example.nix
+
+# 2. Format the changes
+nix fmt
+
+# 3. Quick validation
+check-quick
+
+# 4. If validation passes and ready to commit
+gcn  # Formats, adds, checks staged files, commits
+
+# 5. Before pushing
+gps  # Full check + push
+
+# 6. For system rebuild
+nhs  # Full check + rebuild switch
+```
+
+### Why This Matters
+
+- Prevents broken configurations from being committed
+- Ensures policy assertions are validated
+- Maintains consistent code style
+- Catches dead code and linting issues early
+- Reduces CI failures and rebuild errors
+
+The dev-scripts and nh tools are specifically designed for this workflow and should be preferred over manual commands.
