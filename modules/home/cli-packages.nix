@@ -34,7 +34,6 @@
     lm_sensors
     fastfetch
 
-    claude-code
     gemini-cli
   ];
 }
