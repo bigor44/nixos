@@ -21,6 +21,7 @@ in
     systemd.services.uptime-kuma.environment.PORT = toString networkCfg.ports.uptime-kuma;
 
     services.caddy.virtualHosts."kuma.${networkCfg.domain}".extraConfig = ''
+      tls internal
       reverse_proxy 127.0.0.1:${toString networkCfg.ports.uptime-kuma}
     '';
   };
