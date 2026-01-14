@@ -47,7 +47,8 @@ in
         '';
       };
       device = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         description = "Device path or UUID for local storage (e.g., /dev/disk/by-uuid/...)";
         example = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
       };
@@ -91,7 +92,7 @@ in
       }
 
       # Local storage mount
-      (mkIf cfg.localStorage.enable {
+      (mkIf (cfg.localStorage.enable && cfg.localStorage.device != null) {
         fileSystems."/mnt/storage" = {
           inherit (cfg.localStorage) device fsType;
         };
