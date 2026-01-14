@@ -25,7 +25,7 @@
       cpu-power-management.enable = true;
 
       # Services (expanded from homelab-master profile)
-      ssh.enable = true;
+      sshd.enable = true;
       caddy.enable = true;
       unbound.enable = true;
       gatus.enable = true;

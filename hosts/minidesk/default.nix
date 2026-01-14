@@ -24,7 +24,7 @@
     # Capabilities: optional features and services
     capabilities = {
       cpu-power-management.enable = true;
-      ssh.enable = true;
+      sshd.enable = true;
       blocky.enable = true;
 
       # Desktop features

@@ -89,8 +89,12 @@ in
             else
               cfg.upstreams;
 
-          # Strict: try upstreams in order, failover on timeout/error
-          strategy = "parallel_best";
+          # Strategy: strict for local recursive (prioritize Unbound), parallel_best otherwise
+          strategy =
+            if (cfg.followDnsPolicy && config.bigor.platform.policies.dns.mode == "local-recursive") then
+              "strict"
+            else
+              "parallel_best";
           timeout = cfg.upstreamTimeout;
         };
 
