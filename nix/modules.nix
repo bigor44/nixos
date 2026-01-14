@@ -24,6 +24,7 @@
     ../modules/nixos/capabilities/desktop.nix
     ../modules/nixos/capabilities/flatpak.nix
     ../modules/nixos/capabilities/gaming.nix
+    ../modules/nixos/capabilities/gatus.nix
     ../modules/nixos/capabilities/nfs-client.nix
     ../modules/nixos/capabilities/nfs-server.nix
     ../modules/nixos/capabilities/sshd.nix

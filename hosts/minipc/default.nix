@@ -28,7 +28,7 @@
       ssh.enable = true;
       caddy.enable = true;
       unbound.enable = true;
-      uptime-kuma.enable = true;
+      gatus.enable = true;
       blocky.enable = true;
       nfs-server.enable = true;
     };
