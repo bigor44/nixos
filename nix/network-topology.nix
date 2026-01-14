@@ -39,7 +39,6 @@
       rpc = 111;
       server = 2049;
     };
-    uptime-kuma = 3001;
     gatus = 8080;
   };
 }

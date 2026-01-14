@@ -47,7 +47,7 @@ in
           (optional config.bigor.capabilities.blocky.enable {
             name = "Service: Blocky DNS";
             group = "Local Services";
-            url = "udp://127.0.0.1:${toString networkCfg.ports.blocky.dns}";
+            url = "127.0.0.1:${toString networkCfg.ports.blocky.dns}";
             dns = {
               query-name = "google.com";
               query-type = "A";
@@ -60,7 +60,7 @@ in
           (optional config.bigor.capabilities.unbound.enable {
             name = "Service: Unbound DNS";
             group = "Local Services";
-            url = "udp://127.0.0.1:${toString networkCfg.ports.unbound}";
+            url = "127.0.0.1:${toString networkCfg.ports.unbound}";
             dns = {
               query-name = "google.com";
               query-type = "A";

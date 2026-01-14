@@ -29,7 +29,7 @@
     ../modules/nixos/capabilities/nfs-server.nix
     ../modules/nixos/capabilities/sshd.nix
     ../modules/nixos/capabilities/unbound.nix
-    ../modules/nixos/capabilities/uptime-kuma.nix
+
     ../modules/nixos/capabilities/keyboardVIA.nix
   ];
 

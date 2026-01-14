@@ -36,6 +36,7 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
 ```
 nixos/
 ├── certs/                  # SSL certificates
+├── dotfiles/               # Static dotfiles (linked via Home Manager)
 ├── hosts/                  # Host-specific configurations
 │   ├── grospc/            # Desktop workstation
 │   ├── minipc/            # Home server
@@ -142,7 +143,7 @@ nhs
 - **Kernel**: LTS (stability focused)
 - **DNS**: Local recursive (provides DNS for LAN)
 - **Storage**: NFS server (exports storage)
-- **Capabilities**: Caddy, Unbound, Blocky, SSH, NFS
+- **Capabilities**: Caddy, Unbound, Blocky, SSH, NFS, Gatus
 
 ### minidesk (Portable Laptop)
 
@@ -179,6 +180,7 @@ Optional features (enabled per-host):
 - `desktop.nix` - COSMIC desktop environment
 - `flatpak.nix` - Flatpak support
 - `gaming.nix` - Steam, Lutris, gamemode
+- `gatus.nix` - Service status monitoring
 - `nfs-client.nix` - NFS client configuration
 - `nfs-server.nix` - NFS server configuration
 - `sshd.nix` - SSH server
@@ -190,9 +192,12 @@ Optional features (enabled per-host):
 User-level configuration:
 
 - `cli-packages.nix` - Essential CLI tools
+- `dev-scripts.nix` - QA and development scripts
+- `git.nix` - Git configuration and aliases
+- `gui.nix` - Desktop applications
 - `nixvim/` - Neovim configuration
 - `shell/` - Zsh, Starship, shell tools
-- `gui.nix` - Desktop applications
+- `wallpapers.nix` - Wallpaper synchronization
 
 ## 🔐 Secret Management
 

@@ -90,6 +90,7 @@ Always work inside the devshell (`nix develop`) which provides necessary tools a
 
 ## 4. Directory Structure
 
+- **`dotfiles/`**: Static configuration files (COSMIC, autostart) symlinked by Home Manager.
 - **`hosts/`**: Host-specific `default.nix` and `hardware-configuration.nix`.
 - **`modules/nixos/`**: System-level modules (`platform`, `capabilities`).
 - **`modules/home/`**: User-level modules (`cli`, `gui`, `nixvim`, `shell`).
@@ -100,5 +101,5 @@ Always work inside the devshell (`nix develop`) which provides necessary tools a
 ## 5. Host Context
 
 - **`grospc`**: High-performance Desktop. Uses Zen kernel, LAN recursive DNS, NFS client.
-- **`minipc`**: Home Server. Uses LTS kernel, Local recursive DNS, NFS server, Caddy, Unbound.
+- **`minipc`**: Home Server. Uses LTS kernel, Local recursive DNS, NFS server, Caddy, Unbound, Gatus.
 - **`minidesk`**: Laptop. Uses Zen kernel, Portable DNS, local storage.

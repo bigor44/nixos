@@ -80,6 +80,7 @@ Before committing, ensure your changes don't break the configuration:
 
 - **Quick Check**: Run `check-quick` (or `qc`) for a fast incremental check.
 - **Full Check**: Run `check-full` (or `qf`) for a complete validation of all hosts.
+- **Intelligent Check**: Run `check-mega` (or `mega`) to automatically choose the best check based on git state.
 - **DNS Test**: If you modified DNS settings, run `dns-test`.
 
 ### 6. Applying Changes Locally
