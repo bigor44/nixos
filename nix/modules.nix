@@ -39,5 +39,6 @@
     ../modules/home/shell
     ../modules/home/nixvim
     ../modules/home/gui.nix
+    ../modules/home/wallpapers.nix
   ];
 }

@@ -3,5 +3,8 @@
 {
   home.stateVersion = "25.11";
 
-  bigor.home.gui.enable = true;
+  bigor.home = {
+    gui.enable = true;
+    wallpapers.enable = true;
+  };
 }
