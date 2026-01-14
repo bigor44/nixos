@@ -35,5 +35,6 @@
     fastfetch
 
     claude-code
+    gemini-cli
   ];
 }

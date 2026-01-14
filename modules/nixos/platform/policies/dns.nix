@@ -1,3 +1,5 @@
+# Policy: dns
+# Purpose: Strategic DNS configuration (local-recursive, lan-recursive, portable)
 { config, lib, ... }:
 let
   inherit (lib) mkOption mkIf types;

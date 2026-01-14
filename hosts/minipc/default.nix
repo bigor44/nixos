@@ -29,7 +29,7 @@
       caddy.enable = true;
       unbound.enable = true;
       blocky.enable = true;
-      nfs.server = true;
+      nfs-server.enable = true;
     };
   };
 

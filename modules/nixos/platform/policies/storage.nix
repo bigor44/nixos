@@ -1,10 +1,11 @@
+# Policy: storage
+# Purpose: Strategic storage configuration (NFS server/client, local storage)
 { config, lib, ... }:
 let
   inherit (lib)
     mkOption
     mkIf
     types
-    mkMerge
     ;
   cfg = config.bigor.platform.policies.storage;
   hostname = config.networking.hostName;
@@ -100,25 +101,13 @@ in
     ];
 
     # Auto-configure NFS service based on policy
-    bigor.capabilities.nfs = mkMerge [
-      (mkIf cfg.computed.shouldRunNfsServer {
-        server = lib.mkDefault true;
-        localStorage = {
-          enable = lib.mkDefault true;
-          device = lib.mkDefault cfg.device;
-          fsType = lib.mkDefault cfg.fsType;
-        };
-      })
-      (mkIf cfg.computed.shouldMountNfsClient {
-        client = lib.mkDefault true;
-      })
-      (mkIf (cfg.mode == "local") {
-        localStorage = {
-          enable = lib.mkDefault true;
-          device = lib.mkDefault cfg.device;
-          fsType = lib.mkDefault cfg.fsType;
-        };
-      })
-    ];
+    bigor.capabilities.nfs-server.enable = mkIf cfg.computed.shouldRunNfsServer true;
+    bigor.capabilities.nfs-client.enable = mkIf cfg.computed.shouldMountNfsClient true;
+
+    # Local storage mount (for nfs-server or local modes)
+    fileSystems."/mnt/storage" = mkIf (cfg.computed.localDevice != null) {
+      device = cfg.computed.localDevice;
+      inherit (cfg) fsType;
+    };
   };
 }

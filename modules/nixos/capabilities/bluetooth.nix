@@ -1,3 +1,5 @@
+# Feature: bluetooth
+# Purpose: Bluetooth hardware support
 {
   config,
   lib,

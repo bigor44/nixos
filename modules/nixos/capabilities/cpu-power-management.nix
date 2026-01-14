@@ -1,3 +1,5 @@
+# Feature: cpu-power-management
+# Purpose: CPU frequency scaling and power optimizations (AMD P-State / Intel P-State)
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;

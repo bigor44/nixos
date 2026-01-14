@@ -1,0 +1,31 @@
+# Feature: nfs-client
+# Purpose: NFS client configuration for mounting remote storage
+{
+  config,
+  lib,
+  ...
+}:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.bigor.capabilities.nfs-client;
+in
+{
+  options.bigor.capabilities.nfs-client.enable = mkEnableOption "NFS client";
+
+  config = mkIf cfg.enable {
+    fileSystems."/mnt/storage" = {
+      device = "${config.bigor.network.hosts.minipc.ip}:/mnt/storage";
+      fsType = "nfs";
+      # Automount on access, not at boot
+      options = [
+        "x-systemd.automount"
+        "_netdev"
+        "nofail"
+        "noatime"
+        "soft"
+        "timeo=600"
+        "retrans=5"
+      ];
+    };
+  };
+}
