@@ -67,6 +67,15 @@ in
             };
             interval = "30s";
             conditions = [ "[DNS_RCODE] == NOERROR" ];
+          })
+        ++
+          # Dynamic: Check Caddy HTTPS if enabled
+          (optional config.bigor.capabilities.caddy.enable {
+            name = "Service: Caddy HTTPS";
+            group = "Local Services";
+            url = "https://status.${networkCfg.domain}";
+            interval = "1m";
+            conditions = [ "[STATUS] == 200" ];
           });
       };
     };
