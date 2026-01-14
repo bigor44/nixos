@@ -1,10 +1,13 @@
-# Home: nixvim-utils
-# Purpose: Utility plugins for nixvim (mini.nvim modules)
+# Home: nixvim-mini
+# Purpose: Mini.nvim consolidated configuration
 {
   programs.nixvim.plugins.mini = {
     enable = true;
     modules = {
+      # AI
       ai = { };
+
+      # Editing & Motion
       cursorword = { };
       indentscope = { };
       pairs = { };
@@ -12,9 +15,36 @@
       comment = { };
       trailspace = { };
 
-      # ========================================================================
-      # Mini.clue (Keybinding Hints)
-      # ========================================================================
+      # UI Elements
+      statusline = { };
+      tabline = { };
+
+      # Highlights
+      hipatterns = {
+        highlighters = {
+          hex_color = {
+            __raw = "require('mini.hipatterns').gen_highlighter.hex_color()";
+          };
+          fixme = {
+            pattern = "%f[%w]()FIXME()%f[%W]";
+            group = "MiniHipatternsFixme";
+          };
+          hack = {
+            pattern = "%f[%w]()HACK()%f[%W]";
+            group = "MiniHipatternsHack";
+          };
+          todo = {
+            pattern = "%f[%w]()TODO()%f[%W]";
+            group = "MiniHipatternsTodo";
+          };
+          note = {
+            pattern = "%f[%w]()NOTE()%f[%W]";
+            group = "MiniHipatternsNote";
+          };
+        };
+      };
+
+      # Keybinding Hints (Mini.clue)
       clue = {
         triggers = [
           {
