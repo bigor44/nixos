@@ -28,7 +28,7 @@ in
           {
             name = "Internet (Cloudflare)";
             group = "External";
-            url = "1.1.1.1";
+            url = "https://1.1.1.1";
             interval = "30s";
             conditions = [ "[CONNECTED] == true" ];
           }
@@ -38,7 +38,7 @@ in
           (mapAttrsToList (name: host: {
             name = "Host: ${name}";
             group = "Infrastructure";
-            url = if host.ip != null then host.ip else name;
+            url = "icmp://${if host.ip != null then host.ip else name}";
             interval = "1m";
             conditions = [ "[CONNECTED] == true" ];
           }) (filterAttrs (n: h: n != config.networking.hostName && h.ip != null) networkCfg.hosts))
@@ -47,7 +47,7 @@ in
           (optional config.bigor.capabilities.blocky.enable {
             name = "Service: Blocky DNS";
             group = "Local Services";
-            url = "127.0.0.1";
+            url = "udp://127.0.0.1:${toString networkCfg.ports.blocky.dns}";
             dns = {
               query-name = "google.com";
               query-type = "A";
@@ -60,7 +60,7 @@ in
           (optional config.bigor.capabilities.unbound.enable {
             name = "Service: Unbound DNS";
             group = "Local Services";
-            url = "127.0.0.1";
+            url = "udp://127.0.0.1:${toString networkCfg.ports.unbound}";
             dns = {
               query-name = "google.com";
               query-type = "A";
