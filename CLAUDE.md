@@ -156,7 +156,7 @@ Optional features, always gated by `enable = mkEnableOption`.
 - `nfs.nix` - NFS server/client (reads from storage policy)
 - `sshd.nix` - SSH server
 - `unbound.nix` - Recursive DNS resolver
-- `via.nix` - VIA keyboard configurator
+- `keyboardVIA.nix` - VIA keyboard configurator
 
 ### Host Configuration Pattern
 

@@ -179,10 +179,11 @@ Optional features (enabled per-host):
 - `desktop.nix` - COSMIC desktop environment
 - `flatpak.nix` - Flatpak support
 - `gaming.nix` - Steam, Lutris, gamemode
-- `nfs.nix` - NFS server/client (reads from storage policy)
+- `nfs-client.nix` - NFS client configuration
+- `nfs-server.nix` - NFS server configuration
 - `sshd.nix` - SSH server
 - `unbound.nix` - Recursive DNS resolver
-- `via.nix` - VIA keyboard configurator
+- `keyboardVIA.nix` - VIA keyboard configurator
 
 ### Home Manager Modules (`modules/home/`)
 
@@ -304,10 +305,7 @@ nix flake lock --update-input nixpkgs
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make changes with proper validation
-4. Submit a pull request
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 **Always run `check-full` before pushing changes!**
 

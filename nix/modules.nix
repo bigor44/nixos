@@ -24,10 +24,11 @@
     ../modules/nixos/capabilities/desktop.nix
     ../modules/nixos/capabilities/flatpak.nix
     ../modules/nixos/capabilities/gaming.nix
-    ../modules/nixos/capabilities/nfs.nix
+    ../modules/nixos/capabilities/nfs-client.nix
+    ../modules/nixos/capabilities/nfs-server.nix
     ../modules/nixos/capabilities/sshd.nix
     ../modules/nixos/capabilities/unbound.nix
-    ../modules/nixos/capabilities/via.nix
+    ../modules/nixos/capabilities/keyboardVIA.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace

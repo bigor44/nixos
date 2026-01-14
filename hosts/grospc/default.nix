@@ -21,7 +21,7 @@
     capabilities = {
       blocky.enable = true;
       cpu-power-management.enable = true;
-      via.enable = true;
+      keyboardVIA.enable = true;
 
       # Desktop features
       desktop.enable = true;
