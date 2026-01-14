@@ -24,11 +24,11 @@ in
       description = ''
         Storage access strategy:
         - "nfs-server": Export local storage via NFS (requires static IP + device)
-        - "nfs-client": Mount storage from minipc via NFS (requires static IP)
+        - "nfs-client": Mount storage from minipc via NFS (works with DHCP)
         - "local": Local storage mount, no network sharing (requires device, works with DHCP)
         - "none": No storage mount
 
-        Note: Only NFS modes require static IP. "local" mode works with DHCP.
+        Note: Only NFS server mode requires static IP.
       '';
     };
 
@@ -80,15 +80,11 @@ in
     # Strategic assertions: validate prerequisites for storage modes
     # This is the authoritative validation layer for storage configuration
     # Note: "local" mode does NOT require static IP (can use DHCP)
-    # Only NFS modes require static IP for reliable network mounting
+    # Only NFS server mode requires static IP for reliable service
     assertions = [
       {
         assertion = cfg.mode == "nfs-server" -> networkCfg.hosts.${hostname}.ip != null;
         message = "Storage policy 'nfs-server' requires a static IP for ${hostname}";
-      }
-      {
-        assertion = cfg.mode == "nfs-client" -> networkCfg.hosts.${hostname}.ip != null;
-        message = "Storage policy 'nfs-client' requires a static IP for ${hostname}";
       }
       {
         assertion = (cfg.mode == "nfs-server" || cfg.mode == "local") -> cfg.device != null;
