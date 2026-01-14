@@ -7,7 +7,6 @@ repl-result
 # Clés privées (ne jamais commiter)
 keys.txt
 *.key
-*.pem
 .env
 
 # --- Outils (Direnv) ---
