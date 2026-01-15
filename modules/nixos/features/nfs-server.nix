@@ -7,7 +7,7 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.nfs-server;
+  cfg = config.bigor.features.nfs-server;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports;
 
@@ -15,7 +15,7 @@ let
   nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
 in
 {
-  options.bigor.capabilities.nfs-server.enable = mkEnableOption "NFS server";
+  options.bigor.features.nfs-server.enable = mkEnableOption "NFS server";
 
   config = mkIf cfg.enable {
     services.nfs.server = {

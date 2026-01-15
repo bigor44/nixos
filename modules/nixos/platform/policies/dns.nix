@@ -97,7 +97,7 @@ in
     ];
 
     # Auto-enable Unbound based on policy
-    bigor.capabilities.unbound = mkIf cfg.computed.shouldRunUnbound {
+    bigor.features.unbound = mkIf cfg.computed.shouldRunUnbound {
       enable = lib.mkDefault true;
       listenOnLan = lib.mkDefault true;
     };

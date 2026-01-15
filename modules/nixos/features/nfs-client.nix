@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.nfs-client;
+  cfg = config.bigor.features.nfs-client;
 in
 {
-  options.bigor.capabilities.nfs-client.enable = mkEnableOption "NFS client";
+  options.bigor.features.nfs-client.enable = mkEnableOption "NFS client";
 
   config = mkIf cfg.enable {
     fileSystems."/mnt/storage" = {

@@ -21,7 +21,7 @@
     };
 
     # Capabilities: optional features and services
-    capabilities = {
+    features = {
       cpu-power-management.enable = true;
 
       # Services (expanded from homelab-master profile)

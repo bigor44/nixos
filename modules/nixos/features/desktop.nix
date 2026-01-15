@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.desktop;
+  cfg = config.bigor.features.desktop;
 in
 {
-  options.bigor.capabilities.desktop.enable = mkEnableOption "Desktop environment (COSMIC)";
+  options.bigor.features.desktop.enable = mkEnableOption "Desktop environment (COSMIC)";
 
   config = mkIf cfg.enable {
     # Desktop environment: COSMIC

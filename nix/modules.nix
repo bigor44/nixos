@@ -16,21 +16,21 @@
     ../modules/nixos/platform/policies/storage.nix
 
     # Capabilities - Optional features and services
-    ../modules/nixos/capabilities/audio.nix
-    ../modules/nixos/capabilities/blocky.nix
-    ../modules/nixos/capabilities/bluetooth.nix
-    ../modules/nixos/capabilities/caddy.nix
-    ../modules/nixos/capabilities/cpu-power-management.nix
-    ../modules/nixos/capabilities/desktop.nix
-    ../modules/nixos/capabilities/flatpak.nix
-    ../modules/nixos/capabilities/gaming.nix
-    ../modules/nixos/capabilities/gatus.nix
-    ../modules/nixos/capabilities/nfs-client.nix
-    ../modules/nixos/capabilities/nfs-server.nix
-    ../modules/nixos/capabilities/sshd.nix
-    ../modules/nixos/capabilities/unbound.nix
+    ../modules/nixos/features/audio.nix
+    ../modules/nixos/features/blocky.nix
+    ../modules/nixos/features/bluetooth.nix
+    ../modules/nixos/features/caddy.nix
+    ../modules/nixos/features/cpu-power-management.nix
+    ../modules/nixos/features/desktop.nix
+    ../modules/nixos/features/flatpak.nix
+    ../modules/nixos/features/gaming.nix
+    ../modules/nixos/features/gatus.nix
+    ../modules/nixos/features/nfs-client.nix
+    ../modules/nixos/features/nfs-server.nix
+    ../modules/nixos/features/sshd.nix
+    ../modules/nixos/features/unbound.nix
 
-    ../modules/nixos/capabilities/keyboardVIA.nix
+    ../modules/nixos/features/keyboardVIA.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace

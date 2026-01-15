@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.bluetooth;
+  cfg = config.bigor.features.bluetooth;
 in
 {
-  options.bigor.capabilities.bluetooth = {
+  options.bigor.features.bluetooth = {
     enable = mkEnableOption "enable bluetooth";
   };
 

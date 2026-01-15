@@ -97,8 +97,8 @@ in
     ];
 
     # Auto-configure NFS service based on policy
-    bigor.capabilities.nfs-server.enable = mkIf cfg.computed.shouldRunNfsServer true;
-    bigor.capabilities.nfs-client.enable = mkIf cfg.computed.shouldMountNfsClient true;
+    bigor.features.nfs-server.enable = mkIf cfg.computed.shouldRunNfsServer true;
+    bigor.features.nfs-client.enable = mkIf cfg.computed.shouldMountNfsClient true;
 
     # Local storage mount (for nfs-server or local modes)
     fileSystems."/mnt/storage" = mkIf (cfg.computed.localDevice != null) {

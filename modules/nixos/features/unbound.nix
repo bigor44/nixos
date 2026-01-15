@@ -1,4 +1,4 @@
-# Module: unbound
+# Feature: unbound
 # Purpose: High-performance recursive DNS resolver with DNSSEC validation
 #
 # Features:
@@ -17,10 +17,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf optionals;
-  cfg = config.bigor.capabilities.unbound;
+  cfg = config.bigor.features.unbound;
 in
 {
-  options.bigor.capabilities.unbound = {
+  options.bigor.features.unbound = {
     enable = mkEnableOption "Unbound DNS resolver" // {
       description = ''
         Enable Unbound high-performance recursive DNS resolver with DNSSEC validation.

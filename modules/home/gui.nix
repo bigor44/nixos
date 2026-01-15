@@ -1,4 +1,4 @@
-# Module: features.gui
+# Module: gui
 # Purpose: User-level desktop applications and COSMIC dotfiles
 # Note: System-level desktop (DE + Firefox) is in nixos/features/desktop.nix
 {

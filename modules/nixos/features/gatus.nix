@@ -1,4 +1,4 @@
-# Module: gatus
+# Feature: gatus
 # Purpose: Status page and monitoring (Configuration as Code alternative to Uptime Kuma)
 {
   config,
@@ -13,11 +13,11 @@ let
     filterAttrs
     optional
     ;
-  cfg = config.bigor.capabilities.gatus;
+  cfg = config.bigor.features.gatus;
   networkCfg = config.bigor.network;
 in
 {
-  options.bigor.capabilities.gatus.enable = mkEnableOption "Gatus status page";
+  options.bigor.features.gatus.enable = mkEnableOption "Gatus status page";
 
   config = mkIf cfg.enable {
     services.gatus = {
@@ -44,7 +44,7 @@ in
           }) (filterAttrs (n: h: n != config.networking.hostName && h.ip != null) networkCfg.hosts))
         ++
           # Dynamic: Check local Blocky DNS if enabled
-          (optional config.bigor.capabilities.blocky.enable {
+          (optional config.bigor.features.blocky.enable {
             name = "Service: Blocky DNS";
             group = "Local Services";
             url = "127.0.0.1:${toString networkCfg.ports.blocky.dns}";
@@ -57,7 +57,7 @@ in
           })
         ++
           # Dynamic: Check local Unbound DNS if enabled
-          (optional config.bigor.capabilities.unbound.enable {
+          (optional config.bigor.features.unbound.enable {
             name = "Service: Unbound DNS";
             group = "Local Services";
             url = "127.0.0.1:${toString networkCfg.ports.unbound}";
@@ -70,7 +70,7 @@ in
           })
         ++
           # Dynamic: Check Caddy HTTPS if enabled
-          (optional config.bigor.capabilities.caddy.enable {
+          (optional config.bigor.features.caddy.enable {
             name = "Service: Caddy HTTPS";
             group = "Local Services";
             url = "https://status.${networkCfg.domain}";

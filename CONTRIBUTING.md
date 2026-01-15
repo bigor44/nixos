@@ -11,7 +11,7 @@ This document provides guidelines for contributing to this repository. Following
 Before contributing, please familiarize yourself with the modular structure of this project:
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, users, etc.).
-- **Capability Modules (`modules/nixos/capabilities/`)**: Optional features (gaming, desktop, etc.) that must be explicitly enabled in host configurations.
+- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, etc.) that must be explicitly enabled in host configurations.
 - **Home Manager Modules (`modules/home/`)**: User-specific configurations.
 - **Host Definitions (`hosts/`)**: Specific configurations for each machine.
 
@@ -46,15 +46,24 @@ git checkout -b feature/your-feature-name
 
 To maintain consistency across the codebase, please follow these standards:
 
-- **File Header**: Every Nix file must start with a 2-line header:
+- **File Header**: Every Nix file must start with a 2-line header. The first line should use a prefix that identifies the file's category, followed by a `# Purpose:` line:
+  - `# Feature:` for system features or platform modules (`modules/nixos/`).
+  - `# Module:` for shared home manager modules (`modules/home/`).
+  - `# Home:` for specific user environments or NixVim components (`modules/home/nixvim/`, `hosts/*/home.nix`).
+  - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
+  - `# Policy:` for system-wide policies (`modules/nixos/platform/policies/`).
+
+  Example:
+
   ```nix
-  # Feature: <feature-name> (or # Module: <module-name>)
-  # Purpose: <brief-description>
+  # Feature: audio
+  # Purpose: PipeWire audio stack with ALSA and PulseAudio compatibility
   ```
-- **Capability Modules**: Modules in `modules/nixos/capabilities/` must follow the standard template:
-  - Define an `enable` option under `bigor.capabilities.<name>.enable`.
+
+- **Feature Modules**: Modules in `modules/nixos/features/` must follow the standard template:
+  - Define an `enable` option under `bigor.features.<name>.enable`.
   - Wrap the configuration in `mkIf cfg.enable`.
-  - Reference `modules/nixos/capabilities/gaming.nix` for a clean example.
+  - Reference `modules/nixos/features/gaming.nix` for a clean example.
 - **Comments**:
   - Must be in **English**.
   - Should be **useful** and explain the **why** (intent), not the **what** (code is self-documenting).

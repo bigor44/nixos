@@ -1,4 +1,4 @@
-# Module: blocky
+# Feature: blocky
 # Purpose: DNS proxy with ad/tracker blocking and automatic failover
 {
   config,
@@ -17,7 +17,7 @@ let
     mapAttrs'
     nameValuePair
     ;
-  cfg = config.bigor.capabilities.blocky;
+  cfg = config.bigor.features.blocky;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports domain;
 
@@ -31,7 +31,7 @@ let
   );
 in
 {
-  options.bigor.capabilities.blocky = {
+  options.bigor.features.blocky = {
     enable = mkEnableOption "Blocky DNS proxy with ad blocking";
 
     followDnsPolicy = mkOption {

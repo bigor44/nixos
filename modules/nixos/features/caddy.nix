@@ -1,4 +1,4 @@
-# Module: caddy
+# Feature: caddy
 # Purpose: Reverse proxy with automatic HTTPS
 {
   config,
@@ -8,12 +8,12 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.caddy;
+  cfg = config.bigor.features.caddy;
   networkCfg = config.bigor.network;
   inherit (networkCfg) mainInterface ports;
 in
 {
-  options.bigor.capabilities.caddy.enable = mkEnableOption "Caddy reverse proxy";
+  options.bigor.features.caddy.enable = mkEnableOption "Caddy reverse proxy";
 
   config = mkIf cfg.enable {
     services.caddy = {

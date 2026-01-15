@@ -22,7 +22,7 @@
     };
 
     # Capabilities: optional features and services
-    capabilities = {
+    features = {
       cpu-power-management.enable = true;
       sshd.enable = true;
       blocky.enable = true;

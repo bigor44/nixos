@@ -1,6 +1,5 @@
-# Common: localization
+# Feature: localization
 # Purpose: French locale, timezone, and keyboard layout (Paris)
-# Applied to all hosts
 { pkgs, ... }:
 {
   time.timeZone = "Europe/Paris";

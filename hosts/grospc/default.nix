@@ -18,7 +18,7 @@
     };
 
     # Capabilities: optional features and services
-    capabilities = {
+    features = {
       blocky.enable = true;
       cpu-power-management.enable = true;
       keyboardVIA.enable = true;

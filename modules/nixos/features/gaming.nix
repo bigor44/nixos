@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.gaming;
+  cfg = config.bigor.features.gaming;
 in
 {
-  options.bigor.capabilities.gaming.enable = mkEnableOption "Gaming optimizations";
+  options.bigor.features.gaming.enable = mkEnableOption "Gaming optimizations";
 
   config = mkIf cfg.enable {
     programs = {

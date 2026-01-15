@@ -1,4 +1,4 @@
-# Module: nixvim
+# Home: nixvim
 # Purpose: Neovim configuration with LSP, treesitter, and completion
 { pkgs, ... }:
 {

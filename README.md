@@ -1,6 +1,6 @@
 # 🐧 Bigor's NixOS Configuration
 
-A modular, reproducible NixOS configuration managed with flakes and Home Manager. Built with a clear separation of platform infrastructure and optional capabilities.
+A modular, reproducible NixOS configuration managed with flakes and Home Manager. Built with a clear separation of platform infrastructure and optional features.
 
 ## ✨ Features
 
@@ -44,7 +44,7 @@ nixos/
 ├── modules/               # Reusable modules
 │   ├── nixos/            # NixOS modules
 │   │   ├── platform/     # Platform infrastructure
-│   │   └── capabilities/ # Optional features
+│   │   └── features/ # Optional features
 │   └── home/             # Home Manager modules
 ├── nix/                   # Flake parts
 ├── scripts/               # Utility scripts
@@ -113,7 +113,7 @@ nhs
 
 ```bash
 # 1. Make changes
-vim modules/nixos/capabilities/example.nix
+vim modules/nixos/features/example.nix
 
 # 2. Format and validate
 nix fmt
@@ -168,7 +168,7 @@ Always-active infrastructure:
 - `policies/dns.nix` - DNS resolution strategy
 - `policies/storage.nix` - Storage strategy
 
-### Capability Modules (`modules/nixos/capabilities/`)
+### Feature Modules (`modules/nixos/features/`)
 
 Optional features (enabled per-host):
 

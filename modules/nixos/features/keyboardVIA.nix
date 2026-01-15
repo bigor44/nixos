@@ -1,4 +1,4 @@
-# Module: features.keyboardVIA
+# Feature: keyboardVIA
 # Purpose: VIA keyboard configurator with udev rules for USB HID access
 {
   config,
@@ -8,10 +8,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.capabilities.keyboardVIA;
+  cfg = config.bigor.features.keyboardVIA;
 in
 {
-  options.bigor.capabilities.keyboardVIA.enable = mkEnableOption "VIA keyboard configurator";
+  options.bigor.features.keyboardVIA.enable = mkEnableOption "VIA keyboard configurator";
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.via ];

@@ -21,7 +21,7 @@ This repository is a **modular NixOS configuration** managed with **Flakes** and
 The configuration distinguishes between **Platform** and **Capabilities**:
 
 - **`modules/nixos/platform/`**: Mandatory infrastructure modules included in every host (boot, network, users, sops, basic policies).
-- **`modules/nixos/capabilities/`**: Optional features (gaming, desktop, specific services) that must be explicitly enabled in host configs (e.g., `capabilities.gaming.enable = true;`).
+- **`modules/nixos/features/`**: Optional features (gaming, desktop, specific services) that must be explicitly enabled in host configs (e.g., `features.gaming.enable = true;`).
 
 ### Host Definitions (`nix/hosts.nix`)
 
@@ -92,7 +92,7 @@ Always work inside the devshell (`nix develop`) which provides necessary tools a
 
 - **`dotfiles/`**: Static configuration files (COSMIC, autostart) symlinked by Home Manager.
 - **`hosts/`**: Host-specific `default.nix` and `hardware-configuration.nix`.
-- **`modules/nixos/`**: System-level modules (`platform`, `capabilities`).
+- **`modules/nixos/`**: System-level modules (`platform`, `features`).
 - **`modules/home/`**: User-level modules (`cli`, `gui`, `nixvim`, `shell`).
 - **`nix/`**: Flake logic (`hosts.nix`, `devshell.nix`, `network-topology.nix`).
 - **`pkgs/`**: Custom packages (if any).
