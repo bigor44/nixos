@@ -100,6 +100,7 @@ in
           blockTTL = "1m";
 
           loading = {
+            strategy = "fast";
             refreshPeriod = "4h";
             downloads = {
               timeout = "5m";
