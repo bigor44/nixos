@@ -53,31 +53,20 @@ in
               conditions = [ "[CONNECTED] == true" ];
             }) (filterAttrs (n: h: n != config.networking.hostName && h.ip != null) networkCfg.hosts))
           ++
-            # Dynamic: Check local Blocky DNS if enabled
-            (optional config.bigor.features.blocky.enable {
-              name = "Service: Blocky DNS";
-              group = "Local Services";
-              url = "127.0.0.1:${toString networkCfg.ports.blocky.dns}";
-              dns = {
-                query-name = "google.com";
-                query-type = "A";
-              };
-              interval = "30s";
-              conditions = [ "[DNS_RCODE] == NOERROR" ];
-            })
-          ++
-            # Dynamic: Check local Unbound DNS if enabled
-            (optional config.bigor.features.unbound.enable {
-              name = "Service: Unbound DNS";
-              group = "Local Services";
-              url = "127.0.0.1:${toString networkCfg.ports.unbound}";
-              dns = {
-                query-name = "google.com";
-                query-type = "A";
-              };
-              interval = "30s";
-              conditions = [ "[DNS_RCODE] == NOERROR" ];
-            })
+            # Blocky DNS (platform service - always present)
+            [
+              {
+                name = "Service: Blocky DNS";
+                group = "Local Services";
+                url = "127.0.0.1:${toString networkCfg.ports.blocky.dns}";
+                dns = {
+                  query-name = "google.com";
+                  query-type = "A";
+                };
+                interval = "30s";
+                conditions = [ "[DNS_RCODE] == NOERROR" ];
+              }
+            ]
           ++
             # Dynamic: Check Caddy HTTPS if enabled
             (optional config.bigor.features.caddy.enable {
