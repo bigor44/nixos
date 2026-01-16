@@ -1,6 +1,6 @@
 # Feature: system.packages
 # Purpose: Essential CLI tools and Nix helper
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   programs = {
     zsh.enable = true;
@@ -10,7 +10,7 @@
       enable = true;
       clean.enable = true;
       clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/home/bigor/nixos";
+      flake = toString inputs.self;
     };
   };
 
