@@ -1,9 +1,8 @@
-# Feature: firewall
+# Platform: firewall
 # Purpose: Centralized firewall configuration based on enabled features and network topology
 {
   config,
   lib,
-  networkTopology,
   ...
 }:
 let
@@ -15,8 +14,9 @@ let
 
   cfg = config.bigor.features;
   hostname = config.networking.hostName;
-  hostConfig = networkTopology.hosts.${hostname};
-  inherit (networkTopology) ports;
+  networkCfg = config.bigor.network;
+  hostConfig = networkCfg.hosts.${hostname};
+  inherit (networkCfg) ports;
 
   # Check if this host has a static IP (required for services that listen on LAN)
   hasStaticIp = hostConfig.ip != null;
@@ -26,11 +26,11 @@ let
   dnsMode = config.bigor.platform.policies.dns.mode;
   # Blocky only needs firewall opening in local-recursive mode (serving LAN)
   # In portable/cloud modes, it only serves localhost
-  blockyEnabled = (cfg.blocky.enable or false) && dnsMode == "local-recursive";
-  unboundEnabled = cfg.unbound.enable or false;
-  unboundListenOnLan = cfg.unbound.listenOnLan or false;
-  caddyEnabled = cfg.caddy.enable or false;
-  nfsServerEnabled = cfg.nfs-server.enable or false;
+  blockyEnabled = cfg.blocky.enable && dnsMode == "local-recursive";
+  unboundEnabled = cfg.unbound.enable;
+  unboundListenOnLan = cfg.unbound.listenOnLan;
+  caddyEnabled = cfg.caddy.enable;
+  nfsServerEnabled = cfg.nfs-server.enable;
 
   # Compute required ports based on enabled features
   tcpPorts =
@@ -86,13 +86,6 @@ in
             Either:
             1. Configure a static IP in nix/network-topology.nix for ${hostname}
             2. Disable these services on this host
-          '';
-        }
-        {
-          assertion = mainInterface != null;
-          message = ''
-            Host ${hostname} has no network interface configured in network-topology.nix.
-            Please add an 'interface' field for this host.
           '';
         }
       ];
