@@ -1,5 +1,5 @@
-# Module: cli-packages
-# Purpose: Essential CLI tools for development and system monitoring
+# Module: cli-tools
+# Purpose: Essential CLI tools for all hosts
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
@@ -9,17 +9,6 @@
     fd
     ripgrep
     jq
-    lazygit
-
-    # Code quality & development
-    nix-health
-    statix
-    deadnix
-    treefmt
-    prettier
-    nixfmt
-    shfmt
-    taplo
 
     # Network utilities
     dig
@@ -33,8 +22,5 @@
     mesa-demos
     lm_sensors
     fastfetch
-
-    gemini-cli
-    claude-code
   ];
 }

@@ -8,7 +8,12 @@
 # - dns-test: DNS stack functional test (local DNS, ad blocking, DNSSEC)
 # - install-git-hooks: Install pre-commit hook
 
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   # Script: check-quick
@@ -311,11 +316,15 @@ let
   '';
 in
 {
-  home.packages = [
-    check-quick
-    check-full
-    check-mega
-    dns-test
-    install-git-hooks
-  ];
+  options.bigor.home.dev-scripts.enable = lib.mkEnableOption "Development QA scripts";
+
+  config = lib.mkIf config.bigor.home.dev-scripts.enable {
+    home.packages = [
+      check-quick
+      check-full
+      check-mega
+      dns-test
+      install-git-hooks
+    ];
+  };
 }

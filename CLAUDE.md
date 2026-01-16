@@ -207,6 +207,44 @@ in
 
 Platform modules do NOT follow this pattern - they are always active and don't have enable options.
 
+### Code Style: `inherit` Pattern
+
+**Rule:** Only use `inherit (lib)` when you have **3 or more** usages of lib functions.
+
+**Why:** The `inherit` pattern reduces verbosity but adds cognitive overhead. For 1-2 usages, prefixing with `lib.` is clearer and more direct.
+
+**Examples:**
+
+Good (3+ usages):
+
+```nix
+let
+  inherit (lib) mkEnableOption mkIf mkOption types;
+  cfg = config.bigor.features.name;
+in
+```
+
+Bad (only 2 usages - over-engineering):
+
+```nix
+let
+  inherit (lib) mkEnableOption mkIf;  # Only 2 usages
+  cfg = config.bigor.home.name;
+in
+```
+
+Better (direct usage):
+
+```nix
+let
+  cfg = config.bigor.home.name;
+in
+{
+  options.bigor.home.name.enable = lib.mkEnableOption "...";
+  config = lib.mkIf cfg.enable { ... };
+}
+```
+
 ## Secret Management
 
 Secrets are managed with SOPS + age:

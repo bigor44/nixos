@@ -4,7 +4,7 @@
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
     # Platform - Always-active infrastructure + strategic policies
-    # Note: Core Nix settings (caches, flakes, CA trust) are in nix/hosts.nix
+    ../modules/nixos/platform/nix-settings.nix
     ../modules/nixos/platform/boot.nix
     ../modules/nixos/platform/fonts.nix
     ../modules/nixos/platform/localization.nix
@@ -35,11 +35,15 @@
 
   # All Home Manager modules under the bigor.home.* namespace
   homeModules = [
-    ../modules/home/cli-packages.nix
-    ../modules/home/dev-scripts.nix
-    ../modules/home/git.nix
+    # Always active (like platform modules)
     ../modules/home/shell
+    ../modules/home/git.nix
+    ../modules/home/cli-tools.nix
+
+    # Optional features
     ../modules/home/nixvim
+    ../modules/home/dev-tools.nix
+    ../modules/home/dev-scripts.nix
     ../modules/home/gui.nix
     ../modules/home/wallpapers.nix
   ];

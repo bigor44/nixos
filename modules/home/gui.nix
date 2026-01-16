@@ -8,17 +8,16 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.home.gui;
 in
 {
-  options.bigor.home.gui.enable = mkEnableOption "Desktop applications";
+  options.bigor.home.gui.enable = lib.mkEnableOption "Desktop applications";
 
   config =
     let
       dotfilesPath = "${config.home.homeDirectory}/nixos/dotfiles";
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       home.packages = with pkgs; [
         prismlauncher
         discord

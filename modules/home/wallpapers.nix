@@ -7,13 +7,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.home.wallpapers;
 in
 {
-  options.bigor.home.wallpapers.enable = mkEnableOption "Wallpaper synchronization";
+  options.bigor.home.wallpapers.enable = lib.mkEnableOption "Wallpaper synchronization";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     home.packages = [ pkgs.rsync ];
 
     systemd.user.services.sync-wallpapers = {

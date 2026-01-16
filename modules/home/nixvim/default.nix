@@ -1,7 +1,17 @@
 # Home: nixvim
 # Purpose: Neovim configuration with LSP, treesitter, and completion
-{ pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.bigor.home.nixvim;
+in
+{
+  options.bigor.home.nixvim.enable = lib.mkEnableOption "Neovim with LSP and plugins";
+
   imports = [
     ./opts.nix
     ./keymaps.nix
@@ -9,23 +19,25 @@
     ./plugins
   ];
 
-  programs.nixvim = {
-    enable = true;
-    extraPackages = with pkgs; [
-      wl-clipboard
-      gcc
+  config = lib.mkIf cfg.enable {
+    programs.nixvim = {
+      enable = true;
+      extraPackages = with pkgs; [
+        wl-clipboard
+        gcc
 
-      # Language servers
-      nodePackages.bash-language-server
-      marksman
-      yaml-language-server
-      nixd
+        # Language servers
+        nodePackages.bash-language-server
+        marksman
+        yaml-language-server
+        nixd
 
-      # Formatters & linters
-      nixfmt
-      shfmt
-      prettier
-      taplo
-    ];
+        # Formatters & linters
+        nixfmt
+        shfmt
+        prettier
+        taplo
+      ];
+    };
   };
 }
