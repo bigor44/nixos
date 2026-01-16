@@ -4,7 +4,7 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
 
 ## ✨ Features
 
-- **Modular Architecture**: Platform modules (always active) vs. capability modules (optional features)
+- **Modular Architecture**: Platform modules (always active) vs. feature modules (optional features)
 - **Multi-Host Support**: Configurations for desktop, server, and laptop
 - **Quality Assurance**: Built-in validation scripts (formatting, linting, dead code detection)
 - **Network Topology**: Centralized network configuration (IPs, ports, domain)
@@ -16,9 +16,9 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
 
 ### Core Principles
 
-1. **Platform vs. Capabilities**:
+1. **Platform vs. Features**:
    - **Platform**: Always-active infrastructure (boot, network, users, policies)
-   - **Capabilities**: Optional features gated by `enable` options (desktop, gaming, services)
+   - **Features**: Optional features gated by `enable` options (desktop, gaming, services)
 
 2. **Policy-Driven Configuration**:
    - DNS strategy (local-recursive, lan-recursive, portable, cloud)
@@ -30,6 +30,26 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
    - Linting with statix and dead code detection
    - Pre-commit hooks for validation
    - Safe rebuild workflows with `nhs`/`nhb`
+
+### System Architecture
+
+```
+     ┌─────────────────────────────────────┐
+     │     Network Topology (Data)         │
+     │  IPs, Ports, Domain, Interfaces     │
+     └──────────────┬──────────────────────┘
+                    │ injected via specialArgs
+     ┌──────────────▼──────────────────────┐
+     │         Host Configuration          │
+     │  ┌──────────────┐  ┌──────────────┐ │
+     │  │   Policies   │  │   Features   │ │
+     │  │  DNS Storage │  │ Desktop, ... │ │
+     │  └──────┬───────┘  └──────────────┘ │
+     │         │ auto-enables               │
+     │         ▼                             │
+     │  Required Features (if needed)       │
+     └──────────────────────────────────────┘
+```
 
 ## 🗂️ Directory Structure
 
@@ -44,7 +64,7 @@ nixos/
 ├── modules/               # Reusable modules
 │   ├── nixos/            # NixOS modules
 │   │   ├── platform/     # Platform infrastructure
-│   │   └── features/ # Optional features
+│   │   └── features/     # Optional features
 │   └── home/             # Home Manager modules
 ├── nix/                   # Flake parts
 ├── scripts/               # Utility scripts
@@ -120,7 +140,7 @@ nix fmt
 check-quick
 
 # 3. Commit safely
-gcn -m "Add new capability"
+gcn -m "Add new feature"
 
 # 4. Push safely
 gps
@@ -136,68 +156,39 @@ nhs
 - **Kernel**: Zen (performance optimized)
 - **DNS**: LAN recursive (uses minipc as resolver)
 - **Storage**: NFS client (mounts from minipc)
-- **Capabilities**: Desktop, audio, flatpak, bluetooth, gaming, blocky, VIA keyboard
+- **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, VIA keyboard
 
 ### minipc (Home Server)
 
 - **Kernel**: LTS (stability focused)
 - **DNS**: Local recursive (provides DNS for LAN)
 - **Storage**: NFS server (exports storage)
-- **Capabilities**: Caddy, Unbound, Blocky, SSH, NFS, Gatus
+- **Features**: Caddy, Unbound, Blocky, SSH, NFS, Gatus
 
 ### minidesk (Portable Laptop)
 
 - **Kernel**: Zen (performance optimized)
 - **DNS**: Portable mode (cloud fallbacks)
 - **Storage**: Local storage
-- **Capabilities**: Desktop, audio, flatpak, bluetooth, gaming, blocky, SSH
+- **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, SSH
 
 ## 🔧 Module System
 
+The codebase uses three module types:
+
 ### Platform Modules (`modules/nixos/platform/`)
 
-Always-active infrastructure:
-
-- `boot.nix` - Bootloader, kernel, Plymouth
-- `fonts.nix` - System fonts and font configuration
-- `localization.nix` - Timezone, locale, keyboard
-- `network.nix` - Network topology injection
-- `packages.nix` - Core system packages
-- `sops.nix` - Secret management via SOPS
-- `users.nix` - User account management
-- `policies/dns.nix` - DNS resolution strategy
-- `policies/storage.nix` - Storage strategy
+Always-active infrastructure with no `enable` options. Includes boot, fonts, localization, network, packages, SOPS, users, and strategic policies (DNS, storage).
 
 ### Feature Modules (`modules/nixos/features/`)
 
-Optional features (enabled per-host):
+Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), audio (PipeWire), gaming (Steam), services (Caddy, Unbound, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
 
-- `audio.nix` - PipeWire audio stack
-- `blocky.nix` - DNS ad-blocking proxy
-- `bluetooth.nix` - Bluetooth support
-- `caddy.nix` - Reverse proxy with internal CA
-- `cpu-power-management.nix` - Laptop power management
-- `desktop.nix` - COSMIC desktop environment
-- `flatpak.nix` - Flatpak support
-- `gaming.nix` - Steam, Lutris, gamemode
-- `gatus.nix` - Service status monitoring
-- `nfs-client.nix` - NFS client configuration
-- `nfs-server.nix` - NFS server configuration
-- `sshd.nix` - SSH server
-- `unbound.nix` - Recursive DNS resolver
-- `keyboardVIA.nix` - VIA keyboard configurator
+See `nix/modules.nix` for the complete and authoritative list of all modules.
 
 ### Home Manager Modules (`modules/home/`)
 
-User-level configuration:
-
-- `cli-packages.nix` - Essential CLI tools
-- `dev-scripts.nix` - QA and development scripts
-- `git.nix` - Git configuration and aliases
-- `gui.nix` - Desktop applications
-- `nixvim/` - Neovim configuration
-- `shell/` - Zsh, Starship, shell tools
-- `wallpapers.nix` - Wallpaper synchronization
+User-level configuration including CLI tools, development scripts, git configuration, GUI applications, nixvim (Neovim), shell configuration (Zsh, Starship), and wallpaper synchronization.
 
 ## 🔐 Secret Management
 
@@ -262,6 +253,8 @@ nix flake update
 
 ```bash
 nix flake lock --update-input nixpkgs
+nix flake lock --update-input home-manager
+nix flake lock --update-input nixvim
 ```
 
 ## 🐛 Troubleshooting
@@ -310,7 +303,7 @@ nix flake lock --update-input nixpkgs
 
 ## 🤝 Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process for submitting pull requests.
 
 **Always run `check-full` before pushing changes!**
 

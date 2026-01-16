@@ -1,9 +1,10 @@
 # Home: nixvim-lsp
 # Purpose: Language Server Protocol configuration for nixvim
+{ inputs, ... }:
 let
-  # Use absolute path instead of inputs.self.outPath for stability
-  # inputs.self.outPath can change when git tree is dirty, causing nixd issues
-  flakePath = "/home/bigor/nixos";
+  # Use toString inputs.self to get the flake path dynamically
+  # This avoids hardcoding the path while maintaining stability for nixd
+  flakePath = toString inputs.self;
 in
 {
   programs.nixvim.plugins.lsp = {
