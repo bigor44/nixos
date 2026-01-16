@@ -139,10 +139,10 @@ in
     # Systemd dependencies
     # ===========================================================================
     systemd.services.blocky = {
-      # Start after basic network is up, but BEFORE network-online
-      # (to avoid cycles since DNS is required for network-online)
-      after = [ "network.target" ];
-      before = [ "network-online.target" ];
+      # Start after network is online to ensure upstream connectivity
+      # (Avoids "network unreachable" errors during boot)
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         # Auto-restart on failure (all hosts)

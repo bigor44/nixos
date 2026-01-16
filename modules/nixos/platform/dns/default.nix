@@ -119,10 +119,9 @@ in
       '';
     };
 
-    # Ensure Blocky starts before network is strictly considered "online"
+    # Ensure Blocky starts properly
     systemd.services.blocky = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-online.target" ];
     };
   };
 }
