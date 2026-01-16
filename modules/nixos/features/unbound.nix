@@ -41,7 +41,7 @@ in
     let
       inherit (config.networking) hostName;
       networkCfg = config.bigor.network;
-      inherit (networkCfg) mainInterface ports domain;
+      inherit (networkCfg) ports domain;
 
       # Get this host's IP from hosts registry
       hostConfig = networkCfg.hosts.${hostName};
@@ -129,11 +129,6 @@ in
         serviceConfig = {
           ReadWritePaths = [ "/var/lib/unbound" ];
         };
-      };
-
-      networking.firewall.interfaces.${mainInterface} = mkIf cfg.listenOnLan {
-        allowedTCPPorts = [ ports.unbound ];
-        allowedUDPPorts = [ ports.unbound ];
       };
     }
   );

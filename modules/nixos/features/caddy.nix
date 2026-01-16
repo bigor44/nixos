@@ -9,8 +9,6 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.caddy;
-  networkCfg = config.bigor.network;
-  inherit (networkCfg) mainInterface ports;
 in
 {
   options.bigor.features.caddy.enable = mkEnableOption "Caddy reverse proxy";
@@ -22,12 +20,5 @@ in
 
     # Required for Caddy's local CA management (certutil)
     environment.systemPackages = [ pkgs.nss ];
-
-    networking.firewall.interfaces.${mainInterface} = {
-      allowedTCPPorts = [
-        ports.caddy.http
-        ports.caddy.https
-      ];
-    };
   };
 }

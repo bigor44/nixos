@@ -11,6 +11,7 @@
     ../modules/nixos/platform/network.nix
     ../modules/nixos/platform/packages.nix
     ../modules/nixos/platform/sops.nix
+    ../modules/nixos/platform/firewall.nix
     ../modules/nixos/platform/users.nix
     ../modules/nixos/platform/policies/dns.nix
     ../modules/nixos/platform/policies/storage.nix

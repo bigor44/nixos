@@ -8,8 +8,6 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.nfs-server;
-  networkCfg = config.bigor.network;
-  inherit (networkCfg) mainInterface ports;
 
   # NFS export options: all requests mapped to bigor (1000:100) for security
   nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
@@ -23,17 +21,6 @@ in
       exports = ''
         /mnt/storage ${config.bigor.network.subnet}(${nfsOptions})
       '';
-    };
-
-    networking.firewall.interfaces.${mainInterface} = {
-      allowedTCPPorts = [
-        ports.nfs.rpc
-        ports.nfs.server
-      ];
-      allowedUDPPorts = [
-        ports.nfs.rpc
-        ports.nfs.server
-      ];
     };
   };
 }

@@ -19,7 +19,7 @@ let
     ;
   cfg = config.bigor.features.blocky;
   networkCfg = config.bigor.network;
-  inherit (networkCfg) mainInterface ports domain;
+  inherit (networkCfg) ports domain;
 
   # Auto-generate DNS rewrites from bigor.network.hosts
   customDNSMapping = filterAttrs (_: ip: ip != null) (
@@ -181,14 +181,6 @@ in
           privacy = true;
         };
       };
-    };
-
-    # ===========================================================================
-    # Firewall
-    # ===========================================================================
-    networking.firewall.interfaces.${mainInterface} = {
-      allowedTCPPorts = [ ports.blocky.dns ];
-      allowedUDPPorts = [ ports.blocky.dns ];
     };
 
     # ===========================================================================
