@@ -121,6 +121,15 @@ To maintain consistency across the codebase, please follow these standards:
 - Keep host-specific configurations in `hosts/`.
 - Use `nix/network-topology.nix` for any new IP or hostname definitions.
 
+- **Firewall Configuration**:
+  - **NEVER** add `networking.firewall.*` to feature modules
+  - All firewall rules are centralized in `modules/nixos/platform/firewall.nix`
+  - When adding a service that needs port openings:
+    1. Add port numbers to `nix/network-topology.nix`
+    2. Update `modules/nixos/platform/firewall.nix` to include the service
+    3. If the service requires a static IP (listening on LAN), add it to the assertions
+  - The firewall module automatically opens ports based on enabled features and network topology
+
 ### 4. Formatting and Linting
 
 We enforce strict formatting and linting rules:

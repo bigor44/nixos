@@ -87,6 +87,39 @@ All network configuration is centralized in `nix/network-topology.nix`. This fil
 
 When adding new services that need static IPs or ports, update this file. The network topology is injected into all hosts via `specialArgs` in `nix/hosts.nix`.
 
+### Firewall Management
+
+Firewall configuration is **fully centralized** in `modules/nixos/platform/firewall.nix`. This platform module:
+
+- **Automatically opens required ports** based on enabled features and network topology
+- **Validates static IP requirements** for services that listen on LAN
+- **Adapts to DNS policy** (blocky only opens ports in local-recursive mode)
+- **Uses network-topology.nix** as single source of truth for port numbers
+
+**Port opening logic:**
+
+- **blocky**: Port 53 (TCP/UDP) only when DNS mode is `local-recursive`
+- **unbound**: Port 5335 (TCP/UDP) only when `listenOnLan` is enabled
+- **caddy**: Ports 80, 443 (TCP) when enabled
+- **nfs-server**: Ports 111, 2049 (TCP/UDP) when enabled
+
+**Static IP assertions:**
+
+Services requiring a static IP (serving LAN) will trigger an assertion failure if the host has no static IP configured:
+
+- blocky (local-recursive mode)
+- caddy (reverse proxy)
+- nfs-server (file sharing)
+- unbound (listenOnLan mode)
+
+Portable hosts (like minidesk with `dns.mode = "portable"`) work correctly: blocky runs without static IP since it only serves localhost.
+
+**IMPORTANT: Feature modules must NOT contain firewall configuration.** All firewall rules are managed by the central platform module. When adding a new service:
+
+1. Add port number to `nix/network-topology.nix`
+2. Update `modules/nixos/platform/firewall.nix` to include the new service
+3. Do NOT add `networking.firewall.*` to feature modules
+
 ### Module Registration
 
 All custom modules must be explicitly registered in `nix/modules.nix`:
@@ -283,7 +316,13 @@ nix flake lock --update-input home-manager
 1. Create feature module in `modules/nixos/features/`
 2. Register in `nix/modules.nix`
 3. If it needs a port, add to `nix/network-topology.nix` under `ports`
-4. Enable in `hosts/minipc/default.nix` under `bigor.features`
+4. If it needs firewall ports opened, update `modules/nixos/platform/firewall.nix`:
+   - Add feature detection (e.g., `myServiceEnabled = cfg.myservice.enable or false`)
+   - Add ports to `tcpPorts` and/or `udpPorts` using `optional`
+   - If it requires static IP, add to `servicesRequiringStaticIp` list
+5. Enable in `hosts/minipc/default.nix` under `bigor.features`
+
+**IMPORTANT:** Do NOT add firewall configuration to feature modules. The centralized firewall module handles all port openings automatically.
 
 ### Changing Network Configuration
 
