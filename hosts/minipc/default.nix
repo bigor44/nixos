@@ -11,9 +11,10 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    platform.policies = {
-      dns.mode = "local-recursive";
-      storage = {
+    platform = {
+      dns.mode = "server";
+
+      policies.storage = {
         mode = "nfs-server";
         device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
       };
@@ -24,9 +25,7 @@
 
       sshd.enable = true;
       caddy.enable = true;
-      unbound.enable = true;
       gatus.enable = true;
-      blocky.enable = true;
       nfs-server.enable = true;
     };
   };

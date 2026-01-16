@@ -11,13 +11,12 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    platform.policies = {
-      dns.mode = "lan-recursive";
-      storage.mode = "nfs-client";
+    platform = {
+      dns.mode = "client";
+      policies.storage.mode = "nfs-client";
     };
 
     features = {
-      blocky.enable = true;
       cpu-power-management.enable = true;
       keyboardVIA.enable = true;
 

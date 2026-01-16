@@ -16,13 +16,14 @@
     ../modules/nixos/platform/network.nix
     ../modules/nixos/platform/firewall.nix
 
+    # Platform - DNS
+    ../modules/nixos/platform/dns
+
     # Platform - Policies
-    ../modules/nixos/platform/policies/dns.nix
     ../modules/nixos/platform/policies/storage.nix
 
     # Features
     ../modules/nixos/features/audio.nix
-    ../modules/nixos/features/blocky.nix
     ../modules/nixos/features/bluetooth.nix
     ../modules/nixos/features/caddy.nix
     ../modules/nixos/features/cpu-power-management.nix
@@ -34,7 +35,6 @@
     ../modules/nixos/features/nfs-client.nix
     ../modules/nixos/features/nfs-server.nix
     ../modules/nixos/features/sshd.nix
-    ../modules/nixos/features/unbound.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace

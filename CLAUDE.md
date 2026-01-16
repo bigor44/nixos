@@ -69,12 +69,11 @@ nix develop
 
 **Platform vs Features Pattern**: The codebase uses a strict separation between mandatory infrastructure and optional functionality.
 
-- **Platform modules** (`modules/nixos/platform/`): Always-active infrastructure that every host needs (boot, network, users, fonts, localization, packages, SOPS). These modules do NOT have `enable` options.
+- **Platform modules** (`modules/nixos/platform/`): Always-active infrastructure that every host needs (boot, network, users, fonts, localization, packages, SOPS, DNS). These modules do NOT have `enable` options.
 
 - **Feature modules** (`modules/nixos/features/`): Optional functionality gated by `bigor.features.<name>.enable` options. Each feature module must follow the standard template with `mkEnableOption` and `mkIf cfg.enable` wrapping.
 
-- **Policy modules** (`modules/nixos/platform/policies/`): Strategic decisions that affect system behavior across hosts. Currently two policies:
-  - DNS policy (`dns.nix`): Controls DNS resolution strategy (local-recursive, lan-recursive, portable, cloud)
+- **Policy modules** (`modules/nixos/platform/policies/`): Strategic decisions that affect system behavior across hosts. Currently one policy:
   - Storage policy (`storage.nix`): Controls storage configuration (nfs-server, nfs-client, local, none)
 
 ### Network Topology
@@ -83,7 +82,7 @@ All network configuration is centralized in `nix/network-topology.nix`. This fil
 
 - Subnet and domain definitions
 - Host IP addresses and network interfaces
-- Service port numbers (blocky, unbound, caddy, nfs, gatus)
+- Service port numbers (blocky, caddy, nfs, gatus)
 
 When adding new services that need static IPs or ports, update this file. The network topology is injected into all hosts via `specialArgs` in `nix/hosts.nix`.
 
@@ -93,13 +92,12 @@ Firewall configuration is **fully centralized** in `modules/nixos/platform/firew
 
 - **Automatically opens required ports** based on enabled features and network topology
 - **Validates static IP requirements** for services that listen on LAN
-- **Adapts to DNS policy** (blocky only opens ports in local-recursive mode)
+- **Adapts to DNS role** (opens port 53 only in server mode)
 - **Uses network-topology.nix** as single source of truth for port numbers
 
 **Port opening logic:**
 
-- **blocky**: Port 53 (TCP/UDP) only when DNS mode is `local-recursive`
-- **unbound**: Port 5335 (TCP/UDP) only when `listenOnLan` is enabled
+- **blocky**: Port 53 (TCP/UDP) only when DNS mode is `server`
 - **caddy**: Ports 80, 443 (TCP) when enabled
 - **nfs-server**: Ports 111, 2049 (TCP/UDP) when enabled
 
@@ -107,18 +105,11 @@ Firewall configuration is **fully centralized** in `modules/nixos/platform/firew
 
 Services requiring a static IP (serving LAN) will trigger an assertion failure if the host has no static IP configured:
 
-- blocky (local-recursive mode)
+- DNS server (Blocky in server mode)
 - caddy (reverse proxy)
 - nfs-server (file sharing)
-- unbound (listenOnLan mode)
 
-Portable hosts (like minidesk with `dns.mode = "portable"`) work correctly: blocky runs without static IP since it only serves localhost.
-
-**IMPORTANT: Feature modules must NOT contain firewall configuration.** All firewall rules are managed by the central platform module. When adding a new service:
-
-1. Add port number to `nix/network-topology.nix`
-2. Update `modules/nixos/platform/firewall.nix` to include the new service
-3. Do NOT add `networking.firewall.*` to feature modules
+**IMPORTANT: Feature modules must NOT contain firewall configuration.** All firewall rules are managed by the central platform module.
 
 ### Module Registration
 
@@ -140,9 +131,9 @@ Host configurations (`hosts/*/default.nix`) follow this structure:
   boot.kernelPackages = pkgs.linuxPackages_zen;  # or _lts
 
   bigor = {
-    platform.policies = {
-      dns.mode = "lan-recursive";      # or local-recursive, portable, cloud
-      storage.mode = "nfs-client";     # or nfs-server, local, none
+    platform = {
+      dns.mode = "client";             # or server, standalone
+      policies.storage.mode = "nfs-client"; # or nfs-server, local, none
     };
 
     features = {
@@ -156,14 +147,34 @@ Host configurations (`hosts/*/default.nix`) follow this structure:
 
 ### Policy System Details
 
-**DNS Policy** (`modules/nixos/platform/policies/dns.nix`):
+**DNS Platform Architecture** (`modules/nixos/platform/dns/`):
 
-- `local-recursive`: Runs Unbound + Blocky locally (server role)
-- `lan-recursive`: Uses minipc as recursive resolver (workstation role)
-- `portable`: Blocky with cloud DNS upstreams (no LAN dependency)
-- `cloud`: Reserved for future use (currently identical to portable)
+DNS is a mandatory platform service. Every system runs **Blocky** locally as a unified interface for DNS resolution and ad-blocking.
 
-The policy automatically enables `bigor.features.unbound` when mode is `local-recursive`. It computes Blocky upstreams based on the mode and validates that static IPs are configured when required.
+**DNS Modes**:
+
+- `server`: Host serves DNS to the LAN.
+  - Upstream: DoH (Cloudflare/Quad9)
+  - Open ports: 53 (LAN)
+  - Requirements: Static IP
+- `client`: Host uses the LAN DNS server (minipc).
+  - Upstream: LAN Server IP
+  - Benefits: Shared cache, local domain resolution
+- `standalone`: Host is independent (laptop/roaming).
+  - Upstream: DoH (Cloudflare/Quad9)
+  - Benefits: Works everywhere, no LAN dependency
+
+**Implementation**: All DNS logic is consolidated in `modules/nixos/platform/dns/default.nix`. Blocky is the sole driver.
+
+**Why Blocky only?**
+
+- **Unified DNS interface**: Single codebase, consistent behavior across all hosts
+- **Built-in capabilities**: DoH/DoT support, ad-blocking, custom DNS, caching
+- **Simplicity**: One service to configure, monitor, and debug
+- **Portability**: Works identically in server, client, and standalone modes
+- **Trade-off**: No local DNSSEC validation (delegated to upstream DoH providers like Cloudflare and Quad9)
+
+This architectural choice replaces the previous dual-stack (Unbound + Blocky) with a single, application-layer DNS proxy. DNSSEC validation is handled by upstream recursive resolvers, which is acceptable for this use case.
 
 **Storage Policy** (`modules/nixos/platform/policies/storage.nix`):
 
@@ -295,9 +306,9 @@ Never commit plain-text secrets. Reference secrets in modules via `config.sops.s
 
 ## Host Overview
 
-- **grospc**: Desktop workstation (Zen kernel, lan-recursive DNS, NFS client, gaming)
-- **minipc**: Home server (LTS kernel, local-recursive DNS, NFS server, services)
-- **minidesk**: Portable laptop (Zen kernel, portable DNS, local storage)
+- **grospc**: Desktop workstation (Zen kernel, client DNS mode, NFS client, gaming)
+- **minipc**: Home server (LTS kernel, server DNS mode, NFS server, services)
+- **minidesk**: Portable laptop (Zen kernel, standalone DNS mode, local storage)
 
 ## Updates
 
@@ -339,4 +350,4 @@ Don't create implicit dependencies. If feature A needs feature B, either:
 - Document in the feature description that users must enable both
 - Use assertions to validate the requirement
 
-Platform policies can auto-enable features (see DNS policy auto-enabling Unbound).
+Platform policies can auto-enable features.

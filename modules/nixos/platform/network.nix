@@ -11,7 +11,6 @@ let
   inherit (lib)
     mkOption
     mkMerge
-    mkIf
     types
     filterAttrs
     mapAttrsToList
@@ -95,21 +94,7 @@ in
       networking.nftables.enable = true;
     }
 
-    # DNS configuration when Blocky is enabled locally
-    (mkIf config.bigor.features.blocky.enable (
-      let
-        fallbackDNS = [
-          "127.0.0.1" # Blocky (primary)
-          "1.1.1.1" # Cloudflare (fallback)
-          "9.9.9.9" # Quad9 (fallback)
-        ];
-      in
-      {
-        # For non-NetworkManager hosts (minipc)
-        networking.nameservers = fallbackDNS;
-        # For NetworkManager hosts (grospc, minidesk) - overrides nameservers
-        networking.networkmanager.insertNameservers = fallbackDNS;
-      }
-    ))
+    # DNS configuration is now handled by modules/nixos/platform/dns/resolver.nix
+    # (DNS is a platform guarantee - always present)
   ];
 }

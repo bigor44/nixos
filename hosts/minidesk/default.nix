@@ -12,9 +12,10 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    platform.policies = {
-      dns.mode = "portable";
-      storage = {
+    platform = {
+      dns.mode = "standalone";
+
+      policies.storage = {
         mode = "local";
         device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
       };
@@ -23,7 +24,6 @@
     features = {
       cpu-power-management.enable = true;
       sshd.enable = true;
-      blocky.enable = true;
 
       desktop.enable = true;
       audio.enable = true;

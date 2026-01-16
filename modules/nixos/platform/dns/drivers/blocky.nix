@@ -1,23 +1,18 @@
-# Feature: blocky
-# Purpose: DNS proxy with ad/tracker blocking and automatic failover
+# Platform: dns/drivers/blocky
+# Purpose: Internal Blocky service driver - auto-enabled based on DNS policy
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
   inherit (lib)
-    mkEnableOption
     mkIf
-    mkOption
-    mkMerge
-    types
     filterAttrs
     mapAttrs'
     nameValuePair
     ;
-  cfg = config.bigor.features.blocky;
+  cfg = config.bigor.platform.dns;
   networkCfg = config.bigor.network;
   inherit (networkCfg) ports domain;
 
@@ -31,42 +26,7 @@ let
   );
 in
 {
-  options.bigor.features.blocky = {
-    enable = mkEnableOption "Blocky DNS proxy with ad blocking";
-
-    followDnsPolicy = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to use DNS policy (bigor.platform.policies.dns) for upstream configuration.
-        When true (default), upstreams are automatically configured based on the DNS policy mode.
-        When false, allows manual upstream configuration via the upstreams option.
-      '';
-    };
-
-    upstreams = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = ''
-        Manual DNS upstream servers (only used when followDnsPolicy = false).
-        When followDnsPolicy is true, this option is ignored and upstreams are determined by bigor.platform.policies.dns.
-        Fallback upstreams are configured via bigor.platform.policies.dns.fallbackUpstreams.
-      '';
-      example = [
-        "127.0.0.1:5335"
-        "1.1.1.1"
-        "9.9.9.9"
-      ];
-    };
-
-    upstreamTimeout = mkOption {
-      type = types.str;
-      default = "2s";
-      description = "Timeout before falling back to next upstream";
-    };
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf cfg.computed.shouldRunBlocky {
     services.blocky = {
       enable = true;
 
@@ -82,28 +42,19 @@ in
         # Upstream DNS with automatic failover
         # =======================================================================
         upstreams = {
-          # Use policy-based upstreams by default, or manual config if disabled
-          groups.default =
-            if cfg.followDnsPolicy then
-              config.bigor.platform.policies.dns.computed.blockyUpstreams
-            else
-              cfg.upstreams;
-
-          # Strategy: strict for local recursive (prioritize Unbound), parallel_best otherwise
-          strategy =
-            if (cfg.followDnsPolicy && config.bigor.platform.policies.dns.mode == "local-recursive") then
-              "strict"
-            else
-              "parallel_best";
-          timeout = cfg.upstreamTimeout;
+          # Upstreams and strategy computed by DNS policy module
+          groups.default = cfg.computed.blockyUpstreams;
+          strategy = cfg.computed.blockyStrategy;
+          timeout = "2s";
         };
 
-        # Bootstrap DNS (for resolving DoH/DoT hostnames if ever needed)
+        # Bootstrap DNS (Critical for resolving DoH hostnames)
         bootstrapDns = {
-          upstream = "1.1.1.1";
+          upstream = "https://1.1.1.1/dns-query"; # Use Cloudflare DoH as primary bootstrap
           ips = [
-            "1.1.1.1"
-            "1.0.0.1"
+            "1.1.1.1" # Cloudflare
+            "9.9.9.9" # Quad9
+            "8.8.8.8" # Google
           ];
         };
 
@@ -186,25 +137,17 @@ in
     # ===========================================================================
     # Systemd dependencies
     # ===========================================================================
-    systemd.services.blocky = mkMerge [
-      {
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        serviceConfig = {
-          # Auto-restart on failure (all hosts)
-          Restart = "on-failure";
-          RestartSec = "1s";
-          # Wait for network to be truly ready (dhcpcd race condition)
-          ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
-        };
-      }
-      (mkIf (cfg.followDnsPolicy && config.bigor.platform.policies.dns.computed.shouldRunUnbound) {
-        after = [
-          "unbound.service"
-          "network-online.target"
-        ];
-        wants = [ "unbound.service" ];
-      })
-    ];
+    systemd.services.blocky = {
+      # Start after basic network is up, but BEFORE network-online
+      # (to avoid cycles since DNS is required for network-online)
+      after = [ "network.target" ];
+      before = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        # Auto-restart on failure (all hosts)
+        Restart = "on-failure";
+        RestartSec = "1s";
+      };
+    };
   };
 }

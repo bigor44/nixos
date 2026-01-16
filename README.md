@@ -21,7 +21,7 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
    - **Features**: Optional features gated by `enable` options (desktop, gaming, services)
 
 2. **Policy-Driven Configuration**:
-   - DNS strategy (local-recursive, lan-recursive, portable, cloud)
+   - DNS strategy (server, client, standalone)
    - Storage strategy (nfs-server, nfs-client, local, none)
    - Network topology centralized in `nix/network-topology.nix`
 
@@ -154,21 +154,21 @@ nhs
 ### grospc (Desktop Workstation)
 
 - **Kernel**: Zen (performance optimized)
-- **DNS**: LAN recursive (uses minipc as resolver)
+- **DNS**: Client mode (uses minipc as resolver)
 - **Storage**: NFS client (mounts from minipc)
 - **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, VIA keyboard
 
 ### minipc (Home Server)
 
 - **Kernel**: LTS (stability focused)
-- **DNS**: Local recursive (provides DNS for LAN)
+- **DNS**: Server mode (serves DNS to LAN)
 - **Storage**: NFS server (exports storage)
-- **Features**: Caddy, Unbound, Blocky, SSH, NFS, Gatus
+- **Features**: Caddy, Blocky, SSH, NFS, Gatus
 
 ### minidesk (Portable Laptop)
 
 - **Kernel**: Zen (performance optimized)
-- **DNS**: Portable mode (cloud fallbacks)
+- **DNS**: Standalone mode (DoH upstreams, no LAN dependency)
 - **Storage**: Local storage
 - **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, SSH
 
@@ -182,7 +182,7 @@ Always-active infrastructure with no `enable` options. Includes boot, fonts, loc
 
 ### Feature Modules (`modules/nixos/features/`)
 
-Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), audio (PipeWire), gaming (Steam), services (Caddy, Unbound, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
+Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), audio (PipeWire), gaming (Steam), services (Caddy, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
 
 See `nix/modules.nix` for the complete and authoritative list of all modules.
 
@@ -231,7 +231,6 @@ Validates:
 
 - Local DNS resolution
 - Ad blocking effectiveness
-- DNSSEC validation
 - External resolution
 
 ### Format and Lint
@@ -284,14 +283,13 @@ nix flake lock --update-input nixvim
    ```bash
    dns-test
    systemctl status blocky
-   systemctl status unbound
    ```
 
 ### Debugging
 
 - Use `nix flake show` to see flake structure
 - Use `nix eval .#nixosConfigurations.<host>.config` to inspect configuration
-- Check systemd logs: `journalctl -u blocky -u unbound`
+- Check systemd logs: `journalctl -u blocky`
 
 ## 📚 Resources
 

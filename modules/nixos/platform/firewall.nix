@@ -13,6 +13,7 @@ let
     ;
 
   cfg = config.bigor.features;
+  dnsCfg = config.bigor.platform.dns;
   hostname = config.networking.hostName;
   networkCfg = config.bigor.network;
   hostConfig = networkCfg.hosts.${hostname};
@@ -23,19 +24,14 @@ let
   mainInterface = hostConfig.interface;
 
   # Features that require firewall openings
-  dnsMode = config.bigor.platform.policies.dns.mode;
-  # Blocky only needs firewall opening in local-recursive mode (serving LAN)
-  # In portable/cloud modes, it only serves localhost
-  blockyEnabled = cfg.blocky.enable && dnsMode == "local-recursive";
-  unboundEnabled = cfg.unbound.enable;
-  unboundListenOnLan = cfg.unbound.listenOnLan;
+  # DNS: Use platform-computed values instead of feature flags
+  blockyEnabled = dnsCfg.computed.needsPort53OnLan;
   caddyEnabled = cfg.caddy.enable;
   nfsServerEnabled = cfg.nfs-server.enable;
 
   # Compute required ports based on enabled features
   tcpPorts =
     optional blockyEnabled ports.blocky.dns
-    ++ optional (unboundEnabled && unboundListenOnLan) ports.unbound
     ++ optional caddyEnabled ports.caddy.http
     ++ optional caddyEnabled ports.caddy.https
     ++ optional nfsServerEnabled ports.nfs.rpc
@@ -43,15 +39,14 @@ let
 
   udpPorts =
     optional blockyEnabled ports.blocky.dns
-    ++ optional (unboundEnabled && unboundListenOnLan) ports.unbound
     ++ optional nfsServerEnabled ports.nfs.rpc
     ++ optional nfsServerEnabled ports.nfs.server;
 
   # Services that require static IP (only when serving LAN)
   servicesRequiringStaticIp = [
     {
-      name = "blocky (local-recursive mode)";
-      enabled = blockyEnabled; # Already filtered for local-recursive mode
+      name = "DNS server (Blocky serving LAN)";
+      enabled = blockyEnabled;
     }
     {
       name = "caddy";
@@ -60,10 +55,6 @@ let
     {
       name = "nfs-server";
       enabled = nfsServerEnabled;
-    }
-    {
-      name = "unbound (listenOnLan)";
-      enabled = unboundEnabled && unboundListenOnLan;
     }
   ];
 
