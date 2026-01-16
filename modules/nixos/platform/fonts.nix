@@ -1,4 +1,4 @@
-# Feature: system.fonts
+# Platform: system.fonts
 # Purpose: System-wide font configuration (Nerd Fonts, CJK, Emoji)
 {
   pkgs,

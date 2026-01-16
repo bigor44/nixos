@@ -205,7 +205,8 @@ Every Nix file must start with a 2-line header:
 
 Use these prefixes:
 
-- `# Feature:` for modules in `modules/nixos/` (platform or features)
+- `# Platform:` for modules in `modules/nixos/platform/`
+- `# Feature:` for modules in `modules/nixos/features/`
 - `# Module:` for shared Home Manager modules in `modules/home/`
 - `# Home:` for user-specific or NixVim components
 - `# Host:` for `hosts/*/default.nix`

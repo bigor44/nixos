@@ -1,4 +1,4 @@
-# Feature: sops
+# Platform: sops
 # Purpose: Secrets management with sops-nix
 { inputs, ... }:
 {

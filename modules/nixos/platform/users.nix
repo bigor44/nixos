@@ -1,4 +1,4 @@
-# Feature: system.users
+# Platform: system.users
 # Purpose: Primary user configuration with Zsh shell and passwordless sudo
 { pkgs, ... }:
 {

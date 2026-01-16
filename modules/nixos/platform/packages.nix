@@ -1,4 +1,4 @@
-# Feature: system.packages
+# Platform: system.packages
 # Purpose: Essential CLI tools and Nix helper
 { pkgs, inputs, ... }:
 {

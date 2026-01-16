@@ -1,4 +1,4 @@
-# Feature: system.boot
+# Platform: system.boot
 # Purpose: systemd-boot UEFI bootloader configuration
 {
   boot.loader = {

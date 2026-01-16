@@ -1,4 +1,4 @@
-# Feature: localization
+# Platform: localization
 # Purpose: French locale, timezone, and keyboard layout (Paris)
 { pkgs, ... }:
 {

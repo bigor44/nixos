@@ -1,4 +1,4 @@
-# Feature: system.network
+# Platform: system.network
 # Purpose: Network configuration, static /etc/hosts entries, and network topology
 # Topology data is imported from nix/network-topology.nix via specialArgs
 {

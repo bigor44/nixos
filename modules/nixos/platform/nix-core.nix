@@ -1,4 +1,4 @@
-# Feature: nix-core
+# Platform: nix-core
 # Purpose: Core Nix configuration (caches, flakes, internal CA trust)
 { inputs, ... }:
 {
