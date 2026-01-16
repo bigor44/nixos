@@ -20,7 +20,7 @@
           deadnix
 
           # Build tools
-          nh # NixOS helper
+          # nh # Removed in favor of nixos-rebuild
 
           # Secrets management
           sops
@@ -44,8 +44,8 @@
           echo "Workflows:"
           echo "  gcn    → Add + format + check + commit (safe)"
           echo "  gps    → Full check + push (safe)"
-          echo "  nhs    → Full check + rebuild (safe)"
-          echo "  nhb    → Full check + rebuild boot (safe)"
+          echo "  nrs    → Full check + rebuild (safe)"
+          echo "  nrb    → Full check + rebuild boot (safe)"
           echo ""
 
           # Auto-install pre-commit hook if not present

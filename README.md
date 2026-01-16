@@ -29,7 +29,7 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
    - Automatic formatting with `nix fmt`
    - Linting with statix and dead code detection
    - Pre-commit hooks for validation
-   - Safe rebuild workflows with `nhs`/`nhb`
+   - Safe rebuild workflows with `nrs`/`nrb`
 
 ### System Architecture
 
@@ -107,7 +107,7 @@ nixos/
 nix build .#nixosConfigurations.grospc.config.system.build.toplevel
 
 # Switch to configuration (with validation)
-nhs
+nrs
 ```
 
 ## 🛠️ Development Workflow
@@ -126,8 +126,8 @@ nhs
 
 - **`gcn`**: Format + add all + check staged + commit
 - **`gps`**: Full check + push
-- **`nhs`**: Full check + rebuild switch (recommended)
-- **`nhb`**: Full check + rebuild boot
+- **`nrs`**: Full check + rebuild switch (recommended)
+- **`nrb`**: Full check + rebuild boot
 
 ### Typical Workflow
 
@@ -146,7 +146,7 @@ gcn -m "Add new feature"
 gps
 
 # 5. Rebuild system
-nhs
+nrs
 ```
 
 ## 🖥️ Host Configurations
@@ -297,7 +297,6 @@ nix flake lock --update-input nixvim
 - [Home Manager](https://github.com/nix-community/home-manager)
 - [Flakes](https://nixos.wiki/wiki/Flakes)
 - [SOPS](https://github.com/getsops/sops)
-- [nh](https://github.com/viperML/nh)
 
 ## 🤝 Contributing
 

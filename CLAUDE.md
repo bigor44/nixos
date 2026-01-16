@@ -37,10 +37,10 @@ gcn -m "commit message"
 gps
 
 # Full check + rebuild switch (recommended for applying changes)
-nhs
+nrs
 
 # Full check + rebuild boot
-nhb
+nrb
 ```
 
 ### Building Specific Hosts

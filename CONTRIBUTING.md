@@ -44,7 +44,7 @@ Home Manager follows the same **Platform vs. Features** pattern:
 
 ### Development Environment
 
-Always use the provided development shell to ensure you have all the necessary tools (like `nh`, `sops`, `statix`, `deadnix`, etc.):
+Always use the provided development shell to ensure you have all the necessary tools (like `nixos-rebuild`, `sops`, `statix`, `deadnix`, etc.):
 
 ```bash
 git clone https://github.com/bigor44/nixos.git
@@ -151,9 +151,9 @@ Before committing, ensure your changes don't break the configuration:
 To test your changes on your current machine:
 
 ```bash
-nhs  # nh os switch . (rebuild and switch)
+nrs  # sudo nixos-rebuild switch --flake . (rebuild and switch)
 # OR
-nhb  # nh os boot . (rebuild and set as boot entry)
+nrb  # sudo nixos-rebuild boot --flake . (rebuild and set as boot entry)
 ```
 
 ## 📝 Commit Guidelines
