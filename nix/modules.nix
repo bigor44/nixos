@@ -1,4 +1,4 @@
-# Module: nix/modules.nix
+# Flake: modules
 # Purpose: Explicit import list for all custom NixOS and Home Manager modules
 {
   # All NixOS modules under the bigor.* namespace
@@ -15,7 +15,7 @@
     ../modules/nixos/platform/policies/dns.nix
     ../modules/nixos/platform/policies/storage.nix
 
-    # Capabilities - Optional features and services
+    # Features - Optional features and services
     ../modules/nixos/features/audio.nix
     ../modules/nixos/features/blocky.nix
     ../modules/nixos/features/bluetooth.nix

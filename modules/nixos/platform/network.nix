@@ -73,7 +73,6 @@ in
   config = mkMerge [
     # Base network configuration (always applied)
     {
-      # Validate network configuration
       assertions = [
         {
           assertion = hostname != "" -> cfg.hosts ? ${hostname};

@@ -127,12 +127,10 @@ in
       # Ensure proper permissions for auto-trust-anchor
       systemd.services.unbound = {
         serviceConfig = {
-          # Allow unbound to update DNSSEC root trust anchor
           ReadWritePaths = [ "/var/lib/unbound" ];
         };
       };
 
-      # Open firewall port when listening on LAN
       networking.firewall.interfaces.${mainInterface} = mkIf cfg.listenOnLan {
         allowedTCPPorts = [ ports.unbound ];
         allowedUDPPorts = [ ports.unbound ];

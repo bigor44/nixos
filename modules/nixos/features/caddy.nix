@@ -23,7 +23,6 @@ in
     # Required for Caddy's local CA management (certutil)
     environment.systemPackages = [ pkgs.nss ];
 
-    # Open Caddy ports
     networking.firewall.interfaces.${mainInterface} = {
       allowedTCPPorts = [
         ports.caddy.http

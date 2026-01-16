@@ -11,19 +11,16 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    # Platform policies: strategic infrastructure decisions
     platform.policies = {
       dns.mode = "lan-recursive";
       storage.mode = "nfs-client";
     };
 
-    # Capabilities: optional features and services
     features = {
       blocky.enable = true;
       cpu-power-management.enable = true;
       keyboardVIA.enable = true;
 
-      # Desktop features
       desktop.enable = true;
       audio.enable = true;
       flatpak.enable = true;

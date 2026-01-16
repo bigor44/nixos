@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
-# ============================================================================
-# File: scripts/concat_config.sh
-# Description: Configuration Aggregation Script
-# Author: Bigor
-# Date: 2025-12-15
-# Purpose: Scans the project directory (default: ~/nixos/) and aggregates the
-#          content of specific configuration files (*.nix, *.lua, etc.) into a
-#          single Markdown document. Useful for sharing or reviewing context.
-#
-# Usage: ./concat_config.sh [output_file]
-# ============================================================================
+# Script: concat_config.sh
+# Purpose: Aggregates configuration files into single Markdown document for sharing
 
 set -euo pipefail
 

@@ -15,12 +15,10 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
-    # AMD P-State configuration
     (mkIf hasAMD {
       boot.kernelParams = [ "amd_pstate=active" ];
     })
 
-    # Intel P-State configuration
     (mkIf hasIntel {
       boot.kernelParams = [ "intel_pstate=active" ];
     })
@@ -30,7 +28,6 @@ in
       services.power-profiles-daemon.enable = true;
     })
 
-    # Assertions
     {
       assertions = [
         {

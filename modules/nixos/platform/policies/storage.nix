@@ -96,7 +96,6 @@ in
       }
     ];
 
-    # Auto-configure NFS service based on policy
     bigor.features.nfs-server.enable = mkIf cfg.computed.shouldRunNfsServer true;
     bigor.features.nfs-client.enable = mkIf cfg.computed.shouldMountNfsClient true;
 

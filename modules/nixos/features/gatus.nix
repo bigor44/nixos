@@ -80,7 +80,6 @@ in
       };
     };
 
-    # Reverse proxy setup
     services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
       tls internal
       reverse_proxy 127.0.0.1:${toString networkCfg.ports.gatus}

@@ -35,7 +35,6 @@ let
     FILE_COUNT=$(echo "$FILES" | wc -l)
     echo "Checking $FILE_COUNT file(s)..."
 
-    # Format check
     FAILED=0
     for file in $FILES; do
       if ! ${pkgs.nixfmt}/bin/nixfmt --check "$file" 2>/dev/null; then
@@ -51,7 +50,6 @@ let
       exit 1
     fi
 
-    # Lint check
     FAILED=0
     for file in $FILES; do
       if ! ${pkgs.statix}/bin/statix check "$file" 2>&1; then
@@ -64,7 +62,6 @@ let
       exit 1
     fi
 
-    # Dead code check
     FAILED=0
     for file in $FILES; do
       if ! ${pkgs.deadnix}/bin/deadnix --fail "$file" 2>&1; then

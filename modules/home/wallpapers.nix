@@ -25,7 +25,7 @@ in
       Service = {
         Type = "oneshot";
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p %h/Images/wallpapers";
-        # Sync from Storage TO Local.
+        # Sync from storage to local directory
         ExecStart = "${pkgs.rsync}/bin/rsync -au /mnt/storage/wallpapers/ %h/Images/wallpapers/";
       };
       Install = {

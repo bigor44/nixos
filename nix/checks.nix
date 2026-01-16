@@ -1,4 +1,4 @@
-# Module: nix/checks.nix
+# Flake: checks
 # Purpose: Flake checks for formatting and linting (flake-parts perSystem)
 { self, ... }:
 {
@@ -40,7 +40,6 @@
           ) self.nixosConfigurations;
         in
         {
-          # Formatting check with treefmt
           nix-fmt =
             pkgs.runCommand "nix-fmt"
               {
@@ -65,7 +64,6 @@
                 touch $out
               '';
 
-          # Linting check with statix and deadnix
           nix-lint =
             pkgs.runCommand "nix-lint"
               {

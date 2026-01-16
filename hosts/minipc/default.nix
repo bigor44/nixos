@@ -11,7 +11,6 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    # Platform policies: strategic infrastructure decisions
     platform.policies = {
       dns.mode = "local-recursive";
       storage = {
@@ -20,11 +19,9 @@
       };
     };
 
-    # Capabilities: optional features and services
     features = {
       cpu-power-management.enable = true;
 
-      # Services (expanded from homelab-master profile)
       sshd.enable = true;
       caddy.enable = true;
       unbound.enable = true;

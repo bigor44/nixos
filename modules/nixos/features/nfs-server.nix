@@ -20,13 +20,11 @@ in
   config = mkIf cfg.enable {
     services.nfs.server = {
       enable = true;
-      # Exports /mnt/storage to the local subnet
       exports = ''
         /mnt/storage ${config.bigor.network.subnet}(${nfsOptions})
       '';
     };
 
-    # Open NFS ports (RPC + NFS server)
     networking.firewall.interfaces.${mainInterface} = {
       allowedTCPPorts = [
         ports.nfs.rpc

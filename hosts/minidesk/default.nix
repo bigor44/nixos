@@ -12,7 +12,6 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    # Platform policies: strategic infrastructure decisions
     platform.policies = {
       dns.mode = "portable";
       storage = {
@@ -21,13 +20,11 @@
       };
     };
 
-    # Capabilities: optional features and services
     features = {
       cpu-power-management.enable = true;
       sshd.enable = true;
       blocky.enable = true;
 
-      # Desktop features
       desktop.enable = true;
       audio.enable = true;
       flatpak.enable = true;

@@ -1,11 +1,9 @@
-# Module: nix/hosts.nix
+# Flake: hosts
 # Purpose: Flake-parts module defining all NixOS configurations
 { inputs, ... }:
 let
-  # Import the module lists
   modules = import ./modules.nix;
 
-  # Import network topology data
   networkTopology = import ./network-topology.nix;
 
   # Common NixOS modules for all hosts
@@ -19,7 +17,6 @@ let
     inputs.nixvim.homeModules.nixvim
   ];
 
-  # Helper function to create a NixOS configuration
   mkHost =
     hostname:
     inputs.nixpkgs.lib.nixosSystem {

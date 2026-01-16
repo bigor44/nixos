@@ -64,10 +64,17 @@ To maintain consistency across the codebase, please follow these standards:
   - Define an `enable` option under `bigor.features.<name>.enable`.
   - Wrap the configuration in `mkIf cfg.enable`.
   - Reference `modules/nixos/features/gaming.nix` for a clean example.
+- **Shell Scripts**:
+  - Must start with a minimal header: Shebang + Script Name + Purpose.
+  - Avoid large ASCII banners.
+  - Apply the same "Why, not What" commenting rule as Nix files.
 - **Comments**:
   - Must be in **English**.
   - Should be **useful** and explain the **why** (intent), not the **what** (code is self-documenting).
   - Use sparingly.
+  - **Anti-patterns** (Avoid these):
+    - _Bad:_ `# Enable steam` -> `programs.steam.enable = true;` (Redundant)
+    - _Good:_ `# Required for Proton compatibility` -> `programs.steam.enable = true;` (Adds context)
 
 ### 3. Make Your Changes
 

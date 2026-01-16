@@ -1,4 +1,4 @@
-# Module: nix/devshell.nix
+# Flake: devshell
 # Purpose: Development shell with QA tools and pre-commit hook auto-install
 {
   perSystem =
