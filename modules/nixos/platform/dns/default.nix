@@ -113,10 +113,12 @@ in
     # Disable systemd-resolved stub listener to let Blocky use port 53
     services.resolved = {
       enable = true;
-      fallbackDns = [ "127.0.0.1" ];
-      extraConfig = ''
-        DNSStubListener=no
-      '';
+      settings = {
+        Resolve = {
+          DNSStubListener = "no";
+          FallbackDNS = [ "127.0.0.1" ];
+        };
+      };
     };
 
     # Ensure Blocky starts properly
