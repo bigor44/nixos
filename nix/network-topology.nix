@@ -30,7 +30,6 @@
       dns = 53;
       http = 4000; # Metrics endpoint
     };
-    unbound = 5335; # Non-standard to avoid conflicts
     caddy = {
       http = 80;
       https = 443;

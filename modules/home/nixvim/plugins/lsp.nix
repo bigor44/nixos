@@ -81,7 +81,7 @@ in
                   let
                     flake = builtins.getFlake "${flakePath}";
                   in
-                    lib.mapAttrs (_: cfg: cfg.options) flake.nixosConfigurations
+                    builtins.mapAttrs (_: cfg: cfg.options) flake.nixosConfigurations
                 '';
               };
 

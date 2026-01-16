@@ -19,6 +19,7 @@ in
       # Automount on access, not at boot
       options = [
         "x-systemd.automount"
+        "x-systemd.idle-timeout=600"
         "_netdev"
         "nofail"
         "noatime"

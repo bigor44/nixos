@@ -26,7 +26,6 @@
       sshd.enable = true;
       caddy.enable = true;
       gatus.enable = true;
-      nfs-server.enable = true;
     };
   };
 
