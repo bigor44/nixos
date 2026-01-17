@@ -38,6 +38,7 @@
       # Nix
       nfc = "nix flake check";
       nfu = "nix flake update";
+      nclean = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
 
       # Quality Assurance
       qc = "check-quick"; # Quick check: changed files

@@ -116,7 +116,11 @@ in
       settings = {
         Resolve = {
           DNSStubListener = "no";
-          FallbackDNS = [ "127.0.0.1" ];
+          # External fallbacks if Blocky crashes (Cloudflare + Quad9)
+          FallbackDNS = [
+            "1.1.1.1"
+            "9.9.9.9"
+          ];
         };
       };
     };
