@@ -22,14 +22,6 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      assertions = [
-        {
-          assertion = cfg.enable -> config.bigor.features.caddy.enable;
-          message = "Gatus status page requires Caddy to be enabled for HTTPS";
-        }
-      ];
-    }
-    {
       services.gatus = {
         enable = true;
         settings = {
@@ -78,11 +70,12 @@ in
             });
         };
       };
-
+    }
+    (mkIf config.bigor.features.caddy.enable {
       services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
         tls internal
         reverse_proxy 127.0.0.1:${toString networkCfg.ports.gatus}
       '';
-    }
+    })
   ]);
 }
