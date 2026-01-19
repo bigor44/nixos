@@ -16,25 +16,28 @@ let
 
     MODE="''${1:---unstaged}"
 
-    # Detect changed Nix files based on mode
+    # Detect changed files based on mode
     if [[ "$MODE" == "--staged" ]]; then
-      FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.nix$' || true)
+      FILES=$(git diff --cached --name-only --diff-filter=ACM || true)
     else
-      FILES=$(git diff --name-only --diff-filter=ACM HEAD | grep '\.nix$' || true)
+      FILES=$(git diff --name-only --diff-filter=ACM HEAD || true)
     fi
 
     # Early exit if no files changed
     if [[ -z "$FILES" ]]; then
-      echo "✓ No Nix files changed"
+      echo "✓ No files changed"
       exit 0
     fi
+
+    # Filter for Nix files for statix/deadnix
+    NIX_FILES=$(echo "$FILES" | grep '\.nix$' || true)
 
     FILE_COUNT=$(echo "$FILES" | wc -l)
     echo "Checking $FILE_COUNT file(s)..."
 
     FAILED=0
     for file in $FILES; do
-      if ! ${pkgs.nixfmt}/bin/nixfmt --check "$file" 2>/dev/null; then
+      if ! ${pkgs.treefmt}/bin/treefmt --fail-on-change "$file" >/dev/null 2>&1; then
         echo "✗ Format check failed: $file"
         FAILED=1
       fi
@@ -43,33 +46,35 @@ let
       echo ""
       echo "Fix with:"
       echo "  nix fmt                 # Format all files"
-      echo "  nixfmt <file>           # Format specific file"
+      echo "  treefmt <file>          # Format specific file"
       exit 1
     fi
 
-    FAILED=0
-    for file in $FILES; do
-      if ! ${pkgs.statix}/bin/statix check "$file" 2>&1; then
-        FAILED=1
+    if [[ -n "$NIX_FILES" ]]; then
+      FAILED=0
+      for file in $NIX_FILES; do
+        if ! ${pkgs.statix}/bin/statix check "$file" 2>&1; then
+          FAILED=1
+        fi
+      done
+      if [[ $FAILED -eq 1 ]]; then
+        echo ""
+        echo "Fix linting issues above, then re-run checks"
+        exit 1
       fi
-    done
-    if [[ $FAILED -eq 1 ]]; then
-      echo ""
-      echo "Fix linting issues above, then re-run checks"
-      exit 1
-    fi
 
-    FAILED=0
-    for file in $FILES; do
-      if ! ${pkgs.deadnix}/bin/deadnix --fail "$file" 2>&1; then
-        FAILED=1
+      FAILED=0
+      for file in $NIX_FILES; do
+        if ! ${pkgs.deadnix}/bin/deadnix --fail "$file" 2>&1; then
+          FAILED=1
+        fi
+      done
+      if [[ $FAILED -eq 1 ]]; then
+        echo ""
+        echo "Remove dead code manually or with:"
+        echo "  deadnix --edit <file>   # Interactive removal"
+        exit 1
       fi
-    done
-    if [[ $FAILED -eq 1 ]]; then
-      echo ""
-      echo "Remove dead code manually or with:"
-      echo "  deadnix --edit <file>   # Interactive removal"
-      exit 1
     fi
 
     echo "✓ All checks passed"
@@ -253,9 +258,9 @@ let
 
     echo "Running pre-commit checks..."
 
-    # 1. Check staged Nix files
-    STAGED_NIX=$(git diff --cached --name-only --diff-filter=ACM | grep '\.nix$' || true)
-    if [[ -n "$STAGED_NIX" ]]; then
+    # 1. Check staged files
+    STAGED=$(git diff --cached --name-only --diff-filter=ACM || true)
+    if [[ -n "$STAGED" ]]; then
       if ! check-quick --staged; then
         echo ""
         echo "✗ Pre-commit checks failed"

@@ -42,6 +42,13 @@ in
   config = mkMerge [
     # Default firewall settings
     {
+      assertions = [
+        {
+          assertion = (cfg.openPorts.tcp != [ ] || cfg.openPorts.udp != [ ]) -> mainInterface != "";
+          message = "Firewall: Open ports are requested but no main network interface is defined for this host.";
+        }
+      ];
+
       networking.firewall = {
         enable = true;
         # Allow ping from LAN
