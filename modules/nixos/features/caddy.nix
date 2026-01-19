@@ -7,16 +7,24 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.caddy;
 in
 {
-  options.bigor.features.caddy.enable = mkEnableOption "Caddy reverse proxy";
+  options.bigor.features.caddy.enable = lib.mkEnableOption "Caddy reverse proxy";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.caddy = {
       enable = true;
     };
+
+    # Declare network needs
+    bigor.platform.firewall = {
+      openPorts.tcp = [
+        config.bigor.network.ports.caddy.http
+        config.bigor.network.ports.caddy.https
+      ];
+    };
+    bigor.network.requiredStaticIpServices = [ "caddy" ];
 
     # Required for Caddy's local CA management (certutil)
     environment.systemPackages = [ pkgs.nss ];

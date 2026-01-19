@@ -99,13 +99,13 @@ To maintain consistency across the codebase, please follow these standards:
 - Use `nix/network-topology.nix` for any new IP or hostname definitions.
 
 - **Firewall Configuration**:
-  - **NEVER** add `networking.firewall.*` to feature modules
-  - All firewall rules are centralized in `modules/nixos/platform/firewall.nix`
+  - **NEVER** add `networking.firewall.*` directly to feature modules.
+  - Use the **Platform Interface** `bigor.platform.firewall.openPorts` to declare ports.
   - When adding a service that needs port openings:
-    1. Add port numbers to `nix/network-topology.nix`
-    2. Update `modules/nixos/platform/firewall.nix` to include the service
-    3. If the service requires a static IP (listening on LAN), add it to the assertions
-  - The firewall module automatically opens ports based on enabled features and network topology
+    1. Add port numbers to `nix/network-topology.nix`.
+    2. Declare them in your feature module using `bigor.platform.firewall.openPorts`.
+    3. If the service requires a static IP (listening on LAN), add it to `bigor.network.requiredStaticIpServices`.
+  - The firewall module automatically manages the rules and validations.
 
 ### 4. Formatting and Linting
 

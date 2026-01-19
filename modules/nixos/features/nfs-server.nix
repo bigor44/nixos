@@ -6,21 +6,29 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
   cfg = config.bigor.features.nfs-server;
 
   # NFS export options: all requests mapped to bigor (1000:100) for security
   nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
 in
 {
-  options.bigor.features.nfs-server.enable = mkEnableOption "NFS server";
+  options.bigor.features.nfs-server.enable = lib.mkEnableOption "NFS server";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nfs.server = {
       enable = true;
       exports = ''
         /mnt/storage ${config.bigor.network.subnet}(${nfsOptions})
       '';
     };
+
+    # Declare network needs
+    bigor.platform.firewall = {
+      openPorts = {
+        tcp = config.bigor.network.ports.nfs.all;
+        udp = config.bigor.network.ports.nfs.all;
+      };
+    };
+    bigor.network.requiredStaticIpServices = [ "nfs-server" ];
   };
 }

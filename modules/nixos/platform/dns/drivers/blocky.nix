@@ -17,13 +17,15 @@ let
   inherit (networkCfg) ports domain;
 
   # Auto-generate DNS rewrites from bigor.network.hosts
-  customDNSMapping = filterAttrs (_: ip: ip != null) (
-    mapAttrs' (name: host: nameValuePair "${name}.${domain}" host.ip) config.bigor.network.hosts
+  customDNSMapping =
+    # Hosts with static IPs
+    mapAttrs' (name: host: nameValuePair "${name}.${domain}" host.ip) (
+      filterAttrs (_: h: h.ip != null) networkCfg.hosts
+    )
+    # Alias for main domain
     // {
-      # Alias for main domain
       ${domain} = networkCfg.hosts.minipc.ip;
-    }
-  );
+    };
 in
 {
   config = mkIf cfg.computed.shouldRunBlocky {

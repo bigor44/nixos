@@ -67,6 +67,12 @@ in
       readOnly = true;
       default = networkTopology.ports;
     };
+
+    requiredStaticIpServices = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "List of services enabled on this host that require a static IP.";
+    };
   };
 
   config = mkMerge [
@@ -76,6 +82,20 @@ in
         {
           assertion = hostname != "" -> cfg.hosts ? ${hostname};
           message = "Host '${hostname}' is not defined in bigor.network.hosts. Add it to the network topology.";
+        }
+        {
+          assertion = cfg.requiredStaticIpServices != [ ] -> (cfg.hosts.${hostname}.ip or null) != null;
+          message = ''
+            The following services require a static IP but ${hostname} has no static IP configured:
+            ${lib.concatMapStringsSep "\n" (s: "  - ${s}") cfg.requiredStaticIpServices}
+
+            To fix:
+            1. Add static IP in nix/network-topology.nix:
+               hosts.${hostname}.ip = "192.168.1.XX";
+
+            2. OR disable services in hosts/${hostname}/default.nix:
+               bigor.features.<service>.enable = false;
+          '';
         }
       ]
       ++ mapAttrsToList (name: host: {

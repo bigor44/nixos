@@ -6,10 +6,9 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption types mkIf;
   cfg = config.bigor.platform.dns;
   networkCfg = config.bigor.network;
-  hostname = config.networking.hostName;
   minipcIp = networkCfg.hosts.minipc.ip;
   blockyPort = toString networkCfg.ports.blocky.dns;
 in
@@ -94,13 +93,23 @@ in
     # ===========================================================================
     assertions = [
       {
-        assertion = cfg.mode == "server" -> networkCfg.hosts.${hostname}.ip != null;
-        message = "DNS mode 'server' requires ${hostname} to have a static IP defined in network-topology.";
-      }
-      {
         assertion = cfg.mode == "client" -> networkCfg.hosts.minipc.ip != null;
         message = "DNS mode 'client' requires minipc to have a static IP defined in network-topology.";
       }
+    ];
+
+    # ===========================================================================
+    # Network Configuration (Firewall)
+    # ===========================================================================
+    bigor.platform.firewall = mkIf cfg.computed.needsPort53OnLan {
+      openPorts = {
+        tcp = [ networkCfg.ports.blocky.dns ];
+        udp = [ networkCfg.ports.blocky.dns ];
+      };
+    };
+
+    bigor.network.requiredStaticIpServices = mkIf cfg.computed.needsPort53OnLan [
+      "DNS server (Blocky serving LAN)"
     ];
 
     # ===========================================================================

@@ -90,28 +90,50 @@ When adding new services that need static IPs or ports, update this file. The ne
 
 ### Firewall Management
 
-Firewall configuration is **fully centralized** in `modules/nixos/platform/firewall.nix`. This platform module:
+Firewall configuration is **centralized yet declarative** via `modules/nixos/platform/firewall.nix`.
 
-- **Automatically opens required ports** based on enabled features and network topology
-- **Validates static IP requirements** for services that listen on LAN
-- **Adapts to DNS role** (opens port 53 only in server mode)
-- **Uses network-topology.nix** as single source of truth for port numbers
+- **Platform Module**: Manages the final firewall rules and interface binding.
+- **Interface**: Features declare their needs via `bigor.platform.firewall`.
+- **Validation**: Automatically checks if services requiring static IPs are running on a host with a static IP.
 
-**Port opening logic:**
+**Declaring Ports in Features:**
 
-- **blocky**: Port 53 (TCP/UDP) only when DNS mode is `server`
-- **caddy**: Ports 80, 443 (TCP) when enabled
-- **nfs-server**: Ports 111, 2049 (TCP/UDP) when enabled
+Feature modules (and other platform modules) should declare their network requirements directly:
+
+```nix
+bigor.platform.firewall = {
+  openPorts = {
+    tcp = [ 80 443 ];
+    udp = [ ];
+  };
+  # Validated by network module
+  bigor.network.requiredStaticIpServices = [ "service-name" ];
+};
+```
 
 **Static IP assertions:**
 
-Services requiring a static IP (serving LAN) will trigger an assertion failure if the host has no static IP configured:
+Services added to `bigor.network.requiredStaticIpServices` will trigger an assertion failure if the host has no static IP configured in `network-topology.nix`.
 
-- DNS server (Blocky in server mode)
-- caddy (reverse proxy)
-- nfs-server (file sharing)
+**IMPORTANT:** Do NOT use `networking.firewall` directly in feature modules. Use the `bigor.platform.firewall` interface to ensure rules are applied to the correct interface.
 
-**IMPORTANT: Feature modules must NOT contain firewall configuration.** All firewall rules are managed by the central platform module.
+**Migration Example:**
+
+```nix
+# OLD (centralized, fragile)
+# modules/nixos/platform/firewall.nix
+myServiceEnabled = cfg.myservice.enable;
+tcpPorts = optional myServiceEnabled 8080;
+
+# NEW (declarative, maintainable)
+# modules/nixos/features/myservice.nix
+config = mkIf cfg.enable {
+  services.myservice.enable = true;
+
+  bigor.platform.firewall.openPorts.tcp = [ 8080 ];
+  bigor.network.requiredStaticIpServices = [ "myservice" ];
+};
+```
 
 ### Module Registration
 
@@ -355,13 +377,12 @@ nix flake lock --update-input nixvim
 1. Create feature module in `modules/nixos/features/`
 2. Register in `nix/modules.nix`
 3. If it needs a port, add to `nix/network-topology.nix` under `ports`
-4. If it needs firewall ports opened, update `modules/nixos/platform/firewall.nix`:
-   - Add feature detection (e.g., `myServiceEnabled = cfg.myservice.enable or false`)
-   - Add ports to `tcpPorts` and/or `udpPorts` using `optional`
-   - If it requires static IP, add to `servicesRequiringStaticIp` list
+4. If it needs firewall ports opened, declare them in the feature module:
+   - Set `bigor.platform.firewall.openPorts` (tcp/udp)
+   - If it requires static IP, add service name to `bigor.network.requiredStaticIpServices`
 5. Enable in `hosts/minipc/default.nix` under `bigor.features`
 
-**IMPORTANT:** Do NOT add firewall configuration to feature modules. The centralized firewall module handles all port openings automatically.
+**IMPORTANT:** Use the `bigor.platform.firewall` interface. Do not modify `modules/nixos/platform/firewall.nix` for feature-specific ports.
 
 ### Changing Network Configuration
 

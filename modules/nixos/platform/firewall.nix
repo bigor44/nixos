@@ -9,78 +9,37 @@ let
   inherit (lib)
     mkIf
     mkMerge
-    optional
+    mkOption
+    types
     ;
 
-  cfg = config.bigor.features;
-  dnsCfg = config.bigor.platform.dns;
-  hostname = config.networking.hostName;
-  networkCfg = config.bigor.network;
-  hostConfig = networkCfg.hosts.${hostname};
-  inherit (networkCfg) ports;
-
-  # Check if this host has a static IP (required for services that listen on LAN)
-  hasStaticIp = hostConfig.ip != null;
+  hostConfig = config.bigor.network.hosts.${config.networking.hostName};
   mainInterface = hostConfig.interface;
 
-  # Features that require firewall openings
-  # DNS: Use platform-computed values instead of feature flags
-  blockyEnabled = dnsCfg.computed.needsPort53OnLan;
-  caddyEnabled = cfg.caddy.enable;
-  nfsServerEnabled = cfg.nfs-server.enable;
+  cfg = config.bigor.platform.firewall;
 
-  # Compute required ports based on enabled features
-  tcpPorts =
-    optional blockyEnabled ports.blocky.dns
-    ++ optional caddyEnabled ports.caddy.http
-    ++ optional caddyEnabled ports.caddy.https
-    ++ optional nfsServerEnabled ports.nfs.rpc
-    ++ optional nfsServerEnabled ports.nfs.server;
-
-  udpPorts =
-    optional blockyEnabled ports.blocky.dns
-    ++ optional nfsServerEnabled ports.nfs.rpc
-    ++ optional nfsServerEnabled ports.nfs.server;
-
-  # Services that require static IP (only when serving LAN)
-  servicesRequiringStaticIp = [
-    {
-      name = "DNS server (Blocky serving LAN)";
-      enabled = blockyEnabled;
-    }
-    {
-      name = "caddy";
-      enabled = caddyEnabled;
-    }
-    {
-      name = "nfs-server";
-      enabled = nfsServerEnabled;
-    }
-  ];
-
-  enabledServicesWithoutStaticIp = lib.filter (
-    s: s.enabled && !hasStaticIp
-  ) servicesRequiringStaticIp;
-
+  portType = types.addCheck types.int (p: p > 0 && p < 65536) // {
+    name = "port";
+    description = "port number (1-65535)";
+  };
 in
 {
-  config = mkMerge [
-    # Assertions
-    {
-      assertions = [
-        {
-          assertion = enabledServicesWithoutStaticIp == [ ];
-          message = ''
-            The following services require a static IP but ${hostname} has no static IP configured:
-            ${lib.concatMapStringsSep "\n" (s: "  - ${s.name}") enabledServicesWithoutStaticIp}
+  options.bigor.platform.firewall = {
+    openPorts = {
+      tcp = mkOption {
+        type = types.listOf portType;
+        default = [ ];
+        description = "TCP ports to open on the main interface.";
+      };
+      udp = mkOption {
+        type = types.listOf portType;
+        default = [ ];
+        description = "UDP ports to open on the main interface.";
+      };
+    };
+  };
 
-            Either:
-            1. Configure a static IP in nix/network-topology.nix for ${hostname}
-            2. Disable these services on this host
-          '';
-        }
-      ];
-    }
+  config = mkMerge [
     # Default firewall settings
     {
       networking.firewall = {
@@ -93,10 +52,10 @@ in
     }
 
     # Open ports on the main interface for enabled services
-    (mkIf (tcpPorts != [ ] || udpPorts != [ ]) {
+    (mkIf (cfg.openPorts.tcp != [ ] || cfg.openPorts.udp != [ ]) {
       networking.firewall.interfaces.${mainInterface} = mkMerge [
-        (mkIf (tcpPorts != [ ]) { allowedTCPPorts = tcpPorts; })
-        (mkIf (udpPorts != [ ]) { allowedUDPPorts = udpPorts; })
+        (mkIf (cfg.openPorts.tcp != [ ]) { allowedTCPPorts = lib.unique cfg.openPorts.tcp; })
+        (mkIf (cfg.openPorts.udp != [ ]) { allowedUDPPorts = lib.unique cfg.openPorts.udp; })
       ];
     })
   ];

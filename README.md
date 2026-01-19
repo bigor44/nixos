@@ -211,8 +211,16 @@ Network configuration is centralized in `nix/network-topology.nix`:
     grospc = { ip = "192.168.1.11"; interface = "enp14s0"; };
     minidesk = { ip = null; interface = "enp2s0"; }; # DHCP
   };
+
+  ports = {
+    caddy = { http = 80; https = 443; };
+    nfs = { rpc = 111; server = 2049; };
+    # ...
+  };
 }
 ```
+
+The firewall is **declarative**: features declare their port needs via `bigor.platform.firewall.openPorts` and the system automatically configures the firewall based on the topology.
 
 ## 🧪 Testing
 

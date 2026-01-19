@@ -8,8 +8,6 @@ let
     types
     ;
   cfg = config.bigor.platform.policies.storage;
-  hostname = config.networking.hostName;
-  networkCfg = config.bigor.network;
 in
 {
   options.bigor.platform.policies.storage = {
@@ -82,10 +80,6 @@ in
     # Note: "local" mode does NOT require static IP (can use DHCP)
     # Only NFS server mode requires static IP for reliable service
     assertions = [
-      {
-        assertion = cfg.mode == "nfs-server" -> networkCfg.hosts.${hostname}.ip != null;
-        message = "Storage policy 'nfs-server' requires a static IP for ${hostname}";
-      }
       {
         assertion = (cfg.mode == "nfs-server" || cfg.mode == "local") -> cfg.device != null;
         message = "Storage policy '${cfg.mode}' requires storage.device to be set";
