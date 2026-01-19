@@ -24,8 +24,10 @@ in
         "nofail"
         "noatime"
         "soft"
-        "timeo=600"
-        "retrans=5"
+        "timeo=30"
+        "retrans=2"
+        "rsize=32768"
+        "wsize=32768"
       ];
     };
   };

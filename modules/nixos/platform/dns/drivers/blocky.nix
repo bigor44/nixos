@@ -52,7 +52,7 @@ in
 
         # Bootstrap DNS (Critical for resolving DoH hostnames)
         bootstrapDns = {
-          upstream = "https://1.1.1.1/dns-query"; # Use Cloudflare DoH as primary bootstrap
+          upstream = "1.1.1.1"; # Use standard DNS for bootstrapping to avoid circular loops
           ips = [
             "1.1.1.1" # Cloudflare
             "9.9.9.9" # Quad9

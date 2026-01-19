@@ -68,6 +68,13 @@
     };
   };
 
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    PAGER = "less";
+    LESS = "-R";
+  };
+
   # CLI Tools
   environment.systemPackages = with pkgs; [
     eza
