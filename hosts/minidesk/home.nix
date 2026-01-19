@@ -4,12 +4,8 @@
   home.stateVersion = "25.11";
 
   bigor.home = {
-    # Optional features
+    # gui.enable is now desktop-apps in NixOS, handled there
     dev-tools.enable = true;
     dev-scripts.enable = true;
-
-    # Desktop
-    gui.enable = true;
-    wallpapers.enable = true;
   };
 }

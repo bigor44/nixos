@@ -9,7 +9,5 @@
     dev-scripts.enable = true;
 
     # Desktop
-    gui.enable = true;
-    wallpapers.enable = true;
   };
 }

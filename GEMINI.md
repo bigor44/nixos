@@ -216,6 +216,7 @@ Home Manager is configured at the system level in `nix/hosts.nix`. Each user get
 - `caddy`: Reverse proxy with automatic HTTPS.
 - `cpu-power-management`: P-State scaling for AMD/Intel CPUs.
 - `desktop`: COSMIC DE with Firefox and NetworkManager.
+- `desktop-apps`: User-level desktop applications and dotfiles.
 - `flatpak`: Flatpak support with Flathub enabled.
 - `gaming`: Steam and GameMode optimizations.
 - `gatus`: Status page monitoring.
@@ -223,17 +224,14 @@ Home Manager is configured at the system level in `nix/hosts.nix`. Each user get
 - `nfs-client`: Mounts remote NFS shares.
 - `nfs-server`: Exports local storage via NFS.
 - `sshd`: Hardened OpenSSH server.
+- `nixvim`: Highly configured Neovim (LSP, Treesitter).
 
 ### Home Manager Features (`modules/home/`)
 
-- `cli-tools`: Essential modern CLI tools (eza, ripgrep, jq, etc.).
 - `dev-scripts`: Quality assurance and helper scripts.
 - `dev-tools`: Development environments (C, Rust, etc.).
 - `git`: Git configuration with aliases.
-- `gui`: GUI applications for desktop users.
-- `nixvim`: Highly configured Neovim (LSP, Treesitter).
 - `shell`: Zsh with Starship and zoxide.
-- `wallpapers`: Desktop wallpaper collection.
 
 ## File Header Standards
 
@@ -350,7 +348,7 @@ Never commit plain-text secrets. Reference secrets in modules via `config.sops.s
   - Kernel: Zen (performance)
   - DNS: Standalone mode (direct DoH)
   - Storage: Local only
-  - Features: Desktop (COSMIC), Audio, Bluetooth, SSHD, CPU Power Management
+  - Features: Desktop (COSMIC), Audio, Bluetooth, Gaming, Flatpak
 
 ## Updates
 

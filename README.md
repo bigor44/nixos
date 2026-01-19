@@ -156,21 +156,21 @@ nrs
 - **Kernel**: Zen (performance optimized)
 - **DNS**: Client mode (uses minipc as resolver)
 - **Storage**: NFS client (mounts from minipc)
-- **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, VIA keyboard
+- **Features**: Desktop, audio, flatpak, bluetooth, gaming, VIA keyboard
 
 ### minipc (Home Server)
 
 - **Kernel**: LTS (stability focused)
 - **DNS**: Server mode (serves DNS to LAN)
 - **Storage**: NFS server (exports storage)
-- **Features**: Caddy, Blocky, SSH, NFS, Gatus
+- **Features**: Caddy, SSH, NFS, Gatus
 
 ### minidesk (Portable Laptop)
 
 - **Kernel**: Zen (performance optimized)
 - **DNS**: Standalone mode (DoH upstreams, no LAN dependency)
 - **Storage**: Local storage
-- **Features**: Desktop, audio, flatpak, bluetooth, gaming, blocky, SSH
+- **Features**: Desktop, audio, flatpak, bluetooth, gaming
 
 ## 🔧 Module System
 
@@ -182,13 +182,13 @@ Always-active infrastructure with no `enable` options. Includes boot, fonts, loc
 
 ### Feature Modules (`modules/nixos/features/`)
 
-Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), audio (PipeWire), gaming (Steam), services (Caddy, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
+Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), user applications (desktop-apps), nixvim (Neovim), audio (PipeWire), gaming (Steam), services (Caddy, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
 
 See `nix/modules.nix` for the complete and authoritative list of all modules.
 
 ### Home Manager Modules (`modules/home/`)
 
-User-level configuration including CLI tools, development scripts, git configuration, GUI applications, nixvim (Neovim), shell configuration (Zsh, Starship), and wallpaper synchronization.
+User-level configuration including development scripts, git configuration, and shell configuration (Zsh, Starship).
 
 ## 🔐 Secret Management
 

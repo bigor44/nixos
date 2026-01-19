@@ -22,11 +22,8 @@
     };
 
     features = {
-      cpu-power-management.enable = true;
-      sshd.enable = true;
-      nixvim.enable = true;
-
       desktop.enable = true;
+      desktop-apps.enable = true;
       audio.enable = true;
       flatpak.enable = true;
       bluetooth.enable = true;
