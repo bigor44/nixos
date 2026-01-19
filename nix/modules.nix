@@ -35,6 +35,7 @@
     ../modules/nixos/features/nfs-client.nix
     ../modules/nixos/features/nfs-server.nix
     ../modules/nixos/features/sshd.nix
+    ../modules/nixos/features/nixvim
   ];
 
   # All Home Manager modules under the bigor.home.* namespace
@@ -45,7 +46,6 @@
     ../modules/home/cli-tools.nix
 
     # Optional features
-    ../modules/home/nixvim
     ../modules/home/dev-tools.nix
     ../modules/home/dev-scripts.nix
     ../modules/home/gui.nix

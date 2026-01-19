@@ -1,4 +1,4 @@
-# Home: nixvim
+# Feature: nixvim
 # Purpose: Neovim configuration with LSP, treesitter, and completion
 {
   config,
@@ -7,10 +7,10 @@
   ...
 }:
 let
-  cfg = config.bigor.home.nixvim;
+  cfg = config.bigor.features.nixvim;
 in
 {
-  options.bigor.home.nixvim.enable = lib.mkEnableOption "Neovim with LSP and plugins";
+  options.bigor.features.nixvim.enable = lib.mkEnableOption "Neovim with LSP and plugins";
 
   imports = [
     ./opts.nix

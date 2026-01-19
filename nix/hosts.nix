@@ -10,12 +10,11 @@ let
   commonNixosModules = modules.nixosModules ++ [
     inputs.sops-nix.nixosModules.sops
     inputs.home-manager.nixosModules.home-manager
+    inputs.nixvim.nixosModules.nixvim
   ];
 
   # Common Home Manager modules for all users
-  commonHomeModules = modules.homeModules ++ [
-    inputs.nixvim.homeModules.nixvim
-  ];
+  commonHomeModules = modules.homeModules;
 
   mkHost =
     hostname:

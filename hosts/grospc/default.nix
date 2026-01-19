@@ -19,6 +19,7 @@
     features = {
       cpu-power-management.enable = true;
       keyboardVIA.enable = true;
+      nixvim.enable = true;
 
       desktop.enable = true;
       audio.enable = true;

@@ -22,6 +22,7 @@
 
     features = {
       cpu-power-management.enable = true;
+      nixvim.enable = true;
 
       sshd.enable = true;
       caddy.enable = true;

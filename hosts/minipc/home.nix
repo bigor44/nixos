@@ -5,7 +5,6 @@
 
   bigor.home = {
     # Optional features
-    nixvim.enable = true;
     dev-tools.enable = true;
     dev-scripts.enable = true;
   };
