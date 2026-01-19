@@ -4,7 +4,6 @@
 {
   home.packages = with pkgs; [
     # Modern CLI tools
-    sl
     eza
     fd
     ripgrep

@@ -25,9 +25,7 @@ in
       taplo
 
       # Development tools
-      lazygit
       gemini-cli
-      claude-code
     ];
   };
 }

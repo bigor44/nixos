@@ -26,7 +26,7 @@ Home Manager follows the same **Platform vs. Features** pattern:
 
 - **Feature Modules** (optional, require `bigor.home.<name>.enable = true`):
   - `nixvim/` - Neovim with LSP and plugins
-  - `dev-tools.nix` - Development tools (statix, deadnix, lazygit, claude-code, etc.)
+  - `dev-tools.nix` - Development tools (statix, deadnix, lazygit, gemini-cli, etc.)
   - `dev-scripts.nix` - QA scripts (check-quick, check-full, dns-test, etc.)
   - `gui.nix` - Desktop applications
   - `wallpapers.nix` - Wallpaper synchronization
