@@ -197,15 +197,7 @@ The flake uses `flake-parts` for modularity:
 - `nix/modules.nix`: Module registration
 - `nix/network-topology.nix`: Network data
 
-All hosts share common modules (platform + features + Home Manager) and receive `networkTopology` via `specialArgs`.
-
-### Home Manager Integration
-
-Home Manager is configured at the system level in `nix/hosts.nix`. Each user gets:
-
-- Common home modules from `nix/modules.nix`
-- User-specific config from `users/bigor/`
-- Host-specific home config from `hosts/*/home.nix`
+All hosts share common modules (platform + features) and receive `networkTopology` via `specialArgs`.
 
 ## Feature Catalog
 
@@ -225,13 +217,9 @@ Home Manager is configured at the system level in `nix/hosts.nix`. Each user get
 - `nfs-server`: Exports local storage via NFS.
 - `sshd`: Hardened OpenSSH server.
 - `nixvim`: Highly configured Neovim (LSP, Treesitter).
-
-### Home Manager Features (`modules/home/`)
-
+- `git`: Git configuration with aliases.
 - `dev-scripts`: Quality assurance and helper scripts.
 - `dev-tools`: Development environments (C, Rust, etc.).
-- `git`: Git configuration with aliases.
-- `shell`: Zsh with Starship and zoxide.
 
 ## File Header Standards
 
@@ -246,8 +234,7 @@ Use these prefixes:
 
 - `# Platform:` for modules in `modules/nixos/platform/`
 - `# Feature:` for modules in `modules/nixos/features/`
-- `# Module:` for shared Home Manager modules in `modules/home/`
-- `# Home:` for user-specific or NixVim components
+- `# Home:` for NixVim components
 - `# Host:` for `hosts/*/default.nix`
 - `# Policy:` for `modules/nixos/platform/policies/`
 - `# Flake:` for flake-parts modules in `nix/`
@@ -302,7 +289,7 @@ Bad (only 2 usages - over-engineering):
 ```nix
 let
   inherit (lib) mkEnableOption mkIf;  # Only 2 usages
-  cfg = config.bigor.home.name;
+  cfg = config.bigor.features.name;
 in
 ```
 
@@ -310,10 +297,10 @@ Better (direct usage):
 
 ```nix
 let
-  cfg = config.bigor.home.name;
+  cfg = config.bigor.features.name;
 in
 {
-  options.bigor.home.name.enable = lib.mkEnableOption "...";
+  options.bigor.features.name.enable = lib.mkEnableOption "...";
   config = lib.mkIf cfg.enable { ... };
 }
 ```
@@ -358,7 +345,7 @@ nix flake update
 
 # Update specific input
 nix flake lock --update-input nixpkgs
-nix flake lock --update-input home-manager
+nix flake lock --update-input nixvim
 ```
 
 ## Common Patterns

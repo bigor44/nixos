@@ -17,6 +17,9 @@
     };
 
     features = {
+      git.enable = true;
+      dev-tools.enable = true;
+      dev-scripts.enable = true;
       cpu-power-management.enable = true;
       keyboardVIA.enable = true;
       nixvim.enable = true;

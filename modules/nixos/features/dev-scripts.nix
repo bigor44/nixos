@@ -1,13 +1,5 @@
-# Module: dev-scripts
+# Feature: dev-scripts
 # Purpose: Development QA scripts for fast quality checks
-#
-# Provides 5 commands:
-# - check-quick: Fast incremental check (changed files only, <0.1s)
-# - check-full: Complete QA check (CI-equivalent, ~16s)
-# - check-mega: Intelligent check orchestrator (adapts to git state)
-# - dns-test: DNS stack functional test (local DNS, ad blocking, DNSSEC)
-# - install-git-hooks: Install pre-commit hook
-
 {
   config,
   lib,
@@ -15,9 +7,9 @@
   ...
 }:
 let
+  cfg = config.bigor.features.dev-scripts;
 
   # Script: check-quick
-  # Fast incremental check: only verify changed Nix files
   check-quick = pkgs.writeShellScriptBin "check-quick" ''
     #!/usr/bin/env bash
     set -euo pipefail
@@ -84,7 +76,6 @@ let
   '';
 
   # Script: check-full
-  # Complete QA check: format, lint, dead code, evaluation, flake checks
   check-full = pkgs.writeShellScriptBin "check-full" ''
     #!/usr/bin/env bash
     set -euo pipefail
@@ -147,7 +138,6 @@ let
   '';
 
   # Script: check-mega
-  # Intelligent check orchestrator: analyzes git state and runs appropriate check
   check-mega = pkgs.writeShellScriptBin "check-mega" ''
     #!/usr/bin/env bash
     set -euo pipefail
@@ -186,7 +176,6 @@ let
   '';
 
   # Script: dns-test
-  # DNS stack functional test: validates local DNS, ad blocking, DNSSEC
   dns-test = pkgs.writeShellScriptBin "dns-test" ''
     #!/usr/bin/env bash
     set -euo pipefail
@@ -237,7 +226,6 @@ let
   '';
 
   # Script: install-git-hooks
-  # Install pre-commit hook for automatic validation
   install-git-hooks = pkgs.writeShellScriptBin "install-git-hooks" ''
         #!/usr/bin/env bash
         set -euo pipefail
@@ -316,10 +304,10 @@ let
   '';
 in
 {
-  options.bigor.home.dev-scripts.enable = lib.mkEnableOption "Development QA scripts";
+  options.bigor.features.dev-scripts.enable = lib.mkEnableOption "Development QA scripts";
 
-  config = lib.mkIf config.bigor.home.dev-scripts.enable {
-    home.packages = [
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
       check-quick
       check-full
       check-mega

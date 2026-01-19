@@ -11,6 +11,11 @@
     ];
   };
 
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   security.sudo.wheelNeedsPassword = false;
   environment.shells = with pkgs; [ zsh ];
 }

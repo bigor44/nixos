@@ -1,4 +1,4 @@
-# Module: dev-tools
+# Feature: dev-tools
 # Purpose: Development and code quality tools
 {
   config,
@@ -7,13 +7,13 @@
   ...
 }:
 let
-  cfg = config.bigor.home.dev-tools;
+  cfg = config.bigor.features.dev-tools;
 in
 {
-  options.bigor.home.dev-tools.enable = lib.mkEnableOption "Development tools";
+  options.bigor.features.dev-tools.enable = lib.mkEnableOption "Development tools";
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
+    environment.systemPackages = with pkgs; [
       # Code quality & development
       nix-health
       statix

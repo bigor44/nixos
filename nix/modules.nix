@@ -5,6 +5,7 @@
   nixosModules = [
     # Platform - Core System
     ../modules/nixos/platform/boot.nix
+    ../modules/nixos/platform/shell.nix
     ../modules/nixos/platform/nix-core.nix
     ../modules/nixos/platform/packages.nix
     ../modules/nixos/platform/sops.nix
@@ -37,16 +38,11 @@
     ../modules/nixos/features/sshd.nix
     ../modules/nixos/features/nixvim
     ../modules/nixos/features/desktop-apps.nix
+    ../modules/nixos/features/git.nix
+    ../modules/nixos/features/dev-tools.nix
+    ../modules/nixos/features/dev-scripts.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace
-  homeModules = [
-    # Always active (like platform modules)
-    ../modules/home/shell
-    ../modules/home/git.nix
-
-    # Optional features
-    ../modules/home/dev-tools.nix
-    ../modules/home/dev-scripts.nix
-  ];
+  homeModules = [ ];
 }

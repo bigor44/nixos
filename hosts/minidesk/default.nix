@@ -22,6 +22,9 @@
     };
 
     features = {
+      git.enable = true;
+      dev-tools.enable = true;
+      dev-scripts.enable = true;
       desktop.enable = true;
       desktop-apps.enable = true;
       audio.enable = true;

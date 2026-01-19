@@ -1,6 +1,6 @@
 # 🐧 Bigor's NixOS Configuration
 
-A modular, reproducible NixOS configuration managed with flakes and Home Manager. Built with a clear separation of platform infrastructure and optional features.
+A modular, reproducible NixOS configuration managed with flakes. Built with a clear separation of platform infrastructure and optional features.
 
 ## ✨ Features
 
@@ -10,7 +10,7 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
 - **Network Topology**: Centralized network configuration (IPs, ports, domain)
 - **Secret Management**: SOPS + age for encrypted secrets
 - **Development Workflow**: Pre-commit hooks and safe rebuild workflows
-- **Home Manager Integration**: User-level configuration with nixvim
+- **NixVim**: Highly configured Neovim integrated as a NixOS feature
 
 ## 🏗️ Architecture
 
@@ -56,16 +56,15 @@ A modular, reproducible NixOS configuration managed with flakes and Home Manager
 ```
 nixos/
 ├── certs/                  # SSL certificates
-├── dotfiles/               # Static dotfiles (linked via Home Manager)
+├── dotfiles/               # Static dotfiles (linked via nixos features)
 ├── hosts/                  # Host-specific configurations
 │   ├── grospc/            # Desktop workstation
 │   ├── minipc/            # Home server
 │   └── minidesk/          # Portable laptop
 ├── modules/               # Reusable modules
-│   ├── nixos/            # NixOS modules
-│   │   ├── platform/     # Platform infrastructure
-│   │   └── features/     # Optional features
-│   └── home/             # Home Manager modules
+│   └── nixos/            # NixOS modules
+│       ├── platform/     # Platform infrastructure
+│       └── features/     # Optional features
 ├── nix/                   # Flake parts
 ├── scripts/               # Utility scripts
 ├── secrets/               # Encrypted secrets
@@ -174,21 +173,17 @@ nrs
 
 ## 🔧 Module System
 
-The codebase uses three module types:
+The codebase uses two module types:
 
 ### Platform Modules (`modules/nixos/platform/`)
 
-Always-active infrastructure with no `enable` options. Includes boot, fonts, localization, network, packages, SOPS, users, and strategic policies (DNS, storage).
+Always-active infrastructure with no `enable` options. Includes boot, fonts, localization, network, shell, packages, SOPS, users, and strategic policies (DNS, storage).
 
 ### Feature Modules (`modules/nixos/features/`)
 
-Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), user applications (desktop-apps), nixvim (Neovim), audio (PipeWire), gaming (Steam), services (Caddy, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), and system utilities (Flatpak, power management).
+Optional functionality enabled via `bigor.features.<name>.enable`. Includes desktop environment (COSMIC), user applications (desktop-apps), nixvim (Neovim), audio (PipeWire), gaming (Steam), services (Caddy, Blocky, SSH, NFS, Gatus), hardware support (Bluetooth, VIA keyboard), git configuration, development tools, and system utilities (Flatpak, power management).
 
 See `nix/modules.nix` for the complete and authoritative list of all modules.
-
-### Home Manager Modules (`modules/home/`)
-
-User-level configuration including development scripts, git configuration, and shell configuration (Zsh, Starship).
 
 ## 🔐 Secret Management
 
@@ -252,7 +247,6 @@ nix flake update
 
 ```bash
 nix flake lock --update-input nixpkgs
-nix flake lock --update-input home-manager
 nix flake lock --update-input nixvim
 ```
 
@@ -294,7 +288,6 @@ nix flake lock --update-input nixvim
 ## 📚 Resources
 
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
-- [Home Manager](https://github.com/nix-community/home-manager)
 - [Flakes](https://nixos.wiki/wiki/Flakes)
 - [SOPS](https://github.com/getsops/sops)
 

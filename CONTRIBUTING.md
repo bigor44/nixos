@@ -12,24 +12,8 @@ Before contributing, please familiarize yourself with the modular structure of t
 
 ### NixOS Modules
 
-- **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, users, etc.). These modules do NOT have `enable` options and are always active.
-- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, etc.) that must be explicitly enabled in host configurations via `bigor.features.<name>.enable`.
-
-### Home Manager Modules
-
-Home Manager follows the same **Platform vs. Features** pattern:
-
-- **Platform Modules** (always active):
-  - `shell/` - Zsh with Starship, fzf, zoxide, and bat
-  - `git.nix` - Git configuration and aliases
-  - `cli-tools.nix` - Essential CLI tools (eza, fd, ripgrep, btop, etc.)
-
-- **Feature Modules** (optional, require `bigor.home.<name>.enable = true`):
-  - `nixvim/` - Neovim with LSP and plugins
-  - `dev-tools.nix` - Development tools (statix, deadnix, lazygit, gemini-cli, etc.)
-  - `dev-scripts.nix` - QA scripts (check-quick, check-full, dns-test, etc.)
-  - `gui.nix` - Desktop applications
-  - `wallpapers.nix` - Wallpaper synchronization
+- **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, shell, users, etc.). These modules do NOT have `enable` options and are always active.
+- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, git, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<name>.enable`.
 
 ### Host Definitions
 
@@ -68,8 +52,7 @@ To maintain consistency across the codebase, please follow these standards:
 
 - **File Header**: Every Nix file must start with a 2-line header. The first line should use a prefix that identifies the file's category, followed by a `# Purpose:` line:
   - `# Feature:` for system features or platform modules (`modules/nixos/`).
-  - `# Module:` for shared home manager modules (`modules/home/`).
-  - `# Home:` for specific user environments or NixVim components (`modules/home/nixvim/`, `hosts/*/home.nix`).
+  - `# Home:` for NixVim components.
   - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
   - `# Policy:` for system-wide policies (`modules/nixos/platform/policies/`).
 
@@ -85,11 +68,7 @@ To maintain consistency across the codebase, please follow these standards:
     - Define an `enable` option under `bigor.features.<name>.enable`.
     - Wrap the configuration in `mkIf cfg.enable`.
     - Reference `modules/nixos/features/gaming.nix` for a clean example.
-  - **Home Manager features** (`modules/home/`) that are optional must:
-    - Define an `enable` option under `bigor.home.<name>.enable`.
-    - Wrap the configuration in `mkIf cfg.enable`.
-    - Reference `modules/home/dev-tools.nix` or `modules/home/gui.nix` for examples.
-  - **Platform modules** (both NixOS and Home Manager) do NOT have enable options and are always active.
+  - **Platform modules** do NOT have enable options and are always active.
 - **Shell Scripts**:
   - Must start with a minimal header: Shebang + Script Name + Purpose.
   - Avoid large ASCII banners.
@@ -113,10 +92,8 @@ To maintain consistency across the codebase, please follow these standards:
 
 ### 3. Make Your Changes
 
-- Follow the **Platform vs. Features** pattern (applies to both NixOS and Home Manager modules).
-- If adding a new **feature** (optional functionality), ensure it has an `enable` option:
-  - NixOS features: `bigor.features.<name>.enable`
-  - Home Manager features: `bigor.home.<name>.enable`
+- Follow the **Platform vs. Features** pattern.
+- If adding a new **feature** (optional functionality), ensure it has an `enable` option under `bigor.features.<name>.enable`.
 - **Platform modules** (mandatory infrastructure) do NOT have enable options.
 - Keep host-specific configurations in `hosts/`.
 - Use `nix/network-topology.nix` for any new IP or hostname definitions.

@@ -1,13 +1,14 @@
-# Module: shell.zsh
-# Purpose: Zsh shell configuration with aliases
+# Platform: shell
+# Purpose: Zsh shell, Starship, and CLI tools
+{ pkgs, ... }:
 {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
+    autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
 
-    initContent = ''
+    interactiveShellInit = ''
       # Colored man pages
       export LESS_TERMCAP_mb=$'\e[1;32m'
       export LESS_TERMCAP_md=$'\e[1;32m'
@@ -41,16 +42,16 @@
       nclean = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
 
       # Quality Assurance
-      qc = "check-quick"; # Quick check: changed files
-      qs = "check-quick --staged"; # Quick check: staged files
-      qf = "check-full"; # Full check: everything
-      mega = "check-mega"; # Intelligent orchestration
+      qc = "check-quick";
+      qs = "check-quick --staged";
+      qf = "check-full";
+      mega = "check-mega";
 
       # Safe Workflows
-      gcn = "nix fmt && gaa && qs && gc"; # Safe commit
-      gps = "check-full && gp"; # Safe push
-      nrs = "check-full && sudo nixos-rebuild switch --flake ."; # Safe rebuild
-      nrb = "check-full && sudo nixos-rebuild boot --flake ."; # Safe rebuild (boot)
+      gcn = "nix fmt && gaa && qs && gc";
+      gps = "check-full && gp";
+      nrs = "check-full && sudo nixos-rebuild switch --flake .";
+      nrb = "check-full && sudo nixos-rebuild boot --flake .";
 
       # System info
       ports = "netstat -tulanp";
@@ -58,4 +59,22 @@
       diskinfo = "df -h";
     };
   };
+
+  # Starship
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+    };
+  };
+
+  # CLI Tools
+  environment.systemPackages = with pkgs; [
+    eza
+    fzf
+    zoxide
+    bat
+    fd
+    ripgrep
+  ];
 }
