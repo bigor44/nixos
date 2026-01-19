@@ -18,6 +18,7 @@
           # Linters
           statix
           deadnix
+          shellcheck
 
           # Build tools
           # nh # Removed in favor of nixos-rebuild

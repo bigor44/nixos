@@ -1,0 +1,11 @@
+# ShellCheck Configuration
+# https://github.com/koalaman/shellcheck/wiki/Directive
+
+# Suggests that the script is a bash script if not specified
+shell=bash
+
+# Allow following sourced files that are not specified in the command
+external-sources=true
+
+# Minimum severity to report (error, warning, info, style)
+severity=style
