@@ -27,6 +27,7 @@ dns-test
 # Linting
 statix check .
 deadnix --fail .
+git ls-files '*.sh' | xargs shellcheck
 ```
 
 ### Safe Workflow Aliases
@@ -218,6 +219,7 @@ The flake uses `flake-parts` for modularity:
 - `nix/devshell.nix`: Development shell configuration
 - `nix/modules.nix`: Module registration
 - `nix/network-topology.nix`: Network data
+- `scripts/`: Standalone QA and helper scripts
 
 All hosts share common modules (platform + features) and receive `networkTopology` via `specialArgs`.
 

@@ -28,7 +28,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 
 ### Development Environment
 
-Always use the provided development shell to ensure you have all the necessary tools (like `nixos-rebuild`, `sops`, `statix`, `deadnix`, etc.):
+Always use the provided development shell to ensure you have all the necessary tools (like `nixos-rebuild`, `sops`, `statix`, `deadnix`, `shellcheck`, etc.):
 
 ```bash
 git clone https://github.com/bigor44/nixos.git
@@ -112,7 +112,7 @@ To maintain consistency across the codebase, please follow these standards:
 We enforce strict formatting and linting rules:
 
 - **Format**: Run `nix fmt` to format all files using `treefmt`.
-- **Lint**: Run `statix check .` and `deadnix .` to check for common mistakes and dead code.
+- **Lint**: Run `statix check .`, `deadnix .`, and `git ls-files '*.sh' | xargs shellcheck` to check for common mistakes, dead code, and shell script issues.
 
 ### 5. Testing Your Changes
 

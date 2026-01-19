@@ -273,6 +273,7 @@ nix flake lock --update-input nixvim
    ```bash
    statix check .
    deadnix --fail .
+   git ls-files '*.sh' | xargs shellcheck
    ```
 
 3. **Evaluation errors**:
