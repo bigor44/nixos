@@ -13,7 +13,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 ### NixOS Modules
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, shell, users, etc.). These modules do NOT have `enable` options and are always active.
-- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, git, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<name>.enable`.
+- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, git, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<category>.<name>.enable`.
 
 ### Host Definitions
 
@@ -65,9 +65,9 @@ To maintain consistency across the codebase, please follow these standards:
 
 - **Feature Modules**:
   - **NixOS features** (`modules/nixos/features/`) must follow the standard template:
-    - Define an `enable` option under `bigor.features.<name>.enable`.
+    - Define an `enable` option under `bigor.features.<category>.<name>.enable`.
     - Wrap the configuration in `mkIf cfg.enable`.
-    - Reference `modules/nixos/features/gaming.nix` for a clean example.
+    - Reference `modules/nixos/features/graphics/gaming.nix` for a clean example.
   - **Platform modules** do NOT have enable options and are always active.
 - **Shell Scripts**:
   - Must start with a minimal header: Shebang + Script Name + Purpose.
@@ -93,17 +93,17 @@ To maintain consistency across the codebase, please follow these standards:
 ### 3. Make Your Changes
 
 - Follow the **Platform vs. Features** pattern.
-- If adding a new **feature** (optional functionality), ensure it has an `enable` option under `bigor.features.<name>.enable`.
+- If adding a new **feature** (optional functionality), ensure it has an `enable` option under `bigor.features.<category>.<name>.enable`.
 - **Platform modules** (mandatory infrastructure) do NOT have enable options.
 - Keep host-specific configurations in `hosts/`.
 - Use `nix/network-topology.nix` for any new IP or hostname definitions.
 
 - **Firewall Configuration**:
   - **NEVER** add `networking.firewall.*` directly to feature modules.
-  - Use the **Platform Interface** `bigor.platform.firewall.openPorts` to declare ports.
+  - Use the **Platform Interface** `bigor.network.firewall.ports` to declare ports.
   - When adding a service that needs port openings:
     1. Add port numbers to `nix/network-topology.nix`.
-    2. Declare them in your feature module using `bigor.platform.firewall.openPorts`.
+    2. Declare them in your feature module using `bigor.network.firewall.ports`.
     3. If the service requires a static IP (listening on LAN), add it to `bigor.network.requiredStaticIpServices`.
   - The firewall module automatically manages the rules and validations.
 

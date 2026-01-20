@@ -1,4 +1,4 @@
-# Feature: nfs-client
+# Feature: services-nfs-client
 # Purpose: NFS client configuration for mounting remote storage
 {
   config,
@@ -6,13 +6,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.features.nfs-client;
+  cfg = config.bigor.features.services.nfs-client;
 in
 {
-  options.bigor.features.nfs-client.enable = mkEnableOption "NFS client";
+  options.bigor.features.services.nfs-client.enable = lib.mkEnableOption "NFS client";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     fileSystems."/mnt/storage" = {
       device = "${config.bigor.network.hosts.minipc.ip}:/mnt/storage";
       fsType = "nfs";

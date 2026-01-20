@@ -21,15 +21,20 @@
     };
 
     features = {
-      git.enable = true;
-      dev-tools.enable = true;
-      dev-scripts.enable = true;
-      cpu-power-management.enable = true;
-      nixvim.enable = true;
-
-      sshd.enable = true;
-      caddy.enable = true;
-      gatus.enable = true;
+      dev = {
+        git.enable = true;
+        tools.enable = true;
+        scripts.enable = true;
+        nixvim.enable = true;
+      };
+      hardware = {
+        cpu-power-management.enable = true;
+      };
+      services = {
+        sshd.enable = true;
+        caddy.enable = true;
+        gatus.enable = true;
+      };
     };
   };
 

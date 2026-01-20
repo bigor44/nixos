@@ -1,4 +1,4 @@
-# Feature: audio
+# Feature: hardware-audio
 # Purpose: PipeWire audio stack with ALSA and PulseAudio compatibility
 {
   lib,
@@ -6,13 +6,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.features.audio;
+  cfg = config.bigor.features.hardware.audio;
 in
 {
-  options.bigor.features.audio.enable = mkEnableOption "Audio stack (Pipewire)";
+  options.bigor.features.hardware.audio.enable = lib.mkEnableOption "Audio stack (Pipewire)";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.pipewire = {
       enable = true;
       alsa.enable = true;

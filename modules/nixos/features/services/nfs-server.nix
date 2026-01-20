@@ -1,4 +1,4 @@
-# Feature: nfs-server
+# Feature: services-nfs-server
 # Purpose: NFS server configuration for exporting storage
 {
   config,
@@ -6,13 +6,13 @@
   ...
 }:
 let
-  cfg = config.bigor.features.nfs-server;
+  cfg = config.bigor.features.services.nfs-server;
 
   # NFS export options: all requests mapped to bigor (1000:100) for security
   nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
 in
 {
-  options.bigor.features.nfs-server.enable = lib.mkEnableOption "NFS server";
+  options.bigor.features.services.nfs-server.enable = lib.mkEnableOption "NFS server";
 
   config = lib.mkIf cfg.enable {
     services.nfs.server = {
@@ -23,11 +23,9 @@ in
     };
 
     # Declare network needs
-    bigor.platform.firewall = {
-      openPorts = {
-        tcp = config.bigor.network.ports.nfs.all;
-        udp = config.bigor.network.ports.nfs.all;
-      };
+    bigor.network.firewall.ports = {
+      tcp = config.bigor.network.ports.nfs.all;
+      udp = config.bigor.network.ports.nfs.all;
     };
     bigor.network.requiredStaticIpServices = [ "nfs-server" ];
   };

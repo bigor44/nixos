@@ -1,4 +1,4 @@
-# Feature: flatpak
+# Feature: graphics-flatpak
 # Purpose: Flatpak support with Flathub repository
 {
   lib,
@@ -7,10 +7,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf getExe;
-  cfg = config.bigor.features.flatpak;
+  cfg = config.bigor.features.graphics.flatpak;
 in
 {
-  options.bigor.features.flatpak.enable = mkEnableOption "Flatpak with Flathub repository";
+  options.bigor.features.graphics.flatpak.enable = mkEnableOption "Flatpak with Flathub repository";
 
   config = mkIf cfg.enable {
     services.flatpak.enable = true;

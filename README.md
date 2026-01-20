@@ -7,7 +7,7 @@ Welcome to my personal NixOS configuration repository. This project uses **Nix F
 This repository follows a strict separation of concerns to keep the configuration maintainable and reusable:
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, networking, shell, users). These are foundational and always active.
-- **Feature Modules (`modules/nixos/features/`)**: Optional capabilities (gaming, desktop environments, development tools). These are toggled per-host using `bigor.features.<name>.enable`.
+- **Feature Modules (`modules/nixos/features/`)**: Optional capabilities (gaming, desktop environments, development tools). These are toggled per-host using `bigor.features.<category>.<name>.enable`.
 - **Hosts (`hosts/`)**: Machine-specific configurations that compose platform and feature modules.
 
 ## 🖥️ Hosts

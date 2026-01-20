@@ -1,4 +1,4 @@
-# Feature: sshd
+# Feature: services-sshd
 # Purpose: Hardened OpenSSH server (key-based auth only, no root login)
 {
   config,
@@ -6,13 +6,13 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.bigor.features.sshd;
+  cfg = config.bigor.features.services.sshd;
 in
 {
-  options.bigor.features.sshd.enable = mkEnableOption "OpenSSH daemon with hardened defaults";
+  options.bigor.features.services.sshd.enable =
+    lib.mkEnableOption "OpenSSH daemon with hardened defaults";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.openssh = {
       enable = true;
       openFirewall = true;

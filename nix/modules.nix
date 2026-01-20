@@ -14,8 +14,8 @@
     ../modules/nixos/platform/fonts.nix
 
     # Platform - Networking
-    ../modules/nixos/platform/network.nix
-    ../modules/nixos/platform/firewall.nix
+    ../modules/nixos/platform/network/default.nix
+    ../modules/nixos/platform/network/firewall.nix
 
     # Platform - DNS
     ../modules/nixos/platform/dns
@@ -23,24 +23,30 @@
     # Platform - Policies
     ../modules/nixos/platform/policies/storage.nix
 
-    # Features
-    ../modules/nixos/features/audio.nix
-    ../modules/nixos/features/bluetooth.nix
-    ../modules/nixos/features/caddy.nix
-    ../modules/nixos/features/cpu-power-management.nix
-    ../modules/nixos/features/desktop.nix
-    ../modules/nixos/features/flatpak.nix
-    ../modules/nixos/features/gaming.nix
-    ../modules/nixos/features/gatus.nix
-    ../modules/nixos/features/keyboardVIA.nix
-    ../modules/nixos/features/nfs-client.nix
-    ../modules/nixos/features/nfs-server.nix
-    ../modules/nixos/features/sshd.nix
-    ../modules/nixos/features/nixvim
-    ../modules/nixos/features/desktop-apps.nix
-    ../modules/nixos/features/git.nix
-    ../modules/nixos/features/dev-tools.nix
-    ../modules/nixos/features/dev-scripts.nix
+    # Features - Graphics
+    ../modules/nixos/features/graphics/desktop.nix
+    ../modules/nixos/features/graphics/apps.nix
+    ../modules/nixos/features/graphics/flatpak.nix
+    ../modules/nixos/features/graphics/gaming.nix
+
+    # Features - Hardware
+    ../modules/nixos/features/hardware/audio.nix
+    ../modules/nixos/features/hardware/bluetooth.nix
+    ../modules/nixos/features/hardware/cpu-power-management.nix
+    ../modules/nixos/features/hardware/keyboardVIA.nix
+
+    # Features - Services
+    ../modules/nixos/features/services/caddy.nix
+    ../modules/nixos/features/services/gatus.nix
+    ../modules/nixos/features/services/nfs-client.nix
+    ../modules/nixos/features/services/nfs-server.nix
+    ../modules/nixos/features/services/sshd.nix
+
+    # Features - Dev
+    ../modules/nixos/features/dev/git.nix
+    ../modules/nixos/features/dev/nixvim
+    ../modules/nixos/features/dev/tools.nix
+    ../modules/nixos/features/dev/scripts.nix
   ];
 
   # All Home Manager modules under the bigor.home.* namespace

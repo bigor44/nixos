@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.bigor.features.dev-scripts;
+  cfg = config.bigor.features.dev.scripts;
 
   # Helper to create scripts from external files
   mkScript =
@@ -19,7 +19,7 @@ let
     };
 
   # Script: check-quick
-  check-quick = mkScript "check-quick" ../../../scripts/check-quick.sh (
+  check-quick = mkScript "check-quick" ../../../../scripts/check-quick.sh (
     with pkgs;
     [
       git
@@ -31,7 +31,7 @@ let
   );
 
   # Script: check-full
-  check-full = mkScript "check-full" ../../../scripts/check-full.sh (
+  check-full = mkScript "check-full" ../../../../scripts/check-full.sh (
     with pkgs;
     [
       git
@@ -44,7 +44,7 @@ let
   );
 
   # Script: check-mega
-  check-mega = mkScript "check-mega" ../../../scripts/check-mega.sh (
+  check-mega = mkScript "check-mega" ../../../../scripts/check-mega.sh (
     with pkgs;
     [
       git
@@ -54,7 +54,7 @@ let
   );
 
   # Script: dns-test
-  dns-test = mkScript "dns-test" ../../../scripts/dns-test.sh (
+  dns-test = mkScript "dns-test" ../../../../scripts/dns-test.sh (
     with pkgs;
     [
       dnsutils
@@ -62,7 +62,7 @@ let
   );
 
   # Script: install-git-hooks
-  install-git-hooks = mkScript "install-git-hooks" ../../../scripts/install-git-hooks.sh (
+  install-git-hooks = mkScript "install-git-hooks" ../../../../scripts/install-git-hooks.sh (
     with pkgs;
     [
       git
@@ -72,7 +72,7 @@ let
   );
 in
 {
-  options.bigor.features.dev-scripts.enable = lib.mkEnableOption "Development QA scripts";
+  options.bigor.features.dev.scripts.enable = lib.mkEnableOption "Development QA scripts";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [

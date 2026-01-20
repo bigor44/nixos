@@ -1,11 +1,11 @@
-# Feature: git
+# Feature: dev-git
 # Purpose: Git configuration and Zsh shell aliases
 { config, lib, ... }:
 let
-  cfg = config.bigor.features.git;
+  cfg = config.bigor.features.dev.git;
 in
 {
-  options.bigor.features.git.enable = lib.mkEnableOption "Git configuration";
+  options.bigor.features.dev.git.enable = lib.mkEnableOption "Git configuration";
 
   config = lib.mkIf cfg.enable {
     programs.git = {

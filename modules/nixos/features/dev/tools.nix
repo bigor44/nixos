@@ -7,10 +7,10 @@
   ...
 }:
 let
-  cfg = config.bigor.features.dev-tools;
+  cfg = config.bigor.features.dev.tools;
 in
 {
-  options.bigor.features.dev-tools.enable = lib.mkEnableOption "Development tools";
+  options.bigor.features.dev.tools.enable = lib.mkEnableOption "Development tools";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

@@ -17,18 +17,24 @@
     };
 
     features = {
-      git.enable = true;
-      dev-tools.enable = true;
-      dev-scripts.enable = true;
-      cpu-power-management.enable = true;
-      keyboardVIA.enable = true;
-      nixvim.enable = true;
-      desktop.enable = true;
-      desktop-apps.enable = true;
-      audio.enable = true;
-      flatpak.enable = true;
-      bluetooth.enable = true;
-      gaming.enable = true;
+      dev = {
+        git.enable = true;
+        tools.enable = true;
+        scripts.enable = true;
+        nixvim.enable = true;
+      };
+      graphics = {
+        desktop.enable = true;
+        apps.enable = true;
+        flatpak.enable = true;
+        gaming.enable = true;
+      };
+      hardware = {
+        cpu-power-management.enable = true;
+        keyboardVIA.enable = true;
+        audio.enable = true;
+        bluetooth.enable = true;
+      };
     };
   };
 

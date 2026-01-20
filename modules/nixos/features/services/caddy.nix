@@ -1,4 +1,4 @@
-# Feature: caddy
+# Feature: services-caddy
 # Purpose: Reverse proxy with automatic HTTPS
 {
   config,
@@ -7,10 +7,10 @@
   ...
 }:
 let
-  cfg = config.bigor.features.caddy;
+  cfg = config.bigor.features.services.caddy;
 in
 {
-  options.bigor.features.caddy.enable = lib.mkEnableOption "Caddy reverse proxy";
+  options.bigor.features.services.caddy.enable = lib.mkEnableOption "Caddy reverse proxy";
 
   config = lib.mkIf cfg.enable {
     services.caddy = {
@@ -18,12 +18,10 @@ in
     };
 
     # Declare network needs
-    bigor.platform.firewall = {
-      openPorts.tcp = [
-        config.bigor.network.ports.caddy.http
-        config.bigor.network.ports.caddy.https
-      ];
-    };
+    bigor.network.firewall.ports.tcp = [
+      config.bigor.network.ports.caddy.http
+      config.bigor.network.ports.caddy.https
+    ];
     bigor.network.requiredStaticIpServices = [ "caddy" ];
 
     # Required for Caddy's local CA management (certutil)

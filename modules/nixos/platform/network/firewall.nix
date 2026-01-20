@@ -16,7 +16,11 @@ let
   hostConfig = config.bigor.network.hosts.${config.networking.hostName};
   mainInterface = hostConfig.interface;
 
-  cfg = config.bigor.platform.firewall;
+  cfg = config.bigor.network.firewall;
+
+  allTcpPorts = lib.unique cfg.ports.tcp;
+  allUdpPorts = lib.unique cfg.ports.udp;
+  hasPorts = allTcpPorts != [ ] || allUdpPorts != [ ];
 
   portType = types.addCheck types.int (p: p > 0 && p < 65536) // {
     name = "port";
@@ -24,8 +28,8 @@ let
   };
 in
 {
-  options.bigor.platform.firewall = {
-    openPorts = {
+  options.bigor.network.firewall = {
+    ports = {
       tcp = mkOption {
         type = types.listOf portType;
         default = [ ];
@@ -44,7 +48,7 @@ in
     {
       assertions = [
         {
-          assertion = (cfg.openPorts.tcp != [ ] || cfg.openPorts.udp != [ ]) -> mainInterface != "";
+          assertion = hasPorts -> mainInterface != "";
           message = "Firewall: Open ports are requested but no main network interface is defined for this host.";
         }
       ];
@@ -59,10 +63,10 @@ in
     }
 
     # Open ports on the main interface for enabled services
-    (mkIf (cfg.openPorts.tcp != [ ] || cfg.openPorts.udp != [ ]) {
+    (mkIf hasPorts {
       networking.firewall.interfaces.${mainInterface} = mkMerge [
-        (mkIf (cfg.openPorts.tcp != [ ]) { allowedTCPPorts = lib.unique cfg.openPorts.tcp; })
-        (mkIf (cfg.openPorts.udp != [ ]) { allowedUDPPorts = lib.unique cfg.openPorts.udp; })
+        (mkIf (allTcpPorts != [ ]) { allowedTCPPorts = allTcpPorts; })
+        (mkIf (allUdpPorts != [ ]) { allowedUDPPorts = allUdpPorts; })
       ];
     })
   ];

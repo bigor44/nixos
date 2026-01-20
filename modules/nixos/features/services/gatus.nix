@@ -1,4 +1,4 @@
-# Feature: gatus
+# Feature: services-gatus
 # Purpose: Status page and monitoring (Configuration as Code alternative to Uptime Kuma)
 {
   config,
@@ -14,11 +14,11 @@ let
     filterAttrs
     optional
     ;
-  cfg = config.bigor.features.gatus;
+  cfg = config.bigor.features.services.gatus;
   networkCfg = config.bigor.network;
 in
 {
-  options.bigor.features.gatus.enable = mkEnableOption "Gatus status page";
+  options.bigor.features.services.gatus.enable = mkEnableOption "Gatus status page";
 
   config = mkIf cfg.enable (mkMerge [
     {
@@ -61,7 +61,7 @@ in
             ]
           ++
             # Dynamic: Check Caddy HTTPS if enabled
-            (optional config.bigor.features.caddy.enable {
+            (optional config.bigor.features.services.caddy.enable {
               name = "Service: Caddy HTTPS";
               group = "Local Services";
               url = "https://status.${networkCfg.domain}";
@@ -71,7 +71,7 @@ in
         };
       };
     }
-    (mkIf config.bigor.features.caddy.enable {
+    (mkIf config.bigor.features.services.caddy.enable {
       services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
         tls internal
         reverse_proxy 127.0.0.1:${toString networkCfg.ports.gatus}

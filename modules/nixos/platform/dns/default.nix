@@ -101,11 +101,9 @@ in
     # ===========================================================================
     # Network Configuration (Firewall)
     # ===========================================================================
-    bigor.platform.firewall = mkIf cfg.computed.needsPort53OnLan {
-      openPorts = {
-        tcp = [ networkCfg.ports.blocky.dns ];
-        udp = [ networkCfg.ports.blocky.dns ];
-      };
+    bigor.network.firewall.ports = mkIf cfg.computed.needsPort53OnLan {
+      tcp = [ networkCfg.ports.blocky.dns ];
+      udp = [ networkCfg.ports.blocky.dns ];
     };
 
     bigor.network.requiredStaticIpServices = mkIf cfg.computed.needsPort53OnLan [

@@ -19,18 +19,18 @@ Contains entry points for each physical machine.
 
 **Mandatory** infrastructure configurations that are always active.
 
-- **Examples:** `boot.nix`, `network.nix`, `users.nix`, `policies/`.
+- **Examples:** `boot.nix`, `network/`, `users.nix`, `policies/`.
 - **Convention:** These modules do **not** have `enable` options.
 
 ### 3. Feature Modules (`modules/nixos/features/`)
 
 **Optional** capabilities that must be explicitly enabled per host.
 
-- **Examples:** `gaming.nix`, `desktop.nix`, `audio.nix`.
+- **Examples:** `graphics/gaming.nix`, `graphics/desktop.nix`, `hardware/audio.nix`.
 - **Convention:**
-  - Must define an `enable` option (e.g., `bigor.features.gaming.enable`).
+  - Must define an `enable` option (e.g., `bigor.features.graphics.gaming.enable`).
   - Configuration must be wrapped in `mkIf cfg.enable`.
-  - **Firewall:** Never use `networking.firewall` directly. Use `bigor.platform.firewall.openPorts`.
+  - **Firewall:** Never use `networking.firewall` directly. Use `bigor.network.firewall.ports`.
 
 ## Development Workflow
 

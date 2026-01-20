@@ -94,7 +94,7 @@ in
                hosts.${hostname}.ip = "192.168.1.XX";
 
             2. OR disable services in hosts/${hostname}/default.nix:
-               bigor.features.<service>.enable = false;
+               bigor.features.<category>.<service>.enable = false;
           '';
         }
       ]

@@ -31,7 +31,7 @@ disabled = [
 #    ✗ enable = mkOption { type = types.bool; default = false; ... };
 #
 #    Rationale: mkEnableOption provides consistent enable option pattern
-#    across all bigor.features.* modules with automatic description.
+#    across all bigor.features.<category>.* modules with automatic description.
 #
 # 3. Policy modules use readOnly options for computed values:
 #    ✓ computed.value = mkOption { type = types.str; readOnly = true; };

@@ -1,4 +1,4 @@
-# Feature: desktop-apps
+# Feature: graphics-apps
 # Purpose: User-level desktop applications and dotfiles (migrated from HM)
 {
   config,
@@ -7,13 +7,13 @@
   ...
 }:
 let
-  cfg = config.bigor.features.desktop-apps;
+  cfg = config.bigor.features.graphics.apps;
   user = "bigor";
   homeDir = "/home/${user}";
   dotfilesPath = "${homeDir}/nixos/dotfiles";
 in
 {
-  options.bigor.features.desktop-apps.enable = lib.mkEnableOption "User-level desktop applications";
+  options.bigor.features.graphics.apps.enable = lib.mkEnableOption "User-level desktop applications";
 
   config = lib.mkIf cfg.enable {
     users.users.${user}.packages = with pkgs; [
