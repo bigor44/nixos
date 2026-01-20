@@ -11,6 +11,7 @@ let
     mkMerge
     mkOption
     types
+    unique
     ;
 
   hostConfig = config.bigor.network.hosts.${config.networking.hostName};
@@ -18,8 +19,8 @@ let
 
   cfg = config.bigor.network.firewall;
 
-  allTcpPorts = lib.unique cfg.ports.tcp;
-  allUdpPorts = lib.unique cfg.ports.udp;
+  allTcpPorts = unique cfg.ports.tcp;
+  allUdpPorts = unique cfg.ports.udp;
   hasPorts = allTcpPorts != [ ] || allUdpPorts != [ ];
 
   portType = types.addCheck types.int (p: p > 0 && p < 65536) // {

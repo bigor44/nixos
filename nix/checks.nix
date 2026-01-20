@@ -7,10 +7,18 @@
     {
       checks =
         let
+          inherit (lib)
+            concatMapStringsSep
+            filter
+            length
+            mapAttrs'
+            nameValuePair
+            ;
+
           # Generate assertion checks for all NixOS configurations
           # This ensures policy assertions are validated during `nix flake check`
           # Strategy: Force evaluation of system.build.toplevel metadata which includes assertions
-          assertionChecks = lib.mapAttrs' (
+          assertionChecks = mapAttrs' (
             hostName: config:
             let
               # Access the system config
@@ -20,20 +28,20 @@
               assertions = cfg.assertions or [ ];
               # Force evaluation of all assertions by accessing system.checks
               # This will fail at eval-time if any assertion is false
-              failedAssertions = lib.filter (x: !x.assertion) assertions;
+              failedAssertions = filter (x: !x.assertion) assertions;
             in
-            lib.nameValuePair "${hostName}-assertions" (
+            nameValuePair "${hostName}-assertions" (
               if failedAssertions != [ ] then
                 throw ''
                   Failed assertions for ${hostName}:
-                  ${lib.concatMapStringsSep "\n" (x: "- ${x.message}") failedAssertions}
+                  ${concatMapStringsSep "\n" (x: "- ${x.message}") failedAssertions}
                 ''
               else
                 pkgs.writeTextFile {
                   name = "${hostName}-assertions";
                   text = ''
                     All assertions passed for ${hostName}
-                    Total assertions checked: ${toString (lib.length assertions)}
+                    Total assertions checked: ${toString (length assertions)}
                   '';
                 }
             )

@@ -15,6 +15,8 @@ let
     filterAttrs
     mapAttrsToList
     concatStringsSep
+    concatMapStringsSep
+    optional
     ;
   cfg = config.bigor.network;
   hostname = config.networking.hostName;
@@ -87,7 +89,7 @@ in
           assertion = cfg.requiredStaticIpServices != [ ] -> (cfg.hosts.${hostname}.ip or null) != null;
           message = ''
             The following services require a static IP but ${hostname} has no static IP configured:
-            ${lib.concatMapStringsSep "\n" (s: "  - ${s}") cfg.requiredStaticIpServices}
+            ${concatMapStringsSep "\n" (s: "  - ${s}") cfg.requiredStaticIpServices}
 
             To fix:
             1. Add static IP in nix/network-topology.nix:
@@ -103,7 +105,7 @@ in
         message = "Host '${name}' has a static IP but no interface defined. Static IP requires an interface.";
       }) cfg.hosts;
 
-      warnings = lib.optional (cfg.domain == "") "bigor.network.domain is not set";
+      warnings = optional (cfg.domain == "") "bigor.network.domain is not set";
 
       # Generate /etc/hosts from hosts registry
       networking.extraHosts = concatStringsSep "\n" (
