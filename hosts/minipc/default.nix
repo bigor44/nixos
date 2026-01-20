@@ -31,7 +31,10 @@
         cpu-power-management.enable = true;
       };
       services = {
-        sshd.enable = true;
+        sshd = {
+          enable = true;
+          openFirewall = true;
+        };
         caddy.enable = true;
         gatus.enable = true;
       };
