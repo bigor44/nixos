@@ -1,4 +1,4 @@
-# Home: nixvim-autocmds
+# Feature: nixvim-autocmds
 # Purpose: Autocommands configuration for nixvim
 {
   programs.nixvim = {

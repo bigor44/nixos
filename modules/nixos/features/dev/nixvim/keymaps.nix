@@ -1,4 +1,4 @@
-# Home: nixvim-keymaps
+# Feature: nixvim-keymaps
 # Purpose: Keyboard mappings configuration for nixvim
 {
   programs.nixvim.keymaps = [

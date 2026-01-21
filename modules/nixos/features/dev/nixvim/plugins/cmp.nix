@@ -1,4 +1,4 @@
-# Home: nixvim-cmp
+# Feature: nixvim-cmp
 # Purpose: Completion engine configuration for nixvim
 { pkgs, ... }:
 {

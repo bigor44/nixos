@@ -1,4 +1,4 @@
-# Home: nixvim-opts
+# Feature: nixvim-opts
 # Purpose: Editor options and visual settings for nixvim
 {
   programs.nixvim = {

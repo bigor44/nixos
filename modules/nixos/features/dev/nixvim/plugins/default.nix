@@ -1,4 +1,4 @@
-# Home: nixvim-plugins
+# Feature: nixvim-plugins
 # Purpose: Plugin imports aggregator for nixvim
 {
   imports = [

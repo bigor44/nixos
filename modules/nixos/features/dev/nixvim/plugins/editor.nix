@@ -1,4 +1,4 @@
-# Home: nixvim-editor
+# Feature: nixvim-editor
 # Purpose: Editor enhancement plugins for nixvim
 {
   programs.nixvim.plugins = {

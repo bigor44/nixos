@@ -1,4 +1,4 @@
-# Home: nixvim-treesitter
+# Feature: nixvim-treesitter
 # Purpose: Treesitter syntax highlighting configuration for nixvim
 {
   programs.nixvim.plugins = {

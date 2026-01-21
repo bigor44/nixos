@@ -1,5 +1,5 @@
 # Flake: bigor-nixos
-# Purpose: Main entry point for NixOS + Home Manager configuration (flake-parts)
+# Purpose: Main entry point for NixOS configuration (flake-parts)
 {
   description = "Bigor's NixOS Configuration";
 

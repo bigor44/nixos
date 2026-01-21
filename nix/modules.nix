@@ -1,5 +1,5 @@
 # Flake: modules
-# Purpose: Explicit import list for all custom NixOS and Home Manager modules
+# Purpose: Explicit import list for all custom NixOS modules
 {
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
@@ -48,7 +48,4 @@
     ../modules/nixos/features/dev/tools.nix
     ../modules/nixos/features/dev/scripts.nix
   ];
-
-  # All Home Manager modules under the bigor.home.* namespace
-  homeModules = [ ];
 }

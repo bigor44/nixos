@@ -1,4 +1,4 @@
-# Home: nixvim-ui
+# Feature: nixvim-ui
 # Purpose: UI plugins and visual enhancements for nixvim
 {
   programs.nixvim = {

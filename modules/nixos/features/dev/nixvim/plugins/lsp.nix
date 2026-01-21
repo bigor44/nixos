@@ -1,4 +1,4 @@
-# Home: nixvim-lsp
+# Feature: nixvim-lsp
 # Purpose: Language Server Protocol configuration for nixvim
 { inputs, ... }:
 let

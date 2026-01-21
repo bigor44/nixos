@@ -1,4 +1,4 @@
-# Home: nixvim-mini
+# Feature: nixvim-mini
 # Purpose: Mini.nvim consolidated configuration
 {
   programs.nixvim.plugins.mini = {

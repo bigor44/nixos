@@ -52,7 +52,6 @@ To maintain consistency across the codebase, please follow these standards:
 
 - **File Header**: Every Nix file must start with a 2-line header. The first line should use a prefix that identifies the file's category, followed by a `# Purpose:` line:
   - `# Feature:` for system features or platform modules (`modules/nixos/`).
-  - `# Home:` for NixVim components.
   - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
   - `# Policy:` for system-wide policies (`modules/nixos/platform/policies/`).
 
@@ -128,9 +127,9 @@ Before committing, ensure your changes don't break the configuration:
 To test your changes on your current machine:
 
 ```bash
-nrs  # sudo nixos-rebuild switch --flake . (rebuild and switch)
+nrs  # check-full && sudo nixos-rebuild switch --flake .
 # OR
-nrb  # sudo nixos-rebuild boot --flake . (rebuild and set as boot entry)
+nrb  # check-full && sudo nixos-rebuild boot --flake .
 ```
 
 ## 📝 Commit Guidelines

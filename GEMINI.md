@@ -44,8 +44,8 @@ nix develop
 
 ### Build & Deploy
 
-- **Rebuild & Switch:** `nrs` (alias for `sudo nixos-rebuild switch --flake .`)
-- **Rebuild & Boot:** `nrb` (alias for `sudo nixos-rebuild boot --flake .`)
+- **Rebuild & Switch:** `nrs` (alias for `check-full && sudo nixos-rebuild switch --flake .`)
+- **Rebuild & Boot:** `nrb` (alias for `check-full && sudo nixos-rebuild boot --flake .`)
 
 ### Verification
 
@@ -65,7 +65,7 @@ Every Nix file requires a specific 2-line header:
 # Purpose: <Description of why this file exists>
 ```
 
-Categories: `# Feature:`, `# Home:`, `# Host:`, `# Policy:`.
+Categories: `# Feature:`, `# Host:`, `# Policy:`.
 
 ### Nix Language Rules
 
@@ -81,6 +81,6 @@ Managed via **sops-nix** with **age**.
 
 ## Key Commands (Aliases)
 
-- `nrs`: Rebuild system (switch)
-- `nrb`: Rebuild system (boot)
-- `gcn`: Git Commit Nix (Format -> Stage -> Check -> Commit)
+- `nrs`: Rebuild system (switch) - **Runs full check first**.
+- `nrb`: Rebuild system (boot) - **Runs full check first**.
+- `gcn`: Git Commit Nix (Format -> Stage -> Staged Check -> Commit)
