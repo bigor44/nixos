@@ -14,6 +14,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, shell, users, etc.). These modules do NOT have `enable` options and are always active.
 - **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, git, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<category>.<name>.enable`.
+- **Home Modules (`modules/home/`)**: User-specific configuration (dotfiles, shell aliases, applications) managed by **Home Manager**.
 
 ### Host Definitions
 
@@ -52,6 +53,7 @@ To maintain consistency across the codebase, please follow these standards:
 
 - **File Header**: Every Nix file must start with a 2-line header. The first line should use a prefix that identifies the file's category, followed by a `# Purpose:` line:
   - `# Feature:` for system features or platform modules (`modules/nixos/`).
+  - `# Home:` for Home Manager modules (`modules/home/`).
   - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
   - `# Policy:` for system-wide policies (`modules/nixos/platform/policies/`).
 
@@ -68,6 +70,10 @@ To maintain consistency across the codebase, please follow these standards:
     - Wrap the configuration in `mkIf cfg.enable`.
     - Reference `modules/nixos/features/graphics/gaming.nix` for a clean example.
   - **Platform modules** do NOT have enable options and are always active.
+- **Home Modules**:
+  - Located in `modules/home/`.
+  - Should be imported via `modules/home/default.nix`.
+  - Used for user-specific packages, dotfiles, and services.
 - **Shell Scripts**:
   - Must start with a minimal header: Shebang + Script Name + Purpose.
   - Avoid large ASCII banners.
@@ -79,15 +85,6 @@ To maintain consistency across the codebase, please follow these standards:
   - **Anti-patterns** (Avoid these):
     - _Bad:_ `# Enable steam` -> `programs.steam.enable = true;` (Redundant)
     - _Good:_ `# Required for Proton compatibility` -> `programs.steam.enable = true;` (Adds context)
-
-- **`inherit` Pattern**:
-  - Only use `inherit (lib)` when you have **3 or more** usages of lib functions.
-  - For 1-2 usages, prefix directly with `lib.` (e.g., `lib.mkEnableOption`, `lib.mkIf`).
-  - **Why:** The `inherit` pattern reduces verbosity but adds cognitive overhead. For few usages, direct prefixing is clearer.
-  - **Examples**:
-    - Good (3+ usages): `inherit (lib) mkEnableOption mkIf mkOption types;`
-    - Bad (only 2 usages): `inherit (lib) mkEnableOption mkIf;`
-    - Better: Use `lib.mkEnableOption` and `lib.mkIf` directly.
 
 ### 3. Make Your Changes
 

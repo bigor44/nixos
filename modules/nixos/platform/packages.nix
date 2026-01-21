@@ -20,6 +20,7 @@
     # Modern CLI tools
     eza
     fd
+    findutils
     ripgrep
     jq
 

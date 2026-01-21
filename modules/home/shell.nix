@@ -1,14 +1,14 @@
-# Platform: shell
+# Home: shell
 # Purpose: Zsh shell, Starship, and CLI tools
 { pkgs, ... }:
 {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestions.enable = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    interactiveShellInit = ''
+    initContent = ''
       # Colored man pages
       export LESS_TERMCAP_mb=$'\e[1;32m'
       export LESS_TERMCAP_md=$'\e[1;32m'
@@ -68,7 +68,7 @@
     };
   };
 
-  environment.variables = {
+  home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
     PAGER = "less";
@@ -76,7 +76,7 @@
   };
 
   # CLI Tools
-  environment.systemPackages = with pkgs; [
+  home.packages = with pkgs; [
     eza
     fzf
     zoxide

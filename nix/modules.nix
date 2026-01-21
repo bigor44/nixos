@@ -5,13 +5,13 @@
   nixosModules = [
     # Platform - Core System
     ../modules/nixos/platform/boot.nix
-    ../modules/nixos/platform/shell.nix
     ../modules/nixos/platform/nix-core.nix
     ../modules/nixos/platform/packages.nix
     ../modules/nixos/platform/sops.nix
     ../modules/nixos/platform/users.nix
     ../modules/nixos/platform/localization.nix
     ../modules/nixos/platform/fonts.nix
+    ../modules/nixos/platform/home.nix
 
     # Platform - Networking
     ../modules/nixos/platform/network/default.nix
@@ -25,7 +25,6 @@
 
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
-    ../modules/nixos/features/graphics/apps.nix
     ../modules/nixos/features/graphics/flatpak.nix
     ../modules/nixos/features/graphics/gaming.nix
 

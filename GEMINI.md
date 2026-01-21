@@ -32,6 +32,14 @@ Contains entry points for each physical machine.
   - Configuration must be wrapped in `mkIf cfg.enable`.
   - **Firewall:** Never use `networking.firewall` directly. Use `bigor.network.firewall.ports`.
 
+### 4. Home Modules (`modules/home/`)
+
+**User-specific** configurations managed by **Home Manager**.
+
+- **Path:** `modules/home/`
+- **Role:** Manages user dotfiles, packages, and services (e.g., Zsh, desktop apps).
+- **Integration:** Integrated via `modules/nixos/platform/home.nix`.
+
 ## Development Workflow
 
 ### Environment
@@ -65,11 +73,10 @@ Every Nix file requires a specific 2-line header:
 # Purpose: <Description of why this file exists>
 ```
 
-Categories: `# Feature:`, `# Host:`, `# Policy:`.
+Categories: `# Feature:`, `# Host:`, `# Policy:`, `# Home:`, `# Platform:`.
 
 ### Nix Language Rules
 
-- **Inherit Pattern:** Only `inherit (lib)` if using **3 or more** functions. Otherwise, use `lib.mkIf`, etc.
 - **Comments:** Explain _why_, not _what_. Use English.
 
 ### Secrets

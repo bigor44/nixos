@@ -29,7 +29,6 @@
       };
       graphics = {
         desktop.enable = true;
-        apps.enable = true;
         flatpak.enable = true;
         gaming.enable = true;
       };
