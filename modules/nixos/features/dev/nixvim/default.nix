@@ -13,7 +13,7 @@ in
   options.bigor.features.dev.nixvim.enable = lib.mkEnableOption "Neovim with LSP and plugins";
 
   imports = [
-    ./plugins.nix
+    ./plugins
     ./keymaps.nix
   ];
 

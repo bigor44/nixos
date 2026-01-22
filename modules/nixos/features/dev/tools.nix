@@ -22,6 +22,7 @@ in
       prettier
       nixfmt
       shfmt
+      shellcheck
       taplo
 
       # Development tools
