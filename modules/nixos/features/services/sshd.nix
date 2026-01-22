@@ -17,7 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      inherit (cfg) openFirewall;
+      openFirewall = false;
       settings = {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
@@ -25,5 +25,9 @@ in
         AllowUsers = [ "bigor" ];
       };
     };
+
+    bigor.network.firewall.ports.tcp = lib.mkIf cfg.openFirewall [
+      config.bigor.network.ports.ssh
+    ];
   };
 }

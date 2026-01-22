@@ -1,10 +1,8 @@
 # Feature: nixvim-keymaps
-# Purpose: Keyboard mappings configuration for nixvim
+# Purpose: Keymaps configuration for nixvim
 {
   programs.nixvim.keymaps = [
-    # ==========================================================================
     # Standard Operations
-    # ==========================================================================
     {
       mode = "n";
       key = "<Esc>";
@@ -18,9 +16,7 @@
       options.desc = "Clear search highlights (Alternative)";
     }
 
-    # ==========================================================================
     # Window Navigation (Ctrl + hjkl)
-    # ==========================================================================
     {
       mode = "n";
       key = "<C-h>";
@@ -46,9 +42,7 @@
       options.desc = "Focus right window";
     }
 
-    # ==========================================================================
     # Window Resize
-    # ==========================================================================
     {
       mode = "n";
       key = "<C-Up>";
@@ -74,9 +68,7 @@
       options.desc = "Increase window width";
     }
 
-    # ==========================================================================
     # Buffer Navigation
-    # ==========================================================================
     {
       mode = "n";
       key = "<S-l>";
@@ -90,10 +82,7 @@
       options.desc = "Previous buffer";
     }
 
-    # ==========================================================================
     # Editing Enhancements
-    # ==========================================================================
-    # Stay in visual mode after indenting
     {
       mode = "v";
       key = "<";
@@ -106,7 +95,6 @@
       action = ">gv";
       options.desc = "Indent selection right";
     }
-    # Move selected lines up/down
     {
       mode = "v";
       key = "J";
@@ -120,34 +108,25 @@
       options.desc = "Move selection up";
     }
 
-    # ==========================================================================
     # Plugin Specific
-    # ==========================================================================
-    # Undotree
     {
       mode = "n";
       key = "<leader>u";
       action = "<cmd>UndotreeToggle<cr>";
       options.desc = "Toggle Undotree";
     }
-
-    # Trouble
     {
       mode = "n";
       key = "<leader>xx";
       action = "<cmd>Trouble diagnostics toggle<cr>";
       options.desc = "Toggle Diagnostics (Trouble)";
     }
-
-    # Neo-tree
     {
       mode = "n";
       key = "<leader>e";
       action = "<cmd>Neotree toggle<cr>";
       options.desc = "Toggle Explorer";
     }
-
-    # LazyGit
     {
       mode = "n";
       key = "<leader>gg";

@@ -34,14 +34,11 @@
       http = 80;
       https = 443;
     };
-    nfs = {
-      rpc = 111;
-      server = 2049;
-      all = [
-        111
-        2049
-      ];
-    };
+    nfs.ports = [
+      111
+      2049
+    ];
     gatus = 8080;
+    ssh = 22;
   };
 }
