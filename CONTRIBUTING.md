@@ -13,7 +13,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 ### NixOS Modules
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, shell, users, etc.). These modules do NOT have `enable` options and are always active.
-- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, git, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<category>.<name>.enable`.
+- **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<category>.<name>.enable`.
 - **Home Modules (`modules/home/`)**: User-specific configuration (dotfiles, shell aliases, applications) managed by **Home Manager**.
 
 ### Host Definitions

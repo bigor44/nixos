@@ -8,7 +8,7 @@ This repository follows a strict separation of concerns to keep the configuratio
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, networking, shell, users). These are foundational and always active.
 - **Feature Modules (`modules/nixos/features/`)**: Optional capabilities (gaming, desktop environments, development tools). These are toggled per-host using `bigor.features.<category>.<name>.enable`.
-- **Home Modules (`modules/home/`)**: User-specific configuration (dotfiles, shell aliases, applications) managed by **Home Manager**.
+- **Home Modules (`modules/home/`)**: User-specific configuration (git, dotfiles, shell aliases, applications) managed by **Home Manager**.
 - **Hosts (`hosts/`)**: Machine-specific configurations that compose platform and feature modules.
 
 ## 🖥️ Hosts

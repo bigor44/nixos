@@ -37,7 +37,7 @@ Contains entry points for each physical machine.
 **User-specific** configurations managed by **Home Manager**.
 
 - **Path:** `modules/home/`
-- **Role:** Manages user dotfiles, packages, and services (e.g., Zsh, desktop apps).
+- **Role:** Manages user dotfiles, packages, and services (e.g., Git, Zsh, desktop apps).
 - **Integration:** Integrated via `modules/nixos/platform/home.nix`.
 
 ## Development Workflow
