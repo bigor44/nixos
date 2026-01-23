@@ -115,18 +115,15 @@ in
       extraPackages = with pkgs; [
         wl-clipboard
         gcc
-
-        # Language servers
-        nodePackages.bash-language-server
-        marksman
-        yaml-language-server
-        nixd
-
-        # Formatters & linters
+        tree-sitter
         nixfmt
         shfmt
         prettier
         taplo
+        nodePackages.bash-language-server
+        marksman
+        yaml-language-server
+        nixd
       ];
     };
   };
