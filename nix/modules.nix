@@ -42,7 +42,6 @@
     ../modules/nixos/features/services/sshd.nix
 
     # Features - Dev
-    ../modules/nixos/features/dev/git.nix
     ../modules/nixos/features/dev/nixvim
     ../modules/nixos/features/dev/tools.nix
     ../modules/nixos/features/dev/scripts.nix

@@ -18,7 +18,6 @@
 
     features = {
       dev = {
-        git.enable = true;
         tools.enable = true;
         scripts.enable = true;
         nixvim.enable = true;

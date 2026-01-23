@@ -4,6 +4,7 @@
 {
   imports = [
     ./shell.nix
+    ./git.nix
     ./apps.nix
     ./dotfiles.nix
     ./packages.nix
