@@ -1,5 +1,5 @@
 # Host: grospc
-# Purpose: Desktop workstation with gaming optimizations
+# Purpose: Desktop workstation with gaming
 { pkgs, config, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
@@ -11,33 +11,19 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    platform = {
-      dns.upstreamServers = [
-        "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.dns.main}"
-      ]
-      ++ config.bigor.platform.dns.defaultDohUpstreams;
-    };
+    profiles = [
+      "desktop"
+      "dev"
+    ];
 
-    features = {
-      services.nfs-client.enable = true;
+    platform.dns.upstreamServers = [
+      "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.dns.main}"
+    ]
+    ++ config.bigor.platform.dns.defaultDohUpstreams;
 
-      dev = {
-        tools.enable = true;
-        scripts.enable = true;
-        nixvim.enable = true;
-      };
-      graphics = {
-        desktop.enable = true;
-        flatpak.enable = true;
-        gaming.enable = true;
-      };
-      hardware = {
-        cpu-power-management.enable = true;
-        keyboardVIA.enable = true;
-        audio.enable = true;
-        bluetooth.enable = true;
-      };
-    };
+    # Host-specific, volontairement hors profil
+    features.graphics.gaming.enable = true;
+    features.hardware.keyboardVIA.enable = true;
   };
 
   fileSystems."/steamlibrary" = {

@@ -1,32 +1,23 @@
 # Host: minidesk
-# Purpose: Portable workstation (can use local storage when available)
+# Purpose: Portable workstation
 { pkgs, ... }:
 {
-  # Reuse minipc hardware config (same hardware base)
   imports = [ ../minipc/hardware-configuration.nix ];
 
   networking.hostName = "minidesk";
   system.stateVersion = "25.11";
 
-  # Kernel: Zen for desktop performance
+  # Kernel: Zen for responsiveness
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    features = {
-      dev = {
-        tools.enable = true;
-        scripts.enable = true;
-      };
-      graphics = {
-        desktop.enable = true;
-        flatpak.enable = true;
-        gaming.enable = true;
-      };
-      hardware = {
-        audio.enable = true;
-        bluetooth.enable = true;
-      };
-    };
+    profiles = [
+      "desktop"
+      "dev"
+    ];
+
+    # Gaming volontairement explicite (si tu veux le garder)
+    features.graphics.gaming.enable = true;
   };
 
   fileSystems."/mnt/storage" = {

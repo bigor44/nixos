@@ -3,6 +3,8 @@
 {
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
+    # Profiles
+    ../modules/nixos/profiles
     # Platform - Core System
     ../modules/nixos/platform/core.nix
     ../modules/nixos/platform/packages.nix

@@ -1,5 +1,5 @@
 # Host: minipc
-# Purpose: Homelab server with DNS, Caddy, and NFS
+# Purpose: Homelab server (DNS, Caddy, NFS, monitoring)
 { pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
@@ -11,29 +11,10 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    platform = {
-      dns.server.enable = true;
-    };
-
-    features = {
-      dev = {
-        tools.enable = true;
-        scripts.enable = true;
-        nixvim.enable = true;
-      };
-      hardware = {
-        cpu-power-management.enable = true;
-      };
-      services = {
-        nfs-server.enable = true;
-        sshd = {
-          enable = true;
-          openFirewall = true;
-        };
-        caddy.enable = true;
-        gatus.enable = true;
-      };
-    };
+    profiles = [
+      "server"
+      "homelab-master"
+    ];
   };
 
   fileSystems."/mnt/storage" = {
