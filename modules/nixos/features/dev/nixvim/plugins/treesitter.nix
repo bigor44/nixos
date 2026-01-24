@@ -1,6 +1,6 @@
 # Feature: nixvim-treesitter
 # Purpose: Treesitter configuration for nixvim
-_: {
+{
   programs.nixvim.plugins = {
     treesitter = {
       enable = true;
