@@ -67,8 +67,8 @@ in
     # Network Configuration (Firewall)
     # ===========================================================================
     bigor.network.firewall.ports = mkIf cfg.server.enable {
-      tcp = [ networkCfg.ports.blocky.dns ];
-      udp = [ networkCfg.ports.blocky.dns ];
+      tcp = [ networkCfg.ports.dns.main ];
+      udp = [ networkCfg.ports.dns.main ];
     };
 
     bigor.network.requiredStaticIpServices = mkIf cfg.server.enable [

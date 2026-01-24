@@ -19,8 +19,8 @@ in
 
     # Declare network needs
     bigor.network.firewall.ports.tcp = [
-      config.bigor.network.ports.caddy.http
-      config.bigor.network.ports.caddy.https
+      config.bigor.network.ports.web.http
+      config.bigor.network.ports.web.https
     ];
     bigor.network.requiredStaticIpServices = [ "caddy" ];
 

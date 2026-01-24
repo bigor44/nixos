@@ -4,13 +4,11 @@
   # All NixOS modules under the bigor.* namespace
   nixosModules = [
     # Platform - Core System
-    ../modules/nixos/platform/boot.nix
-    ../modules/nixos/platform/nix-core.nix
+    ../modules/nixos/platform/core.nix
     ../modules/nixos/platform/packages.nix
     ../modules/nixos/platform/sops.nix
     ../modules/nixos/platform/users.nix
-    ../modules/nixos/platform/localization.nix
-    ../modules/nixos/platform/fonts.nix
+    ../modules/nixos/platform/locale.nix
     ../modules/nixos/platform/home.nix
 
     # Platform - Networking

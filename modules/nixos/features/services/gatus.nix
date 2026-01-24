@@ -25,7 +25,7 @@ in
       services.gatus = {
         enable = true;
         settings = {
-          web.port = networkCfg.ports.gatus;
+          web.port = networkCfg.ports.monitoring.gatus;
           endpoints = [
             {
               name = "Internet (Cloudflare)";
@@ -50,7 +50,7 @@ in
               {
                 name = "Service: Blocky DNS";
                 group = "Local Services";
-                url = "127.0.0.1:${toString networkCfg.ports.blocky.dns}";
+                url = "127.0.0.1:${toString networkCfg.ports.dns.main}";
                 dns = {
                   query-name = "google.com";
                   query-type = "A";
@@ -74,7 +74,7 @@ in
     (mkIf config.bigor.features.services.caddy.enable {
       services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
         tls internal
-        reverse_proxy 127.0.0.1:${toString networkCfg.ports.gatus}
+        reverse_proxy 127.0.0.1:${toString networkCfg.ports.monitoring.gatus}
       '';
     })
   ]);

@@ -1,6 +1,9 @@
 # Module: nix/network-topology.nix
 # Purpose: Network topology data (hosts, IPs, interfaces, subnet)
 # This file is pure data and should not contain NixOS module logic
+let
+  mkNode = ip: interface: { inherit ip interface; };
+in
 {
   # Network subnet in CIDR notation
   subnet = "192.168.1.0/24";
@@ -10,35 +13,32 @@
 
   # All hosts in the network with their static IPs and interfaces
   hosts = {
-    minipc = {
-      ip = "192.168.1.10";
-      interface = "enp2s0";
-    };
-    grospc = {
-      ip = "192.168.1.11";
-      interface = "enp14s0";
-    };
-    minidesk = {
-      ip = null; # DHCP
-      interface = "enp2s0";
-    };
+    minipc = mkNode "192.168.1.10" "enp2s0";
+    grospc = mkNode "192.168.1.11" "enp14s0";
+    minidesk = mkNode null "enp2s0"; # DHCP
   };
 
-  # Standard port numbers for all network services
+  # Standard port numbers grouped by service type
   ports = {
-    blocky = {
-      dns = 53;
-      http = 4000; # Metrics endpoint
-    };
-    caddy = {
+    web = {
       http = 80;
       https = 443;
     };
-    nfs.ports = [
-      111
-      2049
-    ];
-    gatus = 8080;
-    ssh = 22;
+    dns = {
+      main = 53;
+      metrics = 4000;
+    };
+    monitoring = {
+      gatus = 8080;
+    };
+    storage = {
+      nfs = [
+        111
+        2049
+      ];
+    };
+    remote = {
+      ssh = 22;
+    };
   };
 }

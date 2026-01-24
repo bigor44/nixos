@@ -13,7 +13,7 @@
   bigor = {
     platform = {
       dns.upstreamServers = [
-        "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.blocky.dns}"
+        "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.dns.main}"
       ]
       ++ config.bigor.platform.dns.defaultDohUpstreams;
     };

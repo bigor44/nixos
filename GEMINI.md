@@ -19,7 +19,7 @@ Contains entry points for each physical machine.
 
 **Mandatory** infrastructure configurations that are always active.
 
-- **Examples:** `boot.nix`, `network/`, `users.nix`.
+- **Examples:** `core.nix`, `network/`, `users.nix`.
 - **Convention:** These modules do **not** have `enable` options.
 
 ### 3. Feature Modules (`modules/nixos/features/`)

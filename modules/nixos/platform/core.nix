@@ -1,7 +1,17 @@
-# Platform: nix-core
-# Purpose: Core Nix configuration (caches, flakes, internal CA trust)
+# Platform: core
+# Purpose: Core system configuration (Boot, Nix settings, Caches, Security)
 { inputs, ... }:
 {
+  # --- Boot Configuration ---
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      configurationLimit = 10;
+    };
+    efi.canTouchEfiVariables = true;
+  };
+
+  # --- Nix Core Configuration ---
   nixpkgs.config.allowUnfree = true;
 
   # Trust internal CA for local services (HTTPS via Caddy)

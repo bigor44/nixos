@@ -24,8 +24,8 @@ in
 
     # Declare network needs
     bigor.network.firewall.ports = {
-      tcp = config.bigor.network.ports.nfs.ports;
-      udp = config.bigor.network.ports.nfs.ports;
+      tcp = config.bigor.network.ports.storage.nfs;
+      udp = config.bigor.network.ports.storage.nfs;
     };
     bigor.network.requiredStaticIpServices = [ "nfs-server" ];
   };
