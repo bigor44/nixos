@@ -20,6 +20,9 @@
           deadnix
           shellcheck
 
+          # QA
+          pre-commit
+
           # Build tools
           # nh # Removed in favor of nixos-rebuild
 

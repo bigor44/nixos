@@ -90,3 +90,5 @@ Managed via **sops-nix** with **age**.
 - `nrs`: Rebuild system (switch) - **Runs full check first**.
 - `nrb`: Rebuild system (boot) - **Runs full check first**.
 - `gcn`: Git Commit Nix (Stage -> Pre-commit Check -> Commit)
+- `gps`: Git Push Safe (Full Check -> Git Push)
+- `nclean`: Maintenance (Garbage collect user & system)

@@ -42,9 +42,8 @@
       nclean = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
 
       # Quality Assurance
-      qc = "pre-commit run";
-      qs = "pre-commit run";
-      qf = "nix flake check";
+      qc = "nix develop --command pre-commit run";
+      qf = "nix develop --command pre-commit run && nix flake check";
 
       # Safe Workflows
       gcn = "git add -A && pre-commit run && git commit";

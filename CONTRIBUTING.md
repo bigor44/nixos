@@ -141,6 +141,14 @@ The `gcn` alias will:
 2. Run `pre-commit` checks (linting, formatting).
 3. Commit only if checks pass.
 
+To push your changes safely, use `gps`:
+
+```bash
+gps
+```
+
+This ensures a full flake check passes before pushing to the remote.
+
 ## 🔐 Secrets Management
 
 Do **NOT** commit plain-text secrets. This project uses **SOPS** with **age**.
