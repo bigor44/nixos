@@ -20,9 +20,6 @@
     # Platform - DNS
     ../modules/nixos/platform/dns
 
-    # Platform - Policies
-    ../modules/nixos/platform/policies/storage.nix
-
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
     ../modules/nixos/features/graphics/flatpak.nix

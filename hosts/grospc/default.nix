@@ -1,6 +1,6 @@
 # Host: grospc
 # Purpose: Desktop workstation with gaming optimizations
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -12,11 +12,15 @@
 
   bigor = {
     platform = {
-      dns.mode = "client";
-      policies.storage.mode = "nfs-client";
+      dns.upstreamServers = [
+        "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.blocky.dns}"
+      ]
+      ++ config.bigor.platform.dns.defaultDohUpstreams;
     };
 
     features = {
+      services.nfs-client.enable = true;
+
       dev = {
         tools.enable = true;
         scripts.enable = true;

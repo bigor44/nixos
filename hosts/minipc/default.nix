@@ -12,12 +12,7 @@
 
   bigor = {
     platform = {
-      dns.mode = "server";
-
-      policies.storage = {
-        mode = "nfs-server";
-        device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
-      };
+      dns.server.enable = true;
     };
 
     features = {
@@ -30,6 +25,7 @@
         cpu-power-management.enable = true;
       };
       services = {
+        nfs-server.enable = true;
         sshd = {
           enable = true;
           openFirewall = true;
@@ -38,6 +34,11 @@
         gatus.enable = true;
       };
     };
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
+    fsType = "ext4";
   };
 
   hardware.cpu.amd.updateMicrocode = true;

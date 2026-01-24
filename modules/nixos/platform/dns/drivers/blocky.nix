@@ -28,7 +28,7 @@ let
     };
 in
 {
-  config = mkIf cfg.computed.shouldRunBlocky {
+  config = mkIf cfg.blocky.enable {
     services.blocky = {
       enable = true;
 
@@ -45,8 +45,8 @@ in
         # =======================================================================
         upstreams = {
           # Upstreams and strategy computed by DNS policy module
-          groups.default = cfg.computed.blockyUpstreams;
-          strategy = cfg.computed.blockyStrategy;
+          groups.default = cfg.upstreamServers;
+          inherit (cfg.blocky) strategy;
           timeout = "2s";
         };
 

@@ -12,15 +12,6 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   bigor = {
-    platform = {
-      dns.mode = "standalone";
-
-      policies.storage = {
-        mode = "local";
-        device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
-      };
-    };
-
     features = {
       dev = {
         tools.enable = true;
@@ -36,5 +27,10 @@
         bluetooth.enable = true;
       };
     };
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/a1ee534d-78d8-42df-be26-9cadae8197cf";
+    fsType = "ext4";
   };
 }
