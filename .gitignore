@@ -2,6 +2,7 @@
 result
 result-*
 repl-result
+.pre-commit-config.yaml
 
 # --- Sécurité (CRITIQUE) ---
 # Clés privées (ne jamais commiter)

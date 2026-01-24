@@ -2,7 +2,7 @@
 # Purpose: Development shell with QA tools and pre-commit hook auto-install
 {
   perSystem =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
       devShells.default = pkgs.mkShell {
         name = "nixos-config-dev";
@@ -49,17 +49,8 @@
           echo "  nrb    → Full check + rebuild boot (safe)"
           echo ""
 
-          # Auto-install pre-commit hook if not present
-          if [[ -d .git ]] && [[ ! -f .git/hooks/pre-commit ]]; then
-            echo "Installing pre-commit hook..."
-            if command -v install-git-hooks &>/dev/null; then
-              install-git-hooks
-            else
-              echo "⚠ install-git-hooks not found in PATH"
-              echo "  Enable dev-scripts in your Home Manager config and rebuild"
-            fi
-            echo ""
-          fi
+          # Auto-install pre-commit hook
+          ${config.pre-commit.installationScript}
 
           echo "Ready! Try 'qc' to check your changes."
           echo "      Try 'mega' for intelligent check."

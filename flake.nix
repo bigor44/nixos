@@ -23,6 +23,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -34,9 +39,11 @@
       systems = [ "x86_64-linux" ];
 
       imports = [
+        inputs.git-hooks.flakeModule
         ./nix/hosts.nix
         ./nix/checks.nix
         ./nix/devshell.nix
+        ./nix/git-hooks.nix
       ];
 
       perSystem =

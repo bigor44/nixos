@@ -60,16 +60,6 @@ let
       dnsutils
     ]
   );
-
-  # Script: install-git-hooks
-  install-git-hooks = mkScript "install-git-hooks" ../../../../scripts/install-git-hooks.sh (
-    with pkgs;
-    [
-      git
-      sops
-      check-quick
-    ]
-  );
 in
 {
   options.bigor.features.dev.scripts.enable = lib.mkEnableOption "Development QA scripts";
@@ -80,7 +70,6 @@ in
       check-full
       check-mega
       dns-test
-      install-git-hooks
     ];
   };
 }
