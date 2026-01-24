@@ -19,7 +19,7 @@ Contains entry points for each physical machine.
 
 **Mandatory** infrastructure configurations that are always active.
 
-- **Examples:** `boot.nix`, `network/`, `users.nix`, `policies/`.
+- **Examples:** `boot.nix`, `network/`, `users.nix`.
 - **Convention:** These modules do **not** have `enable` options.
 
 ### 3. Feature Modules (`modules/nixos/features/`)
@@ -72,7 +72,7 @@ Every Nix file requires a specific 2-line header:
 # Purpose: <Description of why this file exists>
 ```
 
-Categories: `# Feature:`, `# Host:`, `# Policy:`, `# Home:`, `# Platform:`.
+Categories: `# Feature:`, `# Host:`, `# Home:`, `# Platform:`.
 
 ### Nix Language Rules
 

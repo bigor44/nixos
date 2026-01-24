@@ -32,6 +32,14 @@
         ];
 
         shellHook = ''
+          # Aliases
+          alias qc='pre-commit run'
+          alias qf='nix flake check'
+          alias gcn='git add . && pre-commit run && git commit'
+          alias gps='nix flake check && git push'
+          alias nrs='nix flake check && sudo nixos-rebuild switch --flake .'
+          alias nrb='nix flake check && sudo nixos-rebuild boot --flake .'
+
           echo "╔═══════════════════════════════════════════════╗"
           echo "║   NixOS Config Development Shell              ║"
           echo "╚═══════════════════════════════════════════════╝"

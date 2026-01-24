@@ -55,7 +55,6 @@ To maintain consistency across the codebase, please follow these standards:
   - `# Feature:` for system features or platform modules (`modules/nixos/`).
   - `# Home:` for Home Manager modules (`modules/home/`).
   - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
-  - `# Policy:` for system-wide policies (`modules/nixos/platform/policies/`).
 
   Example:
 
