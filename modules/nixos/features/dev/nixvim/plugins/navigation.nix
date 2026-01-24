@@ -1,5 +1,5 @@
-# Feature: nixvim-editor
-# Purpose: Editor-related plugins for nixvim (Telescope, Neo-tree, etc.)
+# Feature: nixvim-navigation
+# Purpose: Navigation plugins (Telescope, Neo-tree, Git)
 {
   programs.nixvim.plugins = {
     telescope = {
@@ -55,27 +55,5 @@
     };
 
     lazygit.enable = true;
-    undotree.enable = true;
-    trouble.enable = true;
-
-    conform-nvim = {
-      enable = true;
-      settings = {
-        formatters_by_ft = {
-          nix = [ "nixfmt" ];
-          sh = [ "shfmt" ];
-          bash = [ "shfmt" ];
-          json = [ "prettier" ];
-          jsonc = [ "prettier" ];
-          yaml = [ "prettier" ];
-          markdown = [ "prettier" ];
-          toml = [ "taplo" ];
-        };
-        format_on_save = {
-          lsp_format = "fallback";
-          timeout_ms = 500;
-        };
-      };
-    };
   };
 }

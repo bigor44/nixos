@@ -3,10 +3,10 @@
 {
   imports = [
     ./completion.nix
-    ./editor.nix
+    ./editing.nix
     ./lsp.nix
     ./mini.nix
-    ./treesitter.nix
+    ./navigation.nix
     ./ui.nix
   ];
 }
