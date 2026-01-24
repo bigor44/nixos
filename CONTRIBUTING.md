@@ -114,9 +114,8 @@ We enforce strict formatting and linting rules:
 
 Before committing, ensure your changes don't break the configuration:
 
-- **Quick Check**: Run `check-quick` (or `qc`) for a fast incremental check.
-- **Full Check**: Run `check-full` (or `qf`) for a complete validation of all hosts.
-- **Intelligent Check**: Run `check-mega` (or `mega`) to automatically choose the best check based on git state.
+- **Quick Check**: Run `qc` (alias for `pre-commit run`) for fast formatting and linting of staged files.
+- **Full Check**: Run `qf` (alias for `nix flake check`) for a complete validation of all hosts and builds.
 - **DNS Test**: If you modified DNS settings, run `dns-test`.
 
 ### 6. Applying Changes Locally
@@ -124,9 +123,9 @@ Before committing, ensure your changes don't break the configuration:
 To test your changes on your current machine:
 
 ```bash
-nrs  # check-full && sudo nixos-rebuild switch --flake .
+nrs  # nix flake check && sudo nixos-rebuild switch --flake .
 # OR
-nrb  # check-full && sudo nixos-rebuild boot --flake .
+nrb  # nix flake check && sudo nixos-rebuild boot --flake .
 ```
 
 ## 📝 Commit Guidelines
@@ -139,11 +138,9 @@ gcn -m "feat: add new capability for X"
 
 The `gcn` alias will:
 
-1. Format your code.
-2. Stage all changes.
-3. Run all checks.
-4. Prompt for a commit message (if not provided via `-m`).
-5. Only commit if all checks pass.
+1. Stage all changes.
+2. Run `pre-commit` checks (linting, formatting).
+3. Commit only if checks pass.
 
 ## 🔐 Secrets Management
 
@@ -154,7 +151,7 @@ Do **NOT** commit plain-text secrets. This project uses **SOPS** with **age**.
 
 ## 🤝 Pull Request Process
 
-1. Ensure all checks pass (`check-full`).
+1. Ensure all checks pass (`qf`).
 2. Update the `README.md` if you've added new features or changed existing ones.
 3. Push your branch to your fork.
 4. Open a Pull Request with a clear description of the changes.

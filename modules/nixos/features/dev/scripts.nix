@@ -18,41 +18,6 @@ let
       text = builtins.readFile src;
     };
 
-  # Script: check-quick
-  check-quick = mkScript "check-quick" ../../../../scripts/check-quick.sh (
-    with pkgs;
-    [
-      git
-      treefmt
-      statix
-      deadnix
-      shellcheck
-    ]
-  );
-
-  # Script: check-full
-  check-full = mkScript "check-full" ../../../../scripts/check-full.sh (
-    with pkgs;
-    [
-      git
-      treefmt
-      statix
-      deadnix
-      nix
-      shellcheck
-    ]
-  );
-
-  # Script: check-mega
-  check-mega = mkScript "check-mega" ../../../../scripts/check-mega.sh (
-    with pkgs;
-    [
-      git
-      check-quick
-      check-full
-    ]
-  );
-
   # Script: dns-test
   dns-test = mkScript "dns-test" ../../../../scripts/dns-test.sh (
     with pkgs;
@@ -66,9 +31,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      check-quick
-      check-full
-      check-mega
       dns-test
     ];
   };

@@ -52,14 +52,13 @@ nix develop
 
 ### Build & Deploy
 
-- **Rebuild & Switch:** `nrs` (alias for `check-full && sudo nixos-rebuild switch --flake .`)
-- **Rebuild & Boot:** `nrb` (alias for `check-full && sudo nixos-rebuild boot --flake .`)
+- **Rebuild & Switch:** `nrs` (alias for `nix flake check && sudo nixos-rebuild switch --flake .`)
+- **Rebuild & Boot:** `nrb` (alias for `nix flake check && sudo nixos-rebuild boot --flake .`)
 
 ### Verification
 
-- **Quick Check:** `check-quick` (or `qc`) - Incremental validation.
-- **Full Check:** `check-full` (or `qf`) - Validates all hosts.
-- **Intelligent Check:** `check-mega` (or `mega`) - Auto-selects check based on git state.
+- **Quick Check:** `qc` - Fast validation using `pre-commit` (formatting, linting).
+- **Full Check:** `qf` - Full system validation using `nix flake check`.
 - **DNS Test:** `dns-test` - Verify DNS settings.
 
 ## Coding Standards
@@ -90,4 +89,4 @@ Managed via **sops-nix** with **age**.
 
 - `nrs`: Rebuild system (switch) - **Runs full check first**.
 - `nrb`: Rebuild system (boot) - **Runs full check first**.
-- `gcn`: Git Commit Nix (Format -> Stage -> Staged Check -> Commit)
+- `gcn`: Git Commit Nix (Stage -> Pre-commit Check -> Commit)

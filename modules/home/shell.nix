@@ -42,16 +42,15 @@
       nclean = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
 
       # Quality Assurance
-      qc = "check-quick";
-      qs = "check-quick --staged";
-      qf = "check-full";
-      mega = "check-mega";
+      qc = "pre-commit run";
+      qs = "pre-commit run";
+      qf = "nix flake check";
 
       # Safe Workflows
-      gcn = "nix fmt && gaa && qs && gc";
-      gps = "check-full && gp";
-      nrs = "check-full && sudo nixos-rebuild switch --flake .";
-      nrb = "check-full && sudo nixos-rebuild boot --flake .";
+      gcn = "git add -A && pre-commit run && git commit";
+      gps = "nix flake check && gp";
+      nrs = "nix flake check && sudo nixos-rebuild switch --flake .";
+      nrb = "nix flake check && sudo nixos-rebuild boot --flake .";
 
       # System info
       ports = "netstat -tulanp";

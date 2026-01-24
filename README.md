@@ -24,7 +24,7 @@ This repository follows a strict separation of concerns to keep the configuratio
 - **Nix Flakes**: Fully reproducible builds.
 - **Secrets Management**: Integrated **SOPS** with **age** via `sops-nix`.
 - **NixVim**: Highly customized Neovim configuration managed through Nix.
-- **Developer Experience**: Custom scripts for validation (`check-full`, `check-quick`) and deployment.
+- **Developer Experience**: Robust validation workflow using `pre-commit` hooks and `nix flake check`.
 - **Formatting**: Automated formatting with `treefmt`.
 
 ## 🛠️ Getting Started
