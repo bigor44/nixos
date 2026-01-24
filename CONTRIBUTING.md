@@ -13,6 +13,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 ### NixOS Modules
 
 - **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, network, shell, users, etc.). These modules do NOT have `enable` options and are always active.
+- **Profiles (`modules/nixos/profiles/`)**: High-level groupings of features.
 - **Feature Modules (`modules/nixos/features/`)**: Optional features (gaming, desktop, dev-tools, etc.) that must be explicitly enabled in host configurations via `bigor.features.<category>.<name>.enable`.
 - **Home Modules (`modules/home/`)**: User-specific configuration (dotfiles, shell aliases, applications) managed by **Home Manager**.
 
@@ -52,7 +53,9 @@ git checkout -b feature/your-feature-name
 To maintain consistency across the codebase, please follow these standards:
 
 - **File Header**: Every Nix file must start with a 2-line header. The first line should use a prefix that identifies the file's category, followed by a `# Purpose:` line:
-  - `# Feature:` for system features or platform modules (`modules/nixos/`).
+  - `# Platform:` for platform modules (`modules/nixos/platform/`).
+  - `# Profile:` for profile definitions (`modules/nixos/profiles/`).
+  - `# Feature:` for feature modules (`modules/nixos/features/`).
   - `# Home:` for Home Manager modules (`modules/home/`).
   - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
 

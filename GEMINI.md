@@ -6,25 +6,34 @@ This repository contains the NixOS configuration for Bigor's infrastructure. It 
 
 ## Architecture
 
-The configuration is modular, dividing logic into **Platform** and **Features**:
+The configuration is modular, dividing logic into **Platform**, **Profiles**, and **Features**:
 
 ### 1. Hosts (`hosts/`)
 
 Contains entry points for each physical machine.
 
 - **Path:** `hosts/<hostname>/default.nix`
-- **Role:** Imports the platform and specific features required for that machine.
+- **Role:** Imports the platform and defines the profiles for that machine.
 
-### 2. Platform Modules (`modules/nixos/platform/`)
+### 2. Profiles (`modules/nixos/profiles/`)
+
+**High-level** groupings of features that define a machine's role.
+
+- **Examples:** `desktop.nix`, `server.nix`, `dev.nix`.
+- **Convention:**
+  - Enabled via `bigor.profiles` list in the host configuration.
+  - Automatically enables relevant **Feature Modules**.
+
+### 3. Platform Modules (`modules/nixos/platform/`)
 
 **Mandatory** infrastructure configurations that are always active.
 
 - **Examples:** `core.nix`, `network/`, `users.nix`.
 - **Convention:** These modules do **not** have `enable` options.
 
-### 3. Feature Modules (`modules/nixos/features/`)
+### 4. Feature Modules (`modules/nixos/features/`)
 
-**Optional** capabilities that must be explicitly enabled per host.
+**Optional** capabilities that must be explicitly enabled per host or profile.
 
 - **Examples:** `graphics/gaming.nix`, `graphics/desktop.nix`, `hardware/audio.nix`.
 - **Convention:**
@@ -32,7 +41,7 @@ Contains entry points for each physical machine.
   - Configuration must be wrapped in `mkIf cfg.enable`.
   - **Firewall:** Never use `networking.firewall` directly. Use `bigor.network.firewall.ports`.
 
-### 4. Home Modules (`modules/home/`)
+### 5. Home Modules (`modules/home/`)
 
 **User-specific** configurations managed by **Home Manager**.
 
@@ -72,7 +81,7 @@ Every Nix file requires a specific 2-line header:
 # Purpose: <Description of why this file exists>
 ```
 
-Categories: `# Feature:`, `# Host:`, `# Home:`, `# Platform:`.
+Categories: `# Feature:`, `# Host:`, `# Home:`, `# Platform:`, `# Profile:`.
 
 ### Nix Language Rules
 
