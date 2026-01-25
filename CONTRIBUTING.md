@@ -96,16 +96,11 @@ To maintain consistency across the codebase, please follow these standards:
 - If adding a new **feature** (optional functionality), ensure it has an `enable` option under `bigor.features.<category>.<name>.enable`.
 - **Platform modules** (mandatory infrastructure) do NOT have enable options.
 - Keep host-specific configurations in `hosts/`.
-- Use `nix/network-topology.nix` for any new IP or hostname definitions.
 
 - **Firewall Configuration**:
-  - **NEVER** add `networking.firewall.*` directly to feature modules.
-  - Use the **Platform Interface** `bigor.network.firewall.ports` to declare ports.
-  - When adding a service that needs port openings:
-    1. Add port numbers to `nix/network-topology.nix`.
-    2. Declare them in your feature module using `bigor.network.firewall.ports`.
-    3. If the service requires a static IP (listening on LAN), add it to `bigor.network.requiredStaticIpServices`.
-  - The firewall module automatically manages the rules and validations.
+  - Use standard NixOS options `networking.firewall.allowedTCPPorts` and `networking.firewall.allowedUDPPorts`.
+  - Open ports directly in the feature module where the service is defined.
+  - Ensure the ports are necessary and documented.
 
 ### 4. Formatting and Linting
 

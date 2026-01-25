@@ -15,7 +15,7 @@ The design clearly separates:
 
 - **Flakes first** – reproducible, declarative, versioned
 - **Explicit enablement** – nothing optional is enabled implicitly
-- **Strong validation** – assertions, topology checks, flake checks
+- **Strong validation** – assertions, flake checks
 - **Host clarity** – minimal host files, no hidden logic
 - **Single source of truth** – network, ports, services are centralized
 
@@ -97,20 +97,9 @@ Examples:
 
 ## 🌐 Network & Firewall Model
 
-- **All ports are declared centrally** in `nix/network-topology.nix`
-- Feature modules **never** touch `networking.firewall.*` directly
-- Services declare intent via:
-
-```nix
-bigor.network.firewall.ports
-bigor.network.requiredStaticIpServices
-```
-
-The platform layer:
-
-- Opens ports
-- Validates topology
-- Enforces consistency
+- **Standard NixOS networking**: Use `networking.firewall` options directly in modules.
+- **DNS**: Centralized DNS configuration in `modules/nixos/platform/dns.nix`.
+- **Static IPs**: Managed within host configurations or platform settings as needed.
 
 ---
 

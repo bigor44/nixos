@@ -66,7 +66,6 @@ Categories: `Platform`, `Feature`, `Home`, `Host`.
 
 - **Platform Modules:** No `enable` option. Always active.
 - **Feature Modules:** MUST have an `enable` option (`bigor.features...`). Default to `false`.
-- **Network:** Define ports in `bigor.network.firewall.ports` and standardise IPs in `nix/network-topology.nix`.
 
 ### 3. Secrets
 
