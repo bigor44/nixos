@@ -1,68 +1,215 @@
-# Bigor's NixOS Configuration
+# Bigor’s NixOS Configuration
 
-Welcome to my personal NixOS configuration repository. This project uses **Nix Flakes** and a modular architecture to manage multiple machines with a consistent yet flexible setup.
+This repository contains my **NixOS infrastructure**, managed with **Nix Flakes** and a **strictly modular architecture**.  
+It supports multiple hosts (desktop, laptop, homelab server) while maximizing reuse, validation, and long-term maintainability.
 
-## 🏗️ Architecture
+The design clearly separates:
 
-This repository follows a strict separation of concerns to keep the configuration maintainable and reusable:
+- **Mandatory platform infrastructure**
+- **High-level profiles**
+- **Optional features**
+- **User (Home Manager) configuration**
 
-- **Platform Modules (`modules/nixos/platform/`)**: Mandatory infrastructure (boot, networking, shell, users). These are foundational and always active.
-- **Profiles (`modules/nixos/profiles/`)**: High-level groupings of features (e.g., `desktop`, `server`) that simplify host definitions.
-- **Feature Modules (`modules/nixos/features/`)**: Optional capabilities (gaming, desktop environments, development tools). These are toggled per-host using `bigor.features.<category>.<name>.enable`.
-- **Home Modules (`modules/home/`)**: User-specific configuration (git, dotfiles, shell aliases, applications) managed by **Home Manager**.
-- **Hosts (`hosts/`)**: Machine-specific configurations that compose platform and feature modules.
+---
+
+## ✨ Key Principles
+
+- **Flakes first** – reproducible, declarative, versioned
+- **Explicit enablement** – nothing optional is enabled implicitly
+- **Strong validation** – assertions, topology checks, flake checks
+- **Host clarity** – minimal host files, no hidden logic
+- **Single source of truth** – network, ports, services are centralized
+
+---
+
+## 🗂️ Repository Structure
+
+```
+
+.
+├── flake.nix                # Flake entry point (flake-parts)
+├── flake.lock               # Locked dependencies
+├── hosts/                   # Per-machine configurations
+├── modules/
+│   ├── nixos/
+│   │   ├── platform/        # Mandatory system infrastructure (always enabled)
+│   │   ├── profiles/        # High-level feature groupings
+│   │   └── features/        # Optional capabilities (explicitly enabled)
+│   └── home/                # Home Manager modules
+├── nix/                     # Flake helpers, checks, devshell
+├── scripts/                 # Utility scripts
+├── secrets/                 # Encrypted secrets (SOPS)
+├── dotfiles/                # Desktop environment config (Cosmic)
+├── certs/                   # Internal CA certificates
+├── CONTRIBUTING.md          # Architecture & contribution rules
+└── LICENSE
+
+```
+
+---
+
+## 🧠 Architecture Overview
+
+### 1. Platform Modules (`modules/nixos/platform/`)
+
+- **Always enabled**
+- Core OS concerns: boot, users, DNS, networking, firewall, Nix settings
+- **No `enable` options by design**
+
+### 2. Profiles (`modules/nixos/profiles/`)
+
+- High-level roles such as:
+  - `desktop` (uses **latest** kernel)
+  - `server` (uses **LTS** kernel)
+  - `dev`
+  - `homelab-master`
+- Profiles **aggregate features** and dictate core settings (like kernel version).
+- `desktop` and `server` are mutually exclusive.
+
+Enabled per host:
+
+```nix
+bigor.profiles = [ "desktop" "dev" ];
+```
+
+### 3. Feature Modules (`modules/nixos/features/`)
+
+- Fully optional
+- Must expose:
+
+```nix
+bigor.features.<category>.<name>.enable
+```
+
+- Wrapped in `mkIf cfg.enable`
+- Examples:
+  - `graphics.desktop`
+  - `graphics.gaming`
+  - `services.caddy`
+  - `dev.nixvim`
+
+### 4. Home Manager (`modules/home/`)
+
+- User-level configuration
+- Activated automatically via NixOS integration
+- Desktop-only logic can reference `osConfig.bigor.features.*`
+
+---
 
 ## 🖥️ Hosts
 
-| Host       | Purpose             | Hardware     |
-| :--------- | :------------------ | :----------- |
-| `grospc`   | Main Workstation    | x86_64-linux |
-| `minipc`   | Home Server / Media | x86_64-linux |
-| `minidesk` | Secondary Desktop   | x86_64-linux |
+Each host lives in `hosts/<hostname>/` and contains **only**:
 
-## 🚀 Key Features
+- Host identity
+- Profile selection
+- Truly host-specific overrides
 
-- **Nix Flakes**: Fully reproducible builds.
-- **Secrets Management**: Integrated **SOPS** with **age** via `sops-nix`.
-- **NixVim**: Highly customized Neovim configuration managed through Nix.
-- **Developer Experience**: Robust validation workflow using `pre-commit` hooks and `nix flake check`.
-- **Formatting**: Automated formatting with `treefmt`.
+Examples:
 
-## 🛠️ Getting Started
+- **`grospc`** – Desktop workstation with gaming
+- **`minidesk`** – Portable workstation
+- **`minipc`** – Homelab server (DNS, NFS, Caddy, monitoring)
 
-### Prerequisites
+---
 
-- A running NixOS system with `nix-command` and `flakes` enabled.
+## 🌐 Network & Firewall Model
 
-### Usage
+- **All ports are declared centrally** in `nix/network-topology.nix`
+- Feature modules **never** touch `networking.firewall.*` directly
+- Services declare intent via:
 
-1.  **Clone the repository**:
+```nix
+bigor.network.firewall.ports
+bigor.network.requiredStaticIpServices
+```
 
-    ```bash
-    git clone https://github.com/bigor44/nixos.git
-    cd nixos
-    ```
+The platform layer:
 
-2.  **Enter the development shell**:
+- Opens ports
+- Validates topology
+- Enforces consistency
 
-    ```bash
-    nix develop
-    ```
+---
 
-3.  **Build and Switch (for the current host)**:
-    ```bash
-    sudo nixos-rebuild switch --flake .#<hostname>
-    ```
+## 🔐 Secrets Management
 
-## 📝 Development
+- Managed with **SOPS + age**
+- Stored encrypted in `secrets/secrets.yaml`
+- Never committed in plain text
 
-Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed information on:
+```bash
+sops secrets/secrets.yaml
+```
 
-- Naming conventions and headers.
-- How to add new features or hosts.
-- Using the validation scripts and aliases.
-- Commit standards (`gcn`).
+Accessed via:
 
-## ⚖️ License
+```nix
+config.sops.secrets.<name>
+```
 
-This project is licensed under the [LICENSE](./LICENSE) file found in the root directory.
+---
+
+## 🛠️ Development Environment
+
+Always use the provided dev shell:
+
+```bash
+nix develop
+```
+
+### Common Aliases
+
+| Alias | Command                                | Description                                      |
+| :---- | :------------------------------------- | :----------------------------------------------- |
+| `qc`  | `pre-commit run`                       | **Quick Check**: Lint/format staged files        |
+| `qf`  | `nix flake check`                      | **Full Check**: Validate entire configuration    |
+| `gcn` | _(sequence)_                           | **Safe Commit**: Add all + Check + Commit        |
+| `gps` | _(sequence)_                           | **Safe Push**: Full Check + Push                 |
+| `nrs` | `... && sudo nixos-rebuild switch ...` | **Rebuild Switch**: Check + Rebuild current host |
+| `nrb` | `... && sudo nixos-rebuild boot ...`   | **Rebuild Boot**: Check + Build for next boot    |
+
+---
+
+## 🚀 Deployment
+
+### Current host
+
+```bash
+nrs
+```
+
+### Remote host
+
+```bash
+nixos-rebuild switch \
+  --flake .#<hostname> \
+  --target-host user@ip
+```
+
+---
+
+## 📐 Conventions
+
+This repository follows **strict structural and naming rules**:
+
+- Mandatory file headers
+- Clear separation of concerns
+- No hidden enablement
+- “Explain **why**, not what” comments only
+
+➡️ **See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the full specification.**
+
+---
+
+## 📜 License
+
+This project is licensed under the terms of the **MIT License** (see `LICENSE`).
+
+---
+
+## 🧭 Status
+
+This configuration is **actively used and maintained** for personal infrastructure.
+Breaking changes are intentional and validated via `nix flake check`.
+
+---

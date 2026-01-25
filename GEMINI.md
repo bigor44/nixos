@@ -1,108 +1,105 @@
-# Gemini Context: Bigor's NixOS Configuration
+# Bigor's NixOS Configuration
 
 ## Project Overview
 
-This repository contains the NixOS configuration for Bigor's infrastructure. It utilizes **Nix Flakes** for reproducibility and manages multiple hosts (e.g., `grospc`, `minidesk`, `minipc`). The project is structured to separate mandatory infrastructure from optional features.
+This repository contains the NixOS configuration for Bigor's infrastructure, managed using **Nix Flakes**. It supports multiple hosts (workstations, servers) through a modular architecture separating core platform requirements, high-level profiles, and specific features.
 
 ## Architecture
 
-The configuration is modular, dividing logic into **Platform**, **Profiles**, and **Features**:
+The project is structured to maximize code reuse and clarity:
 
-### 1. Hosts (`hosts/`)
+- **`flake.nix`**: The entry point defining inputs, outputs, and system configurations.
+- **`hosts/`**: Configurations for specific machines (e.g., `grospc`, `minipc`). Each host has a `configuration.nix` entry point.
+- **`modules/`**:
+  - **`nixos/platform/`**: Mandatory infrastructure modules (networking, users, core system). Always active.
+  - **`nixos/profiles/`**: High-level groupings of features (e.g., `desktop`, `server`, `dev`) enabled via `bigor.profiles`.
+  - **`nixos/features/`**: Optional capabilities (e.g., `gaming`, `audio`, `dev-tools`) enabled via `bigor.features.<category>.<name>.enable`.
+  - **`home/`**: Home Manager modules for user-specific configuration.
+- **`nix/`**: Flake helper files, checks, and the development shell definition.
+- **`secrets/`**: Encrypted secrets managed by **SOPS**.
+- **`dotfiles/`**: Application configuration files (Cosmic DE, autostart entries).
 
-Contains entry points for each physical machine.
+## Development Environment
 
-- **Path:** `hosts/<hostname>/default.nix`
-- **Role:** Imports the platform and defines the profiles for that machine.
+The project includes a comprehensive development shell defined in `nix/devshell.nix`.
 
-### 2. Profiles (`modules/nixos/profiles/`)
-
-**High-level** groupings of features that define a machine's role.
-
-- **Examples:** `desktop.nix`, `server.nix`, `dev.nix`.
-- **Convention:**
-  - Enabled via `bigor.profiles` list in the host configuration.
-  - Automatically enables relevant **Feature Modules**.
-  - **Kernel Policy:**
-    - **Desktop:** Uses `linuxPackages_latest` for performance and hardware support.
-    - **Server:** Uses `linuxPackages` (LTS) for stability.
-  - **Exclusivity:** `desktop` and `server` profiles are mutually exclusive.
-
-### 3. Platform Modules (`modules/nixos/platform/`)
-
-**Mandatory** infrastructure configurations that are always active.
-
-- **Examples:** `core.nix`, `network/`, `users.nix`.
-- **Convention:** These modules do **not** have `enable` options.
-
-### 4. Feature Modules (`modules/nixos/features/`)
-
-**Optional** capabilities that must be explicitly enabled per host or profile.
-
-- **Examples:** `graphics/gaming.nix`, `graphics/desktop.nix`, `hardware/audio.nix`.
-- **Convention:**
-  - Must define an `enable` option (e.g., `bigor.features.graphics.gaming.enable`).
-  - Configuration must be wrapped in `mkIf cfg.enable`.
-  - **Firewall:** Never use `networking.firewall` directly. Use `bigor.network.firewall.ports`.
-
-### 5. Home Modules (`modules/home/`)
-
-**User-specific** configurations managed by **Home Manager**.
-
-- **Path:** `modules/home/`
-- **Role:** Manages user dotfiles, packages, and services (e.g., Git, Zsh, desktop apps).
-- **Integration:** Integrated via `modules/nixos/platform/home.nix`.
-
-## Development Workflow
-
-### Environment
-
-Enter the development shell to access tools like `nixos-rebuild`, `sops`, `statix`, and custom scripts.
+**Enter the shell:**
 
 ```bash
 nix develop
 ```
 
-### Build & Deploy
+### Key Tools & Aliases
 
-- **Rebuild & Switch:** `nrs` (alias for `nix flake check && sudo nixos-rebuild switch --flake .`)
-- **Rebuild & Boot:** `nrb` (alias for `nix flake check && sudo nixos-rebuild boot --flake .`)
+The shell provides several aliases to streamline the workflow:
 
-### Verification
+| Alias | Command                                            | Description                                                                    |
+| :---- | :------------------------------------------------- | :----------------------------------------------------------------------------- |
+| `qc`  | `pre-commit run`                                   | **Quick Check**: Runs formatting and linting on staged files.                  |
+| `qf`  | `nix flake check`                                  | **Full Check**: Validates the entire flake, including all host configurations. |
+| `gcn` | _(sequence)_                                       | **Safe Commit**: Stages all changes, runs checks, and commits.                 |
+| `gps` | _(sequence)_                                       | **Safe Push**: Runs full checks and pushes to remote.                          |
+| `nrs` | `nix flake check && sudo nixos-rebuild switch ...` | **Rebuild Switch**: Deploys changes to the current host safely.                |
+| `nrb` | `nix flake check && sudo nixos-rebuild boot ...`   | **Rebuild Boot**: Builds changes for the next boot safely.                     |
 
-- **Quick Check:** `qc` - Fast validation using `pre-commit` (formatting, linting).
-- **Full Check:** `qf` - Full system validation using `nix flake check`.
-- **DNS Test:** `dns-test` - Verify DNS settings.
+### Included Tools
 
-## Coding Standards
+- **Formatters:** `treefmt`, `nixfmt`, `shfmt`, `prettier`, `taplo`.
+- **Linters:** `statix`, `deadnix`, `shellcheck`.
+- **Secrets:** `sops`, `age`.
 
-### File Headers
+## Conventions & Guidelines
 
-Every Nix file requires a specific 2-line header:
+Refer to `CONTRIBUTING.md` for detailed rules. Key takeaways:
+
+### 1. File Headers
+
+Every Nix file must start with a descriptive 2-line header:
 
 ```nix
-# Category: <name>
-# Purpose: <Description of why this file exists>
+# <Category>: <Name>
+# Purpose: <Brief description>
 ```
 
-Categories: `# Feature:`, `# Host:`, `# Home:`, `# Platform:`, `# Profile:`.
+Categories: `Platform`, `Profile`, `Feature`, `Home`, `Host`.
 
-### Nix Language Rules
+### 2. Module System
 
-- **Comments:** Explain _why_, not _what_. Use English.
-- **Naming:** `default.nix` should be reserved for mainly importing files in the directory. If a file contains significant logic/configuration, give it a descriptive name (e.g., `settings.nix`, `manager.nix`, `home.nix`). Avoid `default.nix` if it simply imports a single file; import that file directly instead. **Note:** `configuration.nix` is a special name reserved for host-level system entry points (found in `hosts/*/`); do not use it elsewhere.
+- **Platform Modules:** No `enable` option. Always active.
+- **Feature Modules:** MUST have an `enable` option (`bigor.features...`). Default to `false`.
+- **Profiles:** Aggregations of features.
+- **Network:** Define ports in `bigor.network.firewall.ports` and standardise IPs in `nix/network-topology.nix`.
 
-### Secrets
+### 3. Secrets
 
-Managed via **sops-nix** with **age**.
+- **NEVER** commit plain-text secrets.
+- Use `sops secrets/secrets.yaml` to edit.
+- Reference via `config.sops.secrets`.
 
-- **File:** `secrets/secrets.yaml`
-- **Edit:** `sops secrets/secrets.yaml`
+### 4. Commits
 
-## Key Commands (Aliases)
+- Use `gcn` to ensure quality.
+- Follow the format: `type: message`.
 
-- `nrs`: Rebuild system (switch) - **Runs full check first**.
-- `nrb`: Rebuild system (boot) - **Runs full check first**.
-- `gcn`: Git Commit Nix (Stage -> Pre-commit Check -> Commit)
-- `gps`: Git Push Safe (Full Check -> Git Push)
-- `nclean`: Maintenance (Garbage collect user & system)
+## Usage
+
+### Adding a New Feature
+
+1.  Create the file in `modules/nixos/features/<category>/<name>.nix`.
+2.  Add the standard header.
+3.  Define the `enable` option.
+4.  Import it in `modules/nixos/features/default.nix` (or category default).
+
+### Deploying to a Host
+
+To deploy to the current machine (assuming it matches a host definition):
+
+```bash
+nrs
+```
+
+To deploy to a specific remote host:
+
+```bash
+nixos-rebuild switch --flake .#<hostname> --target-host <user>@<ip>
+```
