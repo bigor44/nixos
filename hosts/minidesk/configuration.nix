@@ -1,20 +1,34 @@
 # Host: minidesk
 # Purpose: Portable workstation
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [ ../minipc/hardware-configuration.nix ];
 
   networking.hostName = "minidesk";
   system.stateVersion = "25.11";
 
-  bigor = {
-    profiles = [
-      "desktop"
-      "dev"
-    ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    # Gaming volontairement explicite (si tu veux le garder)
-    features.graphics.gaming.enable = true;
+  bigor = {
+    features = {
+      # From desktop profile
+      graphics = {
+        desktop.enable = true;
+        flatpak.enable = true;
+        gaming.enable = true; # Host specific
+      };
+      hardware = {
+        audio.enable = true;
+        bluetooth.enable = true;
+      };
+
+      # From dev profile
+      dev = {
+        tools.enable = true;
+        scripts.enable = true;
+        nixvim.enable = true;
+      };
+    };
   };
 
   fileSystems."/mnt/storage" = {

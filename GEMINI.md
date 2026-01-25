@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains the NixOS configuration for Bigor's infrastructure, managed using **Nix Flakes**. It supports multiple hosts (workstations, servers) through a modular architecture separating core platform requirements, high-level profiles, and specific features.
+This repository contains the NixOS configuration for Bigor's infrastructure, managed using **Nix Flakes**. It supports multiple hosts (workstations, servers) through a modular architecture separating core platform requirements and specific features.
 
 ## Architecture
 
@@ -12,7 +12,6 @@ The project is structured to maximize code reuse and clarity:
 - **`hosts/`**: Configurations for specific machines (e.g., `grospc`, `minipc`). Each host has a `configuration.nix` entry point.
 - **`modules/`**:
   - **`nixos/platform/`**: Mandatory infrastructure modules (networking, users, core system). Always active.
-  - **`nixos/profiles/`**: High-level groupings of features (e.g., `desktop`, `server`, `dev`) enabled via `bigor.profiles`.
   - **`nixos/features/`**: Optional capabilities (e.g., `gaming`, `audio`, `dev-tools`) enabled via `bigor.features.<category>.<name>.enable`.
   - **`home/`**: Home Manager modules for user-specific configuration.
 - **`nix/`**: Flake helper files, checks, and the development shell definition.
@@ -61,13 +60,12 @@ Every Nix file must start with a descriptive 2-line header:
 # Purpose: <Brief description>
 ```
 
-Categories: `Platform`, `Profile`, `Feature`, `Home`, `Host`.
+Categories: `Platform`, `Feature`, `Home`, `Host`.
 
 ### 2. Module System
 
 - **Platform Modules:** No `enable` option. Always active.
 - **Feature Modules:** MUST have an `enable` option (`bigor.features...`). Default to `false`.
-- **Profiles:** Aggregations of features.
 - **Network:** Define ports in `bigor.network.firewall.ports` and standardise IPs in `nix/network-topology.nix`.
 
 ### 3. Secrets

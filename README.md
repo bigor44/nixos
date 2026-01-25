@@ -6,7 +6,6 @@ It supports multiple hosts (desktop, laptop, homelab server) while maximizing re
 The design clearly separates:
 
 - **Mandatory platform infrastructure**
-- **High-level profiles**
 - **Optional features**
 - **User (Home Manager) configuration**
 
@@ -33,7 +32,6 @@ The design clearly separates:
 ├── modules/
 │   ├── nixos/
 │   │   ├── platform/        # Mandatory system infrastructure (always enabled)
-│   │   ├── profiles/        # High-level feature groupings
 │   │   └── features/        # Optional capabilities (explicitly enabled)
 │   └── home/                # Home Manager modules
 ├── nix/                     # Flake helpers, checks, devshell
@@ -56,25 +54,10 @@ The design clearly separates:
 - Core OS concerns: boot, users, DNS, networking, firewall, Nix settings
 - **No `enable` options by design**
 
-### 2. Profiles (`modules/nixos/profiles/`)
+### 2. Features (`modules/nixos/features/`)
 
-- High-level roles such as:
-  - `desktop` (uses **latest** kernel)
-  - `server` (uses **LTS** kernel)
-  - `dev`
-  - `homelab-master`
-- Profiles **aggregate features** and dictate core settings (like kernel version).
-- `desktop` and `server` are mutually exclusive.
+Atomic units of configuration that can be enabled or disabled.
 
-Enabled per host:
-
-```nix
-bigor.profiles = [ "desktop" "dev" ];
-```
-
-### 3. Feature Modules (`modules/nixos/features/`)
-
-- Fully optional
 - Must expose:
 
 ```nix
@@ -101,7 +84,7 @@ bigor.features.<category>.<name>.enable
 Each host lives in `hosts/<hostname>/` and contains **only**:
 
 - Host identity
-- Profile selection
+- Feature selection
 - Truly host-specific overrides
 
 Examples:
