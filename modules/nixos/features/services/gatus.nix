@@ -10,8 +10,6 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mapAttrsToList
-    filterAttrs
     optional
     ;
   cfg = config.bigor.features.services.gatus;
@@ -25,7 +23,7 @@ in
       services.gatus = {
         enable = true;
         settings = {
-          web.port = networkCfg.ports.monitoring.gatus;
+          web.port = 8080;
           endpoints = [
             {
               name = "Internet (Cloudflare)";
@@ -36,21 +34,12 @@ in
             }
           ]
           ++
-            # Dynamic: Ping other known hosts in the topology
-            (mapAttrsToList (name: host: {
-              name = "Host: ${name}";
-              group = "Infrastructure";
-              url = "icmp://${if host.ip != null then host.ip else name}";
-              interval = "1m";
-              conditions = [ "[CONNECTED] == true" ];
-            }) (filterAttrs (n: h: n != config.networking.hostName && h.ip != null) networkCfg.hosts))
-          ++
             # Blocky DNS (platform service - always present)
             [
               {
                 name = "Service: Blocky DNS";
                 group = "Local Services";
-                url = "127.0.0.1:${toString networkCfg.ports.dns.main}";
+                url = "127.0.0.1:53";
                 dns = {
                   query-name = "google.com";
                   query-type = "A";
@@ -70,11 +59,13 @@ in
             });
         };
       };
+
+      networking.firewall.allowedTCPPorts = [ 8080 ];
     }
     (mkIf config.bigor.features.services.caddy.enable {
       services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
         tls internal
-        reverse_proxy 127.0.0.1:${toString networkCfg.ports.monitoring.gatus}
+        reverse_proxy 127.0.0.1:8080
       '';
     })
   ]);

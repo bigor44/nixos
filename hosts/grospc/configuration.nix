@@ -11,7 +11,7 @@
 
   bigor = {
     platform.dns.upstreamServers = [
-      "${config.bigor.network.hosts.minipc.ip}:${toString config.bigor.network.ports.dns.main}"
+      "192.168.1.10:53"
     ]
     ++ config.bigor.platform.dns.defaultDohUpstreams;
 

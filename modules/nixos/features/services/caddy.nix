@@ -17,12 +17,10 @@ in
       enable = true;
     };
 
-    # Declare network needs
-    bigor.network.firewall.ports.tcp = [
-      config.bigor.network.ports.web.http
-      config.bigor.network.ports.web.https
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
     ];
-    bigor.network.requiredStaticIpServices = [ "caddy" ];
 
     # Required for Caddy's local CA management (certutil)
     environment.systemPackages = [ pkgs.nss ];

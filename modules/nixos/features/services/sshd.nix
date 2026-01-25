@@ -26,8 +26,6 @@ in
       };
     };
 
-    bigor.network.firewall.ports.tcp = lib.mkIf cfg.openFirewall [
-      config.bigor.network.ports.remote.ssh
-    ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 22 ];
   };
 }

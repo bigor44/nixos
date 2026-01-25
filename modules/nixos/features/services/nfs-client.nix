@@ -13,7 +13,7 @@ in
 
   config = lib.mkIf cfg.enable {
     fileSystems."/mnt/storage" = {
-      device = "${config.bigor.network.hosts.minipc.ip}:/mnt/storage";
+      device = "192.168.1.10:/mnt/storage";
       fsType = "nfs";
       # Automount on access, not at boot
       options = [

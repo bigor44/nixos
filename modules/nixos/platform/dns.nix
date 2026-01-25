@@ -10,42 +10,34 @@ let
     mkOption
     types
     mkIf
-    filterAttrs
     mapAttrs'
     nameValuePair
     ;
   cfg = config.bigor.platform.dns;
-  networkCfg = config.bigor.network;
-  inherit (networkCfg) ports domain;
+  inherit (config.bigor.network) domain hosts;
 
-  # Auto-generate DNS rewrites from bigor.network.hosts
-  customDNSMapping =
-    # Hosts with static IPs
-    mapAttrs' (name: host: nameValuePair "${name}.${domain}" host.ip) (
-      filterAttrs (_: h: h.ip != null) networkCfg.hosts
-    )
-    # Alias for main domain
-    // {
-      ${domain} = networkCfg.hosts.minipc.ip;
-    };
+  # Generate records from hosts definition
+  hostRecords = mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) hosts;
 in
 {
   options.bigor.platform.dns = {
-    # ===========================================================================
-    # Interface (Public API)
-    # ===========================================================================
+    extraRecords = mkOption {
+      type = types.attrsOf types.str;
+      default = {
+        "${domain}" = "192.168.1.10"; # Default root to minipc
+      };
+      description = "Additional DNS records to serve via Blocky";
+    };
+
     defaultDohUpstreams = mkOption {
       type = types.listOf types.str;
       readOnly = true;
       default = [
-        # Quad9 (DoH) - Privacy & Security
         "https://dns.quad9.net/dns-query"
-        # Cloudflare (DoH) - Speed
         "https://cloudflare-dns.com/dns-query"
-        # AdGuard (DoH) - Backup filtering
         "https://dns.adguard-dns.com/dns-query"
       ];
-      description = "Standard list of DoH upstreams (for reuse in configuration)";
+      description = "Standard list of DoH upstreams";
     };
 
     upstreamServers = mkOption {
@@ -78,32 +70,18 @@ in
   };
 
   config = {
-    # ===========================================================================
-    # Network Configuration (Firewall)
-    # ===========================================================================
-    bigor.network.firewall.ports = mkIf cfg.server.enable {
-      tcp = [ networkCfg.ports.dns.main ];
-      udp = [ networkCfg.ports.dns.main ];
+    networking.firewall = mkIf cfg.server.enable {
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 ];
     };
 
-    bigor.network.requiredStaticIpServices = mkIf cfg.server.enable [
-      "DNS server (Blocky serving LAN)"
-    ];
-
-    # ===========================================================================
-    # Resolver Configuration (System Integration)
-    # ===========================================================================
-
-    # Point system DNS to local Blocky
     networking.nameservers = [ "127.0.0.1" ];
 
-    # Disable systemd-resolved stub listener to let Blocky use port 53
     services.resolved = {
       enable = true;
       settings = {
         Resolve = {
           DNSStubListener = "no";
-          # External fallbacks if Blocky crashes (Cloudflare + Quad9)
           FallbackDNS = [
             "1.1.1.1"
             "9.9.9.9"
@@ -112,69 +90,48 @@ in
       };
     };
 
-    # ===========================================================================
-    # Blocky Service Configuration
-    # ===========================================================================
     services.blocky = mkIf cfg.blocky.enable {
       enable = true;
 
       settings = {
-        # =======================================================================
-        # Ports
-        # =======================================================================
         ports = {
-          dns = ports.dns.main;
-          http = ports.dns.metrics;
+          dns = 53;
+          http = 4000;
         };
 
-        # =======================================================================
-        # Upstream DNS with automatic failover
-        # =======================================================================
         upstreams = {
-          # Upstreams and strategy computed by DNS policy module
           groups.default = cfg.upstreamServers;
           inherit (cfg.blocky) strategy;
           timeout = "2s";
         };
 
-        # Bootstrap DNS (Critical for resolving DoH hostnames)
         bootstrapDns = {
-          upstream = "1.1.1.1"; # Use standard DNS for bootstrapping to avoid circular loops
+          upstream = "1.1.1.1";
           ips = [
-            "1.1.1.1" # Cloudflare
-            "9.9.9.9" # Quad9
-            "8.8.8.8" # Google
+            "1.1.1.1"
+            "9.9.9.9"
+            "8.8.8.8"
           ];
         };
 
-        # =======================================================================
-        # Custom DNS
-        # =======================================================================
         customDNS = {
           customTTL = "1h";
           filterUnmappedTypes = true;
-          mapping = customDNSMapping;
+          mapping = hostRecords // cfg.extraRecords;
         };
 
-        # =======================================================================
-        # Ad/Tracker Blocking
-        # =======================================================================
         blocking = {
           denylists = {
             ads = [
-              # Steven Black's unified hosts (ads + malware)
               "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-              # Hagezi's Multi Normal (ads + tracking + malware)
               "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/multi.txt"
             ];
             threats = [
-              # Hagezi's Threat Intelligence Feeds
               "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif.txt"
             ];
           };
 
           allowlists = {
-            # Add domains that should never be blocked
             essential = [ ];
           };
 
@@ -199,9 +156,6 @@ in
           };
         };
 
-        # =======================================================================
-        # Caching
-        # =======================================================================
         caching = {
           minTime = "5m";
           maxTime = "24h";
@@ -210,10 +164,7 @@ in
           prefetchThreshold = 5;
         };
 
-        # =======================================================================
-        # Logging
-        # =======================================================================
-        queryLog.type = "none"; # Disable for privacy
+        queryLog.type = "none";
 
         log = {
           level = "info";
@@ -224,17 +175,11 @@ in
       };
     };
 
-    # ===========================================================================
-    # Systemd dependencies
-    # ===========================================================================
     systemd.services.blocky = mkIf cfg.blocky.enable {
-      # Start after network is online to ensure upstream connectivity
-      # (Avoids "network unreachable" errors during boot)
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        # Auto-restart on failure (all hosts)
         Restart = "on-failure";
         RestartSec = "1s";
       };

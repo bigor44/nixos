@@ -22,11 +22,15 @@ in
       '';
     };
 
-    # Declare network needs
-    bigor.network.firewall.ports = {
-      tcp = config.bigor.network.ports.storage.nfs;
-      udp = config.bigor.network.ports.storage.nfs;
+    networking.firewall = {
+      allowedTCPPorts = [
+        111
+        2049
+      ];
+      allowedUDPPorts = [
+        111
+        2049
+      ];
     };
-    bigor.network.requiredStaticIpServices = [ "nfs-server" ];
   };
 }

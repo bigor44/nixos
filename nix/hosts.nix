@@ -4,8 +4,6 @@
 let
   modules = import ./modules.nix;
 
-  networkTopology = import ./network-topology.nix;
-
   # Common NixOS modules for all hosts
   commonNixosModules = modules.nixosModules ++ [
     inputs.sops-nix.nixosModules.sops
@@ -18,7 +16,7 @@ let
     inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
-        inherit inputs networkTopology;
+        inherit inputs;
       };
       modules = commonNixosModules ++ [
         ../hosts/${hostname}/configuration.nix
