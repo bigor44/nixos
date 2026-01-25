@@ -23,6 +23,10 @@ Contains entry points for each physical machine.
 - **Convention:**
   - Enabled via `bigor.profiles` list in the host configuration.
   - Automatically enables relevant **Feature Modules**.
+  - **Kernel Policy:**
+    - **Desktop:** Uses `linuxPackages_latest` for performance and hardware support.
+    - **Server:** Uses `linuxPackages` (LTS) for stability.
+  - **Exclusivity:** `desktop` and `server` profiles are mutually exclusive.
 
 ### 3. Platform Modules (`modules/nixos/platform/`)
 

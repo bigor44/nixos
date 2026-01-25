@@ -1,14 +1,11 @@
 # Host: minidesk
 # Purpose: Portable workstation
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [ ../minipc/hardware-configuration.nix ];
 
   networking.hostName = "minidesk";
   system.stateVersion = "25.11";
-
-  # Kernel: latest for responsiveness
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   bigor = {
     profiles = [
