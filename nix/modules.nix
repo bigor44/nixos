@@ -17,7 +17,7 @@
     ../modules/nixos/platform/network
 
     # Platform - DNS
-    ../modules/nixos/platform/dns/settings.nix
+    ../modules/nixos/platform/dns.nix
 
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
