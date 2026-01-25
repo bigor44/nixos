@@ -21,7 +21,7 @@ let
         inherit inputs networkTopology;
       };
       modules = commonNixosModules ++ [
-        ../hosts/${hostname}
+        ../hosts/${hostname}/configuration.nix
       ];
     };
 in

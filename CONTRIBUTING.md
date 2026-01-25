@@ -57,7 +57,7 @@ To maintain consistency across the codebase, please follow these standards:
   - `# Profile:` for profile definitions (`modules/nixos/profiles/`).
   - `# Feature:` for feature modules (`modules/nixos/features/`).
   - `# Home:` for Home Manager modules (`modules/home/`).
-  - `# Host:` for host-specific configurations (`hosts/*/default.nix`).
+  - `# Host:` for host-specific configurations (`hosts/*/configuration.nix`).
 
   Example:
 
@@ -65,6 +65,12 @@ To maintain consistency across the codebase, please follow these standards:
   # Feature: audio
   # Purpose: PipeWire audio stack with ALSA and PulseAudio compatibility
   ```
+
+- **Naming Conventions**:
+  - `default.nix`: Reserved for aggregator files (importing multiple files in a directory).
+  - `configuration.nix`: Reserved EXCLUSIVELY for host-level entry points in `hosts/*/`.
+  - **Descriptive Naming**: Use descriptive names for files with significant logic (e.g., `settings.nix`, `manager.nix`, `home.nix`).
+  - **No Redundancy**: Avoid `default.nix` if it simply imports a single file; import that file directly instead.
 
 - **Feature Modules**:
   - **NixOS features** (`modules/nixos/features/`) must follow the standard template:
@@ -74,7 +80,7 @@ To maintain consistency across the codebase, please follow these standards:
   - **Platform modules** do NOT have enable options and are always active.
 - **Home Modules**:
   - Located in `modules/home/`.
-  - Should be imported via `modules/home/default.nix`.
+  - Primary entry point is `modules/home/home.nix`.
   - Used for user-specific packages, dotfiles, and services.
 - **Shell Scripts**:
   - Must start with a minimal header: Shebang + Script Name + Purpose.

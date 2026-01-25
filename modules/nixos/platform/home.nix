@@ -6,6 +6,6 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
-    users.bigor = import ../../home;
+    users.bigor = import ../../home/home.nix;
   };
 }

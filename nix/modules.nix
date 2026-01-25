@@ -14,11 +14,10 @@
     ../modules/nixos/platform/home.nix
 
     # Platform - Networking
-    ../modules/nixos/platform/network/default.nix
-    ../modules/nixos/platform/network/firewall.nix
+    ../modules/nixos/platform/network
 
     # Platform - DNS
-    ../modules/nixos/platform/dns
+    ../modules/nixos/platform/dns/settings.nix
 
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
@@ -39,7 +38,7 @@
     ../modules/nixos/features/services/sshd.nix
 
     # Features - Dev
-    ../modules/nixos/features/dev/nixvim
+    ../modules/nixos/features/dev/nixvim/settings.nix
     ../modules/nixos/features/dev/tools.nix
     ../modules/nixos/features/dev/scripts.nix
   ];

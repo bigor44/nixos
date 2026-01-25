@@ -1,5 +1,5 @@
-# Home: default
-# Purpose: Entry point for Home Manager configuration
+# Home: configuration
+# Purpose: Main Home Manager configuration
 { osConfig, ... }:
 {
   imports = [

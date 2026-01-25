@@ -86,6 +86,7 @@ Categories: `# Feature:`, `# Host:`, `# Home:`, `# Platform:`, `# Profile:`.
 ### Nix Language Rules
 
 - **Comments:** Explain _why_, not _what_. Use English.
+- **Naming:** `default.nix` should be reserved for mainly importing files in the directory. If a file contains significant logic/configuration, give it a descriptive name (e.g., `settings.nix`, `manager.nix`, `home.nix`). Avoid `default.nix` if it simply imports a single file; import that file directly instead. **Note:** `configuration.nix` is a special name reserved for host-level system entry points (found in `hosts/*/`); do not use it elsewhere.
 
 ### Secrets
 
