@@ -7,8 +7,8 @@
   networking.hostName = "minidesk";
   system.stateVersion = "25.11";
 
-  # Kernel: Zen for responsiveness
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # Kernel: latest for responsiveness
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   bigor = {
     profiles = [
