@@ -7,9 +7,6 @@
 }:
 let
   cfg = config.bigor.features.services.nfs-server;
-
-  # NFS export options: all requests mapped to bigor (1000:100) for security
-  nfsOptions = "rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100";
 in
 {
   options.bigor.features.services.nfs-server.enable = lib.mkEnableOption "NFS server";
@@ -18,7 +15,7 @@ in
     services.nfs.server = {
       enable = true;
       exports = ''
-        /mnt/storage ${config.bigor.network.subnet}(${nfsOptions})
+        /mnt/storage ${config.bigor.network.subnet}(rw,sync,no_subtree_check,secure,all_squash,anonuid=1000,anongid=100)
       '';
     };
 

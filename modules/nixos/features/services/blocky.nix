@@ -17,15 +17,6 @@ let
 
   cfg = config.bigor.features.services.blocky;
   inherit (config.bigor.network) domain hosts;
-
-  # Generate records from hosts definition
-  hostRecords = mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) hosts;
-
-  defaultDohUpstreams = [
-    "https://dns.quad9.net/dns-query"
-    "https://cloudflare-dns.com/dns-query"
-    "https://dns.adguard-dns.com/dns-query"
-  ];
 in
 {
   options.bigor.features.services.blocky = {
@@ -73,7 +64,14 @@ in
         };
 
         upstreams = {
-          groups.default = defaultDohUpstreams;
+          groups.default = [
+            "https://ns0.fdn.fr/dns-query"
+            "https://dns.quad9.net/dns-query"
+            "https://cloudflare-dns.com/dns-query"
+            "https://dns.adguard-dns.com/dns-query"
+            "https://dns.google/dns-query"
+            "https://doh.opendns.com/dns-query"
+          ];
           strategy = "parallel_best";
           timeout = "2s";
         };
@@ -85,7 +83,7 @@ in
         customDNS = {
           customTTL = "1h";
           filterUnmappedTypes = true;
-          mapping = hostRecords // {
+          mapping = (mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) hosts) // {
             "${domain}" = "192.168.1.10";
           };
         };

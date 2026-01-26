@@ -68,6 +68,9 @@ To maintain consistency across the codebase, please follow these standards:
   - **Descriptive Naming**: Use descriptive names for files with significant logic (e.g., `settings.nix`, `manager.nix`, `home.nix`).
   - **No Redundancy**: Avoid `default.nix` if it simply imports a single file; import that file directly instead.
 
+- **Variable Usage**:
+  - Inline variables that are used only once, unless they significantly improve readability or are used for complex expressions.
+
 - **Feature Modules**:
   - **NixOS features** (`modules/nixos/features/`) must follow the standard template:
     - Define an `enable` option under `bigor.features.<category>.<name>.enable`.
