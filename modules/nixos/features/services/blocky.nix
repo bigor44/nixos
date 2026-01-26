@@ -133,15 +133,6 @@ in
           prefetchExpires = "2h";
           prefetchThreshold = 5;
         };
-
-        queryLog.type = "none";
-
-        log = {
-          level = "info";
-          format = "text";
-          timestamp = true;
-          privacy = true;
-        };
       };
     };
 
