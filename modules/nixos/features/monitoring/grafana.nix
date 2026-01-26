@@ -41,5 +41,18 @@ in
         reverse_proxy 127.0.0.1:3000
       '';
     })
+    (mkIf config.bigor.features.monitoring.prometheus.enable {
+      services.grafana.provision = {
+        enable = true;
+        datasources.settings.datasources = [
+          {
+            name = "Prometheus";
+            type = "prometheus";
+            access = "proxy";
+            url = "http://127.0.0.1:${toString config.services.prometheus.port}";
+          }
+        ];
+      };
+    })
   ]);
 }
