@@ -46,7 +46,7 @@
       qf = "nix develop --command pre-commit run && nix flake check";
 
       # Safe Workflows
-      gcn = "git add -A && pre-commit run && git commit";
+      gcn = "git add -A && nix develop --command pre-commit run && git commit";
       gps = "nix flake check && gp";
       nrs = "nix flake check && sudo nixos-rebuild switch --flake .";
       nrb = "nix flake check && sudo nixos-rebuild boot --flake .";
