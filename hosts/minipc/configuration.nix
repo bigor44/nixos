@@ -11,6 +11,11 @@
 
   bigor = {
     features = {
+      dev = {
+        tools.enable = true;
+        scripts.enable = true;
+        nixvim.enable = true;
+      };
       services = {
         blocky = {
           enable = true;

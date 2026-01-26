@@ -12,8 +12,6 @@
   bigor = {
     features = {
       services.blocky.enable = true;
-
-      # From desktop profile
       graphics = {
         desktop.enable = true;
         flatpak.enable = true;
