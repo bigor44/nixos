@@ -29,6 +29,10 @@
         scripts.enable = true;
         nixvim.enable = true;
       };
+
+      monitoring = {
+        node-exporter.enable = true;
+      };
     };
   };
 

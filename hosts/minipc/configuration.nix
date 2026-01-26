@@ -27,7 +27,11 @@
         };
         nfs-server.enable = true;
         caddy.enable = true;
-        gatus.enable = true;
+      };
+      monitoring = {
+        node-exporter.enable = true;
+        prometheus.enable = true;
+        grafana.enable = true;
       };
     };
   };

@@ -105,6 +105,50 @@ To maintain consistency across the codebase, please follow these standards:
   - Open ports directly in the feature module where the service is defined.
   - Ensure the ports are necessary and documented.
 
+- **Exposing Services via Caddy & DNS**:
+  To expose a service with a local domain (e.g., `myservice.bigor.lan`):
+  1. **Define the service** in a feature module.
+  2. **Use `mkMerge`** to separate the service config, DNS records, and Caddy config.
+  3. **Add a DNS record** in `bigor.network.serviceRecords` pointing to the host's IP.
+  4. **Configure Caddy** reverse proxy with `tls internal` (conditional on Caddy being enabled).
+
+  **Example:**
+
+  ```nix
+  { config, lib, ... }:
+  let
+    inherit (lib) mkEnableOption mkIf mkMerge;
+    cfg = config.bigor.features.services.myservice;
+    networkCfg = config.bigor.network;
+  in
+  {
+    options.bigor.features.services.myservice.enable = mkEnableOption "My Service";
+
+    config = mkIf cfg.enable (mkMerge [
+      # 1. Service Configuration
+      {
+        services.myservice.enable = true;
+        networking.firewall.allowedTCPPorts = [ 1234 ];
+      }
+
+      # 2. DNS Record (myservice.bigor.lan -> host IP)
+      {
+        bigor.network.serviceRecords = {
+          myservice = networkCfg.hosts.${config.networking.hostName};
+        };
+      }
+
+      # 3. Caddy Reverse Proxy (Conditional)
+      (mkIf config.bigor.features.services.caddy.enable {
+        services.caddy.virtualHosts."myservice.${networkCfg.domain}".extraConfig = ''
+          tls internal
+          reverse_proxy 127.0.0.1:1234
+        '';
+      })
+    ]);
+  }
+  ```
+
 ### 4. Formatting and Linting
 
 We enforce strict formatting and linting rules:

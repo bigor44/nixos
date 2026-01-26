@@ -73,6 +73,7 @@ Each host lives in `hosts/<hostname>/configuration.nix` and only enables the fea
   - `dev.nixvim`
   - `services.blocky`
   - `services.caddy`
+  - `monitoring.grafana`
   - `hardware.audio`
 
 ### Home Manager (`modules/home/`)

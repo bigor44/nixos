@@ -28,10 +28,14 @@
     # Features - Services
     ../modules/nixos/features/services/blocky.nix
     ../modules/nixos/features/services/caddy.nix
-    ../modules/nixos/features/services/gatus.nix
     ../modules/nixos/features/services/nfs-client.nix
     ../modules/nixos/features/services/nfs-server.nix
     ../modules/nixos/features/services/sshd.nix
+
+    # Features - Monitoring
+    ../modules/nixos/features/monitoring/grafana.nix
+    ../modules/nixos/features/monitoring/node-exporter.nix
+    ../modules/nixos/features/monitoring/prometheus.nix
 
     # Features - Dev
     ../modules/nixos/features/dev/nixvim/settings.nix

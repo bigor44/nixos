@@ -18,7 +18,7 @@ This is a modular **NixOS configuration** repository using **Nix Flakes**. It ma
   - Each host directory has a `configuration.nix` which is the entry point for that host.
 - `modules/`: Reusable Nix modules.
   - `nixos/platform/`: **Mandatory** base infrastructure (boot, network, users, etc.). These are always active.
-  - `nixos/features/`: **Optional** capabilities (gaming, dev tools, etc.). These must be explicitly enabled via `bigor.features.<category>.<name>.enable`.
+  - `nixos/features/`: **Optional** capabilities (gaming, dev tools, monitoring, etc.). These must be explicitly enabled via `bigor.features.<category>.<name>.enable`.
   - `home/`: Home Manager modules for user-specific dotfiles and apps.
 - `secrets/`: Encrypted secrets managed by SOPS (`secrets.yaml`).
 - `certs/`: Certificates.
