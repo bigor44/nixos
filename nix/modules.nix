@@ -14,9 +14,6 @@
     # Platform - Networking
     ../modules/nixos/platform/network
 
-    # Platform - DNS
-    ../modules/nixos/platform/dns.nix
-
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
     ../modules/nixos/features/graphics/flatpak.nix
@@ -29,6 +26,7 @@
     ../modules/nixos/features/hardware/keyboardVIA.nix
 
     # Features - Services
+    ../modules/nixos/features/services/blocky.nix
     ../modules/nixos/features/services/caddy.nix
     ../modules/nixos/features/services/gatus.nix
     ../modules/nixos/features/services/nfs-client.nix

@@ -1,6 +1,6 @@
 # Host: grospc
 # Purpose: Desktop workstation with gaming
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -10,12 +10,9 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   bigor = {
-    platform.dns.upstreamServers = [
-      "192.168.1.10:53"
-    ]
-    ++ config.bigor.platform.dns.defaultDohUpstreams;
-
     features = {
+      services.blocky.enable = true;
+
       # From desktop profile
       graphics = {
         desktop.enable = true;

@@ -1,5 +1,5 @@
-# Platform: dns
-# Purpose: Core DNS platform module (Interface + Policy + Assertions + Resolver + Blocky Driver)
+# Feature: Services - Blocky
+# Purpose: DNS proxy and ad-blocker (Blocky) configuration
 {
   config,
   lib,
@@ -7,75 +7,48 @@
 }:
 let
   inherit (lib)
+    mkEnableOption
     mkOption
     types
     mkIf
     mapAttrs'
     nameValuePair
     ;
-  cfg = config.bigor.platform.dns;
+
+  cfg = config.bigor.features.services.blocky;
   inherit (config.bigor.network) domain hosts;
 
   # Generate records from hosts definition
   hostRecords = mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) hosts;
+
+  defaultDohUpstreams = [
+    "https://dns.quad9.net/dns-query"
+    "https://cloudflare-dns.com/dns-query"
+    "https://dns.adguard-dns.com/dns-query"
+  ];
 in
 {
-  options.bigor.platform.dns = {
-    extraRecords = mkOption {
-      type = types.attrsOf types.str;
-      default = {
-        "${domain}" = "192.168.1.10"; # Default root to minipc
-      };
-      description = "Additional DNS records to serve via Blocky";
-    };
+  options.bigor.features.services.blocky = {
+    enable = mkEnableOption "Blocky DNS service";
 
-    defaultDohUpstreams = mkOption {
-      type = types.listOf types.str;
-      readOnly = true;
-      default = [
-        "https://dns.quad9.net/dns-query"
-        "https://cloudflare-dns.com/dns-query"
-        "https://dns.adguard-dns.com/dns-query"
-      ];
-      description = "Standard list of DoH upstreams";
-    };
-
-    upstreamServers = mkOption {
-      type = types.listOf types.str;
-      default = cfg.defaultDohUpstreams;
-      description = "List of upstream servers used by Blocky.";
-    };
-
-    server = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to open port 53 on LAN (Server role)";
-      };
-    };
-
-    blocky = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Platform guarantee: Blocky always runs as local proxy";
-      };
-
-      strategy = mkOption {
-        type = types.str;
-        default = "parallel_best";
-        description = "Blocky upstream strategy";
-      };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to open port 53 on the firewall (for serving DNS to other devices)";
     };
   };
 
-  config = {
-    networking.firewall = mkIf cfg.server.enable {
+  config = mkIf cfg.enable {
+    networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 53 ];
       allowedUDPPorts = [ 53 ];
     };
 
-    networking.nameservers = [ "127.0.0.1" ];
+    # Localhost as main nameserver, Quad9 as fallback
+    networking.nameservers = [
+      "127.0.0.1"
+      "9.9.9.9"
+    ];
 
     services.resolved = {
       enable = true;
@@ -90,7 +63,7 @@ in
       };
     };
 
-    services.blocky = mkIf cfg.blocky.enable {
+    services.blocky = {
       enable = true;
 
       settings = {
@@ -100,24 +73,21 @@ in
         };
 
         upstreams = {
-          groups.default = cfg.upstreamServers;
-          inherit (cfg.blocky) strategy;
+          groups.default = defaultDohUpstreams;
+          strategy = "parallel_best";
           timeout = "2s";
         };
 
         bootstrapDns = {
           upstream = "1.1.1.1";
-          ips = [
-            "1.1.1.1"
-            "9.9.9.9"
-            "8.8.8.8"
-          ];
         };
 
         customDNS = {
           customTTL = "1h";
           filterUnmappedTypes = true;
-          mapping = hostRecords // cfg.extraRecords;
+          mapping = hostRecords // {
+            "${domain}" = "192.168.1.10";
+          };
         };
 
         blocking = {
@@ -175,7 +145,7 @@ in
       };
     };
 
-    systemd.services.blocky = mkIf cfg.blocky.enable {
+    systemd.services.blocky = {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];

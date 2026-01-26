@@ -10,15 +10,12 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   bigor = {
-    platform.dns.server.enable = true;
-
     features = {
-      dev.tools.enable = true;
-      dev.scripts.enable = true;
-
-      hardware.cpu-power-management.enable = true;
-
       services = {
+        blocky = {
+          enable = true;
+          openFirewall = true;
+        };
         sshd = {
           enable = true;
           openFirewall = true;

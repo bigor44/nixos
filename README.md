@@ -51,7 +51,7 @@ The design clearly separates:
 ### 1. Platform Modules (`modules/nixos/platform/`)
 
 - **Always enabled**
-- Core OS concerns: boot, users, DNS, networking, firewall, Nix settings
+- Core OS concerns: boot, users, networking, firewall, Nix settings
 - **No `enable` options by design**
 
 ### 2. Features (`modules/nixos/features/`)
@@ -69,6 +69,7 @@ bigor.features.<category>.<name>.enable
   - `graphics.desktop`
   - `graphics.gaming`
   - `services.caddy`
+  - `services.blocky`
   - `dev.nixvim`
 
 ### 4. Home Manager (`modules/home/`)
@@ -98,7 +99,7 @@ Examples:
 ## 🌐 Network & Firewall Model
 
 - **Standard NixOS networking**: Use `networking.firewall` options directly in modules.
-- **DNS**: Centralized DNS configuration in `modules/nixos/platform/dns.nix`.
+- **DNS**: DNS proxying/ad-blocking (Blocky) is available as a feature in `modules/nixos/features/services/blocky.nix`.
 - **Static IPs**: Managed within host configurations or platform settings as needed.
 
 ---
