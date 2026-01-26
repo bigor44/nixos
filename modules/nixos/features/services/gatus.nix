@@ -62,6 +62,11 @@ in
 
       networking.firewall.allowedTCPPorts = [ 8080 ];
     }
+    {
+      bigor.network.serviceRecords = {
+        status = config.bigor.network.hosts.minipc;
+      };
+    }
     (mkIf config.bigor.features.services.caddy.enable {
       services.caddy.virtualHosts."status.${networkCfg.domain}".extraConfig = ''
         tls internal

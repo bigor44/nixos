@@ -16,7 +16,7 @@ let
     ;
 
   cfg = config.bigor.features.services.blocky;
-  inherit (config.bigor.network) domain hosts;
+  inherit (config.bigor.network) domain hosts serviceRecords;
 in
 {
   options.bigor.features.services.blocky = {
@@ -83,9 +83,11 @@ in
         customDNS = {
           customTTL = "1h";
           filterUnmappedTypes = true;
-          mapping = (mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) hosts) // {
-            "${domain}" = "192.168.1.10";
-          };
+          mapping =
+            (mapAttrs' (name: ip: nameValuePair "${name}.${domain}" ip) (hosts // serviceRecords))
+            // {
+              "${domain}" = "192.168.1.10";
+            };
         };
 
         blocking = {

@@ -6,7 +6,14 @@
   ...
 }:
 let
-  inherit (lib) mkOption types optional;
+  inherit (lib)
+    mkOption
+    types
+    optional
+    mkIf
+    concatStringsSep
+    mapAttrsToList
+    ;
   cfg = config.bigor.network;
 in
 {
@@ -32,6 +39,11 @@ in
       };
       description = "Static IP mappings for known hosts";
     };
+    serviceRecords = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Service DNS records (service → IP)";
+    };
   };
 
   config = {
@@ -39,5 +51,8 @@ in
 
     # Enable nftables (modern firewall backend)
     networking.nftables.enable = true;
+    networking.extraHosts = mkIf (cfg.hosts != { }) (
+      concatStringsSep "\n" (mapAttrsToList (name: ip: "${ip} ${name}") cfg.hosts)
+    );
   };
 }
