@@ -38,6 +38,7 @@ in
     # Localhost as main nameserver, Quad9 as fallback
     networking.nameservers = [
       "127.0.0.1"
+      "::1"
       "9.9.9.9"
     ];
 
