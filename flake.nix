@@ -41,7 +41,6 @@
       imports = [
         inputs.git-hooks.flakeModule
         ./nix/hosts.nix
-        ./nix/checks.nix
         ./nix/devshell.nix
         ./nix/git-hooks.nix
       ];
