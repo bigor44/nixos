@@ -9,7 +9,7 @@
     ../modules/nixos/platform/sops.nix
     ../modules/nixos/platform/users.nix
     ../modules/nixos/platform/locale.nix
-    ../modules/nixos/platform/home.nix
+    ./home-manager.nix
 
     # Platform - Networking
     ../modules/nixos/platform/network

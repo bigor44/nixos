@@ -75,7 +75,8 @@ Categories: `Platform`, `Feature`, `Home`, `Host`.
 
 ### 4. Commits
 
-- Use `gcn` to ensure quality.
+- **Validation:** Always use `nix develop --command pre-commit run` to validate changes before committing.
+- Use `gcn` (in devshell) or manual git commands to ensure quality.
 - Follow the format: `type: message`.
 
 ## Usage
