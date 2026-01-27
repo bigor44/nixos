@@ -26,7 +26,6 @@
           openFirewall = true;
         };
         caddy.enable = true;
-        samba.enable = true;
       };
       monitoring = {
         node-exporter.enable = true;
