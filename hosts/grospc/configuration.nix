@@ -36,12 +36,12 @@
     };
   };
 
-  fileSystems."/steamlibrary" = {
-    device = "/dev/disk/by-uuid/eca2097b-72d2-46cc-95d3-3b1d546afffc";
-    fsType = "ext4";
-    options = [
-      "noatime"
-      "nodiratime"
-    ];
-  };
+  # fileSystems."/steamlibrary" = {
+  # device = "/dev/disk/by-uuid/eca2097b-72d2-46cc-95d3-3b1d546afffc";
+  # fsType = "ext4";
+  # options = [
+  #   "noatime"
+  #   "nodiratime"
+  # ];
+  # };
 }
