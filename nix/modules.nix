@@ -28,6 +28,7 @@
     # Features - Services
     ../modules/nixos/features/services/blocky.nix
     ../modules/nixos/features/services/caddy.nix
+    ../modules/nixos/features/services/samba.nix
     ../modules/nixos/features/services/sshd.nix
 
     # Features - Monitoring
