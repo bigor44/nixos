@@ -1,5 +1,5 @@
 # Host: minipc
-# Purpose: Homelab server (DNS, Caddy, NFS, monitoring)
+# Purpose: Homelab server (DNS, Caddy, monitoring)
 { pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
@@ -25,7 +25,6 @@
           enable = true;
           openFirewall = true;
         };
-        nfs-server.enable = true;
         caddy.enable = true;
       };
       monitoring = {

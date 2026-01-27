@@ -19,11 +19,11 @@ This repository also integrates **Home Manager**, **SOPS**, and a strict quality
 
 ## 📦 Managed Hosts
 
-| Host       | Purpose                                              |
-| ---------- | ---------------------------------------------------- |
-| `grospc`   | Desktop workstation with gaming                      |
-| `minidesk` | Portable workstation                                 |
-| `minipc`   | Homelab server (DNS, reverse proxy, monitoring, NFS) |
+| Host       | Purpose                                         |
+| ---------- | ----------------------------------------------- |
+| `grospc`   | Desktop workstation with gaming                 |
+| `minidesk` | Portable workstation                            |
+| `minipc`   | Homelab server (DNS, reverse proxy, monitoring) |
 
 Each host lives in `hosts/<hostname>/configuration.nix` and only enables the features it needs.
 
