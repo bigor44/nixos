@@ -28,7 +28,6 @@
       dev = {
         tools.enable = true;
         scripts.enable = true;
-        nixvim.enable = true;
       };
     };
   };

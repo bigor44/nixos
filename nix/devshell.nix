@@ -19,6 +19,8 @@
           statix
           deadnix
           shellcheck
+          luaPackages.luacheck
+          stylua
 
           # QA
           pre-commit

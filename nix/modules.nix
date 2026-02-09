@@ -36,7 +36,6 @@
     ../modules/nixos/features/monitoring/prometheus.nix
 
     # Features - Dev
-    ../modules/nixos/features/dev/nixvim/settings.nix
     ../modules/nixos/features/dev/tools.nix
     ../modules/nixos/features/dev/scripts.nix
   ];

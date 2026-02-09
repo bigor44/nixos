@@ -43,3 +43,10 @@ excludes = ["secrets/*"]
 command = "taplo"
 options = ["fmt"]
 includes = ["*.toml"]
+
+# ------------------------------------------------------------------------------
+# Lua (stylua)
+# ------------------------------------------------------------------------------
+[formatter.lua]
+command = "stylua"
+includes = ["*.lua"]

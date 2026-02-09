@@ -70,7 +70,6 @@ Each host lives in `hosts/<hostname>/configuration.nix` and only enables the fea
 - Examples:
   - `graphics.desktop`
   - `graphics.gaming`
-  - `dev.nixvim`
   - `services.blocky`
   - `services.caddy`
   - `monitoring.grafana`

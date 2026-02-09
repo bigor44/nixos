@@ -27,6 +27,9 @@ in
 
       # Development tools
       gemini-cli
+      neovim
+      luaPackages.luacheck
+      stylua
     ];
   };
 }

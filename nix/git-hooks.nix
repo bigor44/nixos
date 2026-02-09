@@ -27,6 +27,7 @@
                           shfmt
                           taplo
                           nodePackages.prettier
+                          stylua
                         ]
                       )
                     }
@@ -37,6 +38,11 @@
           statix.enable = true;
           deadnix.enable = true;
           shellcheck.enable = true;
+          luacheck = {
+            enable = true;
+            package = pkgs.luaPackages.luacheck;
+            entry = "${pkgs.luaPackages.luacheck}/bin/luacheck --config .luacheckrc";
+          };
 
           # Security
           detect-private-keys.enable = true;

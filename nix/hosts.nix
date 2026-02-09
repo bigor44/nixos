@@ -7,7 +7,6 @@ let
   # Common NixOS modules for all hosts
   commonNixosModules = modules.nixosModules ++ [
     inputs.sops-nix.nixosModules.sops
-    inputs.nixvim.nixosModules.nixvim
     inputs.home-manager.nixosModules.home-manager
   ];
 
