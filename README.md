@@ -1,7 +1,14 @@
-# Bigor’s NixOS Configuration
+# Bigor’s NixOS
 
 A modular, flake-based **NixOS configuration** used to manage multiple machines with a clean separation between **mandatory platform infrastructure** and **optional features**.  
 This repository also integrates **Home Manager**, **SOPS**, and a strict quality-driven development workflow.
+
+<div align="center">
+
+[![CI](https://github.com/bigor44/nixos/actions/workflows/ci.yml/badge.svg)](https://github.com/bigor44/nixos/actions/workflows/ci.yml)
+[![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+
+</div>
 
 ---
 
@@ -168,6 +175,30 @@ Before pushing:
 ```bash
 qf
 ```
+
+---
+
+## 📂 Dotfiles
+
+The `dotfiles/` directory contains raw configuration files for various applications, which are deployed via Home Manager.
+
+| File/Directory | Description                                                      |
+| -------------- | ---------------------------------------------------------------- |
+| `autostart/`   | `.desktop` files for applications that should launch on startup. |
+| `cosmic/`      | Configuration files for the Cosmic desktop environment.          |
+| `nvim/`        | Neovim configuration files.                                      |
+
+---
+
+## Utility Scripts
+
+This repository includes several utility scripts in the `scripts/` directory to aid in development and maintenance:
+
+| Script             | Description                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `concat_config.sh` | Aggregates all configuration files into a single Markdown document for easy sharing and review.       |
+| `dns-test.sh`      | Performs a functional test of the DNS stack, verifying reachability, local rewrites, and ad blocking. |
+| `post_install.sh`  | Automates the initial setup of a new host by copying hardware configs and updating state versions.    |
 
 ---
 

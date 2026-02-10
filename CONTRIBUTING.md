@@ -1,4 +1,4 @@
-# Contributing to Bigor's NixOS Configuration
+# Contributing to Bigor's NixOS
 
 First off, thank you for considering contributing to this project! It's people like you that make the open-source community such a great place to learn, inspire, and create.
 

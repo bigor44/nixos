@@ -1,4 +1,4 @@
-# Gemini Context: Bigor's NixOS Configuration
+# Gemini Context: Bigor's NixOS
 
 ## Project Overview
 
@@ -63,6 +63,26 @@ This environment provides necessary tools (`nixos-rebuild`, `sops`, `treefmt`, e
 - **File:** `secrets/secrets.yaml`.
 - **Edit:** `sops secrets/secrets.yaml`.
 - **Usage:** Secrets are referenced in modules via `config.sops.secrets`. Do **not** commit plain-text secrets.
+
+### Dotfiles
+
+The `dotfiles/` directory contains raw configuration files for various applications, which are deployed via Home Manager.
+
+| File/Directory | Description                                                      |
+| -------------- | ---------------------------------------------------------------- |
+| `autostart/`   | `.desktop` files for applications that should launch on startup. |
+| `cosmic/`      | Configuration files for the Cosmic desktop environment.          |
+| `nvim/`        | Neovim configuration files.                                      |
+
+### Utility Scripts
+
+This repository includes several utility scripts in the `scripts/` directory to aid in development and maintenance:
+
+| Script             | Description                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `concat_config.sh` | Aggregates all configuration files into a single Markdown document for easy sharing and review.       |
+| `dns-test.sh`      | Performs a functional test of the DNS stack, verifying reachability, local rewrites, and ad blocking. |
+| `post_install.sh`  | Automates the initial setup of a new host by copying hardware configs and updating state versions.    |
 
 ## Coding Conventions
 
