@@ -38,21 +38,18 @@ in
     # Configure systemd-resolved to use Blocky for local domain
     services.resolved = {
       enable = true;
-      settings = {
-        Resolve = {
-          DNS = [ "127.0.0.1" ];
-          FallbackDNS = [
-            "1.1.1.1"
-            "9.9.9.9"
-          ];
-          Domains = [ "~${domain}" ]; # Route .bigor.lan queries to Blocky
-          DNSStubListener = "no";
-        };
-      };
+      fallbackDns = [
+        "1.1.1.1"
+        "9.9.9.9"
+      ];
+      domains = [ "~${domain}" ]; # Route .bigor.lan queries to Blocky
+      extraConfig = ''
+        DNSStubListener=no
+      '';
     };
 
-    # Ensure /etc/resolv.conf points to systemd-resolved
-    networking.nameservers = lib.mkForce [ ];
+    # Ensure resolved uses Blocky
+    networking.nameservers = lib.mkForce [ "127.0.0.1" ];
 
     services.blocky = {
       enable = true;

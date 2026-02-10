@@ -27,6 +27,7 @@ in
 
       # Development tools
       gemini-cli
+      codex
       neovim
       luaPackages.luacheck
       stylua
