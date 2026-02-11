@@ -38,14 +38,14 @@ in
     # Configure systemd-resolved to use Blocky for local domain
     services.resolved = {
       enable = true;
-      fallbackDns = [
-        "1.1.1.1"
-        "9.9.9.9"
-      ];
-      domains = [ "~${domain}" ]; # Route .bigor.lan queries to Blocky
-      extraConfig = ''
-        DNSStubListener=no
-      '';
+      settings.Resolve = {
+        FallbackDNS = [
+          "1.1.1.1"
+          "9.9.9.9"
+        ];
+        Domains = [ "~${domain}" ]; # Route .bigor.lan queries to Blocky
+        DNSStubListener = "no";
+      };
     };
 
     # Ensure resolved uses Blocky
