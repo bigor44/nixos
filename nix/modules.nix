@@ -31,9 +31,6 @@
     ../modules/nixos/features/services/sshd.nix
 
     # Features - Monitoring
-    ../modules/nixos/features/monitoring/grafana.nix
-    ../modules/nixos/features/monitoring/node-exporter.nix
-    ../modules/nixos/features/monitoring/prometheus.nix
 
     # Features - Dev
     ../modules/nixos/features/dev/tools.nix

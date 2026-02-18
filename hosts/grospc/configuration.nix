@@ -29,9 +29,6 @@
         scripts.enable = true;
       };
 
-      monitoring = {
-        node-exporter.enable = true;
-      };
     };
   };
 

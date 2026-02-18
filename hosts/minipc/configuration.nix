@@ -26,11 +26,7 @@
         };
         caddy.enable = true;
       };
-      monitoring = {
-        node-exporter.enable = true;
-        prometheus.enable = true;
-        grafana.enable = true;
-      };
+
     };
   };
 
