@@ -42,7 +42,7 @@ Formatters and linters run through `nix fmt` and `nix flake check` (no devshell,
 
 ## Dotfiles
 
-`dotfiles/` is symlinked out of the store (edits apply without a rebuild):
+`dotfiles/` is symlinked out of the store (edits apply without a rebuild), except `autostart/`, which is copied read-only into the store so apps cannot rewrite it:
 
 | Directory    | Description                        |
 | ------------ | ---------------------------------- |

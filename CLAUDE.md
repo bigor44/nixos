@@ -21,7 +21,7 @@ No unit tests: validation = `nix fmt` (applies fixes) + `qf` (fails on unformatt
 - New system modules must be added to `imports` in `hosts/grospc/configuration.nix`; an unlisted file is silently ignored.
 - Home Manager entry is `modules/home/default.nix`; user is `bigor`, HM stateVersion follows the system's.
 - Neovim config lives in `dotfiles/nvim` (Lua, symlinked via HM) — nixvim was removed. Desktop is COSMIC.
-- `dotfiles/` is an out-of-store symlink: deleting a file there deletes it from `~/.config` immediately. The generated COSMIC theme dirs are git-ignored, not removed.
+- `dotfiles/` is an out-of-store symlink: deleting a file there deletes it from `~/.config` immediately. Exception: `autostart/` is copied read-only into the store (Discord rewrites its entry), so changes there need a rebuild. The generated COSMIC theme dirs are git-ignored, not removed.
 
 ## Module conventions
 
