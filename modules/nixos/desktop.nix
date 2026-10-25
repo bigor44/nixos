@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth, VIA keyboard access and gaming (Steam, GameMode)
+# Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth and gaming (Steam, GameMode)
 { config, ... }:
 {
   services = {
