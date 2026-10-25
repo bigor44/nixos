@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, Nix settings, caches, primary user and firewall
+# Purpose: Boot, Nix settings, caches, primary user, Home Manager and firewall
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -16,7 +16,6 @@
 
   nix = {
     settings = {
-      auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
@@ -28,24 +27,17 @@
       max-jobs = "auto";
 
       substituters = [
-        "https://cache.nixos.org"
         "https://nix-community.cachix.org"
         "https://cosmic.cachix.org"
       ];
 
       trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
     };
 
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-
+    # Garbage collection is handled by programs.nh.clean (packages.nix)
     optimise.automatic = true;
   };
 
@@ -57,6 +49,14 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    # Rename pre-existing files (e.g. zsh's first-run ~/.zshrc) instead of aborting activation
+    backupFileExtension = "hm-backup";
+    users.bigor = import ../home;
+  };
 
   # Firewall itself is on by default; only switch the backend
   networking.nftables.enable = true;

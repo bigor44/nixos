@@ -8,6 +8,11 @@
     nh = {
       enable = true;
       flake = "/home/bigor/nixos";
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep-since 7d --keep 5";
+      };
     };
   };
 
@@ -19,9 +24,7 @@
     unzip
 
     # Modern CLI tools
-    eza
     fd
-    findutils
     ripgrep
     jq
 

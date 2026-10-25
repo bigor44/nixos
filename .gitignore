@@ -19,3 +19,7 @@ keys.txt
 *~
 .idea/
 .DS_Store
+# --- COSMIC ---
+# Derived from the *.Builder themes; COSMIC rewrites them on every theme change
+dotfiles/cosmic/com.system76.CosmicTheme.Dark/
+dotfiles/cosmic/com.system76.CosmicTheme.Light/

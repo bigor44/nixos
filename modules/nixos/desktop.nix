@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth and VIA keyboard access
+# Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth, VIA keyboard access and gaming (Steam, GameMode)
 { config, pkgs, ... }:
 {
   services = {
@@ -23,7 +23,12 @@
   };
 
   networking.networkmanager.enable = true;
-  programs.firefox.enable = true;
+  programs = {
+    firefox.enable = true;
+    gamemode.enable = true;
+    steam.enable = true;
+  };
+
   security.rtkit.enable = true;
 
   hardware.bluetooth = {

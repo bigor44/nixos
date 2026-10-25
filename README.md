@@ -11,16 +11,13 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, Nix, user, firewall
+│   │   ├── core.nix          # Boot, Nix, user, Home Manager, firewall
 │   │   ├── locale.nix        # Locale, keyboard, fonts
-│   │   ├── packages.nix      # Base CLI tools
-│   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Flatpak, VIA
-│   │   ├── gaming.nix        # Steam, GameMode
-│   │   ├── dev.nix           # Dev tools
-│   │   └── home-manager.nix  # Home Manager integration
+│   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
+│   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Flatpak, VIA, Steam
+│   │   └── dev.nix           # Dev tools
 │   └── home/                 # Home Manager modules (shell, git, apps, dotfiles)
-├── dotfiles/                 # Raw configs symlinked by Home Manager
-└── scripts/
+└── dotfiles/                 # Raw configs symlinked by Home Manager
 ```
 
 ## Commands
@@ -34,8 +31,9 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 | `qf`      | `nix flake check` (includes the pre-commit checks)              |
 | `gcn`     | Stage all, run pre-commit, commit                               |
 | `gps`     | Flake check, then push                                          |
-| `nrs`     | Flake check, then `nixos-rebuild switch`                        |
-| `nrb`     | Flake check, then `nixos-rebuild boot`                          |
+| `nrs`     | Flake check, then `nh os switch`                                |
+| `nrb`     | Flake check, then `nh os boot`                                  |
+| `nclean`  | `nh clean all` (also runs weekly)                               |
 
 ## Dotfiles
 
@@ -47,9 +45,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 | `cosmic/`    | COSMIC desktop settings            |
 | `nvim/`      | Neovim configuration (Lua)         |
 
-## Scripts
-
-- `scripts/concat_config.sh [out.md]` concatenates the configuration into a single Markdown file for sharing.
+The generated `CosmicTheme.Dark`/`CosmicTheme.Light` directories are git-ignored; only the `*.Builder` themes are tracked.
 
 ## License
 

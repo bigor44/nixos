@@ -12,7 +12,7 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master) for the single ho
 - `qc` = `nix develop --command pre-commit run` — treefmt, statix, deadnix, shellcheck, luacheck, detect-private-keys
 - `qf` = `nix flake check` — also runs the pre-commit checks
 - Build without switching: `nix build .#nixosConfigurations.grospc.config.system.build.toplevel`
-- `nrs` / `nrb` = flake check + `sudo nixos-rebuild switch|boot --flake ~/nixos` — **ask before running these** (or any `nixos-rebuild`); they change the live system.
+- `nrs` / `nrb` = flake check + `nh os switch|boot` — **ask before running these** (or any `nixos-rebuild` / `nh os`); they change the live system.
 
 No unit tests: validation = `nix fmt` + `qc` + `qf`.
 
@@ -22,6 +22,7 @@ No unit tests: validation = `nix fmt` + `qc` + `qf`.
 - New system modules must be added to `imports` in `hosts/grospc/configuration.nix`; an unlisted file is silently ignored.
 - Home Manager entry is `modules/home/default.nix`; user is `bigor`, HM stateVersion follows the system's.
 - Neovim config lives in `dotfiles/nvim` (Lua, symlinked via HM) — nixvim was removed. Desktop is COSMIC.
+- `dotfiles/` is an out-of-store symlink: deleting a file there deletes it from `~/.config` immediately. The generated COSMIC theme dirs are git-ignored, not removed.
 
 ## Module conventions
 
