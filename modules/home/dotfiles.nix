@@ -1,9 +1,6 @@
 # Home: dotfiles
 # Purpose: Manage dotfiles via Home Manager
-{
-  config,
-  ...
-}:
+{ config, ... }:
 let
   dotfilesPath = "${config.home.homeDirectory}/nixos/dotfiles";
 in
@@ -13,5 +10,4 @@ in
     "autostart".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/autostart";
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
   };
-
 }

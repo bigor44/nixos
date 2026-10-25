@@ -8,7 +8,8 @@
     ../../modules/nixos/locale.nix
     ../../modules/nixos/packages.nix
     ../../modules/nixos/desktop.nix
-    ../../modules/nixos/dev.nix
+    ../../modules/nixos/gpu.nix
+    ../../modules/nixos/ollama.nix
   ];
 
   networking.hostName = "grospc";

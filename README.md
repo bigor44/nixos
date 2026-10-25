@@ -15,8 +15,14 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
 │   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Flatpak, VIA, Steam
-│   │   └── dev.nix           # Dev tools
-│   └── home/                 # Home Manager modules (shell, git, apps, dotfiles)
+│   │   ├── gpu.nix           # AMD GPU compute: Vulkan, ROCm, OpenCL
+│   │   └── ollama.nix        # Ollama server on the RX 7800 XT (ROCm)
+│   └── home/                 # Home Manager modules, aggregated by default.nix
+│       ├── shell.nix         # Fish, Starship, CLI tools
+│       ├── git.nix           # Git, gh, git aliases
+│       ├── dev.nix           # Toolchains, Neovim, Claude Code, OpenCode (Ollama)
+│       ├── apps.nix          # Desktop applications
+│       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
 └── dotfiles/                 # Raw configs symlinked by Home Manager
 ```
 

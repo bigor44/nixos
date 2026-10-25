@@ -7,6 +7,5 @@
     discord
     whatsapp-electron
     brave
-    rsync
   ];
 }

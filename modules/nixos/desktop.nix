@@ -1,6 +1,6 @@
 # Platform: desktop
 # Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth, VIA keyboard access and gaming (Steam, GameMode)
-{ config, pkgs, ... }:
+{ config, ... }:
 {
   services = {
     displayManager.cosmic-greeter.enable = true;
@@ -35,8 +35,6 @@
     enable = true;
     powerOnBoot = true;
   };
-
-  environment.systemPackages = [ pkgs.via ];
 
   # NixOS has no declarative Flatpak remotes; add Flathub once the network is up
   systemd.services.flatpak-add-flathub = {

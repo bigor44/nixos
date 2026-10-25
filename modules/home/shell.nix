@@ -1,5 +1,6 @@
 # Home: shell
-# Purpose: Fish shell, Starship, and CLI tools (eza, fzf, zoxide, bat)
+# Purpose: Fish shell, Starship, and CLI tools (eza, fzf, zoxide, bat, rsync)
+{ pkgs, ... }:
 {
   programs = {
     fish = {
@@ -67,9 +68,9 @@
     bat.enable = true;
   };
 
+  home.packages = [ pkgs.rsync ];
+
   home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
     PAGER = "less";
     LESS = "-R";
   };
