@@ -1,7 +1,6 @@
 # Platform: core
 # Purpose: Core system configuration (Boot, Nix settings, Caches, Security)
-{ inputs, ... }:
-{
+_: {
   # --- Boot Configuration ---
   boot.loader = {
     systemd-boot = {
@@ -13,9 +12,6 @@
 
   # --- Nix Core Configuration ---
   nixpkgs.config.allowUnfree = true;
-
-  # Trust internal CA for local services (HTTPS via Caddy)
-  security.pki.certificateFiles = [ "${inputs.self}/certs/minipc-ca.pem" ];
 
   nix = {
     settings = {

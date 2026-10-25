@@ -46,15 +46,6 @@
 
           # Security
           detect-private-keys.enable = true;
-
-          # Custom: Validate SOPS secrets
-          check-sops = {
-            enable = true;
-            name = "Check SOPS secrets";
-            entry = "${pkgs.bash}/bin/bash -c 'if [ -n \"$NIX_BUILD_TOP\" ]; then exit 0; fi; for file in \"$@\"; do ${pkgs.sops}/bin/sops -d \"$file\" >/dev/null; done' --";
-            files = "secrets/.*\\.yaml$";
-            pass_filenames = true;
-          };
         };
       };
     };

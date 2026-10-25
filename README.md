@@ -1,7 +1,7 @@
 # Bigor’s NixOS
 
-A modular, flake-based **NixOS configuration** used to manage multiple machines with a clean separation between **mandatory platform infrastructure** and **optional features**.  
-This repository also integrates **Home Manager**, **SOPS**, and a strict quality-driven development workflow.
+A modular, flake-based **NixOS configuration** with a clean separation between **mandatory platform infrastructure** and **optional features**.  
+This repository also integrates **Home Manager** and a strict quality-driven development workflow.
 
 <div align="center">
 
@@ -16,9 +16,7 @@ This repository also integrates **Home Manager**, **SOPS**, and a strict quality
 
 - **Nix Flakes + flake-parts**
 - Clear **Platform vs Feature** module architecture
-- **Multi-host** setup (desktop, portable workstation, homelab)
 - **Home Manager** for user environments
-- **SOPS + age** for secrets management
 - Opinionated **developer tooling & QA workflow**
 - Fully reproducible and auditable configuration
 
@@ -26,11 +24,9 @@ This repository also integrates **Home Manager**, **SOPS**, and a strict quality
 
 ## 📦 Managed Hosts
 
-| Host       | Purpose                                         |
-| ---------- | ----------------------------------------------- |
-| `grospc`   | Desktop workstation with gaming                 |
-| `minidesk` | Portable workstation                            |
-| `minipc`   | Homelab server (DNS, reverse proxy, monitoring) |
+| Host     | Purpose                         |
+| -------- | ------------------------------- |
+| `grospc` | Desktop workstation with gaming |
 
 Each host lives in `hosts/<hostname>/configuration.nix` and only enables the features it needs.
 
@@ -50,9 +46,7 @@ Each host lives in `hosts/<hostname>/configuration.nix` and only enables the fea
 │   │   └── features/       # Optional, toggleable capabilities
 │   └── home/               # Home Manager modules
 ├── nix/                    # Flake wiring (hosts, devshell, hooks)
-├── secrets/                # SOPS-encrypted secrets
-├── scripts/                # Utility scripts
-└── certs/                  # Certificates
+└── scripts/                # Utility scripts
 ```
 
 ---
@@ -63,7 +57,7 @@ Each host lives in `hosts/<hostname>/configuration.nix` and only enables the fea
 
 - Always enabled
 - No `enable` options
-- Core infrastructure (users, network, locale, packages, SOPS, etc.)
+- Core infrastructure (users, network, locale, packages, etc.)
 
 ### Feature Modules (`modules/nixos/features/`)
 
@@ -77,9 +71,6 @@ Each host lives in `hosts/<hostname>/configuration.nix` and only enables the fea
 - Examples:
   - `graphics.desktop`
   - `graphics.gaming`
-  - `services.blocky`
-  - `services.caddy`
-  - `monitoring.grafana`
   - `hardware.audio`
 
 ### Home Manager (`modules/home/`)
@@ -116,7 +107,6 @@ nix develop
 This provides:
 
 - `nixos-rebuild`
-- `sops`
 - `treefmt`, `statix`, `deadnix`, `shellcheck`
 - Preconfigured aliases and pre-commit hooks
 
@@ -131,27 +121,6 @@ This provides:
 | `nrs`     | Rebuild and switch system               |
 | `nrb`     | Rebuild and apply on next boot          |
 | `nix fmt` | Format entire repository                |
-
----
-
-## 🔐 Secrets Management
-
-Secrets are managed using **SOPS + age**.
-
-- Encrypted file: `secrets/secrets.yaml`
-- Edit secrets:
-
-  ```bash
-  sops secrets/secrets.yaml
-  ```
-
-- Access secrets in Nix via:
-
-  ```nix
-  config.sops.secrets.<name>
-  ```
-
-**Never commit plaintext secrets.**
 
 ---
 
@@ -194,11 +163,10 @@ The `dotfiles/` directory contains raw configuration files for various applicati
 
 This repository includes several utility scripts in the `scripts/` directory to aid in development and maintenance:
 
-| Script             | Description                                                                                           |
-| ------------------ | ----------------------------------------------------------------------------------------------------- |
-| `concat_config.sh` | Aggregates all configuration files into a single Markdown document for easy sharing and review.       |
-| `dns-test.sh`      | Performs a functional test of the DNS stack, verifying reachability, local rewrites, and ad blocking. |
-| `post_install.sh`  | Automates the initial setup of a new host by copying hardware configs and updating state versions.    |
+| Script             | Description                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| `concat_config.sh` | Aggregates all configuration files into a single Markdown document for easy sharing and review.    |
+| `post_install.sh`  | Automates the initial setup of a new host by copying hardware configs and updating state versions. |
 
 ---
 

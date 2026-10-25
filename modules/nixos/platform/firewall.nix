@@ -1,7 +1,9 @@
 # Platform: firewall
-# Purpose: Basic firewall configuration
+# Purpose: Basic firewall configuration (nftables backend)
 {
   config = {
+    networking.nftables.enable = true;
+
     networking.firewall = {
       enable = true;
       # Allow ping from LAN

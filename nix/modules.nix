@@ -6,13 +6,10 @@
     # Platform - Core System
     ../modules/nixos/platform/core.nix
     ../modules/nixos/platform/packages.nix
-    ../modules/nixos/platform/sops.nix
     ../modules/nixos/platform/users.nix
     ../modules/nixos/platform/locale.nix
+    ../modules/nixos/platform/firewall.nix
     ./home-manager.nix
-
-    # Platform - Networking
-    ../modules/nixos/platform/network
 
     # Features - Graphics
     ../modules/nixos/features/graphics/desktop.nix
@@ -25,15 +22,7 @@
     ../modules/nixos/features/hardware/cpu-power-management.nix
     ../modules/nixos/features/hardware/keyboardVIA.nix
 
-    # Features - Services
-    ../modules/nixos/features/services/blocky.nix
-    ../modules/nixos/features/services/caddy.nix
-    ../modules/nixos/features/services/sshd.nix
-
-    # Features - Monitoring
-
     # Features - Dev
     ../modules/nixos/features/dev/tools.nix
-    ../modules/nixos/features/dev/scripts.nix
   ];
 }

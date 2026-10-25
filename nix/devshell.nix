@@ -42,10 +42,6 @@
             # Build tools
             # nh # Removed in favor of nixos-rebuild
 
-            # Secrets management
-            sops
-            age
-
             # Version control
             git
           ]);

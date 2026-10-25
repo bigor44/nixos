@@ -25,8 +25,6 @@ Arguments: `$ARGUMENTS` (e.g. `services/jellyfin` or a description). Ask for cat
    ```
 
    - Open firewall ports in this module, not elsewhere.
-   - If the service should be reachable as `<name>.bigor.lan`, use the `mkMerge` pattern from CONTRIBUTING.md ("Exposing Services via Caddy & DNS"): service block, `bigor.network.serviceRecords.<name> = networkCfg.hosts.${config.networking.hostName};`, and a Caddy vhost wrapped in `mkIf config.bigor.features.services.caddy.enable` with `tls internal`.
-   - Secrets go through `config.sops.secrets` + `secrets/secrets.yaml`, never inline.
 
 3. Add the path to the matching section of `nix/modules.nix` (otherwise it's silently ignored).
 4. If requested, enable it in `hosts/<host>/configuration.nix` under the existing nested `bigor.features.<category>` attrset.

@@ -11,7 +11,6 @@
 
   bigor = {
     features = {
-      services.blocky.enable = true;
       graphics = {
         desktop.enable = true;
         flatpak.enable = true;
@@ -24,10 +23,7 @@
       };
 
       # From dev profile
-      dev = {
-        tools.enable = true;
-        scripts.enable = true;
-      };
+      dev.tools.enable = true;
 
     };
   };

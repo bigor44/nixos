@@ -29,7 +29,7 @@ Before contributing, please familiarize yourself with the modular structure of t
 
 ### Development Environment
 
-Always use the provided development shell to ensure you have all the necessary tools (like `nixos-rebuild`, `sops`, `statix`, `deadnix`, `shellcheck`, etc.):
+Always use the provided development shell to ensure you have all the necessary tools (like `nixos-rebuild`, `statix`, `deadnix`, `shellcheck`, etc.):
 
 ```bash
 git clone https://github.com/bigor44/nixos.git
@@ -105,50 +105,6 @@ To maintain consistency across the codebase, please follow these standards:
   - Open ports directly in the feature module where the service is defined.
   - Ensure the ports are necessary and documented.
 
-- **Exposing Services via Caddy & DNS**:
-  To expose a service with a local domain (e.g., `myservice.bigor.lan`):
-  1. **Define the service** in a feature module.
-  2. **Use `mkMerge`** to separate the service config, DNS records, and Caddy config.
-  3. **Add a DNS record** in `bigor.network.serviceRecords` pointing to the host's IP.
-  4. **Configure Caddy** reverse proxy with `tls internal` (conditional on Caddy being enabled).
-
-  **Example:**
-
-  ```nix
-  { config, lib, ... }:
-  let
-    inherit (lib) mkEnableOption mkIf mkMerge;
-    cfg = config.bigor.features.services.myservice;
-    networkCfg = config.bigor.network;
-  in
-  {
-    options.bigor.features.services.myservice.enable = mkEnableOption "My Service";
-
-    config = mkIf cfg.enable (mkMerge [
-      # 1. Service Configuration
-      {
-        services.myservice.enable = true;
-        networking.firewall.allowedTCPPorts = [ 1234 ];
-      }
-
-      # 2. DNS Record (myservice.bigor.lan -> host IP)
-      {
-        bigor.network.serviceRecords = {
-          myservice = networkCfg.hosts.${config.networking.hostName};
-        };
-      }
-
-      # 3. Caddy Reverse Proxy (Conditional)
-      (mkIf config.bigor.features.services.caddy.enable {
-        services.caddy.virtualHosts."myservice.${networkCfg.domain}".extraConfig = ''
-          tls internal
-          reverse_proxy 127.0.0.1:1234
-        '';
-      })
-    ]);
-  }
-  ```
-
 ### 4. Formatting and Linting
 
 We enforce strict formatting and linting rules:
@@ -162,7 +118,6 @@ Before committing, ensure your changes don't break the configuration:
 
 - **Quick Check**: Run `qc` (alias for `pre-commit run`) for fast formatting and linting of staged files.
 - **Full Check**: Run `qf` (alias for `nix flake check`) for a complete validation of all hosts and builds.
-- **DNS Test**: If you modified DNS settings, run `dns-test`.
 
 ### 6. Applying Changes Locally
 
@@ -195,13 +150,6 @@ gps
 ```
 
 This ensures a full flake check passes before pushing to the remote.
-
-## 🔐 Secrets Management
-
-Do **NOT** commit plain-text secrets. This project uses **SOPS** with **age**.
-
-- To edit secrets: `sops secrets/secrets.yaml`
-- New secrets should be added to `secrets/secrets.yaml` and referenced in your Nix modules via `config.sops.secrets`.
 
 ## 🤝 Pull Request Process
 

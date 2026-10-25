@@ -17,9 +17,6 @@
     htop
     zip
     unzip
-    sops
-    age
-    ssh-to-age
 
     # Modern CLI tools
     eza

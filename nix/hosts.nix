@@ -6,7 +6,6 @@ let
 
   # Common NixOS modules for all hosts
   commonNixosModules = modules.nixosModules ++ [
-    inputs.sops-nix.nixosModules.sops
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -25,7 +24,5 @@ in
 {
   flake.nixosConfigurations = {
     grospc = mkHost "grospc";
-    minipc = mkHost "minipc";
-    minidesk = mkHost "minidesk";
   };
 }
