@@ -1,4 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Discord
-Exec=Discord --start-minimized
+Exec=/nix/store/p3q3qvfg1yfn2c666n1w1rgvpxi68cin-discord-unwrapped-1.0.161/opt/Discord/.Discord-wrapped
+Hidden=false
+NoDisplay=false
+Name=.Discord-wrapped
+Icon=/nix/store/p3q3qvfg1yfn2c666n1w1rgvpxi68cin-discord-unwrapped-1.0.161/opt/Discord/discord.png
+Comment=Text and voice chat for gamers.
+X-GNOME-Autostart-enabled=true
