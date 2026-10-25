@@ -14,7 +14,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 │   │   ├── core.nix          # Boot, Nix, user, Home Manager, firewall
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
-│   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Flatpak, Steam
+│   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Steam
 │   │   ├── gpu.nix           # AMD GPU compute: Vulkan, ROCm, OpenCL
 │   │   └── ollama.nix        # Ollama server on the RX 7800 XT (ROCm)
 │   └── home/                 # Home Manager modules, aggregated by default.nix

@@ -1,7 +1,6 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, NetworkManager, Firefox, Flatpak, PipeWire, Bluetooth and gaming (Steam, GameMode)
-{ config, ... }:
-{
+# Purpose: COSMIC desktop, NetworkManager, Firefox, PipeWire, Bluetooth and gaming (Steam, GameMode)
+_: {
   services = {
     displayManager.cosmic-greeter.enable = true;
     desktopManager.cosmic.enable = true;
@@ -13,9 +12,6 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
-
-    flatpak.enable = true;
-
   };
 
   networking.networkmanager = {
@@ -34,18 +30,5 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-  };
-
-  # NixOS has no declarative Flatpak remotes; add Flathub once the network is up
-  systemd.services.flatpak-add-flathub = {
-    description = "Add Flathub repository to Flatpak";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${config.services.flatpak.package}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo";
-    };
   };
 }
