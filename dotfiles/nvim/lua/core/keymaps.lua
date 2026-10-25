@@ -1,9 +1,6 @@
 -- This file is for setting keybindings.
 -- See `:help key-mapping` for details on creating keybindings.
 
--- set leader key to space
-vim.g.mapleader = " "
-
 local map = vim.api.nvim_set_keymap
 
 -- normal mode
@@ -16,8 +13,8 @@ map("n", "<C-k>", "<C-w>k", { noremap = true, silent = true })
 -- resize window
 map("n", "<C-Up>", ":resize -2<CR>", { noremap = true, silent = true })
 map("n", "<C-Down>", ":resize +2<CR>", { noremap = true, silent = true })
-map("n", "<C-Left>", ":resize -2<CR>", { noremap = true, silent = true })
-map("n", "<C-Right>", ":resize +2<CR>", { noremap = true, silent = true })
+map("n", "<C-Left>", ":vertical resize -2<CR>", { noremap = true, silent = true })
+map("n", "<C-Right>", ":vertical resize +2<CR>", { noremap = true, silent = true })
 
 -- move line
 map("n", "<A-j>", ":m .+1<CR>==", { noremap = true, silent = true })
