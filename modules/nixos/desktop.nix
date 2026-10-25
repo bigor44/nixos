@@ -16,10 +16,6 @@
 
     flatpak.enable = true;
 
-    # VIA/QMK needs raw HID access to configure the keyboard
-    udev.extraRules = ''
-      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-    '';
   };
 
   networking.networkmanager = {
