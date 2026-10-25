@@ -11,16 +11,14 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, Nix, user, Home Manager, firewall
+│   │   ├── core.nix          # Boot, Nix, user, Home Manager
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
-│   │   ├── desktop.nix       # COSMIC, audio, Bluetooth, Steam
-│   │   ├── gpu.nix           # AMD GPU compute: Vulkan, ROCm, OpenCL
-│   │   └── ollama.nix        # Ollama server on the RX 7800 XT (ROCm)
+│   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, Steam
 │   └── home/                 # Home Manager modules, aggregated by default.nix
 │       ├── shell.nix         # Fish, Starship, CLI tools
 │       ├── git.nix           # Git, gh, git aliases
-│       ├── dev.nix           # Toolchains, Neovim, Claude Code, OpenCode (Ollama)
+│       ├── dev.nix           # Toolchains, Neovim, Claude Code
 │       ├── apps.nix          # Desktop applications
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
 └── dotfiles/                 # Raw configs symlinked by Home Manager

@@ -38,6 +38,8 @@
     pciutils
     usbutils
     mesa-demos
+    vulkan-tools
+    amdgpu_top
     lm_sensors
     fastfetch
   ];

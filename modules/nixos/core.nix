@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, Nix settings, caches, primary user, Home Manager and firewall
+# Purpose: Boot, Nix settings, caches, primary user and Home Manager
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -24,7 +24,6 @@
         "root"
         "bigor"
       ];
-      max-jobs = "auto";
 
       substituters = [
         "https://nix-community.cachix.org"
@@ -57,7 +56,4 @@
     backupFileExtension = "hm-backup";
     users.bigor = import ../home;
   };
-
-  # Firewall itself is on by default; only switch the backend
-  networking.nftables.enable = true;
 }

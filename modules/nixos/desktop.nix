@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, NetworkManager, Firefox, PipeWire, Bluetooth and gaming (Steam, GameMode)
+# Purpose: COSMIC desktop, graphics, NetworkManager, Firefox, PipeWire, Bluetooth and gaming (Steam, GameMode)
 _: {
   services = {
     displayManager.cosmic-greeter.enable = true;
@@ -11,7 +11,6 @@ _: {
       # 32-bit games under Steam/Proton
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.enable = true;
     };
   };
 
@@ -20,10 +19,17 @@ _: {
     # Local DNS server, placed ahead of the DHCP-provided ones in resolv.conf
     insertNameservers = [ "192.168.1.10" ];
   };
+
   programs = {
     firefox.enable = true;
     gamemode.enable = true;
     steam.enable = true;
+  };
+
+  hardware.graphics = {
+    enable = true;
+    # 32-bit Vulkan/GL drivers for Steam and Proton
+    enable32Bit = true;
   };
 
   # Lets PipeWire acquire realtime scheduling without running as root (avoids audio crackling under load)

@@ -1,5 +1,5 @@
 # Home: dev
-# Purpose: Development tools, Neovim, and AI coding agents (QA tooling lives in the flake formatter, nix/checks.nix)
+# Purpose: Development tools, Neovim, and Claude Code (QA tooling lives in the flake formatter, nix/checks.nix)
 { pkgs, ... }:
 {
   home = {
@@ -17,21 +17,6 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-    };
-  };
-
-  # OpenCode (Claude Code-like TUI) backed by the local Ollama server
-  programs.opencode = {
-    enable = true;
-    settings = {
-      model = "ollama/qwen3.8:latest";
-      provider.ollama = {
-        npm = "@ai-sdk/openai-compatible";
-        name = "Ollama (local)";
-        options.baseURL = "http://localhost:11434/v1";
-        # Only models pulled with `ollama pull` can be listed here
-        models."qwen3.8:latest".name = "Qwen 3.8";
-      };
     };
   };
 }
