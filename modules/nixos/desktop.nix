@@ -22,7 +22,11 @@
     '';
   };
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    # Local DNS server, placed ahead of the DHCP-provided ones in resolv.conf
+    insertNameservers = [ "192.168.1.10" ];
+  };
   programs = {
     firefox.enable = true;
     gamemode.enable = true;
