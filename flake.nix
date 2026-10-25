@@ -20,25 +20,21 @@
   };
 
   outputs =
-    inputs@{
-      flake-parts,
-      ...
-    }:
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
       imports = [
         inputs.git-hooks.flakeModule
-        ./nix/hosts.nix
         ./nix/devshell.nix
-        ./nix/git-hooks.nix
       ];
 
-      perSystem =
-        { pkgs, ... }:
-        {
-          # Formatter for nix fmt
-          formatter = pkgs.treefmt;
-        };
+      flake.nixosConfigurations.grospc = inputs.nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          inputs.home-manager.nixosModules.home-manager
+          ./hosts/grospc/configuration.nix
+        ];
+      };
     };
 }

@@ -1,72 +1,59 @@
 # Flake: devshell
-# Purpose: Development shell with QA tools and pre-commit hook auto-install
+# Purpose: Formatter, pre-commit hooks (cachix/git-hooks.nix) and development shell
 {
   perSystem =
     { pkgs, config, ... }:
-    let
-      # Real executables rather than aliases: shellHook aliases only exist in the
-      # bash spawned by `nix develop`, not in zsh, direnv or non-interactive shells
-      shortcuts = pkgs.lib.mapAttrsToList pkgs.writeShellScriptBin {
-        qc = ''pre-commit run "$@"'';
-        qf = ''nix flake check "$@"'';
-        gcn = ''git add . && pre-commit run && git commit "$@"'';
-        gps = ''nix flake check && git push "$@"'';
-        nrs = ''nix flake check && sudo nixos-rebuild switch --flake . "$@"'';
-        nrb = ''nix flake check && sudo nixos-rebuild boot --flake . "$@"'';
-      };
-    in
     {
+      # Bundle the formatters so `nix fmt` and the hook work outside the devshell
+      formatter =
+        pkgs.runCommand "treefmt-wrapped"
+          {
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            meta.mainProgram = "treefmt";
+          }
+          ''
+            mkdir -p $out/bin
+            makeWrapper ${pkgs.treefmt}/bin/treefmt $out/bin/treefmt \
+              --prefix PATH : ${
+                pkgs.lib.makeBinPath (
+                  with pkgs;
+                  [
+                    nixfmt
+                    shfmt
+                    taplo
+                    prettier
+                    stylua
+                  ]
+                )
+              }
+          '';
+
+      pre-commit = {
+        check.enable = true;
+
+        settings.hooks = {
+          treefmt = {
+            enable = true;
+            package = config.formatter;
+          };
+
+          statix.enable = true;
+          deadnix.enable = true;
+          shellcheck.enable = true;
+          luacheck = {
+            enable = true;
+            package = pkgs.luaPackages.luacheck;
+            entry = "${pkgs.luaPackages.luacheck}/bin/luacheck --config .luacheckrc";
+          };
+
+          detect-private-keys.enable = true;
+        };
+      };
+
+      # Provides the hook tools and installs the git hook on entry
       devShells.default = pkgs.mkShell {
         name = "nixos-config-dev";
-
-        packages =
-          shortcuts
-          ++ (with pkgs; [
-            # Formatters
-            treefmt
-            nixfmt
-            shfmt
-            prettier
-            taplo
-
-            # Linters
-            statix
-            deadnix
-            shellcheck
-            luaPackages.luacheck
-            stylua
-
-            # QA
-            pre-commit
-
-            # Build tools
-            # nh # Removed in favor of nixos-rebuild
-
-            # Version control
-            git
-          ]);
-
-        shellHook = ''
-          echo "╔═══════════════════════════════════════════════╗"
-          echo "║   NixOS Config Development Shell              ║"
-          echo "╚═══════════════════════════════════════════════╝"
-          echo ""
-          echo "QA Commands:"
-          echo "  qc     → Quick check (pre-commit run)"
-          echo "  qf     → Full check (nix flake check)"
-          echo ""
-          echo "Workflows:"
-          echo "  gcn    → Add + check + commit (safe)"
-          echo "  gps    → Full check + push (safe)"
-          echo "  nrs    → Full check + rebuild (safe)"
-          echo "  nrb    → Full check + rebuild boot (safe)"
-          echo ""
-
-          # Auto-install pre-commit hook
-          ${config.pre-commit.installationScript}
-
-          echo "Ready! Try 'qc' to check your changes."
-        '';
+        inputsFrom = [ config.pre-commit.devShell ];
       };
     };
 }

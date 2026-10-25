@@ -1,50 +1,27 @@
-# ============================================================================
-# File: treefmt.toml
-# Description: Treefmt Configuration
-# Author: Bigor
-# Date: 2025-12-15
-# Purpose: Defines formatters for various file types (Nix, Lua, Shell, etc.)
-#          to ensure consistent code style across the project.
-# ============================================================================
+# Treefmt configuration; formatters are bundled by the flake formatter (nix/devshell.nix)
 
-# Global options
 [global]
 on-error = "continue"
 
-# ------------------------------------------------------------------------------
-# Nix (nixfmt)
-# ------------------------------------------------------------------------------
 [formatter.nix]
 command = "nixfmt"
 includes = ["*.nix"]
-excludes = ["generated.nix"]
 
-# ------------------------------------------------------------------------------
-# Shell (shfmt)
-# ------------------------------------------------------------------------------
 [formatter.shell]
 command = "shfmt"
 includes = ["*.sh"]
 options = ["-i", "2", "-s", "-w"]
 
-# ------------------------------------------------------------------------------
-# Web / Config (prettier)
-# ------------------------------------------------------------------------------
 [formatter.prettier]
 command = "prettier"
 options = ["--write"]
 includes = ["*.md", "*.json", "*.yaml", "*.yml", "*.html", "*.css", "*.scss"]
-# ------------------------------------------------------------------------------
-# TOML (taplo)
-# ------------------------------------------------------------------------------
+
 [formatter.toml]
 command = "taplo"
 options = ["fmt"]
 includes = ["*.toml"]
 
-# ------------------------------------------------------------------------------
-# Lua (stylua)
-# ------------------------------------------------------------------------------
 [formatter.lua]
 command = "stylua"
 includes = ["*.lua"]

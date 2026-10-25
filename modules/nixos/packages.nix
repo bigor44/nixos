@@ -1,4 +1,4 @@
-# Platform: system.packages
+# Platform: packages
 # Purpose: Essential CLI tools and Nix helper
 { pkgs, ... }:
 {

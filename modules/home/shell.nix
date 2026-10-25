@@ -43,7 +43,8 @@
 
       # Quality Assurance
       qc = "nix develop --command pre-commit run";
-      qf = "nix develop --command pre-commit run && nix flake check";
+      # flake check already runs the pre-commit hooks
+      qf = "nix flake check";
 
       # Safe Workflows
       gcn = "git add -A && nix develop --command pre-commit run && git commit";
@@ -73,13 +74,10 @@
     LESS = "-R";
   };
 
-  # CLI Tools
+  # eza, fd and ripgrep come from the system packages
   home.packages = with pkgs; [
-    eza
     fzf
     zoxide
     bat
-    fd
-    ripgrep
   ];
 }

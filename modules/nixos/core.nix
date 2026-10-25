@@ -1,6 +1,7 @@
 # Platform: core
-# Purpose: Core system configuration (Boot, Nix settings, Caches, Security)
-_: {
+# Purpose: Boot, Nix settings, caches, primary user and firewall
+{ pkgs, ... }:
+{
   # --- Boot Configuration ---
   boot.loader = {
     systemd-boot = {
@@ -47,4 +48,16 @@ _: {
 
     optimise.automatic = true;
   };
+
+  # --- User ---
+  users.users.bigor = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+  };
+
+  security.sudo.wheelNeedsPassword = false;
+
+  # Firewall itself is on by default; only switch the backend
+  networking.nftables.enable = true;
 }
