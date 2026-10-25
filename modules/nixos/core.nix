@@ -45,7 +45,7 @@
   users.users.bigor = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   security.sudo.wheelNeedsPassword = false;
@@ -53,7 +53,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    # Rename pre-existing files (e.g. zsh's first-run ~/.zshrc) instead of aborting activation
+    # Rename pre-existing files (e.g. a pre-existing ~/.config/fish/config.fish) instead of aborting activation
     backupFileExtension = "hm-backup";
     users.bigor = import ../home;
   };

@@ -22,7 +22,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 
 ## Commands
 
-Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are zsh aliases (Home Manager), so they work in any shell:
+Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are fish aliases (Home Manager), so they work in any shell:
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |

@@ -1,5 +1,5 @@
 # Home: git
-# Purpose: Git configuration and Zsh shell aliases
+# Purpose: Git configuration and Fish shell aliases
 {
   programs.git = {
     enable = true;
@@ -11,7 +11,7 @@
     };
   };
 
-  programs.zsh.shellAliases = {
+  programs.fish.shellAliases = {
     g = "git";
     gaa = "git add -A";
     gc = "git commit";

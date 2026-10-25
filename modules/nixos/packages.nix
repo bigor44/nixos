@@ -3,7 +3,7 @@
 { pkgs, ... }:
 {
   programs = {
-    zsh.enable = true;
+    fish.enable = true;
     tmux.enable = true;
     nh = {
       enable = true;

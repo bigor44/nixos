@@ -6,7 +6,7 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master) for the single ho
 
 ## Commands
 
-No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are zsh aliases from Home Manager (`modules/home/shell.nix`), available in any interactive zsh.
+No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are fish aliases from Home Manager (`modules/home/shell.nix`), available in any interactive fish.
 
 - `nix fmt` — nixfmt, stylua, taplo, prettier, statix, deadnix, shellcheck, luacheck, detect-private-keys on all files (or only the files given), applying fixes
 - `qf` = `nix flake check` — also checks formatting and lint (read-only)

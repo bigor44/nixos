@@ -1,22 +1,21 @@
 # Home: shell
-# Purpose: Zsh shell, Starship, and CLI tools (eza, fzf, zoxide, bat)
+# Purpose: Fish shell, Starship, and CLI tools (eza, fzf, zoxide, bat)
 {
   programs = {
-    zsh = {
+    fish = {
       enable = true;
-      enableCompletion = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
 
-      initContent = ''
+      interactiveShellInit = ''
+        set -g fish_greeting
+
         # Colored man pages
-        export LESS_TERMCAP_mb=$'\e[1;32m'
-        export LESS_TERMCAP_md=$'\e[1;32m'
-        export LESS_TERMCAP_me=$'\e[0m'
-        export LESS_TERMCAP_se=$'\e[0m'
-        export LESS_TERMCAP_so=$'\e[01;33m'
-        export LESS_TERMCAP_ue=$'\e[0m'
-        export LESS_TERMCAP_us=$'\e[1;4;31m'
+        set -gx LESS_TERMCAP_mb \e'[1;32m'
+        set -gx LESS_TERMCAP_md \e'[1;32m'
+        set -gx LESS_TERMCAP_me \e'[0m'
+        set -gx LESS_TERMCAP_se \e'[0m'
+        set -gx LESS_TERMCAP_so \e'[01;33m'
+        set -gx LESS_TERMCAP_ue \e'[0m'
+        set -gx LESS_TERMCAP_us \e'[1;4;31m'
       '';
 
       shellAliases = {
@@ -57,7 +56,7 @@
       };
     };
 
-    # Modules instead of bare packages for the zsh integrations (eza's ls/ll/la/lt aliases, fzf keybindings, zoxide's z)
+    # Modules instead of bare packages for the fish integrations (eza's ls/ll/la/lt aliases, fzf keybindings, zoxide's z)
     eza = {
       enable = true;
       icons = "auto";
