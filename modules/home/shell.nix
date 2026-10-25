@@ -48,8 +48,8 @@
       # Safe Workflows
       gcn = "git add -A && nix develop --command pre-commit run && git commit";
       gps = "nix flake check && gp";
-      nrs = "nix flake check && sudo nixos-rebuild switch --flake .";
-      nrb = "nix flake check && sudo nixos-rebuild boot --flake .";
+      nrs = "nix flake check ~/nixos && sudo nixos-rebuild switch --flake ~/nixos";
+      nrb = "nix flake check ~/nixos && sudo nixos-rebuild boot --flake ~/nixos";
 
       # System info
       ports = "netstat -tulanp";

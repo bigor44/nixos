@@ -26,7 +26,7 @@
                           nixfmt
                           shfmt
                           taplo
-                          nodePackages.prettier
+                          prettier
                           stylua
                         ]
                       )

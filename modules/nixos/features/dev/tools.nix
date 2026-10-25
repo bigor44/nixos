@@ -26,8 +26,9 @@ in
       taplo
 
       # Development tools
-      gemini-cli
-      codex
+      antigravity-cli
+      claude-code
+      gh
       neovim
       luaPackages.luacheck
       stylua

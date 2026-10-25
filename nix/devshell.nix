@@ -3,48 +3,54 @@
 {
   perSystem =
     { pkgs, config, ... }:
+    let
+      # Real executables rather than aliases: shellHook aliases only exist in the
+      # bash spawned by `nix develop`, not in zsh, direnv or non-interactive shells
+      shortcuts = pkgs.lib.mapAttrsToList pkgs.writeShellScriptBin {
+        qc = ''pre-commit run "$@"'';
+        qf = ''nix flake check "$@"'';
+        gcn = ''git add . && pre-commit run && git commit "$@"'';
+        gps = ''nix flake check && git push "$@"'';
+        nrs = ''nix flake check && sudo nixos-rebuild switch --flake . "$@"'';
+        nrb = ''nix flake check && sudo nixos-rebuild boot --flake . "$@"'';
+      };
+    in
     {
       devShells.default = pkgs.mkShell {
         name = "nixos-config-dev";
 
-        packages = with pkgs; [
-          # Formatters
-          treefmt
-          nixfmt
-          shfmt
-          nodePackages.prettier
-          taplo
+        packages =
+          shortcuts
+          ++ (with pkgs; [
+            # Formatters
+            treefmt
+            nixfmt
+            shfmt
+            prettier
+            taplo
 
-          # Linters
-          statix
-          deadnix
-          shellcheck
-          luaPackages.luacheck
-          stylua
+            # Linters
+            statix
+            deadnix
+            shellcheck
+            luaPackages.luacheck
+            stylua
 
-          # QA
-          pre-commit
+            # QA
+            pre-commit
 
-          # Build tools
-          # nh # Removed in favor of nixos-rebuild
+            # Build tools
+            # nh # Removed in favor of nixos-rebuild
 
-          # Secrets management
-          sops
-          age
+            # Secrets management
+            sops
+            age
 
-          # Version control
-          git
-        ];
+            # Version control
+            git
+          ]);
 
         shellHook = ''
-          # Aliases
-          alias qc='pre-commit run'
-          alias qf='nix flake check'
-          alias gcn='git add . && pre-commit run && git commit'
-          alias gps='nix flake check && git push'
-          alias nrs='nix flake check && sudo nixos-rebuild switch --flake .'
-          alias nrb='nix flake check && sudo nixos-rebuild boot --flake .'
-
           echo "╔═══════════════════════════════════════════════╗"
           echo "║   NixOS Config Development Shell              ║"
           echo "╚═══════════════════════════════════════════════╝"
