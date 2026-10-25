@@ -35,12 +35,11 @@
         nclean = "nh clean all";
 
         # Quality Assurance
-        qc = "nix develop --command pre-commit run";
-        # flake check already runs the pre-commit hooks
+        # flake check also runs the formatters and linters
         qf = "nix flake check";
 
         # Safe Workflows
-        gcn = "git add -A && nix develop --command pre-commit run && git commit";
+        gcn = "git add -A && nix fmt && git commit";
         gps = "nix flake check && gp";
         nrs = "nix flake check ~/nixos && nh os switch";
         nrb = "nix flake check ~/nixos && nh os boot";

@@ -6,9 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; treefmt --quiet --no-cache \"$f\"; } >/dev/null 2>&1 || true",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; nix fmt -- \"$f\"; } >/dev/null 2>&1 || true",
             "timeout": 30,
-            "statusMessage": "treefmt"
+            "statusMessage": "nix fmt"
           }
         ]
       }

@@ -6,15 +6,14 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master) for the single ho
 
 ## Commands
 
-`nix develop` installs the pre-commit hook and puts the QA tools on PATH. The shortcuts below are zsh aliases from Home Manager (`modules/home/shell.nix`), available in any interactive zsh.
+No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are zsh aliases from Home Manager (`modules/home/shell.nix`), available in any interactive zsh.
 
-- `nix fmt` — treefmt (`treefmt.toml`): nixfmt, shfmt, prettier, taplo, stylua; works outside the devshell
-- `qc` = `nix develop --command pre-commit run` — treefmt, statix, deadnix, shellcheck, luacheck, detect-private-keys
-- `qf` = `nix flake check` — also runs the pre-commit checks
+- `nix fmt` — nixfmt, stylua, taplo, prettier, statix, deadnix, shellcheck, luacheck, detect-private-keys on all files (or only the files given), applying fixes
+- `qf` = `nix flake check` — also checks formatting and lint (read-only)
 - Build without switching: `nix build .#nixosConfigurations.grospc.config.system.build.toplevel`
 - `nrs` / `nrb` = flake check + `nh os switch|boot` — **ask before running these** (or any `nixos-rebuild` / `nh os`); they change the live system.
 
-No unit tests: validation = `nix fmt` + `qc` + `qf`.
+No unit tests: validation = `nix fmt` (applies fixes) + `qf` (fails on unformatted or lint errors).
 
 ## Gotchas
 

@@ -26,7 +26,7 @@
 
       imports = [
         inputs.git-hooks.flakeModule
-        ./nix/devshell.nix
+        ./nix/checks.nix
       ];
 
       flake.nixosConfigurations.grospc = inputs.nixpkgs.lib.nixosSystem {

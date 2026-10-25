@@ -7,7 +7,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 ```text
 .
 ├── flake.nix                 # Inputs + nixosConfigurations.grospc
-├── nix/devshell.nix          # Formatter, pre-commit hooks, dev shell
+├── nix/checks.nix            # Formatters and linters (nix fmt, flake check)
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
@@ -22,18 +22,17 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 
 ## Commands
 
-`nix develop` installs the pre-commit hook and provides the QA tools. The shortcuts are zsh aliases (Home Manager), so they work in any shell:
+Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are zsh aliases (Home Manager), so they work in any shell:
 
-| Command   | Description                                                     |
-| --------- | --------------------------------------------------------------- |
-| `nix fmt` | Format the repository (treefmt)                                 |
-| `qc`      | Run pre-commit (treefmt, statix, deadnix, shellcheck, luacheck) |
-| `qf`      | `nix flake check` (includes the pre-commit checks)              |
-| `gcn`     | Stage all, run pre-commit, commit                               |
-| `gps`     | Flake check, then push                                          |
-| `nrs`     | Flake check, then `nh os switch`                                |
-| `nrb`     | Flake check, then `nh os boot`                                  |
-| `nclean`  | `nh clean all` (also runs weekly)                               |
+| Command   | Description                                         |
+| --------- | --------------------------------------------------- |
+| `nix fmt` | Format and lint the repository (applies fixes)      |
+| `qf`      | `nix flake check` (includes format and lint checks) |
+| `gcn`     | Stage all, `nix fmt`, commit                        |
+| `gps`     | Flake check, then push                              |
+| `nrs`     | Flake check, then `nh os switch`                    |
+| `nrb`     | Flake check, then `nh os boot`                      |
+| `nclean`  | `nh clean all` (also runs weekly)                   |
 
 ## Dotfiles
 
