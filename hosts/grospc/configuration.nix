@@ -13,6 +13,7 @@
   ];
 
   networking.hostName = "grospc";
+  # Release this machine was installed with; governs stateful data formats, not package versions. Do not bump.
   system.stateVersion = "26.05";
 
   boot.kernelPackages = pkgs.linuxPackages_zen;

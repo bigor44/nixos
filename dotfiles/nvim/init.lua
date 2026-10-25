@@ -1,5 +1,5 @@
---  It is the main entry point for Neovim's configuration.
---  It is responsible for loading the entire configuration.
+-- Entry point for Neovim's configuration (symlinked to ~/.config/nvim by modules/home/dotfiles.nix).
+-- Sets the leader, then loads the core modules from lua/core/.
 
 -- Set <space> as the leader key
 -- See `:help mapleader`

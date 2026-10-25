@@ -8,6 +8,7 @@ _: {
     pipewire = {
       enable = true;
       alsa.enable = true;
+      # 32-bit games under Steam/Proton
       alsa.support32Bit = true;
       pulse.enable = true;
       wireplumber.enable = true;
@@ -25,6 +26,7 @@ _: {
     steam.enable = true;
   };
 
+  # Lets PipeWire acquire realtime scheduling without running as root (avoids audio crackling under load)
   security.rtkit.enable = true;
 
   hardware.bluetooth = {

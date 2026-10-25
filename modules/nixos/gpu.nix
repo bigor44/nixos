@@ -5,6 +5,7 @@
   hardware = {
     graphics = {
       enable = true;
+      # 32-bit Vulkan/GL drivers for Steam and Proton
       enable32Bit = true;
     };
     amdgpu.opencl.enable = true;
