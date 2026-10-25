@@ -3,11 +3,7 @@
 { pkgs, ... }:
 {
   # --- Localization ---
-  time = {
-    timeZone = "Europe/Paris";
-    # Dual boot with Windows, which keeps the RTC in local time
-    hardwareClockInLocalTime = true;
-  };
+  time.timeZone = "Europe/Paris";
 
   i18n = {
     defaultLocale = "fr_FR.UTF-8";
