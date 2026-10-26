@@ -11,13 +11,13 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, Nix, user, Home Manager
+│   │   ├── core.nix          # Boot, fwupd, Nix, user, Home Manager
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
 │   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
-│   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, apps, Steam
+│   │   └── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps, gaming (Steam, Proton-GE, LACT…)
 │   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
