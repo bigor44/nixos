@@ -1,6 +1,6 @@
 # Platform: nixvim
 # Purpose: Neovim built by nixvim: tokyonight night, mini.nvim suite, LSP + completion for Nix and shell
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   # nixd evaluates option trees from this flake for completion and hover
   flake = ''(builtins.getFlake "/home/bigor/nixos")'';
@@ -189,7 +189,7 @@ in
           enable = true;
           config.settings.nixd = {
             nixpkgs.expr = "import ${flake}.inputs.nixpkgs { }";
-            formatting.command = [ "nixfmt" ];
+            formatting.command = [ (lib.getExe pkgs.nixfmt) ];
             options = {
               nixos.expr = "${flake}.nixosConfigurations.grospc.options";
               home-manager.expr = "${flake}.nixosConfigurations.grospc.options.home-manager.users.type.getSubOptions [ ]";
