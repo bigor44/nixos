@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, Nix settings, caches, primary user and Home Manager
+# Purpose: Boot, firmware updates, Nix settings, caches, primary user and Home Manager
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -10,6 +10,9 @@
     };
     efi.canTouchEfiVariables = true;
   };
+
+  # Firmware updates (UEFI, NVMe, peripherals) via LVFS: `fwupdmgr refresh && fwupdmgr update`
+  services.fwupd.enable = true;
 
   # --- Nix Core Configuration ---
   nixpkgs.config.allowUnfree = true;
