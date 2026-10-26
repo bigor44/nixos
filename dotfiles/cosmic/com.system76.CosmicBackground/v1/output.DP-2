@@ -2,8 +2,8 @@
     output: "DP-2",
     source: Path("/home/bigor/Images/wallpapers"),
     filter_by_theme: false,
-    rotation_frequency: 1800,
+    rotation_frequency: 900,
     filter_method: Lanczos,
-    scaling_mode: Fit((0.0, 0.0, 0.0)),
+    scaling_mode: Zoom,
     sampling_method: Alphanumeric,
 )
