@@ -9,6 +9,7 @@
     ../../modules/nixos/packages.nix
     ../../modules/nixos/shell.nix
     ../../modules/nixos/dev.nix
+    ../../modules/nixos/nixvim.nix
     ../../modules/nixos/desktop.nix
   ];
 

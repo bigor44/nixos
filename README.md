@@ -1,6 +1,6 @@
 # Bigor’s NixOS
 
-Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for my desktop workstation `grospc`, running COSMIC.
+Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixvim) for my desktop workstation `grospc`, running COSMIC.
 
 ## Layout
 
@@ -14,8 +14,9 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 │   │   ├── core.nix          # Boot, Nix, user, Home Manager
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
-│   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases
-│   │   ├── dev.nix           # Git, gh, toolchains, Neovim, Claude Code
+│   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
+│   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
+│   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
 │   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, apps, Steam
 │   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
@@ -25,7 +26,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 
 ## Commands
 
-Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish aliases (`modules/nixos/shell.nix`):
+Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish abbreviations (`modules/nixos/shell.nix`):
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |
@@ -45,7 +46,6 @@ Formatters and linters run through `nix fmt` and `nix flake check` (no devshell,
 | ------------ | ---------------------------------- |
 | `autostart/` | `.desktop` files launched at login |
 | `cosmic/`    | COSMIC desktop settings            |
-| `nvim/`      | Neovim configuration (Lua)         |
 
 The generated `CosmicTheme.Dark`/`CosmicTheme.Light` directories are git-ignored; only the `*.Builder` themes are tracked.
 

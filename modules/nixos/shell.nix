@@ -1,5 +1,5 @@
 # Platform: shell
-# Purpose: Fish shell, Starship, CLI tools (eza, fzf, zoxide, bat) and shell aliases
+# Purpose: Fish shell, Starship, CLI tools (eza, fzf, zoxide, bat) and shell aliases/abbreviations
 { pkgs, ... }:
 {
   programs = {
@@ -19,6 +19,7 @@
         set -gx LESS_TERMCAP_us \e'[1;4;31m'
       '';
 
+      # Aliases only where an existing command is redefined
       shellAliases = {
         # Safety
         rm = "rm -i";
@@ -37,7 +38,10 @@
         ".." = "cd ..";
         "..." = "cd ../..";
         "...." = "cd ../../..";
+      };
 
+      # Abbreviations expand in place, so the full command lands in history and stays editable
+      shellAbbrs = {
         # Nix
         nfu = "nix flake update";
         nclean = "nh clean all";
@@ -48,7 +52,7 @@
 
         # Safe Workflows
         gcn = "git add -A && nix fmt && git commit";
-        gps = "nix flake check && gp";
+        gps = "nix flake check && git push";
         nrs = "nix flake check ~/nixos && nh os switch";
         nrb = "nix flake check ~/nixos && nh os boot";
 

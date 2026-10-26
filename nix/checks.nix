@@ -27,18 +27,12 @@
 
         settings.hooks = {
           nixfmt.enable = true;
-          stylua.enable = true;
           taplo.enable = true;
           prettier.enable = true;
 
           statix.enable = true;
           deadnix.enable = true;
           shellcheck.enable = true;
-          luacheck = {
-            enable = true;
-            package = pkgs.luaPackages.luacheck;
-            entry = "${pkgs.luaPackages.luacheck}/bin/luacheck --config .luacheckrc";
-          };
 
           detect-private-keys.enable = true;
         };

@@ -13,6 +13,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +39,7 @@
         system = "x86_64-linux";
         modules = [
           inputs.home-manager.nixosModules.home-manager
+          inputs.nixvim.nixosModules.nixvim
           ./hosts/grospc/configuration.nix
         ];
       };

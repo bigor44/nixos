@@ -1,5 +1,5 @@
 # Platform: dev
-# Purpose: Git, GitHub CLI, toolchains, Neovim and Claude Code (QA tooling lives in the flake formatter, nix/checks.nix)
+# Purpose: Git, GitHub CLI, toolchains and Claude Code (QA tooling lives in the flake formatter, nix/checks.nix)
 { pkgs, ... }:
 {
   programs = {
@@ -12,7 +12,7 @@
       };
     };
 
-    fish.shellAliases = {
+    fish.shellAbbrs = {
       g = "git";
       gaa = "git add -A";
       gc = "git commit";
@@ -35,18 +35,12 @@
     systemPackages = with pkgs; [
       gh
       claude-code
+      antigravity-cli
       gcc
       gnumake
-      # Plain package: the whole config comes from the dotfiles/nvim symlink
-      neovim
       python3
       # Global pip installs fail on NixOS; uv manages per-project venvs instead
       uv
     ];
-
-    sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
   };
 }
