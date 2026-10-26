@@ -159,6 +159,7 @@ in
         };
       };
 
+      # Only ships the lsp/*.lua server configs read by vim.lsp.enable; setup uses the native API
       lspconfig.enable = true;
 
       # Not part of mini.nvim: formatting by external tools is out of its scope
