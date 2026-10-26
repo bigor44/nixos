@@ -25,12 +25,19 @@
   };
 
   programs = {
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+      # The French UI ships as a language pack, not in the base build
+      languagePacks = [ "fr" ];
+      preferences."intl.locale.requested" = "fr";
+    };
     gamemode.enable = true;
     # Per-game launch option: `gamescope -f -- %command%`
     gamescope.enable = true;
     steam = {
       enable = true;
+      # Client language otherwise lives in ~/.steam/registry.vdf, which Steam rewrites
+      package = pkgs.steam.override { extraArgs = "-language french"; };
       # Selectable per game under Properties > Compatibility
       extraCompatPackages = [ pkgs.proton-ge-bin ];
     };
