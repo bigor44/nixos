@@ -51,7 +51,8 @@
         qf = "nix flake check";
 
         # Safe Workflows
-        gcn = "git add -A && nix fmt && git commit";
+        # fmt exits 1 when it rewrites files, so `;` lets the fixes be staged and committed
+        gcn = "nix fmt; git add -A && git commit";
         gps = "nix flake check && git push";
         nrs = "nix flake check ~/nixos && nh os switch";
         nrb = "nix flake check ~/nixos && nh os boot";

@@ -12,7 +12,4 @@
     homeDirectory = "/home/bigor";
     inherit (osConfig.system) stateVersion;
   };
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
 }

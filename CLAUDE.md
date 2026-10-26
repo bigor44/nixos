@@ -8,7 +8,7 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master, nixvim) for the s
 
 No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are system-wide fish abbreviations (`modules/nixos/shell.nix`), available in any interactive fish.
 
-- `nix fmt` — nixfmt, taplo, prettier, statix, deadnix, shellcheck, detect-private-keys on all files (or only the files given), applying fixes
+- `nix fmt` — nixfmt, taplo, prettier, statix, deadnix, shellcheck, detect-private-keys on all files (or only the files given); formatters rewrite files, linters only report
 - `qf` = `nix flake check` — also checks formatting and lint (read-only)
 - Build without switching: `nix build .#nixosConfigurations.grospc.config.system.build.toplevel`
 - `nrs` / `nrb` = flake check + `nh os switch|boot` — **ask before running these** (or any `nixos-rebuild` / `nh os`); they change the live system.

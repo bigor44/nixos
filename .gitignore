@@ -3,21 +3,22 @@ result
 result-*
 repl-result
 
-# --- Sécurité (CRITIQUE) ---
-# Clés privées (ne jamais commiter)
+# --- Secrets ---
+# Private keys (never commit)
 keys.txt
 *.key
 .env
 
-# --- Outils (Direnv) ---
+# --- Tools (direnv) ---
 .direnv/
 
-# --- Éditeurs ---
+# --- Editors ---
 *.swp
 *.swo
 *~
 .idea/
 .DS_Store
+
 # --- COSMIC ---
 # Derived from the *.Builder themes; COSMIC rewrites them on every theme change
 dotfiles/cosmic/com.system76.CosmicTheme.Dark/

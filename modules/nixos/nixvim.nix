@@ -8,6 +8,8 @@ in
 {
   programs.nixvim = {
     enable = true;
+    # Reuse the system pkgs instead of a second nixpkgs evaluation
+    nixpkgs.useGlobalPackages = true;
     viAlias = true;
     vimAlias = true;
 

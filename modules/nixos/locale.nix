@@ -25,11 +25,8 @@
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
       terminus_font
-      powerline-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
-      ipafont
-      hanazono
       noto-fonts-color-emoji
     ];
 

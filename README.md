@@ -30,9 +30,9 @@ Formatters and linters run through `nix fmt` and `nix flake check` (no devshell,
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |
-| `nix fmt` | Format and lint the repository (applies fixes)      |
+| `nix fmt` | Format (rewrites files) and lint (reports only)     |
 | `qf`      | `nix flake check` (includes format and lint checks) |
-| `gcn`     | Stage all, `nix fmt`, commit                        |
+| `gcn`     | `nix fmt`, stage all, commit                        |
 | `gps`     | Flake check, then push                              |
 | `nrs`     | Flake check, then `nh os switch`                    |
 | `nrb`     | Flake check, then `nh os boot`                      |
