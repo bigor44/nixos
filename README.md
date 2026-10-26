@@ -16,7 +16,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
 │   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
-│   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
+│   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nil, bashls, fish-lsp)
 │   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, apps, Steam
 │   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity

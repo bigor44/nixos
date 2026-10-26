@@ -1,10 +1,6 @@
 # Platform: nixvim
 # Purpose: Neovim built by nixvim: tokyonight night, mini.nvim suite, LSP + completion for Nix and shell
 { pkgs, ... }:
-let
-  # nixd evaluates option trees from this flake for completion and hover
-  flake = ''(builtins.getFlake "/home/bigor/nixos")'';
-in
 {
   programs.nixvim = {
     enable = true;
@@ -185,16 +181,9 @@ in
         # Advertise mini.completion's capabilities (snippets, resolve) to every server
         "*".config.capabilities.__raw = "MiniCompletion.get_lsp_capabilities()";
 
-        nixd = {
+        nil_ls = {
           enable = true;
-          config.settings.nixd = {
-            nixpkgs.expr = "import ${flake}.inputs.nixpkgs { }";
-            formatting.command = [ "nixfmt" ];
-            options = {
-              nixos.expr = "${flake}.nixosConfigurations.grospc.options";
-              home-manager.expr = "${flake}.nixosConfigurations.grospc.options.home-manager.users.type.getSubOptions [ ]";
-            };
-          };
+          config.settings.nil.formatting.command = [ "nixfmt" ];
         };
         # bash-language-server runs shellcheck for diagnostics when found on PATH
         bashls = {
