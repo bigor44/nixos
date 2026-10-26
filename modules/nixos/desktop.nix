@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, GameMode)
+# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, Proton-GE, GameMode, gamescope, MangoHud, LACT)
 { pkgs, ... }:
 {
   services = {
@@ -13,6 +13,9 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+
+    # GPU fan curves, power limit and undervolt (LACT GUI)
+    lact.enable = true;
   };
 
   networking.networkmanager = {
@@ -24,7 +27,13 @@
   programs = {
     firefox.enable = true;
     gamemode.enable = true;
-    steam.enable = true;
+    # Per-game launch option: `gamescope -f -- %command%`
+    gamescope.enable = true;
+    steam = {
+      enable = true;
+      # Selectable per game under Properties > Compatibility
+      extraCompatPackages = [ pkgs.proton-ge-bin ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -32,19 +41,26 @@
     discord
     whatsapp-electron
     prismlauncher
+    # FPS/frametime overlay, per-game launch option: `mangohud %command%`
+    mangohud
   ];
 
-  hardware.graphics = {
-    enable = true;
-    # 32-bit Vulkan/GL drivers for Steam and Proton
-    enable32Bit = true;
+  hardware = {
+    graphics = {
+      enable = true;
+      # 32-bit Vulkan/GL drivers for Steam and Proton
+      enable32Bit = true;
+    };
+
+    # Unlocks the voltage/clock tables the driver hides by default, needed for LACT's undervolt
+    amdgpu.overdrive.enable = true;
+
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
   };
 
   # Lets PipeWire acquire realtime scheduling without running as root (avoids audio crackling under load)
   security.rtkit.enable = true;
-
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-  };
 }
