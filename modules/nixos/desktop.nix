@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, Proton-GE, GameMode, gamescope, MangoHud, LACT)
+# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, Proton-GE, GameMode, gamescope, MangoHud, LACT, DualSense)
 { pkgs, ... }:
 {
   services = {
@@ -50,6 +50,8 @@
     prismlauncher
     # FPS/frametime overlay, per-game launch option: `mangohud %command%`
     mangohud
+    # DualSense battery, lightbar, mic LED and Bluetooth power-off; hidraw access comes from Steam's udev rules
+    dualsensectl
   ];
 
   hardware = {
