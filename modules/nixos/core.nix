@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, firmware updates, Nix settings, caches, primary user and Home Manager
+# Purpose: Boot, firmware updates, Nix settings, primary user and Home Manager
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -22,18 +22,6 @@
       experimental-features = [
         "nix-command"
         "flakes"
-      ];
-      trusted-users = [
-        "root"
-        "bigor"
-      ];
-
-      substituters = [
-        "https://nix-community.cachix.org"
-      ];
-
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
 
       # Hardlink duplicates at build time; garbage collection is handled by programs.nh.clean (packages.nix)
