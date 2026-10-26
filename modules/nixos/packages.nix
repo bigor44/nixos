@@ -3,7 +3,6 @@
 { pkgs, ... }:
 {
   programs = {
-    fish.enable = true;
     tmux.enable = true;
     nh = {
       enable = true;
@@ -22,6 +21,7 @@
     htop
     zip
     unzip
+    rsync
 
     # Modern CLI tools
     fd

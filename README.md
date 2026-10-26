@@ -14,19 +14,18 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager) for 
 │   │   ├── core.nix          # Boot, Nix, user, Home Manager
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
-│   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, Steam
-│   └── home/                 # Home Manager modules, aggregated by default.nix
-│       ├── shell.nix         # Fish, Starship, CLI tools
-│       ├── git.nix           # Git, gh, git aliases
-│       ├── dev.nix           # Toolchains, Neovim, Claude Code
-│       ├── apps.nix          # Desktop applications
+│   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases
+│   │   ├── dev.nix           # Git, gh, toolchains, Neovim, Claude Code
+│   │   └── desktop.nix       # COSMIC, graphics, audio, Bluetooth, apps, Steam
+│   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
+│       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
 └── dotfiles/                 # Raw configs symlinked by Home Manager
 ```
 
 ## Commands
 
-Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are fish aliases (Home Manager), so they work in any shell:
+Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish aliases (`modules/nixos/shell.nix`):
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |

@@ -1,6 +1,7 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, graphics, NetworkManager, Firefox, PipeWire, Bluetooth and gaming (Steam, GameMode)
-_: {
+# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, GameMode)
+{ pkgs, ... }:
+{
   services = {
     displayManager.cosmic-greeter.enable = true;
     desktopManager.cosmic.enable = true;
@@ -25,6 +26,13 @@ _: {
     gamemode.enable = true;
     steam.enable = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    brave
+    discord
+    whatsapp-electron
+    prismlauncher
+  ];
 
   hardware.graphics = {
     enable = true;

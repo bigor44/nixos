@@ -3,10 +3,7 @@
 { osConfig, ... }:
 {
   imports = [
-    ./shell.nix
     ./git.nix
-    ./dev.nix
-    ./apps.nix
     ./dotfiles.nix
   ];
 

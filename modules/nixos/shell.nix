@@ -1,5 +1,5 @@
-# Home: shell
-# Purpose: Fish shell, Starship, and CLI tools (eza, fzf, zoxide, bat, rsync)
+# Platform: shell
+# Purpose: Fish shell, Starship, CLI tools (eza, fzf, zoxide, bat) and shell aliases
 { pkgs, ... }:
 {
   programs = {
@@ -24,6 +24,14 @@
         rm = "rm -i";
         cp = "cp -i";
         mv = "mv -i";
+
+        # eza (NixOS has no eza module; same aliases Home Manager's eza integration provided)
+        eza = "eza --icons auto --git";
+        ls = "eza";
+        ll = "eza -l";
+        la = "eza -a";
+        lt = "eza --tree";
+        lla = "eza -la";
 
         # Directory shortcuts
         ".." = "cd ..";
@@ -57,21 +65,11 @@
       };
     };
 
-    # Modules instead of bare packages for the fish integrations (eza's ls/ll/la/lt aliases, fzf keybindings, zoxide's z)
-    eza = {
-      enable = true;
-      icons = "auto";
-      git = true;
-    };
-    fzf.enable = true;
+    # Modules instead of bare packages for the fish integrations (fzf keybindings, zoxide's z)
+    fzf.keybindings = true;
     zoxide.enable = true;
     bat.enable = true;
   };
 
-  home.packages = [ pkgs.rsync ];
-
-  home.sessionVariables = {
-    PAGER = "less";
-    LESS = "-R";
-  };
+  environment.systemPackages = [ pkgs.eza ];
 }

@@ -7,6 +7,8 @@
     ../../modules/nixos/core.nix
     ../../modules/nixos/locale.nix
     ../../modules/nixos/packages.nix
+    ../../modules/nixos/shell.nix
+    ../../modules/nixos/dev.nix
     ../../modules/nixos/desktop.nix
   ];
 

@@ -6,7 +6,7 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master) for the single ho
 
 ## Commands
 
-No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are fish aliases from Home Manager (`modules/home/shell.nix`), available in any interactive fish.
+No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are system-wide fish aliases (`modules/nixos/shell.nix`), available in any interactive fish.
 
 - `nix fmt` — nixfmt, stylua, taplo, prettier, statix, deadnix, shellcheck, luacheck, detect-private-keys on all files (or only the files given), applying fixes
 - `qf` = `nix flake check` — also checks formatting and lint (read-only)
@@ -26,7 +26,7 @@ No unit tests: validation = `nix fmt` (applies fixes) + `qf` (fails on unformatt
 ## Module conventions
 
 - `modules/nixos/<topic>.nix` — plain NixOS modules, no `enable` options or `mkIf` wrappers; group by topic (desktop, gaming, dev…) rather than one file per service.
-- `modules/home/<topic>.nix` — Home Manager modules, imported from `modules/home/default.nix`.
+- `modules/home/<topic>.nix` — Home Manager modules, imported from `modules/home/default.nix`; only user-specific config (identity, dotfiles). Packages, shell setup and aliases go in NixOS modules.
 - Every `.nix` file starts with a two-line header: `# Platform: <name>` / `# Purpose: ...` (use `# Host:`, `# Home:`, `# Flake:` as appropriate). Shell scripts: shebang, then `# Script:` / `# Purpose:`.
 - `default.nix` only for directories that aggregate several files; `configuration.nix` only in `hosts/*/`. Use descriptive filenames.
 - Open firewall ports in the module that defines the service.
