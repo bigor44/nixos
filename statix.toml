@@ -1,7 +1,8 @@
 # Statix linter configuration
 # Purpose: Lint settings and the Nix conventions statix cannot enforce
 
-nix_version = '2.4'
+# Nix shipped by the system (nix.package); version-gated lints assume at least this
+nix_version = '2.34'
 ignore = ['.direnv', 'result', '.git']
 
 disabled = [
