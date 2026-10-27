@@ -17,7 +17,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 │   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
-│   │   └── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps, gaming (Steam, Proton-GE, LACT, DualSense…)
+│   │   └── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps, gaming (Steam, CurseForge, Proton-GE, LACT, DualSense…)
 │   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
