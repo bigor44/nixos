@@ -1,4 +1,10 @@
 (
     save_location: Documents,
     choice: Rectangle,
+    last_rectangle: Some((
+        left: 1849,
+        top: 133,
+        right: 2926,
+        bottom: 796,
+    )),
 )
