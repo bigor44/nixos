@@ -81,6 +81,7 @@ in
     discord
     whatsapp-electron
     prismlauncher
+    protonup-qt
     curseforge
     curseforgeDesktop
     # FPS/frametime overlay, per-game launch option: `mangohud %command%`
