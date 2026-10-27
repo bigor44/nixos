@@ -1,5 +1,5 @@
 # Platform: desktop
-# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, CurseForge, Proton-GE, GameMode, gamescope, MangoHud, LACT, DualSense)
+# Purpose: COSMIC desktop, graphics, NetworkManager, PipeWire, Bluetooth, desktop apps and gaming (Steam, Lutris, CurseForge, Proton-GE, GameMode, gamescope, MangoHud, LACT, DualSense)
 { pkgs, ... }:
 let
   # CurseForge only ships a self-updating AppImage with no stable versioned URL, so fetch the latest at launch
@@ -81,6 +81,10 @@ in
     discord
     whatsapp-electron
     prismlauncher
+    # Non-Steam launchers (Battle.net…); system Wine for the "System" runner and winetricks for prefix fixes
+    lutris
+    wineWow64Packages.staging
+    winetricks
     protonup-qt
     curseforge
     curseforgeDesktop
