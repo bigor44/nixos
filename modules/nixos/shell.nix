@@ -32,6 +32,7 @@
         ll = "eza -l";
         la = "eza -a";
         lt = "eza --tree";
+        tree = "eza --tree";
         lla = "eza -la";
 
         # Directory shortcuts
