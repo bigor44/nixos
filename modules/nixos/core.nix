@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, firmware updates, Nix settings, primary user and Home Manager
+# Purpose: Boot, firmware updates, Nix settings and primary user
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -37,12 +37,4 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    # Rename pre-existing files (e.g. a pre-existing ~/.config/fish/config.fish) instead of aborting activation
-    backupFileExtension = "hm-backup";
-    users.bigor = import ../home;
-  };
 }

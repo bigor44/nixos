@@ -6,19 +6,19 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 
 ```text
 .
-├── flake.nix                 # Inputs + nixosConfigurations.grospc
+├── flake.nix                 # Inputs + nixosConfigurations.grospc + homeConfigurations."bigor@grospc"
 ├── nix/checks.nix            # Formatters and linters (nix fmt, flake check)
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, fwupd, Nix, user, Home Manager
+│   │   ├── core.nix          # Boot, fwupd, Nix, user
 │   │   ├── locale.nix        # Locale, keyboard, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
 │   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
 │   │   └── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps, gaming (Steam, Lutris, CurseForge, Proton-GE, LACT, DualSense…)
-│   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
+│   └── home/                 # Standalone Home Manager (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
 └── dotfiles/                 # Raw configs symlinked by Home Manager
@@ -35,6 +35,7 @@ Formatters and linters run through `nix fmt` and `nix flake check` (no devshell,
 | `gps`     | Flake check, then push                              |
 | `nrs`     | Flake check, then `nh os switch`                    |
 | `nrb`     | Flake check, then `nh os boot`                      |
+| `nhs`     | Flake check, then `nh home switch` (Home Manager)   |
 | `nclean`  | `nh clean all` (also runs weekly)                   |
 
 ## Dotfiles

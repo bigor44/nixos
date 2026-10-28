@@ -29,7 +29,7 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
+    inputs@{ self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
@@ -40,10 +40,17 @@
 
       flake.nixosConfigurations.grospc = inputs.nixpkgs.lib.nixosSystem {
         modules = [
-          inputs.home-manager.nixosModules.home-manager
           inputs.nixvim.nixosModules.nixvim
           ./hosts/grospc/configuration.nix
         ];
+      };
+
+      # Standalone so `nh home switch` applies user config without a new NixOS generation
+      flake.homeConfigurations."bigor@grospc" = inputs.home-manager.lib.homeManagerConfiguration {
+        # Reuse the system's nixpkgs instance (same config/overlays as the old useGlobalPkgs)
+        inherit (self.nixosConfigurations.grospc) pkgs;
+        extraSpecialArgs.osConfig = self.nixosConfigurations.grospc.config;
+        modules = [ ./modules/home ];
       };
     };
 }

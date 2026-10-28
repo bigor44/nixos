@@ -19,9 +19,9 @@ No unit tests: validation = `nix fmt` (applies fixes) + `qf` (fails on unformatt
 
 - Flakes only see git-tracked files: `git add` (or `git add -N`) new files before `nix flake check`/build, otherwise they "don't exist".
 - New system modules must be added to `imports` in `hosts/grospc/configuration.nix`; an unlisted file is silently ignored.
-- Home Manager entry is `modules/home/default.nix`; user is `bigor`, HM stateVersion follows the system's.
+- Home Manager is standalone (`homeConfigurations."bigor@grospc"` in `flake.nix`, applied with `nh home switch` / `nhs`), entry `modules/home/default.nix`; user is `bigor`. `osConfig` (the grospc system config) is passed via `extraSpecialArgs`, so HM stateVersion follows the system's. `nrs` no longer applies HM changes.
 - Neovim is built by nixvim in `modules/nixos/nixvim.nix` (NixOS module, config baked into the wrapper; `~/.config/nvim` is unused). nixd reads options from `/home/bigor/nixos` via `builtins.getFlake`. Desktop is COSMIC.
-- `dotfiles/` is an out-of-store symlink: deleting a file there deletes it from `~/.config` immediately. Exception: `autostart/` is copied read-only into the store (Discord rewrites its entry), so changes there need a rebuild. The generated COSMIC theme dirs are git-ignored, not removed.
+- `dotfiles/` is an out-of-store symlink: deleting a file there deletes it from `~/.config` immediately. Exception: `autostart/` is copied read-only into the store (Discord rewrites its entry), so changes there need `nhs`. The generated COSMIC theme dirs are git-ignored, not removed.
 
 ## Module conventions
 

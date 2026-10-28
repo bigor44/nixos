@@ -55,6 +55,9 @@
         gps = "nix flake check && git push";
         nrs = "nix flake check ~/nixos && nh os switch";
         nrb = "nix flake check ~/nixos && nh os boot";
+        # Home Manager is standalone: user config switches without a NixOS generation
+        # -b renames pre-existing files instead of aborting activation
+        nhs = "nix flake check ~/nixos && nh home switch -b hm-backup";
 
         # System info
         meminfo = "free -h";
