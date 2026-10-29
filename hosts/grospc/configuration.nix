@@ -5,7 +5,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/core.nix
-    ../../modules/nixos/locale.nix
     ../../modules/nixos/packages.nix
     ../../modules/nixos/shell.nix
     ../../modules/nixos/dev.nix

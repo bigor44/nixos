@@ -11,8 +11,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, fwupd, Nix, user
-│   │   ├── locale.nix        # Locale, keyboard, fonts
+│   │   ├── core.nix          # Boot, fwupd, Nix, user, locale, fonts
 │   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
 │   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
