@@ -6,7 +6,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 
 ```text
 .
-├── flake.nix                 # Inputs + nixosConfigurations.grospc + homeConfigurations."bigor@grospc"
+├── flake.nix                 # Inputs + nixosConfigurations.grospc
 ├── nix/checks.nix            # Formatters and linters (nix fmt, flake check)
 ├── hosts/grospc/             # Host entry point, machine-specific settings (kernel, AMD GPU, Pi-hole DNS) + hardware config
 ├── modules/
@@ -17,8 +17,9 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
 │   │   ├── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps
-│   │   └── gaming.nix        # Steam, Proton-GE, Lutris, CurseForge, GameMode, MangoHud, DualSense…
-│   └── home/                 # Standalone Home Manager (user-specific only), aggregated by default.nix
+│   │   ├── gaming.nix        # Steam, Proton-GE, Lutris, CurseForge, GameMode, MangoHud, DualSense…
+│   │   └── home.nix          # Home Manager as a NixOS module (user bigor)
+│   └── home/                 # Home Manager modules (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/
 └── dotfiles/                 # Raw configs symlinked by Home Manager
@@ -28,15 +29,14 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 
 Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish abbreviations (`modules/nixos/core.nix`):
 
-| Command   | Description                                         |
-| --------- | --------------------------------------------------- |
-| `nix fmt` | Format (rewrites files) and lint (reports only)     |
-| `qf`      | `nix flake check` (includes format and lint checks) |
-| `gps`     | Flake check, then push                              |
-| `nrs`     | Flake check, then `nh os switch`                    |
-| `nrb`     | Flake check, then `nh os boot`                      |
-| `nhs`     | Flake check, then `nh home switch` (Home Manager)   |
-| `nclean`  | `nh clean all` (also runs weekly)                   |
+| Command   | Description                                           |
+| --------- | ----------------------------------------------------- |
+| `nix fmt` | Format (rewrites files) and lint (reports only)       |
+| `qf`      | `nix flake check` (includes format and lint checks)   |
+| `gps`     | Flake check, then push                                |
+| `nrs`     | Flake check, then `nh os switch` (incl. Home Manager) |
+| `nrb`     | Flake check, then `nh os boot`                        |
+| `nclean`  | `nh clean all` (also runs weekly)                     |
 
 ## Dotfiles
 

@@ -11,6 +11,7 @@
     ../../modules/nixos/nixvim.nix
     ../../modules/nixos/desktop.nix
     ../../modules/nixos/gaming.nix
+    ../../modules/nixos/home.nix
   ];
 
   networking = {

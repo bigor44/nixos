@@ -193,7 +193,7 @@ in
             formatting.command = [ (lib.getExe pkgs.nixfmt) ];
             options = {
               nixos.expr = "${flake}.nixosConfigurations.grospc.options";
-              home-manager.expr = "${flake}.homeConfigurations.\"bigor@grospc\".options";
+              home-manager.expr = "${flake}.nixosConfigurations.grospc.options.home-manager.users.type.getSubOptions [ ]";
             };
           };
         };
