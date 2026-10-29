@@ -22,11 +22,20 @@
     enable = true;
     # The French UI ships as a language pack, not in the base build
     languagePacks = [ "fr" ];
-    preferences."intl.locale.requested" = "fr";
+    preferences = {
+      "intl.locale.requested" = "fr";
+      # WebGPU is still off by default on Linux release builds
+      "dom.webgpu.enabled" = true;
+      "gfx.webgpu.ignore-blocklist" = true;
+    };
   };
 
   environment.systemPackages = with pkgs; [
-    brave
+    # Chromium blocklists WebGPU on Linux; Dawn needs the Vulkan feature to present to canvas
+    (brave.override {
+      enableVulkan = true;
+      commandLineArgs = "--enable-unsafe-webgpu";
+    })
     discord
     whatsapp-electron
   ];
