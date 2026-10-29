@@ -31,11 +31,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # Chromium blocklists WebGPU on Linux; Dawn needs the Vulkan feature to present to canvas
-    (brave.override {
-      enableVulkan = true;
-      commandLineArgs = "--enable-unsafe-webgpu";
-    })
+    brave
     discord
     whatsapp-electron
   ];
