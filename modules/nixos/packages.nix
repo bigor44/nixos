@@ -1,19 +1,8 @@
 # Platform: packages
-# Purpose: Essential CLI tools and Nix helper
+# Purpose: Essential CLI tools
 { pkgs, ... }:
 {
-  programs = {
-    tmux.enable = true;
-    nh = {
-      enable = true;
-      flake = "/home/bigor/nixos";
-      clean = {
-        enable = true;
-        dates = "weekly";
-        extraArgs = "--keep-since 7d --keep 5";
-      };
-    };
-  };
+  programs.tmux.enable = true;
 
   environment.systemPackages = with pkgs; [
     wget

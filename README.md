@@ -11,9 +11,9 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 ├── hosts/grospc/             # Host entry point + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
-│   │   ├── core.nix          # Boot, fwupd, Nix, user, locale, fonts
-│   │   ├── packages.nix      # Base CLI tools, nh (rebuild + GC)
-│   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases, abbreviations
+│   │   ├── core.nix          # Boot, fwupd, Nix, nh + Nix abbreviations, user, locale, fonts
+│   │   ├── packages.nix      # Base CLI tools
+│   │   ├── shell.nix         # Fish, Starship, CLI tools, aliases
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
 │   │   ├── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps
@@ -26,7 +26,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 
 ## Commands
 
-Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish abbreviations (`modules/nixos/shell.nix`):
+Formatters and linters run through `nix fmt` and `nix flake check` (no devshell, no git hook). The shortcuts are system-wide fish abbreviations (`modules/nixos/core.nix`):
 
 | Command   | Description                                         |
 | --------- | --------------------------------------------------- |

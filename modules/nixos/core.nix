@@ -1,5 +1,5 @@
 # Platform: core
-# Purpose: Boot, firmware updates, Nix settings, primary user, locale and fonts
+# Purpose: Boot, firmware updates, Nix settings and nh workflow, primary user, locale and fonts
 { pkgs, ... }:
 {
   # --- Boot Configuration ---
@@ -24,8 +24,36 @@
         "flakes"
       ];
 
-      # Hardlink duplicates at build time; garbage collection is handled by programs.nh.clean (packages.nix)
+      # Hardlink duplicates at build time; garbage collection is handled by programs.nh.clean
       auto-optimise-store = true;
+    };
+  };
+
+  programs = {
+    nh = {
+      enable = true;
+      flake = "/home/bigor/nixos";
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep-since 7d --keep 5";
+      };
+    };
+
+    fish.shellAbbrs = {
+      nfu = "nix flake update";
+      nclean = "nh clean all";
+
+      # flake check also runs the formatters and linters
+      qf = "nix flake check";
+
+      # Safe workflows: never push or switch a config that fails the checks
+      gps = "nix flake check && git push";
+      nrs = "nix flake check ~/nixos && nh os switch";
+      nrb = "nix flake check ~/nixos && nh os boot";
+      # Home Manager is standalone: user config switches without a NixOS generation
+      # -b renames pre-existing files instead of aborting activation
+      nhs = "nix flake check ~/nixos && nh home switch -b hm-backup";
     };
   };
 

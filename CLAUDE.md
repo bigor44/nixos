@@ -6,7 +6,7 @@ NixOS flake (nixos-unstable, flake-parts, home-manager master, nixvim) for the s
 
 ## Commands
 
-No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are system-wide fish abbreviations (`modules/nixos/shell.nix`), available in any interactive fish.
+No devshell and no git hook: formatters and linters (`nix/checks.nix`) run through `nix fmt` and `nix flake check`. The shortcuts below are system-wide fish abbreviations (`modules/nixos/core.nix`), available in any interactive fish.
 
 - `nix fmt` — nixfmt, taplo, prettier, statix, deadnix, shellcheck, detect-private-keys on all files (or only the files given); formatters rewrite files, linters only report
 - `qf` = `nix flake check` — also checks formatting and lint (read-only)

@@ -42,23 +42,8 @@
       };
 
       # Abbreviations expand in place, so the full command lands in history and stays editable
+      # Nix workflow abbreviations live in core.nix, git ones in dev.nix
       shellAbbrs = {
-        # Nix
-        nfu = "nix flake update";
-        nclean = "nh clean all";
-
-        # Quality Assurance
-        # flake check also runs the formatters and linters
-        qf = "nix flake check";
-
-        # Safe Workflows
-        gps = "nix flake check && git push";
-        nrs = "nix flake check ~/nixos && nh os switch";
-        nrb = "nix flake check ~/nixos && nh os boot";
-        # Home Manager is standalone: user config switches without a NixOS generation
-        # -b renames pre-existing files instead of aborting activation
-        nhs = "nix flake check ~/nixos && nh home switch -b hm-backup";
-
         # System info
         meminfo = "free -h";
         diskinfo = "df -h";
