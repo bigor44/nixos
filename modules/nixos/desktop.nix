@@ -51,10 +51,19 @@ in
     lact.enable = true;
   };
 
-  networking.networkmanager = {
-    enable = true;
-    # Local DNS server, placed ahead of the DHCP-provided ones in resolv.conf
-    insertNameservers = [ "192.168.1.10" ];
+  networking = {
+    networkmanager = {
+      enable = true;
+      # insertNameservers only re-applies on link up, so DHCPv6/RA updates dropped Pi-hole from resolv.conf
+      dns = "none";
+    };
+    # Pi-hole first, router as fallback; IPv4 only since Pi-hole's IPv6 addresses are SLAAC-dynamic
+    nameservers = [
+      "192.168.1.10"
+      "192.168.1.1"
+    ];
+    # glibc waits 5 s per query before falling back; Pi-hole answers in ms when it is up
+    resolvconf.extraOptions = [ "timeout:1" ];
   };
 
   programs = {
