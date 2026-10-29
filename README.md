@@ -8,7 +8,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 .
 ├── flake.nix                 # Inputs + nixosConfigurations.grospc + homeConfigurations."bigor@grospc"
 ├── nix/checks.nix            # Formatters and linters (nix fmt, flake check)
-├── hosts/grospc/             # Host entry point + hardware config
+├── hosts/grospc/             # Host entry point, machine-specific settings (kernel, AMD GPU, Pi-hole DNS) + hardware config
 ├── modules/
 │   ├── nixos/                # System modules, imported by the host
 │   │   ├── core.nix          # Boot, fwupd, Nix, nh + Nix abbreviations, user, locale, fonts
@@ -17,7 +17,7 @@ Flake-based NixOS configuration (nixos-unstable, flake-parts, Home Manager, nixv
 │   │   ├── dev.nix           # Git, gh, toolchains, Claude Code
 │   │   ├── nixvim.nix        # Neovim via nixvim: tokyonight, mini.nvim, LSP (nixd, bashls, fish-lsp)
 │   │   ├── desktop.nix       # COSMIC, graphics, network, audio, Bluetooth, apps
-│   │   └── gaming.nix        # Steam, Proton-GE, Lutris, CurseForge, GameMode, MangoHud, LACT, DualSense…
+│   │   └── gaming.nix        # Steam, Proton-GE, Lutris, CurseForge, GameMode, MangoHud, DualSense…
 │   └── home/                 # Standalone Home Manager (user-specific only), aggregated by default.nix
 │       ├── git.nix           # Git identity
 │       └── dotfiles.nix      # Out-of-store symlinks to dotfiles/

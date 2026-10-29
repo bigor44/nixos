@@ -1,5 +1,5 @@
 # Platform: gaming
-# Purpose: Steam, Proton-GE, Lutris/Wine, Minecraft launchers, GameMode, gamescope, MangoHud, LACT, DualSense
+# Purpose: Steam, Proton-GE, Lutris/Wine, Minecraft launchers, GameMode, gamescope, MangoHud, DualSense
 { pkgs, ... }:
 let
   # CurseForge only ships a self-updating AppImage with no stable versioned URL, so fetch the latest at launch
@@ -62,12 +62,6 @@ in
     # DualSense battery, lightbar, mic LED and Bluetooth power-off; hidraw access comes from Steam's udev rules
     dualsensectl
   ];
-
-  # GPU fan curves, power limit and undervolt (LACT GUI)
-  services.lact.enable = true;
-
-  # Unlocks the voltage/clock tables the driver hides by default, needed for LACT's undervolt
-  hardware.amdgpu.overdrive.enable = true;
 
   # GameMode's polkit rule only lets this group switch the CPU governor and split-lock mitigation
   users.users.bigor.extraGroups = [ "gamemode" ];

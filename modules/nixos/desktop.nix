@@ -15,20 +15,8 @@
     };
   };
 
-  networking = {
-    networkmanager = {
-      enable = true;
-      # insertNameservers only re-applies on link up, so DHCPv6/RA updates dropped Pi-hole from resolv.conf
-      dns = "none";
-    };
-    # Pi-hole first, router as fallback; IPv4 only since Pi-hole's IPv6 addresses are SLAAC-dynamic
-    nameservers = [
-      "192.168.1.10"
-      "192.168.1.1"
-    ];
-    # glibc waits 5 s per query before falling back; Pi-hole answers in ms when it is up
-    resolvconf.extraOptions = [ "timeout:1" ];
-  };
+  # DNS servers are LAN-specific and set by the host
+  networking.networkmanager.enable = true;
 
   programs.firefox = {
     enable = true;
