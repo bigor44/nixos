@@ -10,6 +10,7 @@
     ../../modules/nixos/dev.nix
     ../../modules/nixos/nixvim.nix
     ../../modules/nixos/desktop.nix
+    ../../modules/nixos/gaming.nix
   ];
 
   networking.hostName = "grospc";
