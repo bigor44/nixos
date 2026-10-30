@@ -1,34 +1,26 @@
-# Platform: nixvim
-# Purpose: Neovim built by nixvim: tokyonight night, mini.nvim suite, LSP + completion for Nix and shell
 { lib, pkgs, ... }:
 let
-  # nixd evaluates option trees from this flake for completion and hover
   flake = ''(builtins.getFlake "/home/bigor/nixos")'';
 in
 {
   programs.nixvim = {
     enable = true;
-    # Reuse the system pkgs instead of a second nixpkgs evaluation
     nixpkgs.useGlobalPackages = true;
     viAlias = true;
     vimAlias = true;
-
     globals = {
       mapleader = " ";
       maplocalleader = " ";
     };
-
     opts = {
       number = true;
       relativenumber = true;
       signcolumn = "yes";
       cursorline = true;
       scrolloff = 8;
-
       tabstop = 2;
       shiftwidth = 2;
       expandtab = true;
-
       wrap = false;
       ignorecase = true;
       smartcase = true;
@@ -36,27 +28,22 @@ in
       splitbelow = true;
       undofile = true;
       updatetime = 250;
-      # mini.completion drives the popup; noselect avoids inserting the first item on its own
       completeopt = "menuone,noselect,fuzzy";
     };
     clipboard = {
       register = "unnamedplus";
       providers.wl-copy.enable = true;
     };
-
     colorschemes.tokyonight = {
       enable = true;
       settings.style = "night";
     };
-
     diagnostic.settings = {
       virtual_text = true;
       severity_sort = true;
       float.border = "rounded";
     };
-
     plugins = {
-      # --- mini.nvim: UI ---
       mini-icons = {
         enable = true;
         mockDevIcons = true;
@@ -77,8 +64,6 @@ in
           hex_color.__raw = "require('mini.hipatterns').gen_highlighter.hex_color()";
         };
       };
-
-      # --- mini.nvim: editing ---
       mini-ai.enable = true;
       mini-surround.enable = true;
       mini-pairs.enable = true;
@@ -86,8 +71,6 @@ in
       mini-splitjoin.enable = true;
       mini-bracketed.enable = true;
       mini-bufremove.enable = true;
-
-      # --- mini.nvim: navigation and git ---
       mini-files.enable = true;
       mini-pick.enable = true;
       mini-extra.enable = true;
@@ -141,16 +124,12 @@ in
           window.delay = 300;
         };
       };
-
-      # --- mini.nvim: completion ---
-      # LSP items via completefunc, buffer words as fallback; snippets expand through mini.snippets
       mini-completion.enable = true;
       mini-snippets = {
         enable = true;
         settings.snippets.__raw = ''{ require("mini.snippets").gen_loader.from_lang() }'';
       };
       friendly-snippets.enable = true;
-
       treesitter = {
         enable = true;
         settings = {
@@ -158,11 +137,7 @@ in
           indent.enable = true;
         };
       };
-
-      # Only ships the lsp/*.lua server configs read by vim.lsp.enable; setup uses the native API
       lspconfig.enable = true;
-
-      # Not part of mini.nvim: formatting by external tools is out of its scope
       conform-nvim = {
         enable = true;
         autoInstall.enable = true;
@@ -180,12 +155,9 @@ in
         };
       };
     };
-
     lsp = {
       servers = {
-        # Advertise mini.completion's capabilities (snippets, resolve) to every server
         "*".config.capabilities.__raw = "MiniCompletion.get_lsp_capabilities()";
-
         nixd = {
           enable = true;
           config.settings.nixd = {
@@ -197,15 +169,12 @@ in
             };
           };
         };
-        # bash-language-server runs shellcheck for diagnostics when found on PATH
         bashls = {
           enable = true;
           packages.suffix = [ pkgs.shellcheck ];
         };
         fish_lsp.enable = true;
       };
-
-      # Neovim 0.11 already maps K, grn, gra, grr, gri, gO and <C-s>
       keymaps = [
         {
           key = "gd";
@@ -229,9 +198,7 @@ in
         }
       ];
     };
-
     keymaps = [
-      # Windows
       {
         mode = "n";
         key = "<C-h>";
@@ -287,8 +254,6 @@ in
         key = "<Esc>";
         action = "<cmd>nohlsearch<CR>";
       }
-
-      # Files and pickers
       {
         mode = "n";
         key = "<leader>e";
@@ -337,16 +302,12 @@ in
         action = "<cmd>Pick lsp scope='document_symbol'<CR>";
         options.desc = "Document symbols";
       }
-
-      # Buffers
       {
         mode = "n";
         key = "<leader>bd";
         action.__raw = "function() MiniBufremove.delete() end";
         options.desc = "Delete buffer";
       }
-
-      # Code
       {
         mode = [
           "n"
@@ -368,8 +329,6 @@ in
         action.__raw = "function() MiniTrailspace.trim() end";
         options.desc = "Trim trailing whitespace";
       }
-
-      # Git
       {
         mode = "n";
         key = "<leader>go";
@@ -387,7 +346,6 @@ in
       }
     ];
   };
-
   environment.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

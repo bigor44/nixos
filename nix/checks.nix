@@ -1,11 +1,7 @@
-# Flake: checks
-# Purpose: Formatters and linters (cachix/git-hooks.nix) behind `nix fmt` and `nix flake check`
 {
   perSystem =
     { pkgs, config, ... }:
     {
-      # No git hook is installed: `nix fmt` runs the hooks below on demand,
-      # file arguments restrict it to those files
       formatter = pkgs.writeShellApplication {
         name = "pre-commit-fmt";
         runtimeInputs = [
@@ -14,26 +10,22 @@
         ];
         text = ''
           cfg=${config.pre-commit.settings.configFile}
-          if [ $# -eq 0 ] || [ "$*" = "." ]; then
+          if [ $
             pre-commit run --config "$cfg" --all-files
           else
             pre-commit run --config "$cfg" --files "$@"
           fi
         '';
       };
-
       pre-commit = {
         check.enable = true;
-
         settings.hooks = {
           nixfmt.enable = true;
           taplo.enable = true;
           prettier.enable = true;
-
           statix.enable = true;
           deadnix.enable = true;
           shellcheck.enable = true;
-
           detect-private-keys.enable = true;
         };
       };

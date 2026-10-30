@@ -1,5 +1,6 @@
 [
-    "firefox",
     "com.system76.CosmicFiles",
+    "firefox",
+    "brave-browser",
     "com.system76.CosmicTerm",
 ]
