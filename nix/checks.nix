@@ -10,7 +10,7 @@
         ];
         text = ''
           cfg=${config.pre-commit.settings.configFile}
-          if [ $
+          if [ $# -eq 0 ] || [ "$*" = "." ]; then
             pre-commit run --config "$cfg" --all-files
           else
             pre-commit run --config "$cfg" --files "$@"
