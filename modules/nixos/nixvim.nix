@@ -1,10 +1,15 @@
+# Platform: nixvim
+# Purpose: Neovim built by nixvim (config baked into the wrapper): mini.nvim, treesitter, LSP for Nix and shell
 { lib, pkgs, ... }:
 let
+  # Nix expression *text* spliced into nixd's settings; nixd evaluates it at runtime
+  # against the live checkout, so option completion follows uncommitted edits
   flake = ''(builtins.getFlake "/home/bigor/nixos")'';
 in
 {
   programs.nixvim = {
     enable = true;
+    # Use the system's nixpkgs instance rather than evaluating a second one
     nixpkgs.useGlobalPackages = true;
     viAlias = true;
     vimAlias = true;
@@ -27,9 +32,12 @@ in
       splitright = true;
       splitbelow = true;
       undofile = true;
+      # Fires CursorHold and writes the swap file sooner (default 4 s)
       updatetime = 250;
+      # noselect: mini.completion opens the menu without inserting the first match
       completeopt = "menuone,noselect,fuzzy";
     };
+    # Yank/paste through the Wayland system clipboard
     clipboard = {
       register = "unnamedplus";
       providers.wl-copy.enable = true;
@@ -43,9 +51,11 @@ in
       severity_sort = true;
       float.border = "rounded";
     };
+    # mini.nvim covers UI, editing and navigation; other plugins only fill its gaps
     plugins = {
       mini-icons = {
         enable = true;
+        # Stand in for nvim-web-devicons so plugins expecting it still get icons
         mockDevIcons = true;
       };
       mini-statusline.enable = true;
@@ -57,6 +67,8 @@ in
       mini-starter.enable = true;
       mini-hipatterns = {
         enable = true;
+        # __raw passes the string through as Lua instead of serializing it.
+        # %f[%w]…%f[%W] are Lua frontier patterns: whole words only; the empty () mark the highlighted span
         settings.highlighters = {
           fixme.__raw = "{ pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' }";
           todo.__raw = "{ pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' }";
@@ -76,6 +88,7 @@ in
       mini-extra.enable = true;
       mini-diff.enable = true;
       mini-git.enable = true;
+      # Which-key style popup: lists the next keys after one of these prefixes
       mini-clue = {
         enable = true;
         settings = {
@@ -109,6 +122,7 @@ in
               keys = "z";
             }
           ];
+          # Group labels for the <Leader> keymaps below, plus mini.clue's generated clues for built-in keys
           clues.__raw = ''
             {
               { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
@@ -127,6 +141,7 @@ in
       mini-completion.enable = true;
       mini-snippets = {
         enable = true;
+        # Loads snippets by buffer language from friendly-snippets' collection
         settings.snippets.__raw = ''{ require("mini.snippets").gen_loader.from_lang() }'';
       };
       friendly-snippets.enable = true;
@@ -137,9 +152,12 @@ in
           indent.enable = true;
         };
       };
+      # Only provides the default server configs; servers are started by nixvim's native `lsp` below
       lspconfig.enable = true;
+      # mini.nvim has no formatter runner
       conform-nvim = {
         enable = true;
+        # Puts the formatters listed below on Neovim's PATH from nixpkgs
         autoInstall.enable = true;
         settings = {
           formatters_by_ft = {
@@ -148,6 +166,7 @@ in
             bash = [ "shfmt" ];
             fish = [ "fish_indent" ];
           };
+          # Fall back to the LSP formatter for filetypes with no entry above
           format_on_save = {
             timeout_ms = 1000;
             lsp_format = "fallback";
@@ -157,9 +176,12 @@ in
     };
     lsp = {
       servers = {
+        # "*" applies to every server: tell them mini.completion handles snippets and item resolve
         "*".config.capabilities.__raw = "MiniCompletion.get_lsp_capabilities()";
         nixd = {
           enable = true;
+          # Each expr is evaluated by nixd: pkgs from the flake's own lock, options from
+          # grospc. Home Manager options are read from the submodule type of `home-manager.users`
           config.settings.nixd = {
             nixpkgs.expr = "import ${flake}.inputs.nixpkgs { }";
             formatting.command = [ (lib.getExe pkgs.nixfmt) ];
@@ -171,10 +193,12 @@ in
         };
         bashls = {
           enable = true;
+          # Appended to the server's PATH: bash-language-server lints with shellcheck when it finds it
           packages.suffix = [ pkgs.shellcheck ];
         };
         fish_lsp.enable = true;
       };
+      # Buffer-local, set on LspAttach; Neovim 0.11+ already provides K, grn, gra, grr, gri, gO
       keymaps = [
         {
           key = "gd";
@@ -198,7 +222,9 @@ in
         }
       ];
     };
+    # Global keymaps; <leader> groups match the mini.clue labels (b, c, f, g)
     keymaps = [
+      # Window focus and resize
       {
         mode = "n";
         key = "<C-h>";
@@ -239,6 +265,7 @@ in
         key = "<C-Right>";
         action = "<cmd>vertical resize +2<CR>";
       }
+      # Re-select after indenting so repeated < / > keep working on the same lines
       {
         mode = "v";
         key = "<";
@@ -257,6 +284,7 @@ in
       {
         mode = "n";
         key = "<leader>e";
+        # Opens the explorer on the current file instead of the working directory
         action.__raw = "function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end";
         options.desc = "File explorer";
       }
@@ -305,6 +333,7 @@ in
       {
         mode = "n";
         key = "<leader>bd";
+        # Unlike :bdelete, keeps the window layout
         action.__raw = "function() MiniBufremove.delete() end";
         options.desc = "Delete buffer";
       }
@@ -346,6 +375,7 @@ in
       }
     ];
   };
+  # Session-wide so every program, not only fish, opens Neovim as the editor
   environment.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
